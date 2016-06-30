@@ -1,0 +1,12 @@
+[submodule "Test"]
+	path = Test
+	url = https://github.com/philsquared/Catch.git
+[submodule "duilib"]
+	path = duilib
+	url = https://github.com/duilib/duilib.git
+[submodule "JSON"]
+	path = JSON
+	url = https://github.com/miloyip/rapidjson.git
+[submodule "poco"]
+	path = poco
+	url = https://github.com/pocoproject/poco.git
