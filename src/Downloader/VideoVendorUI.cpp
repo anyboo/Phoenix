@@ -22,12 +22,12 @@ LPCTSTR CVideoVendorUI::GetWindowClassName() const
 
 CDuiString CVideoVendorUI::GetSkinFolder()
 {
-	return _T("..//x86");
+	return _T("skin");
 }
 
 CDuiString CVideoVendorUI::GetSkinFile()
 {
-	return _T("VideoVendor.xml");
+	return _T("xml//VideoVendor.xml");
 }
 
 void CVideoVendorUI::OnFinalMessage(HWND hWnd)

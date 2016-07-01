@@ -126,11 +126,13 @@
     <ClInclude Include="DownLoadWnd.h" />
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
+    <ClInclude Include="OtherTools.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Vendor.h" />
     <ClInclude Include="VideoLoginUI.h" />
+    <ClInclude Include="VideoVendorUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -138,6 +140,7 @@
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
+    <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -145,6 +148,7 @@
     </ClCompile>
     <ClCompile Include="Vendor.cpp" />
     <ClCompile Include="VideoLoginUI.cpp" />
+    <ClCompile Include="VideoVendorUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

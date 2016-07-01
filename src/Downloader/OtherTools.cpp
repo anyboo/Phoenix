@@ -22,12 +22,12 @@ LPCTSTR COtherTools::GetWindowClassName() const
 
 CDuiString COtherTools::GetSkinFolder()
 {
-	return _T("..//x86");
+	return _T("skin");
 }
 
 CDuiString COtherTools::GetSkinFile()
 {
-	return _T("OtherTools.xml");
+	return _T("xml//OtherTools.xml");
 }
 
 void COtherTools::OnFinalMessage(HWND hWnd)

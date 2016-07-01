@@ -67,22 +67,22 @@ CListContainerElementUI* CVendor::ShowVendor(bool IsOnLine)
 
 	if (IsOnLine)
 	{
-		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'Downloader/online.png' dest = '10,20,38,47'\""));
+		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'skin/network_online.png' dest = '10,20,38,47'\""));
 		VendorList->SetAttributeList(_T("height=\"80\" width=\"185\" bordersize=\"1\" bordercolor=\"0xFFFFFFFF\""));
 	}
 	else
 	{
-		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'Downloader/network_offline.png' dest = '10,20,39,48'\""));
-		VendorList->SetAttributeList(_T("height=\"80\" width=\"200\" bkimage=\"file = 'Downloader/tdxzanniu.png'\" bordersize=\"1\" bordercolor=\"0x12345678\""));
+		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'skin/network_offline.png' dest = '10,20,39,48'\""));
+		VendorList->SetAttributeList(_T("height=\"80\" width=\"200\" bkimage=\"file = 'skin/tdxzanniu.png'\" bordersize=\"1\" bordercolor=\"0x12345678\""));
 	}
 	cLyt->SetFixedWidth(110);
 	VendorName->SetAttributeList(_T("font=\"5\" padding=\"10, 30, 0, 0\" textcolor=\"#FFFFFFFF\""));
 	VendorIP->SetAttributeList(_T("font=\"4\" padding=\"10, 0, 0, 0\" textcolor=\"#FFFFFFFF\""));
-	VendorName->SetText(_T("åŽ‚å•†å"));
+	VendorName->SetText(_T("³§ÉÌÃû"));
 	VendorIP->SetText(_T("(192.168.0.21)"));
 
 	OpenIcon->SetAttributeList(_T("width=\"19\" bkimage=\"file = 'Downloader/xxzk.png' dest = '0,36,19,48'\""));
-	BT_Delete->SetAttributeList(_T("width=\"14\" height=\"14\" padding=\"0,2,2,0\" normalimage=\"file='Downloader/hot_del.png' dest='1,0,15,15'\" hotimage=\"file='Downloader/del_download.png' dest='1,0,15,15'\""));
+	BT_Delete->SetAttributeList(_T("width=\"14\" height=\"14\" padding=\"0,2,2,0\" normalimage=\"file='skin/hot_del.png' dest='1,0,15,15'\" hotimage=\"file='skin/del_download.png' dest='1,0,15,15'\""));
 	STDSTRING strBtName = STDSTRING(_T("BT_delete")) + std::to_string(m_ContListSel);
 	BT_Delete->SetName(strBtName.c_str());
 
@@ -113,13 +113,13 @@ CListContainerElementUI* CVendor::AddChannels()
 		subHlyt->Add(subLab);
 		if (i == 0)
 		{
-			subOption->SetAttributeList(_T("name=\"quanxuan\" width=\"22\" height=\"22\" padding=\"20,4,10,4\" normalimage=\"file='Downloader/quanxuan.png'\" selectedimage=\"file='Downloader/quanxuanzhuangtai.png'\""));
-			subLab->SetAttributeList(_T("text=\"å…¨é€‰\" font=\"5\" textcolor=\"#FFFFFFFF\" valign=\"center\""));
+			subOption->SetAttributeList(_T("name=\"quanxuan\" width=\"22\" height=\"22\" padding=\"20,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
+			subLab->SetAttributeList(_T("text=\"È«Ñ¡\" font=\"5\" textcolor=\"#FFFFFFFF\" valign=\"center\""));
 		}
 		else{
-			subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='Downloader/quanxuan.png'\" selectedimage=\"file='Downloader/quanxuanzhuangtai.png'\""));
+			subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
 			subLab->SetAttributeList(_T("font=\"5\" valign=\"center\" textcolor=\"#FFFFFFFF\""));
-			STDSTRING strChannelName = STDSTRING(_T("é€šé“")) + std::to_string(i);
+			STDSTRING strChannelName = STDSTRING(_T("Í¨µÀ")) + std::to_string(i);
 			subLab->SetText(strChannelName.c_str());
 		}		
 	}

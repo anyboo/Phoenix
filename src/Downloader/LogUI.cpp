@@ -118,11 +118,11 @@ void CLogUI::CreateLogList()
 	item5->SetName(_T("Item5"));
 	item6->SetName(_T("Item6"));
 	item7->SetName(_T("Item7"));
-	item1->SetText(_T("æ—¶é—´"));
+	item1->SetText(_T("Ê±¼ä"));
 	item1->SetFixedWidth(200);
-	item2->SetText(_T("æ“ä½œ"));
+	item2->SetText(_T("²Ù×÷"));
 	item2->SetFixedWidth(300);
-	item3->SetText(_T("æè¿°"));
+	item3->SetText(_T("ÃèÊö"));
 	item3->SetFixedWidth(480);
 	item4->SetFixedWidth(0);
 	item5->SetFixedWidth(0);
@@ -137,7 +137,7 @@ void CLogUI::CreateLogList()
 	list_head->Remove(Item7);
 	m_pList->Remove(list_head);
 	m_pList->Add(newlist);
-	m_pList->SetAttribute(_T("headerbkimage"), _T("file='Downloader/lbl.png'"));
+	m_pList->SetAttribute(_T("headerbkimage"), _T("file='skin/lbl.png'"));
 	newlist->SetFixedHeight(31);
 	newlist->Add(item1);
 	newlist->Add(item2);
@@ -186,19 +186,19 @@ void CLogUI::CreateCaseList()
 	item7->SetName(_T("Item7"));
 	item7->SetAttribute(_T("font"), _T("1"));
 
-	item1->SetText(_T("æ—¶é—´"));
+	item1->SetText(_T("Ê±¼ä"));
 	item1->SetFixedWidth(150);
-	item2->SetText(_T("åœ°ç‚¹"));
+	item2->SetText(_T("µØµã"));
 	item2->SetFixedWidth(100);
-	item3->SetText(_T("é‡‡é›†äºº"));
+	item3->SetText(_T("²É¼¯ÈË"));
 	item3->SetFixedWidth(100);
-	item4->SetText(_T("æ¡ˆä»¶åç§°"));
+	item4->SetText(_T("°¸¼şÃû³Æ"));
 	item4->SetFixedWidth(150);
-	item5->SetText(_T("æ¡ˆä»¶æè¿°"));
+	item5->SetText(_T("°¸¼şÃèÊö"));
 	item5->SetFixedWidth(150);
-	item6->SetText(_T("è®¾å¤‡IP"));
+	item6->SetText(_T("Éè±¸IP"));
 	item6->SetFixedWidth(150);
-	item7->SetText(_T("æè¿°"));
+	item7->SetText(_T("ÃèÊö"));
 	item7->SetFixedWidth(180);
 	list_head->Remove(Item1);
 	list_head->Remove(Item2);
@@ -209,7 +209,7 @@ void CLogUI::CreateCaseList()
 	list_head->Remove(Item7);
 	m_pList->Remove(list_head);
 	m_pList->Add(newlist);
-	m_pList->SetAttribute(_T("headerbkimage"), _T("file='Downloader/lbl.png'"));
+	m_pList->SetAttribute(_T("headerbkimage"), _T("file='skin/lbl.png'"));
 	newlist->SetFixedHeight(31);
 	newlist->Add(item1);
 	newlist->Add(item2);
@@ -231,7 +231,7 @@ void CLogUI::InsertLogInfoToList()
 		pListElement->SetAttribute(_T("font"), _T("1"));
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("ç¨‹åºè®¾è®¡"));
+		pListElement->SetText(1, _T("³ÌĞòÉè¼Æ"));
 		pListElement->SetText(2, _T("100"));		
 	}
 	
@@ -258,10 +258,10 @@ void CLogUI::InsertCaseInfoToList()
 		m_pList->Add(pListElement);
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("ç¨‹åºè®¾è®¡"));
+		pListElement->SetText(1, _T("³ÌĞòÉè¼Æ"));
 		pListElement->SetText(2, _T("100"));
 		pListElement->SetText(3, _T("WHO1753"));
-		pListElement->SetText(4, _T("ç¨‹åºè®¾è®¡"));
+		pListElement->SetText(4, _T("³ÌĞòÉè¼Æ"));
 		pListElement->SetText(5, _T("100"));
 		pListElement->SetText(6, _T("100"));
 	}
@@ -275,12 +275,12 @@ void CLogUI::exportLog()
 	OPENFILENAME  ofn = { 0 };
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXTæ–‡ä»¶(*.txt)\0*.txt\0æ‰€æœ‰æ–‡ä»¶(*.*)\0*.*\0");//è¦é€‰æ‹©çš„æ–‡ä»¶åç¼€   
-	ofn.lpstrInitialDir = _T("D:\\");//é»˜è®¤çš„æ–‡ä»¶è·¯å¾„   
-	ofn.lpstrFile = szBuffer;//å­˜æ”¾æ–‡ä»¶çš„ç¼“å†²åŒº   
+	ofn.lpstrFilter = _T("TXTÎÄ¼ş(*.txt)\0*.txt\0ËùÓĞÎÄ¼ş(*.*)\0*.*\0");//ÒªÑ¡ÔñµÄÎÄ¼şºó×º   
+	ofn.lpstrInitialDir = _T("D:\\");//Ä¬ÈÏµÄÎÄ¼şÂ·¾¶   
+	ofn.lpstrFile = szBuffer;//´æ·ÅÎÄ¼şµÄ»º³åÇø   
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
 	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//æ ‡å¿—å¦‚æœæ˜¯å¤šé€‰è¦åŠ ä¸ŠOFN_ALLOWMULTISELECT  
+	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//±êÖ¾Èç¹ûÊÇ¶àÑ¡Òª¼ÓÉÏOFN_ALLOWMULTISELECT  
 	BOOL bSel = GetOpenFileName(&ofn);
 
 }

@@ -4,7 +4,7 @@
 	<Font shared="true" id="3" name="微软雅黑" size="10" bold="false" />
 	<Font shared="true" id="4" name="宋体" size="14" bold="false" />
 	<Font shared="true" id="5" name="宋体" size="16" bold="false" />
-	<Include source="scrollbar.xml" />
+	<Include source="skin/scrollbar.xml" />
 	
 	<VerticalLayout bkimage="file='skin/bsbj.png'" height="762" width="1018" padding="3,0,0,3" bordersize="3" bordercolor="0xf1234567">
 		<HorizontalLayout height="60" bkimage="file='skin/beijing.png'">
