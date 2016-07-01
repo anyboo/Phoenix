@@ -5,6 +5,7 @@
 #include "VideoLoginUI.h"
 #include "OtherTools.h"
 
+#include "MenuWnd.h"
 CMainWnd::CMainWnd()
 :m_IsMinWnd(FALSE)
 {
@@ -101,6 +102,14 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 void CMainWnd::Notify(TNotifyUI& msg)
 {
+	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("aboutbt"))
+	{
+		CMenuWnd* pMenu = new CMenuWnd();
+		if (pMenu == NULL) { return; }
+		POINT pt = { 830, 30 };
+		::ClientToScreen(m_hWnd, &pt);
+		pMenu->Init(msg.pSender, pt);
+	}
 	return WindowImplBase::NotifyPump(msg);
 }
 
