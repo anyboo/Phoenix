@@ -4,6 +4,7 @@
 #include "LogUI.h"
 #include "VideoLoginUI.h"
 #include "OtherTools.h"
+#include "SetIpWnd.h"
 
 #include "MenuWnd.h"
 CMainWnd::CMainWnd()
@@ -109,6 +110,14 @@ void CMainWnd::Notify(TNotifyUI& msg)
 		POINT pt = { 830, 30 };
 		::ClientToScreen(m_hWnd, &pt);
 		pMenu->Init(msg.pSender, pt);
+	}
+	if (msg.sType == _T("menu_SetIP"))
+	{
+		CSetIpWnd* pDlg = new CSetIpWnd();
+		assert(pDlg);
+		pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+		pDlg->CenterWindow();
+		pDlg->ShowModal();
 	}
 	return WindowImplBase::NotifyPump(msg);
 }

@@ -10,6 +10,9 @@
 #define SUBLISTNAMELONG				8
 #define BTNAMETAG				STDSTRING(_T("BT_Cancel"))
 #define SUBLISTNAMETAG			STDSTRING(_T("ContList"))
+#define BT_TIMEWND1				(_T("daytime1"))
+#define BT_TIMEWND2				(_T("daytime2"))
+
 
 typedef struct 
 {
@@ -34,6 +37,7 @@ public:
 	void OnSelectTimeType();
 	void OnSelectCalendar();
 	void OnSearchFileWnd();
+	void OnSelectDayTime();
 
 	void OnVideoLoginWnd(TNotifyUI& msg);
 

@@ -71,7 +71,7 @@
 					</HorizontalLayout>
 				</HorizontalLayout>
 				<VerticalLayout  height="550" padding="0,13,0,0" >
-					<List name="DownloadList" padding="10,0,5,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
+					<List name="DownloadList" padding="10,0,5,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true">
 						<ListHeader height="31" menu="true">
 							<ListHeaderItem text="名称" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
 							<Control bkimage="file='skin/st.png'" width="1" />

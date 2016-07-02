@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="6" name="宋体" size="18" bold="false" />
+	<Font shared="true" id="7" name="微软雅黑" size="16" bold="false" />
+	<Include source="skin/scrollbar.xml" />
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" >
+		<HorizontalLayout height="60" width="1024" bkimage="file='skin/beijing.png'">
+			<Label text="网络配置" textcolor="#FFFFFFFF" font="0" width="200" align="center" padding="412"/>		
+			<Button name="closebtn" width="30" height="30" padding="370,15,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
+		</HorizontalLayout>
+		<HorizontalLayout width="850" height="100" padding="80,40,0,0" bordersize="2" bordercolor="0x88888888">
+			<Label text="当前IP地址：" font="1" width="120" padding="10,10,0,0" valign="top"/>
+			<Label text="IP地址:" width="80" font="1" align="left"/>
+			<Label text="192.168.0.11" name="IP_Address" font="6" width="120" align="left"/>
+			<Label text="子网掩码:" font="1" width="90" padding="30,0,0,0" align="left"/>
+			<Label text="255.255.255.0" name="Sub_net" font="6" width="120" align="left"/>
+			<Label text="默认网关:" font="1" width="100" padding="30,0,0,0" align="left"/>
+			<Label text="192.168.1.23" name="Mr_netAddress" font="6" width="120" align="left"/>
+		</HorizontalLayout>
+		<VerticalLayout width="850" height="180" padding="80,10,0,0" bordersize="2" bordercolor="0x88888888">
+			<Label text="IP地址增加：" font="1" width="120" height="30" padding="10,10,0,0" valign="top"/>
+			<HorizontalLayout height="40">
+				<Label text="IP地址:" font="1" width="90" padding="130,0,0,0" align="left" valign="center"/>
+				<Edit name="IP_Address1" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="IP_Address2" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="IP_Address3" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="IP_Address4" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+			</HorizontalLayout>
+			<HorizontalLayout height="40">
+				<Label text="子网掩码:" font="1" width="90" padding="130,0,0,0" align="left" valign="center"/>
+				<Edit name="Subnet_mask1" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="Subnet_mask2" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="Subnet_mask3" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="Subnet_mask4" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+			</HorizontalLayout>
+			<HorizontalLayout height="40">
+				<Label text="默认网关:" font="1" width="90" padding="130,0,0,0" align="left" valign="center"/>
+				<Edit name="gateway1" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="gateway2" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="gateway3" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Label text="." font="1" width="20"/>
+				<Edit name="gateway4" font="1" align="center" width="80" height="30" maxchar="3" bordersize="1" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+				<Button name="Add_Setting" width="120" height="30" padding="70,10,0,0" text="增加" font="1" textpadding="30,0,0,0" bordersize="1" bordercolor="0x12345678" tooltip="添加" foreimage="file='skin/tianjia.png' dest='7,3,30,26'"  normalimage="file='skin/Button.png' source='0,0,120,31'" hotimage="file='skin/Button.png' source='0,151,120,181'"/>
+			</HorizontalLayout>
+			</VerticalLayout>
+			<VerticalLayout width="850" height="300" padding="80,10,0,0" bordersize="2" bordercolor="0x88888888">
+				<Label text="IP地址设置：" font="1" width="120" height="30" padding="10,10,0,0" valign="top"/>
+				<HorizontalLayout>
+				<List name="IP_List" padding="130,0,0,10" width="490" itemfont="7" bkcolor="#FFFFFFFF" inset="1,1,1,1" itemshowhtml="true" vscrollbar="true"  headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" bordersize="1" bordercolor="0x12342278">
+					<ListHeader height="31" width="490">
+						<ListHeaderItem text="IP地址" font="1" width="157" padding="1,1,1,1" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+						<Control bkimage="file='skin/st.png'" width="1" />
+						<ListHeaderItem text="子网掩码" font="1" width="157" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+						<Control bkimage="file='skin/st.png'" width="1" />
+						<ListHeaderItem text="默认网关" font="1" width="157" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					</ListHeader>
+				</List>
+				<VerticalLayout width="230">
+					<Button name="Delete" width="120" height="30" padding="50,10,0,0" text="移除" font="1" textpadding="30,0,0,0" bordersize="1" bordercolor="0x12345678" tooltip="移除" foreimage="file='skin/reduce.png' source='0,90,30,120' dest='0,0,30,30'"  normalimage="file='skin/Button.png' source='0,0,120,31'" hotimage="file='skin/Button.png' source='0,151,120,181'"/>
+					<Button name="Add_Use" width="120" height="30" padding="50,10,0,0" text="应用" font="1" textpadding="30,0,0,0" bordersize="1" bordercolor="0x12345678" tooltip="应用" foreimage="file='skin/function.png' source='0,90,30,120' dest='0,0,30,30'"  normalimage="file='skin/Button.png' source='0,0,120,31'" hotimage="file='skin/Button.png' source='0,151,120,181'"/>
+				</VerticalLayout>
+				</HorizontalLayout>
+			</VerticalLayout>
+	</VerticalLayout>
+</Window>

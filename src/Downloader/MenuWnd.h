@@ -151,18 +151,18 @@ public:
             Close();
         }
         else if( msg.sType == _T("itemclick") ) {
-            if( msg.pSender->GetName() == _T("menu_Delete") ) {
-                if( m_pOwner ) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Delete"), 0, 0, true);
+            if( msg.pSender->GetName() == _T("menu_About") ) {
+                if( m_pOwner ) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_About"), 0, 0, true);
             }
-			if (msg.pSender->GetName() == _T("menu_Mark")) {
-				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Mark"), 0, 0, true);
+			if (msg.pSender->GetName() == _T("menu_Help")) {
+				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Help"), 0, 0, true);
 			}
-			if (msg.pSender->GetName() == _T("menu_Open")) {
-				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Open"), 0, 0, true);
+			if (msg.pSender->GetName() == _T("menu_SetIP")) {
+				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_SetIP"), 0, 0, true);
 			}
-			if (msg.pSender->GetName() == _T("menu_Rename")) {
+		/*	if (msg.pSender->GetName() == _T("menu_Rename")) {
 				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Rename"), 0, 0, true);
-			}
+			}*/
         }
     }
 

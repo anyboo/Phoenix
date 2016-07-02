@@ -3,7 +3,7 @@
 #include "CalendarUI.h"
 #include "VideoLoginUI.h"
 #include "SearchFileUI.h"
-
+#include "TimeUI.h"
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(0)
@@ -67,6 +67,15 @@ void DownLoadWnd::OnSelectCalendar()
 	pDlg->ShowModal();
 }
 
+void DownLoadWnd::OnSelectDayTime()
+{
+	CTimeUI* pDlg = new CTimeUI();
+	assert(pDlg);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
+
 void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 {
 	VideoLoginUI* pDlg = new VideoLoginUI();
@@ -98,6 +107,9 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		if (strSendName == BT_Calendar1 || strSendName == BT_Calendar2){
 			OnSelectCalendar();
+		}
+		if (strSendName == BT_TIMEWND1 || strSendName == BT_TIMEWND2){
+			OnSelectDayTime();
 		}
 		if (strSendName == _T("Search")){
 			OnSearchFileWnd();

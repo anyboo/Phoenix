@@ -34,6 +34,12 @@
     <ClCompile Include="VideoVendorUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SetIpWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -67,6 +73,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="VideoVendorUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SetIpWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

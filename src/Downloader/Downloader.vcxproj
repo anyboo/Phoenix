@@ -129,7 +129,9 @@
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
+    <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TimeUI.h" />
     <ClInclude Include="Vendor.h" />
     <ClInclude Include="VideoLoginUI.h" />
     <ClInclude Include="VideoVendorUI.h" />
@@ -142,10 +144,12 @@
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
+    <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TimeUI.cpp" />
     <ClCompile Include="Vendor.cpp" />
     <ClCompile Include="VideoLoginUI.cpp" />
     <ClCompile Include="VideoVendorUI.cpp" />

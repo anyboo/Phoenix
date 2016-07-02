@@ -8,6 +8,7 @@
 #define BT_OtherTools		(_T("Other_tools"))
 #define BT_VideoPlay		(_T("VideoPlay"))
 
+
 class CMainWnd :
 	public WindowImplBase
 {
