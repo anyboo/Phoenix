@@ -7,18 +7,18 @@
 			<Button name="closebtn" width="30" height="30" padding="265,10,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
 		</HorizontalLayout>
 		<HorizontalLayout width="270" height="80" padding="15,0,15,0" bkimage="file='skin/bsbj.png'" bordersize="6" bordercolor="0x88888888" >
-			<Label text="00:00" name="time_text" width="200" height="68" padding="30,6,0,6," font="10" align="center"/>
+			<Label text="--:--" name="time_text" width="200" height="68" padding="30,6,0,6," font="10" align="center"/>
 		</HorizontalLayout>
-		<TileLayout width="248" height="328" padding="26,20,26,0" columns="3" itemsize="80,80" inset="4,4,4,4" bordersize="4" bordercolor="0x88888888">
-			<Button name="num7" width="80" height="80" text="7" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num8" width="80" height="80" text="8" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num9" width="80" height="80" text="9" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num4" width="80" height="80" text="4" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num5" width="80" height="80" text="5" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num6" width="80" height="80" text="6" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+		<TileLayout name="Main_Lyt" width="248" height="328" padding="26,20,26,0" columns="3" itemsize="80,80" inset="4,4,4,4" bordersize="4" bordercolor="0x88888888">
+			<Button name="num7" width="80" height="80" enabled="false" text="7" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num8" width="80" height="80" enabled="false" text="8" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num9" width="80" height="80" enabled="false" text="9" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num4" width="80" height="80" enabled="false" text="4" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num5" width="80" height="80" enabled="false" text="5" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num6" width="80" height="80" enabled="false" text="6" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
 			<Button name="num1" width="80" height="80" text="1" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
 			<Button name="num2" width="80" height="80" text="2" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
-			<Button name="num3" width="80" height="80" text="3" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
+			<Button name="num3" width="80" height="80" enabled="false" text="3" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
 			<Button name="num0" width="80" height="80" text="0" font="9" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
 			<Button name="bt_delete" width="80" height="80" text="清除" font="8" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />
 			<Button name="bt_ok" width="80" height="80" text="确认" font="8" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/Bt_time.png' source='23,12,103,92'" />

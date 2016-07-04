@@ -2,6 +2,7 @@
 #include <DuiLib/UIlib.h>
 #include <vector>
 #include "Vendor.h"
+#include "TimeUI.h"
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -51,6 +52,9 @@ public:
 	void All_SelectChannels();
 	void RemoveVendor(STDSTRING& strSendName);
 
+	void ShowTime(STDSTRING& InputName);
+	void ShowData(STDSTRING& InputName);
+
 	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
 	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
@@ -63,6 +67,7 @@ protected:
 
 private:
 	CVendor		m_Vendor;
+	CTimeUI		m_TimeUI;
 	int			m_FileCount;
 };
 

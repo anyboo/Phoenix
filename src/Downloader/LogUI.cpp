@@ -292,6 +292,7 @@ void CLogUI::OnSelectStartTime(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	ShowData(STDSTRING(_T("DatatimeText1")));
 }
 
 void CLogUI::OnSelectStopTime(TNotifyUI& msg)
@@ -301,4 +302,27 @@ void CLogUI::OnSelectStopTime(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	ShowData(STDSTRING(_T("DatatimeText2")));
+}
+
+void CLogUI::ShowData(STDSTRING& InputName)
+{
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+
+	ifstream ifs(configFile);
+	locale utf8;
+	ifs.imbue(utf8);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
+
+	STDSTRING strTime = d[_T("Data")].GetString();
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(InputName.c_str()));
+	Lab_time->SetText(strTime.c_str());
 }

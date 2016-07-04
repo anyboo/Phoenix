@@ -5,7 +5,9 @@
 #include <ATLComTime.h>
 
 #define BT_CANCEL			(_T("closebtn1"))
-
+#define BT_BKCOLOR1		0x64263231
+#define BT_BKCOLOR2		0xc3324534
+#define BT_BKCOLOR3		0x64263232
 
 class CalendarUI :
 	public WindowImplBase
@@ -18,6 +20,7 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnClose(TNotifyUI& msg);
 
+	void SaveDataToJson(STDSTRING& btnName);
 	void OnPrepare();
 	void DrawCalendar(SYSTEMTIME m_sysTime);
 	int GetDayOfWeek(SYSTEMTIME m_sysTime);

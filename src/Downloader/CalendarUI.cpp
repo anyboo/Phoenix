@@ -45,6 +45,7 @@ void CalendarUI::Notify(TNotifyUI& msg)
 		STDSTRING strTag(_T("Button"));
 		int iRet = btnName.compare(0, 6, strTag);
 		if (iRet == 0){
+			SaveDataToJson(btnName);
 			Close();
 		}
 		if (btnName == _T("Add_Year")){
@@ -118,25 +119,25 @@ void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 			iLastMonthStartDays++;
 			cDay = std::to_string(iLastMonthStartDays);
 			btn->SetText(cDay.c_str());
-			btn->SetBkColor(0x64263232);
+			btn->SetBkColor(BT_BKCOLOR1);
 		}
 		else if (i>iStartDay - 1 && iDay < iMonthDays)
 		{
 			iDay++;
 			cDay = std::to_string(iDay);
 			btn->SetText(cDay.c_str());
-			btn->SetBkColor(0xc3324534);
+			btn->SetBkColor(BT_BKCOLOR2);
 		}
 		else
 		{
 			iNextMonthDays++;
 			cDay = std::to_string(iNextMonthDays);
 			btn->SetText(cDay.c_str());
-			btn->SetBkColor(0x64263232);
+			btn->SetBkColor(BT_BKCOLOR3);
 		}
 	}
 
-	itemName = _T("Item") + std::to_string(m_sysTime.wMonth);
+	itemName = STDSTRING(("Item")) + std::to_string(m_sysTime.wMonth);
 	CListLabelElementUI* itemLabe = static_cast<CListLabelElementUI*>(m_PaintManager.FindControl(itemName.c_str()));
 	itemLabe->Select(true);
 
@@ -165,4 +166,50 @@ int CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
 {
 	m_ctime.SetDate(m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
 	return m_ctime.GetDayOfWeek() - 1;
+}
+
+void CalendarUI::SaveDataToJson(STDSTRING& btnName)
+{
+	CComboUI* CB_Month = static_cast<CComboUI*>(m_PaintManager.FindControl(_T("CB_month")));
+	CLabelUI* LB_Year = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("InputYear")));
+	CButtonUI* BT_Input = static_cast<CButtonUI*>(m_PaintManager.FindControl(btnName.c_str()));
+	DWORD bkcolor = BT_Input->GetBkColor();
+	int month = CB_Month->GetCurSel() + 1;
+	if (bkcolor == BT_BKCOLOR1)
+	{
+		month = month - 1;
+	}
+	if (bkcolor == BT_BKCOLOR3)
+	{
+		month = month + 1;
+	}
+	STDSTRING strMonth = to_string(month);
+	STDSTRING strYear = LB_Year->GetText();
+	STDSTRING Day = BT_Input->GetText();
+	if (Day.size() == 1)
+	{
+		Day = STDSTRING(_T("0")) + Day;
+	}
+	if (strMonth.size() == 1)	
+	{
+		strMonth = STDSTRING(_T("0")) + strMonth;
+	}
+	STDSTRING strData = strYear + STDSTRING(_T("-")) + strMonth + STDSTRING(_T("-")) + Day;
+	
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+
+	Document document;
+	document.Parse(configFile.c_str());
+	ofstream ofs(configFile);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+	Value root(kObjectType);
+	Value Time(strData.c_str(), strData.length(), alloc);
+
+	root.AddMember("Data", Time.Move(), alloc);
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
 }

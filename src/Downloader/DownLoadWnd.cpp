@@ -3,7 +3,7 @@
 #include "CalendarUI.h"
 #include "VideoLoginUI.h"
 #include "SearchFileUI.h"
-#include "TimeUI.h"
+
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(0)
@@ -65,6 +65,7 @@ void DownLoadWnd::OnSelectCalendar()
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	//pDlg->GetDataTime();
 }
 
 void DownLoadWnd::OnSelectDayTime()
@@ -83,7 +84,6 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-
 }
 
 void DownLoadWnd::OnSearchFileWnd()
@@ -107,9 +107,11 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		if (strSendName == BT_Calendar1 || strSendName == BT_Calendar2){
 			OnSelectCalendar();
+			ShowData(strSendName);
 		}
 		if (strSendName == BT_TIMEWND1 || strSendName == BT_TIMEWND2){
 			OnSelectDayTime();
+			ShowTime(strSendName);			
 		}
 		if (strSendName == _T("Search")){
 			OnSearchFileWnd();
@@ -363,4 +365,52 @@ void DownLoadWnd::RemoveVendor(STDSTRING& strSendName)
 		VendorList->RemoveAt(CurSel + 1, true);
 	}
 	VendorList->RemoveAt(CurSel, true);
+}
+
+void DownLoadWnd::ShowTime(STDSTRING& InputName)
+{
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+
+	ifstream ifs(configFile);
+	locale utf8;
+	ifs.imbue(utf8);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
+
+	STDSTRING strTime = d[_T("Time")].GetString();
+	STDSTRING Lab_Tag = InputName.substr(InputName.size() - 1);
+	STDSTRING Show_Labname = STDSTRING(_T("daytimeText")) + Lab_Tag;
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Show_Labname.c_str()));
+	Lab_time->SetText(strTime.c_str());
+}
+
+void DownLoadWnd::ShowData(STDSTRING& InputName)
+{
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+
+	ifstream ifs(configFile);
+	locale utf8;
+	ifs.imbue(utf8);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
+
+	STDSTRING strTime = d[_T("Data")].GetString();
+	STDSTRING Lab_Tag = InputName.substr(InputName.size() - 1);
+	STDSTRING Show_Labname = STDSTRING(_T("DatatimeText")) + Lab_Tag;
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Show_Labname.c_str()));
+	Lab_time->SetText(strTime.c_str());
 }

@@ -47,6 +47,7 @@ public:
 	void OnSelectStartTime(TNotifyUI& msg);
 	void OnSelectStopTime(TNotifyUI& msg);
 	void exportLog();
+	void ShowData(STDSTRING& InputName);
 protected:
 	vector<Log_Search>		m_LogInfo;
 	vector<Case_Search>		m_CaseInfo;

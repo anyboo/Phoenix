@@ -17,12 +17,14 @@
 #include "prettywriter.h"
 #include "stringbuffer.h"
 #include <string>
+#include <fstream>
 
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
 
 using namespace DuiLib;
+using namespace rapidjson;
 
 #ifdef _DEBUG
 #   ifdef _UNICODE
@@ -46,7 +48,6 @@ using namespace DuiLib;
 #	define STDSTRING std::string
 #	define StringToInt	atoi
 #endif
-
 
 
 //{{AFX_INSERT_LOCATION}}
