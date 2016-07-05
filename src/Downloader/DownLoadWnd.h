@@ -36,9 +36,9 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnSelectTimeType();
-	void OnSelectCalendar();
+	void OnSelectCalendar(STDSTRING& SendName);
 	void OnSearchFileWnd();
-	void OnSelectDayTime();
+	void OnSelectDayTime(STDSTRING& SendName);
 
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
@@ -52,8 +52,8 @@ public:
 	void All_SelectChannels();
 	void RemoveVendor(STDSTRING& strSendName);
 
-	void ShowTime(STDSTRING& InputName);
-	void ShowData(STDSTRING& InputName);
+	void InitTime();
+	void SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day);
 
 	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
@@ -69,5 +69,7 @@ private:
 	CVendor		m_Vendor;
 	CTimeUI		m_TimeUI;
 	int			m_FileCount;
+	BOOL		m_beginTag;
+	SYSTEMTIME		 m_sysTime;
 };
 

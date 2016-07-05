@@ -3,10 +3,7 @@
 	<Font shared="true" id="9" name="微软雅黑" size="40" bold="false" />
 	<Font shared="true" id="10" name="微软雅黑" size="60" bold="false" />
 	<VerticalLayout  height="500" bkimage="file='skin/beijing.png'" >
-		<HorizontalLayout height="40" width="300">
-			<Button name="closebtn" width="30" height="30" padding="265,10,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
-		</HorizontalLayout>
-		<HorizontalLayout width="270" height="80" padding="15,0,15,0" bkimage="file='skin/bsbj.png'" bordersize="6" bordercolor="0x88888888" >
+		<HorizontalLayout width="270" height="80" padding="15,20,15,0" bkimage="file='skin/bsbj.png'" bordersize="6" bordercolor="0x88888888" >
 			<Label text="--:--" name="time_text" width="200" height="68" padding="30,6,0,6," font="10" align="center"/>
 		</HorizontalLayout>
 		<TileLayout name="Main_Lyt" width="248" height="328" padding="26,20,26,0" columns="3" itemsize="80,80" inset="4,4,4,4" bordersize="4" bordercolor="0x88888888">

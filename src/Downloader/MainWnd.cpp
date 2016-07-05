@@ -5,6 +5,7 @@
 #include "VideoLoginUI.h"
 #include "OtherTools.h"
 #include "SetIpWnd.h"
+#include "OVPlayerUI.h"
 
 #include "MenuWnd.h"
 CMainWnd::CMainWnd()
@@ -26,6 +27,7 @@ DUI_ON_CLICK_CTRNAME(BT_MINWIND, OnMin)
 DUI_ON_CLICK_CTRNAME(BT_DOWNLOAD, OnDownLoadWnd)
 DUI_ON_CLICK_CTRNAME(BT_LogWnd, OnLogWnd)
 DUI_ON_CLICK_CTRNAME(BT_OtherTools, OnOtherToolsWnd)
+DUI_ON_CLICK_CTRNAME(BT_VideoPlay, OnVideoPlayWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMainWnd::GetWindowClassName() const
@@ -46,7 +48,6 @@ CDuiString CMainWnd::GetSkinFile()
 void CMainWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void CMainWnd::OnClose(TNotifyUI& msg)
@@ -64,8 +65,8 @@ void CMainWnd::OnMin(TNotifyUI& msg)
 
 void CMainWnd::OnDownLoadWnd(TNotifyUI& msg)
 {
-	DownLoadWnd* pDlg = new DownLoadWnd();
-	assert(pDlg);
+	std::auto_ptr<DownLoadWnd> pDlg(new DownLoadWnd);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
@@ -73,8 +74,17 @@ void CMainWnd::OnDownLoadWnd(TNotifyUI& msg)
 
 void CMainWnd::OnLogWnd(TNotifyUI& msg)
 {
-	CLogUI* pDlg = new CLogUI();
-	assert(pDlg);
+	std::auto_ptr<CLogUI> pDlg(new CLogUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
+
+void CMainWnd::OnVideoPlayWnd(TNotifyUI& msg)
+{
+	std::auto_ptr<COVPlayerUI> pDlg(new COVPlayerUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
@@ -82,8 +92,8 @@ void CMainWnd::OnLogWnd(TNotifyUI& msg)
 
 void CMainWnd::OnOtherToolsWnd(TNotifyUI& msg)
 {
-	COtherTools* pDlg = new COtherTools();
-	assert(pDlg);
+	std::auto_ptr<COtherTools> pDlg(new COtherTools);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
@@ -107,14 +117,14 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	{
 		CMenuWnd* pMenu = new CMenuWnd();
 		if (pMenu == NULL) { return; }
-		POINT pt = { 830, 30 };
+		POINT pt = { 835, 30 };
 		::ClientToScreen(m_hWnd, &pt);
 		pMenu->Init(msg.pSender, pt);
 	}
 	if (msg.sType == _T("menu_SetIP"))
 	{
-		CSetIpWnd* pDlg = new CSetIpWnd();
-		assert(pDlg);
+		std::auto_ptr<CSetIpWnd> pDlg(new CSetIpWnd);
+		assert(pDlg.get());
 		pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 		pDlg->CenterWindow();
 		pDlg->ShowModal();

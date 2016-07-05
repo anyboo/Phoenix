@@ -6,7 +6,7 @@
 
 
 DownLoadWnd::DownLoadWnd()
-:m_FileCount(0)
+:m_FileCount(0), m_beginTag(TRUE)
 {
 	m_Vendor.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &m_Vendor);
@@ -41,7 +41,6 @@ CDuiString DownLoadWnd::GetSkinFile()
 void DownLoadWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 
@@ -58,29 +57,43 @@ void DownLoadWnd::OnSelectTimeType()
 	}
 }
 
-void DownLoadWnd::OnSelectCalendar()
+void DownLoadWnd::OnSelectCalendar(STDSTRING& SendName)
 {
-	CalendarUI* pDlg = new CalendarUI();
-	assert(pDlg);
+	
+	std::auto_ptr<CalendarUI> pDlg(new CalendarUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	//pDlg->GetDataTime();
+	STDSTRING strData = pDlg->GetData();
+	STDSTRING NameTag = SendName.substr(SendName.length() - 1);
+	STDSTRING Lab_name = STDSTRING(_T("DatatimeText")) + NameTag;
+	STDSTRING Btn_name = STDSTRING(_T("DataTime")) + NameTag;
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Lab_name.c_str()));
+	Lab_time->SetText(strData.c_str());
+	
+	STDSTRING day = strData.substr(strData.length() - 2);
+	SetBtDataImage(Btn_name, day);
 }
 
-void DownLoadWnd::OnSelectDayTime()
+void DownLoadWnd::OnSelectDayTime(STDSTRING& SendName)
 {
-	CTimeUI* pDlg = new CTimeUI();
-	assert(pDlg);
+	std::auto_ptr<CTimeUI> pDlg(new CTimeUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	STDSTRING strData = pDlg->GetTime();
+	STDSTRING NameTag = SendName.substr(SendName.length() - 1);
+	STDSTRING Lab_name = STDSTRING(_T("daytimeText")) + NameTag;
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Lab_name.c_str()));
+	Lab_time->SetText(strData.c_str());
 }
 
 void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 {
-	VideoLoginUI* pDlg = new VideoLoginUI();
-	assert(pDlg);
+	std::auto_ptr<VideoLoginUI> pDlg(new VideoLoginUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
@@ -88,8 +101,8 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearchFileWnd()
 {
-	SearchFileUI* pDlg = new SearchFileUI();
-	assert(pDlg);
+	std::auto_ptr<SearchFileUI> pDlg(new SearchFileUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
@@ -97,6 +110,11 @@ void DownLoadWnd::OnSearchFileWnd()
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
 {
+	if (m_beginTag)
+	{
+		InitTime();
+		m_beginTag = FALSE;
+	}
 	STDSTRING strSendName = msg.pSender->GetName();
 	if (msg.sType == DUI_MSGTYPE_VALUECHANGED && strSendName == _T("Select_time")){
 		OnSelectTimeType();
@@ -106,12 +124,10 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		if (strSendName == BT_Calendar1 || strSendName == BT_Calendar2){
-			OnSelectCalendar();
-			ShowData(strSendName);
+			OnSelectCalendar(strSendName);
 		}
 		if (strSendName == BT_TIMEWND1 || strSendName == BT_TIMEWND2){
-			OnSelectDayTime();
-			ShowTime(strSendName);			
+			OnSelectDayTime(strSendName);		
 		}
 		if (strSendName == _T("Search")){
 			OnSearchFileWnd();
@@ -367,50 +383,35 @@ void DownLoadWnd::RemoveVendor(STDSTRING& strSendName)
 	VendorList->RemoveAt(CurSel, true);
 }
 
-void DownLoadWnd::ShowTime(STDSTRING& InputName)
+void DownLoadWnd::InitTime()
 {
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+	::GetLocalTime(&m_sysTime);
+	char strData[100] = { 0 };
+	char strTime[100] = { 0 };
+	sprintf_s(strData, "%d-%02d-%02d", m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+	sprintf_s(strTime, "%02d:%02d", m_sysTime.wHour, m_sysTime.wMinute);
+	STDSTRING ShowData(strData);
+	STDSTRING ShowTime(strTime);
+	STDSTRING day = to_string(m_sysTime.wDay);
 
-	ifstream ifs(configFile);
-	locale utf8;
-	ifs.imbue(utf8);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-		return;
+	SetBtDataImage(STDSTRING(_T("DataTime1")), day);
+	SetBtDataImage(STDSTRING(_T("DataTime2")), day);
 
-	STDSTRING strTime = d[_T("Time")].GetString();
-	STDSTRING Lab_Tag = InputName.substr(InputName.size() - 1);
-	STDSTRING Show_Labname = STDSTRING(_T("daytimeText")) + Lab_Tag;
-	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Show_Labname.c_str()));
-	Lab_time->SetText(strTime.c_str());
+	CLabelUI* Lab_time1 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
+	CLabelUI* Lab_time2 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
+	CLabelUI* Lab_time3 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText2")));
+	Lab_time1->SetText(ShowData.c_str());
+	Lab_time2->SetText(ShowData.c_str());
+	Lab_time3->SetText(ShowTime.c_str());
 }
 
-void DownLoadWnd::ShowData(STDSTRING& InputName)
+void DownLoadWnd::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
 {
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
-
-	ifstream ifs(configFile);
-	locale utf8;
-	ifs.imbue(utf8);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-		return;
-
-	STDSTRING strTime = d[_T("Data")].GetString();
-	STDSTRING Lab_Tag = InputName.substr(InputName.size() - 1);
-	STDSTRING Show_Labname = STDSTRING(_T("DatatimeText")) + Lab_Tag;
-	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(Show_Labname.c_str()));
-	Lab_time->SetText(strTime.c_str());
+	if (day[0] == '0')
+		day = day.substr(1);
+	char strValue[200] = { 0 };
+	sprintf_s(strValue, _T("file='skin/Data/%s.png' dest='15,8,39,39'"), day.c_str());
+	STDSTRING pictureInfo(strValue);
+	CButtonUI* btn_data = static_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
+	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
 }

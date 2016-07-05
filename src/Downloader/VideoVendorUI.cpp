@@ -33,7 +33,6 @@ CDuiString CVideoVendorUI::GetSkinFile()
 void CVideoVendorUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 STDSTRING CVideoVendorUI::intToString(int num)

@@ -127,6 +127,7 @@
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="OtherTools.h" />
+    <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="SetIpWnd.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="OtherTools.cpp" />
+    <ClCompile Include="OVPlayerUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -33,20 +33,19 @@ CDuiString SearchFileUI::GetSkinFile()
 void SearchFileUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void SearchFileUI::Notify(TNotifyUI& msg)
 {	
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		STDSTRING SendName = msg.pSender->GetName();
-		if (msg.pSender->GetName() == _T("close"))
+		if (msg.pSender->GetName() == _T("close_bt"))
 		{
-		Close();
+			Close();
 		}
 		if (msg.pSender->GetName() == _T("test"))
 		{
-		SearchTest();
+			SearchTest();
 		}
 		if (msg.pSender->GetName() == _T("All"))
 		{
@@ -106,7 +105,7 @@ CListContainerElementUI* SearchFileUI::Add_FileInfoList(int n)
 	hLyt->Add(BT_Play);
 
 	STDSTRING optionName = STDSTRING(_T("option")) + std::to_string(n);
-	option->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"10,4,42,4\" normalimage=\"file='Downloader/quanxuan.png'\" selectedimage=\"file='Downloader/quanxuanzhuangtai.png'\""));
+	option->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"10,4,42,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
 	option->SetName(optionName.c_str());
 
 	Lab_Name->SetAttributeList("width=\"240\" align=\"center\" font=\"2\"");
@@ -121,7 +120,7 @@ CListContainerElementUI* SearchFileUI::Add_FileInfoList(int n)
 	Lab_Size->SetText(_T("text"));
 
 	STDSTRING buttonName = STDSTRING(_T("BT_Play")) + std::to_string(n);
-	BT_Play->SetAttributeList(_T("width=\"40\" height=\"30\" padding=\"30,0,30,0\" foreimage=\"file='Downloader/play.png' dest='5,0,35,30'\" hotimage=\"file='Downloader/Button_Hot.png'\""));
+	BT_Play->SetAttributeList(_T("width=\"40\" height=\"30\" padding=\"30,0,30,0\" foreimage=\"file='skin/play.png' dest='5,0,35,30'\" hotimage=\"file='skin/Button_Hot.png'\""));
 	BT_Play->SetName(buttonName.c_str());
 
 	return Sublist;

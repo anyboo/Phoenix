@@ -33,7 +33,6 @@ CDuiString VideoLoginUI::GetSkinFile()
 void VideoLoginUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void VideoLoginUI::Notify(TNotifyUI& msg)
@@ -50,8 +49,8 @@ void VideoLoginUI::Notify(TNotifyUI& msg)
 }
 void VideoLoginUI::OnOpenVideoVendorWnd(TNotifyUI& msg)
 {
-	CVideoVendorUI* pDlg = new CVideoVendorUI();
-	assert(pDlg);
+	std::auto_ptr<CVideoVendorUI> pDlg(new CVideoVendorUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();

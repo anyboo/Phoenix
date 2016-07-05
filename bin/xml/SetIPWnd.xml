@@ -6,8 +6,8 @@
 	<Include source="skin/scrollbar.xml" />
 	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" >
 		<HorizontalLayout height="60" width="1024" bkimage="file='skin/beijing.png'">
-			<Label text="网络配置" textcolor="#FFFFFFFF" font="0" width="200" align="center" padding="412"/>		
-			<Button name="closebtn" width="30" height="30" padding="370,15,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
+			<Button name="bt_close" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
+			<Label text="网络配置" textcolor="#FFFFFFFF" font="1" width="200" align="center" padding="350"/>		
 		</HorizontalLayout>
 		<HorizontalLayout width="850" height="100" padding="80,40,0,0" bordersize="2" bordercolor="0x88888888">
 			<Label text="当前IP地址：" font="1" width="120" padding="10,10,0,0" valign="top"/>

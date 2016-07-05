@@ -47,12 +47,15 @@ public:
 	void OnSelectStartTime(TNotifyUI& msg);
 	void OnSelectStopTime(TNotifyUI& msg);
 	void exportLog();
-	void ShowData(STDSTRING& InputName);
+	void InitTime();
+
+	void SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day);
 protected:
 	vector<Log_Search>		m_LogInfo;
 	vector<Case_Search>		m_CaseInfo;
 	CListUI*				m_pList;
 	BOOL					m_bInit;
+	SYSTEMTIME		 m_sysTime;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

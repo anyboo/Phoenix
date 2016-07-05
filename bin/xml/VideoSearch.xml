@@ -7,7 +7,7 @@
 		<HorizontalLayout width="1024" height="60" bkimage="file='skin/beijing.png'">
 			<Button name="test" width="40" height="40" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
 			<Label text="下载视频" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
-			<Button name="close" width="30" height="30" padding="480,10,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
+			<Button name="close_bt" width="30" height="30" padding="480,10,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
 		</HorizontalLayout>
 		<VerticalLayout height="570" >
 			<List name="domainlist" padding="10,0,10,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">

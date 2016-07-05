@@ -36,13 +36,13 @@ CDuiString CLogUI::GetSkinFile()
 void CLogUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void CLogUI::Notify(TNotifyUI& msg)
 {
 	if (m_bInit)
 	{
+		InitTime();
 		m_pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 		m_bInit = FALSE;
 	}
@@ -287,42 +287,56 @@ void CLogUI::exportLog()
 
 void CLogUI::OnSelectStartTime(TNotifyUI& msg)
 {
-	CalendarUI* pDlg = new CalendarUI();
-	assert(pDlg);
+	std::auto_ptr<CalendarUI> pDlg(new CalendarUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	ShowData(STDSTRING(_T("DatatimeText1")));
+	STDSTRING strData = pDlg->GetData();
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
+	Lab_time->SetText(strData.c_str());
+	STDSTRING day = strData.substr(strData.length() - 2);
+	SetBtDataImage(STDSTRING(_T("DataTime1")), day);
 }
 
 void CLogUI::OnSelectStopTime(TNotifyUI& msg)
 {
-	CalendarUI* pDlg = new CalendarUI();
-	assert(pDlg);
+	std::auto_ptr<CalendarUI> pDlg(new CalendarUI);
+	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	ShowData(STDSTRING(_T("DatatimeText2")));
+	STDSTRING strData = pDlg->GetData();
+	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
+	Lab_time->SetText(strData.c_str());
+	STDSTRING day = strData.substr(strData.length() - 2);
+	SetBtDataImage(STDSTRING(_T("DataTime2")), day);
 }
 
-void CLogUI::ShowData(STDSTRING& InputName)
+void CLogUI::InitTime()
 {
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+	::GetLocalTime(&m_sysTime);
+	char strData[100] = { 0 };
+	sprintf_s(strData, "%d-%02d-%02d", m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+	STDSTRING ShowData(strData);
+	STDSTRING day = to_string(m_sysTime.wDay);
 
-	ifstream ifs(configFile);
-	locale utf8;
-	ifs.imbue(utf8);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-		return;
+	SetBtDataImage(STDSTRING(_T("DataTime1")), day);
+	SetBtDataImage(STDSTRING(_T("DataTime2")), day);
 
-	STDSTRING strTime = d[_T("Data")].GetString();
-	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(InputName.c_str()));
-	Lab_time->SetText(strTime.c_str());
+	CLabelUI* Lab_time1 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
+	CLabelUI* Lab_time2 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
+	Lab_time1->SetText(ShowData.c_str());
+	Lab_time2->SetText(ShowData.c_str());
+}
+
+void CLogUI::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
+{
+	if (day[0] == '0')
+		day = day.substr(1);
+	char strValue[200] = { 0 };
+	sprintf_s(strValue, _T("file='skin/Data/%s.png' dest='15,8,39,39'"), day.c_str());
+	STDSTRING pictureInfo(strValue);
+	CButtonUI* btn_data = static_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
+	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
 }

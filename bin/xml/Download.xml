@@ -51,7 +51,7 @@
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,10,0,0">
 							<Button pos="1,0,54,46" float="true" align="bottom" name="daytime2" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
 							<Control bkimage="file='skin/st.png'" width="2" padding="55,0,0,0"/>
-							<Label name="daytimeText2" text="00:00" float="true" pos="56,0,180,46" align="center" font="1" />
+							<Label name="daytimeText2" text="23:59" float="true" pos="56,0,180,46" align="center" font="1" />
 						</HorizontalLayout>
 					</VerticalLayout>
 					<VerticalLayout width="140" height="130" padding="10,0,10,0" borderround="5,5">

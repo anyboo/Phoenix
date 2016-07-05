@@ -34,7 +34,6 @@ CDuiString CSetIpWnd::GetSkinFile()
 void CSetIpWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void CSetIpWnd::Notify(TNotifyUI& msg)
@@ -51,6 +50,10 @@ void CSetIpWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("Delete"))
 	{
 		RemoveSubList();
+	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("bt_close"))
+	{
+		Close();
 	}
 	WindowImplBase::Notify(msg);
 }

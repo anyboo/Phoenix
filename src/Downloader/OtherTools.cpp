@@ -33,7 +33,6 @@ CDuiString COtherTools::GetSkinFile()
 void COtherTools::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void COtherTools::Notify(TNotifyUI& msg)

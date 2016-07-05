@@ -9,7 +9,7 @@ public:
 	CTimeUI();
 	~CTimeUI();
 
-	void SaveTimeToJson();
+	STDSTRING GetTime();
 
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);

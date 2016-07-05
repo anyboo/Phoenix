@@ -34,7 +34,6 @@ CDuiString CalendarUI::GetSkinFile()
 void CalendarUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void CalendarUI::Notify(TNotifyUI& msg)
@@ -45,7 +44,7 @@ void CalendarUI::Notify(TNotifyUI& msg)
 		STDSTRING strTag(_T("Button"));
 		int iRet = btnName.compare(0, 6, strTag);
 		if (iRet == 0){
-			SaveDataToJson(btnName);
+			SaveData(btnName);
 			Close();
 		}
 		if (btnName == _T("Add_Year")){
@@ -146,7 +145,6 @@ void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 	edit_year->SetText(cYear.c_str());
 }
 
-
 int CalendarUI::GetMonthDays(int iY, int iM)
 {
 	int iTotalDay = 31;
@@ -168,7 +166,7 @@ int CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
 	return m_ctime.GetDayOfWeek() - 1;
 }
 
-void CalendarUI::SaveDataToJson(STDSTRING& btnName)
+void CalendarUI::SaveData(STDSTRING& btnName)
 {
 	CComboUI* CB_Month = static_cast<CComboUI*>(m_PaintManager.FindControl(_T("CB_month")));
 	CLabelUI* LB_Year = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("InputYear")));
@@ -190,26 +188,15 @@ void CalendarUI::SaveDataToJson(STDSTRING& btnName)
 	{
 		Day = STDSTRING(_T("0")) + Day;
 	}
-	if (strMonth.size() == 1)	
+	if (strMonth.size() == 1)
 	{
 		strMonth = STDSTRING(_T("0")) + strMonth;
 	}
-	STDSTRING strData = strYear + STDSTRING(_T("-")) + strMonth + STDSTRING(_T("-")) + Day;
-	
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
+	m_strData = strYear + STDSTRING(_T("-")) + strMonth + STDSTRING(_T("-")) + Day;
+}
 
-	Document document;
-	document.Parse(configFile.c_str());
-	ofstream ofs(configFile);
-	OStreamWrapper osw(ofs);
-	Document::AllocatorType& alloc = document.GetAllocator();
-	Value root(kObjectType);
-	Value Time(strData.c_str(), strData.length(), alloc);
 
-	root.AddMember("Data", Time.Move(), alloc);
-	Writer<OStreamWrapper> writer(osw);
-	root.Accept(writer);
+STDSTRING CalendarUI::GetData()
+{
+	return m_strData;
 }

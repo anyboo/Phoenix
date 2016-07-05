@@ -27,6 +27,7 @@ public:
 	void OnDownLoadWnd(TNotifyUI& msg);
 	void OnLogWnd(TNotifyUI& msg);
 	void OnOtherToolsWnd(TNotifyUI& msg);
+	void OnVideoPlayWnd(TNotifyUI& msg);
 
 	void Show_HideTask(BOOL IsHide);
 

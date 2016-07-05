@@ -15,22 +15,26 @@ class CalendarUI :
 public:
 	CalendarUI();
 	~CalendarUI();
+
+	STDSTRING GetData();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnClose(TNotifyUI& msg);
 
-	void SaveDataToJson(STDSTRING& btnName);
+	void SaveData(STDSTRING& btnName);
 	void OnPrepare();
 	void DrawCalendar(SYSTEMTIME m_sysTime);
 	int GetDayOfWeek(SYSTEMTIME m_sysTime);
 	int GetMonthDays(int iY, int iM);
+	
 
 private:
 	BOOL			m_bTag;
 	SYSTEMTIME		 m_sysTime;
 	COleDateTime	m_ctime;
 	int				 m_PrevMonth;
+	STDSTRING		m_strData;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

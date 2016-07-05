@@ -35,7 +35,6 @@ CDuiString CTimeUI::GetSkinFile()
 void CTimeUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
 }
 
 void CTimeUI::Notify(TNotifyUI& msg)
@@ -56,12 +55,14 @@ void CTimeUI::Notify(TNotifyUI& msg)
 		if (strSendName == _T("bt_delete"))
 		{
 			m_Site = 0;
+			SetBtNumEnabled(0, 2, true);
+			SetBtNumEnabled(3, 9, false);
 			CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("time_text")));
 			Lab_time->SetText(_T("--:--"));
 		}
 		if (strSendName == _T("bt_ok"))
 		{
-			SaveTimeToJson();
+			GetTime();
 			Close();
 		}
 	}
@@ -128,7 +129,7 @@ void CTimeUI::SetBtNumEnabled(int begin_num, int end_num, bool IsEnabled)
 	}
 }
 
-void CTimeUI::SaveTimeToJson()
+STDSTRING CTimeUI::GetTime()
 {
 	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("time_text")));
 	STDSTRING returnTime = Lab_time->GetText();
@@ -138,21 +139,5 @@ void CTimeUI::SaveTimeToJson()
 			returnTime[i] = '0';
 		}
 	}
-
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Time.json"));
-
-	Document document;
-	document.Parse(configFile.c_str());
-	ofstream ofs(configFile);
-	OStreamWrapper osw(ofs);
-	Document::AllocatorType& alloc = document.GetAllocator();
-	Value root(kObjectType);
-	Value Time(returnTime.c_str(), returnTime.length(), alloc);
-	
-	root.AddMember("Time", Time.Move(), alloc);
-	Writer<OStreamWrapper> writer(osw);
-	root.Accept(writer);
+	return returnTime;
 }
