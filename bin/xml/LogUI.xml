@@ -42,7 +42,7 @@
 				<Button name="export" width="80" height="80" padding="20,0,0,0" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/save.png' dest='21,8,59,46'" normalimage="file='skin/chaxunanniu.png'"/>
 			</HorizontalLayout>
 		</HorizontalLayout>
-		<VerticalLayout  height="590" bkimage="file='skin/bsbj.png'" >
+		<VerticalLayout  name="ListLyt" height="590" bkimage="file='skin/bsbj.png'" >
 			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" >
 				<ListHeader name="list_head" height="31" width="980">
 					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>

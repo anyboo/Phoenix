@@ -3,6 +3,8 @@
 #include "CalendarUI.h"
 #include "CommDlg.h"
 
+
+
 CLogUI::CLogUI()
 {
 	m_bInit = TRUE;
@@ -43,7 +45,6 @@ void CLogUI::Notify(TNotifyUI& msg)
 	if (m_bInit)
 	{
 		InitTime();
-		m_pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 		m_bInit = FALSE;
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK)	{
@@ -90,144 +91,39 @@ void CLogUI::OnSearchCaseLog()
 void CLogUI::CreateLogList()
 {
 	//create log list
-	m_pList->RemoveAll();
-	CListHeaderUI* list_head = static_cast<CListHeaderUI*>(m_PaintManager.FindControl(_T("list_head")));
-	CListHeaderUI* newlist = new CListHeaderUI;
-	newlist->SetName(_T("list_head"));
-	CListHeaderItemUI* Item1 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item1")));
-	CListHeaderItemUI* Item2 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item2")));
-	CListHeaderItemUI* Item3 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item3")));
-	CListHeaderItemUI* Item4 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item4")));
-	CListHeaderItemUI* Item5 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item5")));
-	CListHeaderItemUI* Item6 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item6")));
-	CListHeaderItemUI* Item7 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item7")));
-	CListHeaderItemUI* item1 = new CListHeaderItemUI;
-	CListHeaderItemUI* item2 = new CListHeaderItemUI;
-	CListHeaderItemUI* item3 = new CListHeaderItemUI;
-	CListHeaderItemUI* item4 = new CListHeaderItemUI;
-	CListHeaderItemUI* item5 = new CListHeaderItemUI;
-	CListHeaderItemUI* item6 = new CListHeaderItemUI;
-	CListHeaderItemUI* item7 = new CListHeaderItemUI;
-	item1->SetName(_T("Item1"));
-	item1->SetAttribute(_T("font"), _T("1"));
-	item2->SetName(_T("Item2"));
-	item2->SetAttribute(_T("font"), _T("1"));
-	item3->SetName(_T("Item3"));
-	item3->SetAttribute(_T("font"), _T("1"));
-	item4->SetName(_T("Item4"));
-	item5->SetName(_T("Item5"));
-	item6->SetName(_T("Item6"));
-	item7->SetName(_T("Item7"));
-	item1->SetText(_T("时间"));
-	item1->SetFixedWidth(200);
-	item2->SetText(_T("操作"));
-	item2->SetFixedWidth(300);
-	item3->SetText(_T("描述"));
-	item3->SetFixedWidth(480);
-	item4->SetFixedWidth(0);
-	item5->SetFixedWidth(0);
-	item6->SetFixedWidth(0);
-	item7->SetFixedWidth(0);
-	list_head->Remove(Item1);
-	list_head->Remove(Item2);
-	list_head->Remove(Item3);
-	list_head->Remove(Item4);
-	list_head->Remove(Item5);
-	list_head->Remove(Item6);
-	list_head->Remove(Item7);
-	m_pList->Remove(list_head);
-	m_pList->Add(newlist);
-	m_pList->SetAttribute(_T("headerbkimage"), _T("file='skin/lbl.png'"));
-	newlist->SetFixedHeight(31);
-	newlist->Add(item1);
-	newlist->Add(item2);
-	newlist->Add(item3);
-	newlist->Add(item4);
-	newlist->Add(item5);
-	newlist->Add(item6);
-	newlist->Add(item7);
+
+	CDialogBuilder builder;
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+
+	CListUI* SubList = (CListUI*)(builder.Create(_T("xml//LogList.xml"), (UINT)0, NULL, &m_PaintManager));
+	CVerticalLayoutUI* Lyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("ListLyt")));
+	Lyt->Remove(pList, true);
+	Lyt->Add(SubList);
 	
 }
 
 void CLogUI::CreateCaseList()
 {
 	//create case list
-	m_pList->RemoveAll();
-	
-	CListHeaderUI* list_head = static_cast<CListHeaderUI*>(m_PaintManager.FindControl(_T("list_head")));
-	CListHeaderUI* newlist = new CListHeaderUI;
-	newlist->SetName(_T("list_head"));
-	CListHeaderItemUI* Item1 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item1")));
-	CListHeaderItemUI* Item2 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item2")));
-	CListHeaderItemUI* Item3 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item3")));
-	CListHeaderItemUI* Item4 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item4")));
-	CListHeaderItemUI* Item5 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item5")));
-	CListHeaderItemUI* Item6 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item6")));
-	CListHeaderItemUI* Item7 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("Item7")));
-	CListHeaderItemUI* item1 = new CListHeaderItemUI;
-	CListHeaderItemUI* item2 = new CListHeaderItemUI;
-	CListHeaderItemUI* item3 = new CListHeaderItemUI;
-	CListHeaderItemUI* item4 = new CListHeaderItemUI;
-	CListHeaderItemUI* item5 = new CListHeaderItemUI;
-	CListHeaderItemUI* item6 = new CListHeaderItemUI;
-	CListHeaderItemUI* item7 = new CListHeaderItemUI;
-	item1->SetName(_T("Item1"));
-	item1->SetAttribute(_T("font"), _T("1"));
-	item2->SetName(_T("Item2"));
-	item2->SetAttribute(_T("font"), _T("1"));
-	item3->SetName(_T("Item3"));
-	item3->SetAttribute(_T("font"), _T("1"));
-	item4->SetName(_T("Item4"));
-	item4->SetAttribute(_T("font"), _T("1"));
-	item5->SetName(_T("Item5"));
-	item5->SetAttribute(_T("font"), _T("1"));
-	item6->SetName(_T("Item6"));
-	item6->SetAttribute(_T("font"), _T("1"));
-	item7->SetName(_T("Item7"));
-	item7->SetAttribute(_T("font"), _T("1"));
-
-	item1->SetText(_T("时间"));
-	item1->SetFixedWidth(150);
-	item2->SetText(_T("地点"));
-	item2->SetFixedWidth(100);
-	item3->SetText(_T("采集人"));
-	item3->SetFixedWidth(100);
-	item4->SetText(_T("案件名称"));
-	item4->SetFixedWidth(150);
-	item5->SetText(_T("案件描述"));
-	item5->SetFixedWidth(150);
-	item6->SetText(_T("设备IP"));
-	item6->SetFixedWidth(150);
-	item7->SetText(_T("描述"));
-	item7->SetFixedWidth(180);
-	list_head->Remove(Item1);
-	list_head->Remove(Item2);
-	list_head->Remove(Item3);
-	list_head->Remove(Item4);
-	list_head->Remove(Item5);
-	list_head->Remove(Item6);
-	list_head->Remove(Item7);
-	m_pList->Remove(list_head);
-	m_pList->Add(newlist);
-	m_pList->SetAttribute(_T("headerbkimage"), _T("file='skin/lbl.png'"));
-	newlist->SetFixedHeight(31);
-	newlist->Add(item1);
-	newlist->Add(item2);
-	newlist->Add(item3);
-	newlist->Add(item4);
-	newlist->Add(item5);
-	newlist->Add(item6);
-	newlist->Add(item7);
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+//	pList->RemoveAll();
+	CDialogBuilder builder;
+	CListUI* SubList = (CListUI*)(builder.Create(_T("xml//CaseList.xml"), (UINT)0, NULL, &m_PaintManager));
+	CVerticalLayoutUI* Lyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("ListLyt")));
+	Lyt->Remove(pList, true);
+	Lyt->Add(SubList);
 }
 
 void CLogUI::InsertLogInfoToList()
 {
 	//m_pList->RemoveAll();
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+
 	for (int i = 0; i < 10; i++)
 	{
 		CListTextElementUI* pListElement = new CListTextElementUI;
 		pListElement->SetTag(i);
-		m_pList->Add(pListElement);
+		pList->Add(pListElement);
 		pListElement->SetAttribute(_T("font"), _T("1"));
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
@@ -249,13 +145,13 @@ void CLogUI::InsertLogInfoToList()
 
 void CLogUI::InsertCaseInfoToList()
 {
-	m_pList->RemoveAll();
-	TListInfoUI* List_Info =  m_pList->GetListInfo();
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	TListInfoUI* List_Info = pList->GetListInfo();
 	for (int i = 0; i < 10; i++)
 	{
 		CListTextElementUI* pListElement = new CListTextElementUI;
 		pListElement->SetTag(i);
-		m_pList->Add(pListElement);
+		pList->Add(pListElement);
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
 		pListElement->SetText(1, _T("程序设计"));

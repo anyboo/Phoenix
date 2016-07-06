@@ -69,9 +69,7 @@
 							<label name="offset2" text="00:00" font="1" align="center" width="73" />
 						</HorizontalLayout>
 					</VerticalLayout>
-					<HorizontalLayout height="130" width="166" >
-						<Button name="Search" pos="30,35,110,115" float="true" align="bottom" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'"/>
-					</HorizontalLayout>
+					<Button name="Search" width="80" height="80" padding="15,30,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'"/>
 				</HorizontalLayout>
 				<VerticalLayout  height="550" padding="0,13,0,0" >
 					<List name="DownloadList" padding="10,0,5,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true">

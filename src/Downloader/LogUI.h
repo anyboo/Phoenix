@@ -53,7 +53,6 @@ public:
 protected:
 	vector<Log_Search>		m_LogInfo;
 	vector<Case_Search>		m_CaseInfo;
-	CListUI*				m_pList;
 	BOOL					m_bInit;
 	SYSTEMTIME		 m_sysTime;
 protected:

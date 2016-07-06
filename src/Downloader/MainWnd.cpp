@@ -117,7 +117,8 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	{
 		CMenuWnd* pMenu = new CMenuWnd();
 		if (pMenu == NULL) { return; }
-		POINT pt = { 835, 30 };
+		//POINT pt = { 835, 30 };
+		POINT pt = { msg.ptMouse.x - 65, 30 };
 		::ClientToScreen(m_hWnd, &pt);
 		pMenu->Init(msg.pSender, pt);
 	}
