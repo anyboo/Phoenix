@@ -57,7 +57,7 @@ public:
 
 	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
-	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
+	CListContainerElementUI* Add_FileInfoList();
 
 protected:
 	vector<FILE_INFO>	m_fileInfo;
