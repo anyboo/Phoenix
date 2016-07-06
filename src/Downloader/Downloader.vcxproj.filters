@@ -43,6 +43,12 @@
     <ClCompile Include="OVPlayerUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="QMSqlite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgtessUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -85,6 +91,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="OVPlayerUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="QMSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgtessUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

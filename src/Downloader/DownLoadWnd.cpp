@@ -3,7 +3,7 @@
 #include "CalendarUI.h"
 #include "VideoLoginUI.h"
 #include "SearchFileUI.h"
-
+#include "ProgtessUI.h"
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(0), m_beginTag(TRUE)
@@ -101,11 +101,18 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearchFileWnd()
 {
-	std::auto_ptr<SearchFileUI> pDlg(new SearchFileUI);
+	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	
+
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	assert(pSearchDlg.get());
+	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
+	pSearchDlg->CenterWindow();
+	pSearchDlg->ShowModal();
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)

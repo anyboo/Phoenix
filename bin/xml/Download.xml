@@ -10,8 +10,11 @@
 		<HorizontalLayout height="60" bkimage="file='skin/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />
-			<Button name="test" width="40" height="40" padding="300,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
+			<Button name="test" width="40" height="40" padding="150,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
 			<Button name="test2" width="40" height="40" padding="10,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
+			<Control name="Network" width="30" height="30" padding="150,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" value="100" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
+			<Label text="100%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>
 		</HorizontalLayout>
 		<HorizontalLayout height="708">
 			<VerticalLayout width="200" height="708" bkimage="file='skin/beijing.png'">
@@ -31,27 +34,27 @@
 					</VerticalLayout>
 					<VerticalLayout width="180" height="130" padding="10,0,10,0" borderround="5,5">
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,20,0,0">
-							<Button pos="1,0,54,46" float="true" align="bottom" name="DataTime1" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
-							<Control bkimage="file='skin/st.png'" width="2" padding="55,0,0,0"/>
-							<label name="DatatimeText1" text="2016-06-15" float="true" font="1" pos="56,0,180,46" align="center" />
+							<Button width="53" height="46" padding="1,0,0,0" name="DataTime1" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="DatatimeText1" text="2016-06-15" font="1" width="124" align="center" />
 						</HorizontalLayout>
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,10,0,0">
-							<Button pos="1,0,54,46" float="true" align="bottom" name="daytime1" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
-							<Control bkimage="file='skin/st.png'" width="2" padding="55,0,0,0"/>
-							<Label name="daytimeText1" text="00:00" float="true" pos="56,0,180,46" align="center" font="1" />
+							<Button width="53" height="46" padding="1,0,0,0" name="daytime1" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<Label name="daytimeText1" text="00:00" width="124" align="center" font="1" />
 						</HorizontalLayout>
 					</VerticalLayout>
 						<Label text="至"  font="1" padding="0,60,0,50"/>
 					<VerticalLayout width="180" height="130" padding="10,0,10,0" borderround="5,5">
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,20,0,0">
-							<Button pos="1,0,54,46" float="true" align="bottom" name="DataTime2" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
-							<Control bkimage="file='skin/st.png'" width="2" padding="55,0,0,0"/>
-							<label name="DatatimeText2" text="2016-06-15" float="true" font="1" pos="56,0,180,46" align="center" />
+							<Button width="53" height="46" padding="1,0,0,0" name="DataTime2" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="DatatimeText2" text="2016-06-15"  font="1" width="124" align="center" />
 						</HorizontalLayout>
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,10,0,0">
-							<Button pos="1,0,54,46" float="true" align="bottom" name="daytime2" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
-							<Control bkimage="file='skin/st.png'" width="2" padding="55,0,0,0"/>
-							<Label name="daytimeText2" text="23:59" float="true" pos="56,0,180,46" align="center" font="1" />
+							<Button width="53" height="46" padding="1,0,0,0" name="daytime2" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2"/>
+							<Label name="daytimeText2" text="23:59" width="124" align="center" font="1" />
 						</HorizontalLayout>
 					</VerticalLayout>
 					<VerticalLayout width="140" height="130" padding="10,0,10,0" borderround="5,5">

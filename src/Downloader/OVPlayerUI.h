@@ -1,24 +1,19 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-#include <vector>
 
 
-class COtherTools :
+class COVPlayerUI :
 	public WindowImplBase
 {
 public:
-	COtherTools();
-	~COtherTools();
+	COVPlayerUI();
+	~COVPlayerUI();
+
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
-
-	void OnOpenExeFile(STDSTRING& filePath);
-
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 };
-
-

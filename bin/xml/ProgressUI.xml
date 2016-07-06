@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="400,140" caption="0,0,0,0" roundcorner="4,4" showdirty="false" >
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout height="200" bkimage="file='skin/beijing.png'" bordersize="3" bordercolor="0xf1234567">
+		<VerticalLayout height="40">
+			<Label text="提示" font="1" width="60" align="center" padding="0,6,0,0," textcolor="#FFFFFFFF"/>
+		</VerticalLayout>
+		<VerticalLayout bkimage="file='skin/bsbj.png'" width="394" padding="3,0,3,2">
+		<Progress name="electric" width="250" height="10" foreimage="file='skin/jindutiao.png'" value="30" padding="70,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
+		<Label name="text" width="200" text="正在搜索文件中:12/38"  padding="100" font="1"/>
+		</VerticalLayout>
+	</VerticalLayout>
+</Window>
