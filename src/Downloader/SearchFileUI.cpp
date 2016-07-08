@@ -68,7 +68,12 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 		}
 		if (!SendName.compare(0, 7, _T("BT_Play")))
 		{
-			GetFileInfo(SendName);
+			std::auto_ptr<CPlayVideoWnd> pSearchDlg(new CPlayVideoWnd);
+			assert(pSearchDlg.get());
+			pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+			pSearchDlg->CenterWindow();
+			pSearchDlg->ShowModal();
+		//	GetFileInfo(SendName);
 		}
 	}
 

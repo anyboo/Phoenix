@@ -147,10 +147,6 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
-    <ClCompile Include="CommonUtrl.cpp" />
-    <ClCompile Include="Device.cpp" />
-    <ClCompile Include="DeviceManager.cpp" />
-    <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
@@ -160,7 +156,6 @@
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
-    <ClCompile Include="SearchVideo.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

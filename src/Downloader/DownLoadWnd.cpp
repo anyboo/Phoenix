@@ -5,9 +5,6 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
-#include "RearchFile/SearchVideo.h" 
-#include "Device.h" 
-#include "DHVendor.h"
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
@@ -111,35 +108,6 @@ void DownLoadWnd::OnSearchFileWnd()
 	pDlg->CenterWindow();
 	pDlg->ShowModal();*/
 
-		time_range range;
-		range.start = 1467475200;
-		range.end = 1467561600;
-
-		m_Channel.push_back(1);
-	 	//通过设备类来调用海康的SDK 
-		DHVendor hkObj;
-	 	//初始化设备类 
-	 	Device dObj(&hkObj);
-	 	//海康的登录 
-		STDSTRING strIP(_T("192.168.0.96"));
-		STDSTRING strUser(_T("admin"));
-		STDSTRING strPswd(_T(""));
-		BOOL bRet1 = dObj.Login(strIP, 37777, strUser, strPswd);
-
-
-		//视频文件查询类 
-		CSearchVideo svObj;
-		svObj.SearchFile(&dObj, range, m_Channel);
-	
-
-		//保存文件查询的信息
-		std::vector<readSearchVideo> RSVObj;
-		BOOL bRet = svObj.ReadDataFromTable(RSVObj);
-		if (bRet)
-		{
-			//pDlg->Close();
-		}
-	
 
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
 	assert(pSearchDlg.get());
@@ -420,4 +388,5 @@ void DownLoadWnd::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
 	STDSTRING pictureInfo(strValue);
 	CButtonUI* btn_data = static_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
 	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
+//	btn_data->GetNativeWindow();
 }

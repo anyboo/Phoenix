@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1280,800" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="3" name="微软雅黑" size="10" bold="false" />
+	<Font shared="true" id="4" name="宋体" size="14" bold="false" />
+	<Font shared="true" id="5" name="宋体" size="16" bold="false" />
+	<Include source="skin/scrollbar.xml" />
+	
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="800" width="1280" inset="3" bordersize="3" bordercolor="0xf1234567">
+		<HorizontalLayout height="60" bkimage="file='skin/beijing.png'">
+			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
+			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="500,1,1,1" />
+			<Button name="test" width="40" height="40" padding="180,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
+			<Button name="test2" width="40" height="40" padding="10,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
+			<Control name="Network" width="30" height="30" padding="275,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" value="100" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
+			<Label text="100%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>
+		</HorizontalLayout>
+		<HorizontalLayout height="740">
+			<VerticalLayout width="250" bkimage="file='skin/beijing.png'">
+				<HorizontalLayout  width="150" height="80" padding="50,30,40,10," bkimage="file='skin/cxbt.png'" >				
+					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" textpadding="0,40,0,2" foreimage="file='skin/tianjia.png' dest='57,10,80,33'" pushedimage="file='skin/cxbt.png'" normalimage="skin/cxbt.png" hotimage="skin/bsbj.png"  />
+				</HorizontalLayout>
+				<VerticalLayout width="250" height="585" >					
+					<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
+
+					</List>
+				</VerticalLayout>
+			</VerticalLayout>
+			<VerticalLayout  height="740" bkimage="skin/bsbj.png" >
+				<HorizontalLayout  height="130" >
+					<VerticalLayout width="50" height="100" padding="40,20,20,10"  bkimage="skin/time.png">
+						<Slider name="Select_time" text="完全            时段" font="1" multiline="true" textpadding="4,15,1,15" hor="false" thumbsize="50,50" step="50" value="100" width="50" height="100"  thumbimage="file='skin/timeOut.png'" thumbpushedimage="skin/timeIn.png" bkimage="file='skin/timeOut.png mask='0xf1234567" />				
+					</VerticalLayout>
+					<VerticalLayout width="225" height="130" padding="20,0,10,0" borderround="5,5">
+						<HorizontalLayout	width="225" height="46" bkimage="skin/szdk.png" padding="0,20,0,0">
+							<Button width="53" height="46" padding="1,0,0,0" name="DataTime1" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="DatatimeText1" text="2016-06-15" font="1" width="124" align="center" />
+						</HorizontalLayout>
+						<HorizontalLayout	width="225" height="46" bkimage="skin/szdk.png" padding="0,10,0,0">
+							<Button width="53" height="46" padding="1,0,0,0" name="daytime1" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<Label name="daytimeText1" text="00:00" width="124" align="center" font="1" />
+						</HorizontalLayout>
+					</VerticalLayout>
+						<Label text="至"  font="1" padding="0,60,0,50"/>
+					<VerticalLayout width="225" height="130" padding="10,0,20,0" borderround="5,5">
+						<HorizontalLayout	width="225" height="46" bkimage="skin/szdk.png" padding="0,20,0,0">
+							<Button width="53" height="46" padding="1,0,0,0" name="DataTime2" foreimage="file='skin/ical.png' dest='15,8,39,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="DatatimeText2" text="2016-06-15"  font="1" width="124" align="center" />
+						</HorizontalLayout>
+						<HorizontalLayout	width="225" height="46" bkimage="skin/szdk.png" padding="0,10,0,0">
+							<Button width="53" height="46" padding="1,0,0,0" name="daytime2" foreimage="file='skin/clock_64.png' dest='11,8,42,39'" pushedimage="file='skin/szdk.png'" normalimage="skin/szdk.png" hotimage="skin/cxbt.png"  />
+							<Control bkimage="file='skin/st.png'" width="2"/>
+							<Label name="daytimeText2" text="23:59" width="124" align="center" font="1" />
+						</HorizontalLayout>
+					</VerticalLayout>
+					<VerticalLayout width="160" height="130" padding="20,0,10,0" borderround="5,5">
+						<HorizontalLayout	width="160" height="46" bkimage="skin/piancha.png" padding="0,20,0,0">
+							<label text="+偏差" font="1" align="center" width="65" />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="offset1" text="00:00" font="1" align="center" width="73" />
+						</HorizontalLayout>
+						<HorizontalLayout	width="160" height="46" bkimage="skin/piancha.png" padding="0,10,0,0">
+							<label text="-偏差" font="1" align="center" width="65" />
+							<Control bkimage="file='skin/st.png'" width="2" />
+							<label name="offset2" text="00:00" font="1" align="center" width="73" />
+						</HorizontalLayout>
+					</VerticalLayout>
+					<Button name="Search" width="80" height="80" padding="30,30,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'"/>
+				</HorizontalLayout>
+				<VerticalLayout  height="550" padding="0,13,0,0" >
+					<List name="DownloadList" padding="10,0,5,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true">
+						<ListHeader height="31" menu="true">
+							<ListHeaderItem text="名称" font="1" width="180" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="大小" font="1" width="125" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="进度" font="1" width="200" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="速度" font="1" width="125" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="剩余时间" font="1" width="125" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="状态" font="1" width="125" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='skin/st.png'" width="1" />
+							<ListHeaderItem text="操作" font="1" width="125" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+						</ListHeader>
+					</List>
+				</VerticalLayout>
+			</VerticalLayout>
+		</HorizontalLayout>
+    </VerticalLayout>
+</Window>
