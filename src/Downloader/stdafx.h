@@ -22,7 +22,16 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
+#include "CommonUtrl.h"
+#include "Device.h"
+#include "JXJVendor.h"
+#include "DZPVendor.h"
+#include "DHVendor.h"
+#include "HKVendor.h"
 
+//#include "SearchDevice.h"
+//#include "LoginDevice.h"
+//#include "SearchVideo.h"
 
 
 using namespace DuiLib;

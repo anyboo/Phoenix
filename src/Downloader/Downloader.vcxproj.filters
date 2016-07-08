@@ -52,6 +52,36 @@
     <ClCompile Include="PlayVideoWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\Device.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\LoginDevice.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchDevice.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchVideo.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\TestWindows.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp">
+      <Filter>源文件\BusinessLayer\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\DHVendor\DHVendor.cpp">
+      <Filter>源文件\BusinessLayer\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp">
+      <Filter>源文件\BusinessLayer\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp">
+      <Filter>源文件\BusinessLayer\sdk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -121,6 +151,12 @@
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{3e88cab4-5be2-48d2-81e4-98ece4ed0288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\BusinessLayer">
+      <UniqueIdentifier>{1a5255c6-fdf3-4225-8ad9-c7f534c76a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\BusinessLayer\sdk">
+      <UniqueIdentifier>{6b5bd1eb-b10b-4dc4-9c17-cec550bab599}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

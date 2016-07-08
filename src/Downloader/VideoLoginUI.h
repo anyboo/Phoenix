@@ -15,6 +15,12 @@ public:
 
 	void OnOpenVideoVendorWnd(TNotifyUI& msg);
 
+	void OnShowDevice(int pages);
+
+private:
+	BOOL	m_Init;
+	DEVICE_INFO_LIST		m_DeviceList;
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

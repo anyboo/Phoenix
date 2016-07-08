@@ -14,7 +14,7 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void SearchTest();
 
-	void GetFileCountAndSize();
+	void GetFileCountAndSize(STDSTRING& optionName);
 	void GetFileInfo(STDSTRING& SendName);
 	void OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime);
 

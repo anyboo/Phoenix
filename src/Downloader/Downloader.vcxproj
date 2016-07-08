@@ -44,6 +44,12 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <IntDir>.\Debug\</IntDir>
+    <LibraryWPath>$(LibraryWPath)</LibraryWPath>
+    <LibraryPath>$(LibraryWPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <ReferencePath>$(LibraryWPath);$(VC_ReferencesPath_x86)</ReferencePath>
+    <ExecutablePath>$(LibraryWPath);$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH)</ExecutablePath>
+    <IncludePath>$(LibraryWPath);$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <SourcePath>$(LibraryWPath);$(VC_SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -58,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\code;$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -75,9 +81,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(TargetPath)</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>duilib_d.lib;dhnetsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>dhnetsdk.dll</DelayLoadDLLs>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -145,6 +152,16 @@
     <ClInclude Include="VideoVendorUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp" />
+    <ClCompile Include="..\BusinessLayer\Device.cpp" />
+    <ClCompile Include="..\BusinessLayer\DHVendor\DHVendor.cpp" />
+    <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp" />
+    <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp" />
+    <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
+    <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
+    <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />
+    <ClCompile Include="..\BusinessLayer\SearchVideo.cpp" />
+    <ClCompile Include="..\BusinessLayer\TestWindows.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
