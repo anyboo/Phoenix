@@ -50,6 +50,10 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 		{
 			SearchTest();
 		}
+		if (!SendName.compare(0, 6, _T("option")))
+		{
+			GetFileCountAndSize();
+		}
 		if (SendName == _T("All"))
 		{
 			CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
@@ -65,6 +69,7 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 					option->Selected(false);
 				}
 			}
+			GetFileCountAndSize();
 		}
 		if (!SendName.compare(0, 7, _T("BT_Play")))
 		{
@@ -146,4 +151,30 @@ void SearchFileUI::OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRIN
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+}
+
+void SearchFileUI::GetFileCountAndSize()
+{
+	int file_Count = 0;
+	int file_size = 0;
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	int SubListCount = pList->GetCount();
+	if (SubListCount != 0)
+	{
+		for (int i = 0; i <= SubListCount; i++)
+		{
+			COptionUI* option = static_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i + 1));
+			if (option->IsSelected())
+			{
+				file_Count++;
+			}
+		}
+		 
+	}
+
+	//CLabelUI* Lab = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("file_Count")));
+	//char str[200] = { 0 };
+	//sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", file_Count, 100);
+	//STDSTRING LabText(str);
+	//Lab->SetText(LabText.c_str());
 }
