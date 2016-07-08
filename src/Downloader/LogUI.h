@@ -51,8 +51,8 @@ public:
 
 	void SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day);
 protected:
-	vector<Log_Search>		m_LogInfo;
-	vector<Case_Search>		m_CaseInfo;
+	std::vector<Log_Search>		m_LogInfo;
+	std::vector<Case_Search>		m_CaseInfo;
 	BOOL					m_bInit;
 	SYSTEMTIME		 m_sysTime;
 protected:

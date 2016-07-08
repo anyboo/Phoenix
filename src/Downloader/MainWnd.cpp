@@ -9,7 +9,7 @@
 
 #include "MenuWnd.h"
 CMainWnd::CMainWnd()
-:m_IsMinWnd(FALSE)
+:m_IsMinWnd(FALSE), m_IsMaxWnd(FALSE)
 {
 	
 }
@@ -36,12 +36,12 @@ LPCTSTR CMainWnd::GetWindowClassName() const
 }
 
 CDuiString CMainWnd::GetSkinFolder()
-{
+{	
 	return _T("skin");
 }
 
 CDuiString CMainWnd::GetSkinFile()
-{
+{	
 	return _T("xml\\MainWnd.xml");
 }
 
@@ -111,6 +111,7 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	return FALSE;
 }
 
+
 void CMainWnd::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("aboutbt"))
@@ -129,6 +130,21 @@ void CMainWnd::Notify(TNotifyUI& msg)
 		pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 		pDlg->CenterWindow();
 		pDlg->ShowModal();
+	}
+	if (msg.sType == _T("menu_Replace"))
+	{
+		if (!m_IsMaxWnd)
+		{
+			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
+			CPaintManagerUI::ReloadSkin();
+			m_IsMaxWnd = TRUE;
+		}
+		else
+		{
+			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
+			CPaintManagerUI::ReloadSkin();
+			m_IsMaxWnd = FALSE;
+		}
 	}
 	return WindowImplBase::NotifyPump(msg);
 }

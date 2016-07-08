@@ -9,8 +9,8 @@ public:
 	~CVendor();
 
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
-	CListContainerElementUI* ShowVendor(bool IsOnLine);
 
+	void ShowOfflineVendor();
 	void AddVendorList();
 	void AddChannelsList(int CurSel);
 	CListContainerElementUI* AddChannels();

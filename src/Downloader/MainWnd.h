@@ -9,6 +9,7 @@
 #define BT_VideoPlay		(_T("VideoPlay"))
 
 
+
 class CMainWnd :
 	public WindowImplBase
 {
@@ -24,6 +25,7 @@ public:
 
 	void OnMin(TNotifyUI& msg);
 	void OnClose(TNotifyUI& msg);
+	
 	void OnDownLoadWnd(TNotifyUI& msg);
 	void OnLogWnd(TNotifyUI& msg);
 	void OnOtherToolsWnd(TNotifyUI& msg);
@@ -33,7 +35,7 @@ public:
 
 private:
 	BOOL	m_IsMinWnd;
-
+	BOOL	m_IsMaxWnd;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

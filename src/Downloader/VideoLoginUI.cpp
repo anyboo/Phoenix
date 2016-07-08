@@ -48,6 +48,7 @@ void VideoLoginUI::Notify(TNotifyUI& msg)
 	}
 	WindowImplBase::Notify(msg);
 }
+
 void VideoLoginUI::OnOpenVideoVendorWnd(TNotifyUI& msg)
 {
 	std::auto_ptr<CVideoVendorUI> pDlg(new CVideoVendorUI);

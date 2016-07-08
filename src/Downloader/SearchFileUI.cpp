@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "SearchFileUI.h"
+#include "PlayVideoWnd.h"
+
+
 
 
 SearchFileUI::SearchFileUI()
@@ -39,15 +42,15 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 {	
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		STDSTRING SendName = msg.pSender->GetName();
-		if (msg.pSender->GetName() == _T("close_bt"))
+		if (SendName == _T("close_bt"))
 		{
 			Close();
 		}
-		if (msg.pSender->GetName() == _T("test"))
+		if (SendName == _T("test"))
 		{
 			SearchTest();
 		}
-		if (msg.pSender->GetName() == _T("All"))
+		if (SendName == _T("All"))
 		{
 			CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 			COptionUI* option_All = static_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, _T("All")));
@@ -63,6 +66,10 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 				}
 			}
 		}
+		if (!SendName.compare(0, 7, _T("BT_Play")))
+		{
+			GetFileInfo(SendName);
+		}
 	}
 
 	WindowImplBase::Notify(msg);
@@ -72,56 +79,66 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 void SearchFileUI::SearchTest()
 {
 	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-//	pList->RemoveAll();
-	CListContainerElementUI* SubList = new CListContainerElementUI;
+//	pList->RemoveAll();	
+	STDSTRING optionName, buttonName, SubListName;
 	int filesize = 10;
-	for (int i = 1; i <= filesize; i++)
+	for (int i = 0; i < filesize; i++)
 	{
-		SubList = Add_FileInfoList(i);
+		CDialogBuilder builder;
+		CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//SearchFileList.xml"), (UINT)0, NULL, &m_PaintManager));
 		pList->Add(SubList);
+		COptionUI* SubOption = static_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_OPTION));
+		CButtonUI* btn_play = static_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+		optionName = STDSTRING(_T("option")) + to_string(i);
+		buttonName = STDSTRING(_T("BT_Play")) + to_string(i);
+		SubListName = STDSTRING(_T("FileInfoList")) + to_string(i);
+		SubOption->SetName(optionName.c_str());
+		btn_play->SetName(buttonName.c_str());
+		SubList->SetName(SubListName.c_str());
+
+		CLabelUI* Lab_Name = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+		CLabelUI* Lab_Channel = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+		CLabelUI* Lab_stime = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
+		CLabelUI* Lab_etime = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
+		CLabelUI* Lab_size = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
+
+		Lab_Name->SetText(to_string(i).c_str());
+		Lab_Channel->SetText(to_string(i).c_str());
+		Lab_stime->SetText(to_string(i).c_str());
+		Lab_etime->SetText(to_string(i).c_str());
+		Lab_size->SetText(to_string(i).c_str());
 	}
 }
 
-CListContainerElementUI* SearchFileUI::Add_FileInfoList(int n)
+
+void SearchFileUI::GetFileInfo(STDSTRING& SendName)
 {
-	CListContainerElementUI* Sublist = new CListContainerElementUI;
-	CHorizontalLayoutUI* hLyt = new CHorizontalLayoutUI;
-	COptionUI* option = new COptionUI;
-	CLabelUI* Lab_Name = new CLabelUI;
-	CLabelUI* Lab_Channel = new CLabelUI;
-	CLabelUI* Lab_Stime = new CLabelUI;
-	CLabelUI* Lab_Etime = new CLabelUI;
-	CLabelUI* Lab_Size = new CLabelUI;
-	CButtonUI* BT_Play = new CButtonUI;
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	CButtonUI* bt_play = static_cast<CButtonUI*>(m_PaintManager.FindSubControlByName(pList, SendName.c_str()));
+	STDSTRING btName = bt_play->GetName();
+	STDSTRING nametag = btName.substr(7);
+	STDSTRING SubListName = STDSTRING(_T("FileInfoList")) + nametag;
+	CListContainerElementUI* SubList = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SubListName.c_str()));
 
-	Sublist->SetFixedHeight(30);
-	Sublist->Add(hLyt);
-	hLyt->Add(option);
-	hLyt->Add(Lab_Name);
-	hLyt->Add(Lab_Channel);
-	hLyt->Add(Lab_Stime);
-	hLyt->Add(Lab_Etime);
-	hLyt->Add(Lab_Size);
-	hLyt->Add(BT_Play);
+	CLabelUI* Lab_name = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	CLabelUI* Lab_Channel = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	CLabelUI* Lab_stime = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
+	CLabelUI* Lab_etime = static_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 
-	STDSTRING optionName = STDSTRING(_T("option")) + std::to_string(n);
-	option->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"10,4,42,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
-	option->SetName(optionName.c_str());
+	
+	STDSTRING filename = Lab_name->GetText();
+	STDSTRING channel = Lab_Channel->GetText();
+	STDSTRING stime = Lab_stime->GetText();
+	STDSTRING etime = Lab_etime->GetText();
 
-	Lab_Name->SetAttributeList("width=\"240\" align=\"center\" font=\"2\"");
-	Lab_Name->SetText(_T("123412"));
-	Lab_Channel->SetAttributeList("width=\"100\" align=\"center\" font=\"2\"");
-	Lab_Channel->SetText(_T("text"));
-	Lab_Stime->SetAttributeList("width=\"200\" align=\"center\" font=\"2\"");
-	Lab_Stime->SetText(_T("text"));
-	Lab_Etime->SetAttributeList("width=\"200\" align=\"center\" font=\"2\"");
-	Lab_Etime->SetText(_T("text"));
-	Lab_Size->SetAttributeList("width=\"100\" align=\"center\" font=\"2\"");
-	Lab_Size->SetText(_T("text"));
+	OnPlayVideo(filename, channel, stime, etime);
+}
 
-	STDSTRING buttonName = STDSTRING(_T("BT_Play")) + std::to_string(n);
-	BT_Play->SetAttributeList(_T("width=\"40\" height=\"30\" padding=\"30,0,30,0\" foreimage=\"file='skin/play.png' dest='5,0,35,30'\" hotimage=\"file='skin/Button_Hot.png'\""));
-	BT_Play->SetName(buttonName.c_str());
-
-	return Sublist;
+void SearchFileUI::OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime)
+{
+	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
 }

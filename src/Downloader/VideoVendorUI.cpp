@@ -176,9 +176,6 @@ void CVideoVendorUI::InsertToDB()
 		STDSTRING spell = a[0].GetString();
 		STDSTRING VendorDeviceName = a[1].GetString();
 
-		/*STDSTRING spell = itr->name.GetString();
-		Value::ConstMemberIterator it = d.FindMember(spell.c_str());
-		STDSTRING VendorDeviceName = it->value.GetString();*/
 		sf.set<0>(spell);
 		sf.set<1>(VendorDeviceName);
 		sfRecord.push_back(sf);

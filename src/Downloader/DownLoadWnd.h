@@ -60,11 +60,12 @@ public:
 	CListContainerElementUI* Add_FileInfoList();
 
 protected:
-	vector<FILE_INFO>	m_fileInfo;
+	//std::vector<FILE_INFO>	m_fileInfo;
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
-
+	std::vector<size_t>	m_Channel;
+	//std::vector<readSearchVideo>  m_FileInfo;
 private:
 	CVendor		m_Vendor;
 	CTimeUI		m_TimeUI;

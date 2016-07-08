@@ -58,7 +58,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\code;$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -77,7 +77,7 @@
       <OutputFile>$(TargetPath)</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>duilib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;dhnetsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -132,6 +132,7 @@
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
+    <ClInclude Include="PlayVideoWnd.h" />
     <ClInclude Include="ProgtessUI.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
@@ -146,14 +147,20 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
+    <ClCompile Include="CommonUtrl.cpp" />
+    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DeviceManager.cpp" />
+    <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="OVPlayerUI.cpp" />
+    <ClCompile Include="PlayVideoWnd.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
+    <ClCompile Include="SearchVideo.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -49,6 +49,24 @@
     <ClCompile Include="ProgtessUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PlayVideoWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DHVendor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonUtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchVideo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -97,6 +115,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ProgtessUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayVideoWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

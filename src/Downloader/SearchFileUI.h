@@ -14,7 +14,8 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void SearchTest();
 
-	CListContainerElementUI* Add_FileInfoList(int n);
+	void GetFileInfo(STDSTRING& SendName);
+	void OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

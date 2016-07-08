@@ -160,9 +160,9 @@ public:
 			if (msg.pSender->GetName() == _T("menu_SetIP")) {
 				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_SetIP"), 0, 0, true);
 			}
-		/*	if (msg.pSender->GetName() == _T("menu_Rename")) {
-				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Rename"), 0, 0, true);
-			}*/
+			if (msg.pSender->GetName() == _T("menu_Replace")) {
+				if (m_pOwner) m_pOwner->GetManager()->SendNotify(m_pOwner, _T("menu_Replace"), 0, 0, true);
+			}
         }
     }
 

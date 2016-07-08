@@ -34,60 +34,18 @@ void CVendor::AddChannelsList(int CurSel)
 void CVendor::AddVendorList()
 {
 	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
-	CListContainerElementUI* SubContList = new CListContainerElementUI;
-	
-	
-	SubContList = ShowVendor(true);
-	pList->Add(SubContList);
+	CDialogBuilder builder;
+	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
+	pList->Add(SubList);
+
+	STDSTRING SubListName = STDSTRING(_T("VendorContList")) + to_string(m_ContListSel);
+	STDSTRING bt_deleteName = STDSTRING(_T("BT_delete")) + to_string(m_ContListSel);
+	CButtonUI* btn = static_cast<CButtonUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+	SubList->SetName(SubListName.c_str());
+	btn->SetName(bt_deleteName.c_str());
+	m_ContListSel = m_ContListSel + 1;
 }
 
-CListContainerElementUI* CVendor::ShowVendor(bool IsOnLine)
-{
-	CListContainerElementUI* VendorList = new CListContainerElementUI;
-	CHorizontalLayoutUI* hLyt = new CHorizontalLayoutUI;
-
-	CControlUI* VendorIcon = new CControlUI;
-	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
-	CLabelUI* VendorName = new CLabelUI;
-	CLabelUI* VendorIP = new CLabelUI;
-	CControlUI* OpenIcon = new CControlUI;
-	CButtonUI* BT_Delete = new CButtonUI;
-
-	VendorList->Add(hLyt);
-	hLyt->Add(VendorIcon);
-	hLyt->Add(cLyt);
-	hLyt->Add(OpenIcon);
-	cLyt->Add(VendorName);
-	cLyt->Add(VendorIP);
-	hLyt->Add(BT_Delete);
-	
-	m_ContListSel++;
-	STDSTRING strContListName = STDSTRING(_T("VendorContList")) + std::to_string(m_ContListSel);
-	VendorList->SetName(strContListName.c_str());
-
-	if (IsOnLine)
-	{
-		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'skin/network_online.png' dest = '10,20,38,47'\""));
-		VendorList->SetAttributeList(_T("height=\"80\" width=\"185\" bordersize=\"1\" bordercolor=\"0xFFFFFFFF\""));
-	}
-	else
-	{
-		VendorIcon->SetAttributeList(_T("width=\"40\" bkimage=\"file = 'skin/network_offline.png' dest = '10,20,39,48'\""));
-		VendorList->SetAttributeList(_T("height=\"80\" width=\"200\" bkimage=\"file = 'skin/tdxzanniu.png'\" bordersize=\"1\" bordercolor=\"0x12345678\""));
-	}
-	cLyt->SetFixedWidth(110);
-	VendorName->SetAttributeList(_T("font=\"5\" padding=\"10, 30, 0, 0\" textcolor=\"#FFFFFFFF\""));
-	VendorIP->SetAttributeList(_T("font=\"4\" padding=\"10, 0, 0, 0\" textcolor=\"#FFFFFFFF\""));
-	VendorName->SetText(_T("厂商名"));
-	VendorIP->SetText(_T("(192.168.0.21)"));
-
-	OpenIcon->SetAttributeList(_T("width=\"19\" bkimage=\"file = 'Downloader/xxzk.png' dest = '0,36,19,48'\""));
-	BT_Delete->SetAttributeList(_T("width=\"14\" height=\"14\" padding=\"0,2,2,0\" normalimage=\"file='skin/hot_del.png' dest='1,0,15,15'\" hotimage=\"file='skin/del_download.png' dest='1,0,15,15'\""));
-	STDSTRING strBtName = STDSTRING(_T("BT_delete")) + std::to_string(m_ContListSel);
-	BT_Delete->SetName(strBtName.c_str());
-
-	return VendorList;
-}
 
 CListContainerElementUI* CVendor::AddChannels()
 {
@@ -119,10 +77,29 @@ CListContainerElementUI* CVendor::AddChannels()
 		else{
 			subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
 			subLab->SetAttributeList(_T("font=\"5\" valign=\"center\" textcolor=\"#FFFFFFFF\""));
-			STDSTRING strChannelName = STDSTRING(_T("通道")) + std::to_string(i);
+			STDSTRING strChannelName = STDSTRING(_T("通道")) + std::to_string(i - 1);
 			subLab->SetText(strChannelName.c_str());
 		}		
 	}
 
 	return ContList;
+}
+
+void CVendor::ShowOfflineVendor()
+{
+	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
+	int CurSel = pList->GetCurSel();
+	CListContainerElementUI* SubList = static_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
+	STDSTRING str = SubList->GetName();
+	CControlUI* network = static_cast<CControlUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_CONTROL, 0));
+	network->SetAttribute(_T("bkimage"), _T("file='skin/network_offline.png' dest='10,20,39,48'"));
+	SubList->SetBkImage(_T("skin/tdxzanniu.png"));
+	SubList->Select(false);
+	SubList->SetMouseEnabled(false);
+
+	CListContainerElementUI* nextList = static_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
+	if (nextList != NULL && nextList->GetName() == _T("Channel_List"))
+	{
+		pList->Remove(nextList, true);
+	}
 }

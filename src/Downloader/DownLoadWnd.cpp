@@ -5,6 +5,10 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
+#include "RearchFile/SearchVideo.h" 
+#include "Device.h" 
+#include "DHVendor.h"
+
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
@@ -101,11 +105,40 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearchFileWnd()
 {
-	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
+	/*std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pDlg->CenterWindow();
-	pDlg->ShowModal();
+	pDlg->ShowModal();*/
+
+		time_range range;
+		range.start = 1467475200;
+		range.end = 1467561600;
+
+		m_Channel.push_back(1);
+	 	//通过设备类来调用海康的SDK 
+		DHVendor hkObj;
+	 	//初始化设备类 
+	 	Device dObj(&hkObj);
+	 	//海康的登录 
+		STDSTRING strIP(_T("192.168.0.96"));
+		STDSTRING strUser(_T("admin"));
+		STDSTRING strPswd(_T(""));
+		BOOL bRet1 = dObj.Login(strIP, 37777, strUser, strPswd);
+
+
+		//视频文件查询类 
+		CSearchVideo svObj;
+		svObj.SearchFile(&dObj, range, m_Channel);
+	
+
+		//保存文件查询的信息
+		std::vector<readSearchVideo> RSVObj;
+		BOOL bRet = svObj.ReadDataFromTable(RSVObj);
+		if (bRet)
+		{
+			//pDlg->Close();
+		}
 	
 
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
@@ -144,13 +177,17 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 			m_Vendor.AddVendorList();
 
 		}
+		if (strSendName == _T("test3"))
+		{
+			m_Vendor.ShowOfflineVendor();
+		}
 		if (strSendName == _T("test2"))
 		{
 			ShowFileList();
 		}
 		if (!strSendName.compare(0, BTNAMELONG, BTNAMETAG))
 		{
-			RemoveSubList(strSendName);
+ 			RemoveSubList(strSendName);
 		}
 	}
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !strSendName.compare(0, 14, _T("VendorContList")))
@@ -192,10 +229,6 @@ void DownLoadWnd::ShowFileList()
 	BT_CanCel->SetName(bt_name.c_str());
 	m_FileCount = m_FileCount + 1;
 
-	for (int i = 0; i < pList->GetCount(); i++)
-	{
-
-	}
 }
 
 CListContainerElementUI* DownLoadWnd::Add_FileInfoList()
@@ -215,8 +248,6 @@ int DownLoadWnd::GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pLi
 	for (int i = 0; i < pList->GetCount(); i++)
 	{
 		SubListTmp = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, i));
-		STDSTRING sts = SubList->GetName();
-		STDSTRING str = SubListTmp->GetName();
 		if (SubListTmp->GetName() == SubList->GetName())
 		{
 			CurSel = i;
@@ -287,9 +318,8 @@ void DownLoadWnd::RemoveSubList(STDSTRING& strSendName)
 	CButtonUI* bt_cancel = static_cast<CButtonUI*>(m_PaintManager.FindSubControlByName(pList, strSendName.c_str()));
 	STDSTRING tag = strSendName.substr(BTNAMELONG);
 	STDSTRING SubListName = SUBLISTNAMETAG + tag;
-//	CListContainerElementUI* ContList = (CListContainerElementUI*)(bt_cancel->GetParent());
+	//CListContainerElementUI* ContList1 = (CListContainerElementUI*)(bt_cancel->GetParent());
 	CListContainerElementUI* ContList = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SubListName.c_str()));
-
 	int ContListserial = GetSubListCurSel(ContList, pList);
 	STDSTRING SubListCount = ContList->GetUserData();
 	int Count = StringToInt(SubListCount.c_str());
