@@ -21,17 +21,17 @@ void CVendor::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 	ppm = pPaintMgr;
 }
 
-void CVendor::AddChannelsList(int CurSel)
+void CVendor::AddChannelsList(int CurSel, size_t Channel_Count)
 {
 	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CListContainerElementUI* SubContList = new CListContainerElementUI;
 
-	SubContList = AddChannels();
+	SubContList = AddChannels(Channel_Count);
 	pList->AddAt(SubContList, CurSel + 1);
 
 }
 
-void CVendor::AddVendorList()
+void CVendor::AddVendorList(STDSTRING& VendorName, STDSTRING& VendorIP)
 {
 	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
@@ -44,15 +44,18 @@ void CVendor::AddVendorList()
 	SubList->SetName(SubListName.c_str());
 	btn->SetName(bt_deleteName.c_str());
 	m_ContListSel = m_ContListSel + 1;
+
+	CLabelUI* Lab_Name = static_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	CLabelUI* Lab_IP = static_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	Lab_Name->SetText(VendorName.c_str());
+	Lab_IP->SetText(VendorIP.c_str());
 }
 
 
-CListContainerElementUI* CVendor::AddChannels()
+CListContainerElementUI* CVendor::AddChannels(size_t Channel_Count)
 {
 	CListContainerElementUI* ContList = new CListContainerElementUI;
 	CVerticalLayoutUI* vLyt = new CVerticalLayoutUI;
-
-	int Channel_Count = 4;
 
 	ContList->SetName(_T("Channel_List"));
 	ContList->SetFixedHeight(30 * Channel_Count + 30);
@@ -60,7 +63,7 @@ CListContainerElementUI* CVendor::AddChannels()
 	ContList->SetMouseEnabled(false);
 	ContList->Add(vLyt);
 
-	for (int i = 0; i <= Channel_Count; i++)
+	for (UINT i = 0; i <= Channel_Count; i++)
 	{
 		CHorizontalLayoutUI* subHlyt = new CHorizontalLayoutUI;
 		COptionUI* subOption = new COptionUI;

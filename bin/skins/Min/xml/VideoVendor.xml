@@ -15,50 +15,50 @@
 			<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45" >
 				<HorizontalLayout>
-					<option name="CheckBox1" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name1" text="蓝色星际" font="1" width="260" align="left"/>
+					<option name="CheckBox1" width="20" height="20" selected="true" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
+					<Label name="equipment_name1" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox3" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name3" text="大华" font="1" width="260" align="left"/>
+					<Label name="equipment_name3" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox5" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name5" text="迪智普" font="1" width="260" align="left"/>
+					<Label name="equipment_name5" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox7" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name7" text="波利" font="1" width="260" align="left"/>
+					<Label name="equipment_name7" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox9" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name9" text="泰康伟业" font="1" width="260" align="left"/>
+					<Label name="equipment_name9" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox11" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name11" text="九安光电" font="1" width="260" align="left"/>
+					<Label name="equipment_name11" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>
 			<ListContainerElement height="45">
 				<HorizontalLayout>
 					<option name="CheckBox13" width="20" height="20" padding="30,13,30,12" normalimage="file='skin/RadioBtnNon.png' dest='3,3,16,16'" selectedimage="file='skin/RadioBtnSel.png' dest='3,3,16,16'" group="RadioBoxTest" />
-					<Label name="equipment_name13" text="天地伟业" font="1" width="260" align="left"/>
+					<Label name="equipment_name13" text="" font="1" width="260" align="left"/>
 				</HorizontalLayout>
 			</ListContainerElement>
 				<Control height="1" bkcolor="0x12345678"/>

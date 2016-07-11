@@ -50,16 +50,21 @@ void CVideoVendorUI::Notify(TNotifyUI& msg)
 	{
 		if (msg.pSender->GetName() == _T("close_btn"))
 		{
+			m_Select = GetNothing;
 			Close();
 		}
 		if (msg.pSender->GetName() == _T("Prev_page"))
 		{
-
 			GetPrevPage();
 		}
 		if (msg.pSender->GetName() == _T("Next_page"))
 		{
 			GetNextPage();
+		}
+		if (msg.pSender->GetName() == _T("BT_OK"))
+		{
+			m_Select = GetDeviceName;
+			Close();
 		}
 	}
 	if (msg.sType == DUI_MSGTYPE_TEXTCHANGED && msg.pSender->GetName() == _T("Edit_Input"))
@@ -79,32 +84,31 @@ void CVideoVendorUI::Notify(TNotifyUI& msg)
 void CVideoVendorUI::GetPrevPage()
 {
 	CLabelUI* Lab_Page = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("pages")));
-	STDSTRING Lab_Text = Lab_Page->GetText();
-	STDSTRING pages = Lab_Text.substr(0, Lab_Text.find_first_of(_T("/")));
-	int page_Num = StringToInt(pages.c_str());
-	if (page_Num > 1)
-	{
-		page_Num--;
-	}
-	Lab_Text = to_string(page_Num) + STDSTRING(_T("/")) + to_string(page_Num);
-	Lab_Page->SetText(Lab_Text.c_str());
-	ShowVendorDevice(page_Num);
+	STDSTRING strText = Lab_Page->GetText();
+	STDSTRING strPage = strText.substr(0, strText.find_first_of("/"));
+	STDSTRING page_count = strText.substr(strText.find_first_of("/") + 1);
+	if (strText == STDSTRING(_T("0/0")) || strPage == STDSTRING(_T("1")))
+		return;
+	int page = StringToInt(strPage.c_str());
+	page = page - 1;
+	ShowVendorDevice(page);
+	strText = to_string(page) + STDSTRING(_T("/")) + page_count;
+	Lab_Page->SetText(strText.c_str());
 }
 
 void CVideoVendorUI::GetNextPage()
 {
 	CLabelUI* Lab_Page = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("pages")));
-	STDSTRING Lab_Text = Lab_Page->GetText();
-	STDSTRING pages = Lab_Text.substr(0, Lab_Text.find_first_of(_T("/")));
-	int page_Num = StringToInt(pages.c_str());
-
-	if (page_Num < m_pageCount)
-	{
-		page_Num++;
-	}
-	Lab_Text = to_string(page_Num) + STDSTRING(_T("/")) + to_string(m_pageCount);
-	Lab_Page->SetText(Lab_Text.c_str());
-	ShowVendorDevice(page_Num);
+	STDSTRING strText = Lab_Page->GetText();
+	STDSTRING strPage = strText.substr(0, strText.find_first_of("/"));
+	STDSTRING page_count = strText.substr(strText.find_first_of("/") + 1);
+	if (strPage == page_count)
+		return;
+	int page = StringToInt(strPage.c_str());
+	page = page + 1;
+	ShowVendorDevice(page);
+	strText = to_string(page) + STDSTRING(_T("/")) + page_count;
+	Lab_Page->SetText(strText.c_str());
 }
 
 void CVideoVendorUI::SelectEquipment()
@@ -139,6 +143,10 @@ void CVideoVendorUI::InitDevice(STDSTRING& Input)
 	CLabelUI* Lab_Page = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("pages")));
 	STDSTRING Lab_show = STDSTRING(_T("1/") + to_string(m_pageCount));
 	Lab_Page->SetText(Lab_show.c_str());
+	if (Count == 0)
+	{
+		Lab_Page->SetText(_T("0/0"));
+	}
 
 	ShowVendorDevice(1);
 }
@@ -204,4 +212,26 @@ void CVideoVendorUI::ShowVendorDevice(int page)
 		}
 
 	}
+}
+
+STDSTRING CVideoVendorUI::GetDevice()
+{
+	if (m_Select == GetNothing)
+		return _T("");
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("equipment_List")));
+	STDSTRING optionName;
+	for (int i = 0; i < 7; i++)
+	{
+		COptionUI* option = static_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i));
+		if (option->IsSelected())
+		{
+			optionName = option->GetName();
+			break;
+		}
+	}
+	STDSTRING tag = optionName.substr(optionName.find_last_of(_T("CheckBox")) + 1);
+	STDSTRING LableName = STDSTRING(_T("equipment_name")) + tag;
+	CLabelUI* Lab_Device = static_cast<CLabelUI*>(m_PaintManager.FindControl(LableName.c_str()));
+	STDSTRING DeviceName =  Lab_Device->GetText();
+	return DeviceName;
 }

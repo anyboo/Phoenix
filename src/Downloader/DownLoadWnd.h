@@ -3,6 +3,7 @@
 #include <vector>
 #include "Vendor.h"
 #include "TimeUI.h"
+
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -13,6 +14,7 @@
 #define SUBLISTNAMETAG			STDSTRING(_T("ContList"))
 #define BT_TIMEWND1				(_T("daytime1"))
 #define BT_TIMEWND2				(_T("daytime2"))
+#define BT_SEARCHFILE			(_T("Search"))
 
 
 typedef struct 
@@ -37,18 +39,18 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnSelectTimeType();
 	void OnSelectCalendar(STDSTRING& SendName);
-	void OnSearchFileWnd();
+	void OnSearchFileWnd(TNotifyUI& msg);
 	void OnSelectDayTime(STDSTRING& SendName);
 
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
-	BOOL SearchFiles();
+	void SearchFile();
 	void ShowFileList();
 
 	void Show_Off_SubList(STDSTRING& strSendName);
 	void RemoveSubList(STDSTRING& strSendName);
 
-	void Show_Off_VendorList(STDSTRING& strSendName);
+	void Show_Off_VendorList(STDSTRING& strSendName, size_t Channel_Count);
 	void All_SelectChannels();
 	void RemoveVendor(STDSTRING& strSendName);
 
@@ -59,12 +61,14 @@ public:
 
 	CListContainerElementUI* Add_FileInfoList();
 
+	void GetChannel();
+	void GetDataTime();
+
 protected:
-	//std::vector<FILE_INFO>	m_fileInfo;
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
-	std::vector<size_t>	m_Channel;
+	
 	//std::vector<readSearchVideo>  m_FileInfo;
 private:
 	CVendor		m_Vendor;
@@ -72,5 +76,9 @@ private:
 	int			m_FileCount;
 	BOOL		m_beginTag;
 	SYSTEMTIME		 m_sysTime;
+	Device*		m_Device;
+	size_t			m_ChannelCount;
+	std::vector<size_t>	m_Channel;
+	time_range		m_timeRangeSearch;
 };
 

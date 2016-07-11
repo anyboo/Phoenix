@@ -1,9 +1,8 @@
-<Window size="300,530" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+<Window size="300,480" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="8" name="微软雅黑" size="28" bold="false" />
 	<Font shared="true" id="9" name="微软雅黑" size="40" bold="false" />
 	<Font shared="true" id="10" name="微软雅黑" size="60" bold="false" />
-	<VerticalLayout  height="500" bkimage="file='skin/beijing.png'" >
-		<Button name="cancel" width="30" height="30" padding="260,5,5,5" tooltip="取消" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
+	<VerticalLayout  height="480" bkimage="file='skin/beijing.png'" >
 		<HorizontalLayout width="270" height="80" padding="15,20,15,0" bkimage="file='skin/bsbj.png'" bordersize="6" bordercolor="0x88888888" >
 			<Label text="--:--" name="time_text" width="200" height="68" padding="30,6,0,6," font="10" align="center"/>
 		</HorizontalLayout>

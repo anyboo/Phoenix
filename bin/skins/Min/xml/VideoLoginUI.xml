@@ -93,7 +93,7 @@
 				</HorizontalLayout>
 			</VerticalLayout>
 			<VerticalLayout width="383" height="475" padding="68,77,0,0" >
-				<Edit name="brand_Edit" width="236" height="42" padding="98,75,0,0" font="1" />
+				<Edit name="brand_Edit" readonly="true" width="236" height="42" padding="98,75,0,0" font="1" />
 				<Edit name="IP_Edit" width="236" height="42" padding="98,17,0,0" font="1" />
 				<Edit name="Port_Edit" width="236" height="42" padding="98,16,0,0" font="1" />
 				<Edit name="UserName" width="236" height="42" padding="98,21,0,0" font="1" />

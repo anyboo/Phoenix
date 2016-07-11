@@ -5,6 +5,7 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
+#include "SearchVideo.h"
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
@@ -22,6 +23,7 @@ DownLoadWnd::~DownLoadWnd()
 
 DUI_BEGIN_MESSAGE_MAP(DownLoadWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_OnVideoLoginUI, OnVideoLoginWnd)
+DUI_ON_CLICK_CTRNAME(BT_SEARCHFILE, OnSearchFileWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR DownLoadWnd::GetWindowClassName() const
@@ -98,16 +100,28 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	pDlg->LogIn();
+	m_Device = pDlg->GetLonInDevice();
+	if (m_Device == NULL)
+		return;
+	m_ChannelCount = m_Device->getMaxChannel();
+	NET_SDK_TYPE VendorType = m_Device->GetSDKType();
+
+	STDSTRING strVendor = "1";
+	STDSTRING strIP = m_Device->getIP();
+	m_Vendor.AddVendorList(strVendor, strIP);
+	
 }
 
-void DownLoadWnd::OnSearchFileWnd()
+void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 {
 	/*std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();*/
-
+	SearchFile();
 
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
 	assert(pSearchDlg.get());
@@ -137,18 +151,6 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		if (strSendName == BT_TIMEWND1 || strSendName == BT_TIMEWND2){
 			OnSelectDayTime(strSendName);		
 		}
-		if (strSendName == _T("Search")){
-			OnSearchFileWnd();
-		}
-		if (strSendName == _T("test"))
-		{
-			m_Vendor.AddVendorList();
-
-		}
-		if (strSendName == _T("test3"))
-		{
-			m_Vendor.ShowOfflineVendor();
-		}
 		if (strSendName == _T("test2"))
 		{
 			ShowFileList();
@@ -160,7 +162,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	}
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !strSendName.compare(0, 14, _T("VendorContList")))
 	{
-		Show_Off_VendorList(strSendName);
+		Show_Off_VendorList(strSendName, m_ChannelCount);
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && strSendName == _T("quanxuan"))
 	{
@@ -174,11 +176,60 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 }
 
 
-BOOL DownLoadWnd::SearchFiles()
+void DownLoadWnd::SearchFile()
+{	
+	GetChannel();
+	GetDataTime();
+	
+	CSearchVideo::getInstance().SearchFile(m_Device, m_timeRangeSearch, m_Channel);
+
+	std::vector<readSearchVideo> fileList;
+	CSearchVideo::getInstance().ReadDataFromTable(fileList);
+}
+
+void DownLoadWnd::GetChannel()
 {
-	return true;
-	//m_fileInfo.clear();
-	//search files
+	m_Channel.clear();
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(pList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	for (int i = 1; i < option_size; i++)
+	{
+		COptionUI* option = static_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i));
+		if (option->IsSelected())
+		{
+			m_Channel.push_back(i);
+		}
+	}
+}
+
+void DownLoadWnd::GetDataTime()
+{
+	CLabelUI* Lab_StartData = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
+	CLabelUI* Lab_StopData = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
+	CLabelUI* Lab_StartTime = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText1")));
+	CLabelUI* Lab_StopTime = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText2")));
+	STDSTRING sData = Lab_StartData->GetText();
+	STDSTRING sTime = Lab_StartTime->GetText();
+	STDSTRING eData = Lab_StopData->GetText();
+	STDSTRING eTime = Lab_StopTime->GetText();
+
+	struct tm startTime, stopTime;
+	startTime = { 0 };
+	stopTime = { 0 };
+	
+	sscanf(sData.c_str(), "%d-%d-%d", &startTime.tm_year, &startTime.tm_mon, &startTime.tm_mday);
+	sscanf(sTime.c_str(), "%d:%d", &startTime.tm_hour, &startTime.tm_min);
+
+	sscanf(eData.c_str(), "%d-%d-%d", &stopTime.tm_year, &stopTime.tm_mon, &stopTime.tm_mday);
+	sscanf(eTime.c_str(), "%d:%d", &stopTime.tm_hour, &stopTime.tm_min);
+
+	startTime.tm_year -= 1900;
+	startTime.tm_mon -= 1;
+	stopTime.tm_year -= 1900;
+	stopTime.tm_mon -= 1;
+	m_timeRangeSearch.start = mktime(&startTime);
+	m_timeRangeSearch.end = mktime(&stopTime);
 }
 
 void DownLoadWnd::ShowFileList()
@@ -298,7 +349,7 @@ void DownLoadWnd::RemoveSubList(STDSTRING& strSendName)
 	}
 }
 
-void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
+void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName, size_t Channel_Count)
 {
 	CListUI* VendorList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
 	CListContainerElementUI* Channel_List = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, _T("Channel_List")));
@@ -306,7 +357,7 @@ void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 	int CurSel = GetSubListCurSel(CurSelList, VendorList);
 	if (Channel_List == NULL)
 	{
-		m_Vendor.AddChannelsList(CurSel);
+		m_Vendor.AddChannelsList(CurSel, Channel_Count);
 	}
 	else
 	{
@@ -314,11 +365,11 @@ void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 		VendorList->RemoveAt(Channel_List_CurSel, true);
 		if (Channel_List_CurSel != CurSel + 1 && Channel_List_CurSel > CurSel)
 		{
-			m_Vendor.AddChannelsList(CurSel);
+			m_Vendor.AddChannelsList(CurSel, Channel_Count);
 		}
 		else if (Channel_List_CurSel != CurSel + 1 && Channel_List_CurSel < CurSel)
 		{
-			m_Vendor.AddChannelsList(CurSel - 1);
+			m_Vendor.AddChannelsList(CurSel - 1, Channel_Count);
 		}
 	}
 }

@@ -11,9 +11,9 @@ public:
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
 
 	void ShowOfflineVendor();
-	void AddVendorList();
-	void AddChannelsList(int CurSel);
-	CListContainerElementUI* AddChannels();
+	void AddVendorList(STDSTRING& VendorName, STDSTRING& VendorIP);
+	void AddChannelsList(int CurSel, size_t Channel_Count);
+	CListContainerElementUI* AddChannels(size_t Channel_Count);
 
 	DUI_DECLARE_MESSAGE_MAP();
 	
