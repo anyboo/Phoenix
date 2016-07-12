@@ -18,7 +18,7 @@ public:
 	~VideoLoginUI();
 
 	void LogIn();
-	Device* GetLonInDevice(){ return m_Device; }
+	Device* GetLonInDevice();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();

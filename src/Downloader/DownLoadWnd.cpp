@@ -97,7 +97,7 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 {
 	std::auto_ptr<VideoLoginUI> pDlg(new VideoLoginUI);
 	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
@@ -107,7 +107,6 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 		return;
 	m_ChannelCount = m_Device->getMaxChannel();
 	NET_SDK_TYPE VendorType = m_Device->GetSDKType();
-
 	STDSTRING strVendor = "1";
 	STDSTRING strIP = m_Device->getIP();
 	m_Vendor.AddVendorList(strVendor, strIP);

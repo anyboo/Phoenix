@@ -295,17 +295,13 @@ void VideoLoginUI::LogIn()
 	STDSTRING strIP = Edit_IP->GetText();
 	STDSTRING strPort = Edit_Port->GetText();
 	int port = StringToInt(strPort.c_str());
-	CJXJVendor jxjVendor;
-	bool b = CLoginDevice::getInstance().Login(&jxjVendor, strIP, port);
+	CJXJVendor jxjVendor;	
+
+	BOOL bRet =  CLoginDevice::getInstance().Login(&jxjVendor, strIP, port);
 	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 }
 
-//Device* VideoLoginUI::GetLonInDevice()
-//{
-//	CEditUI* Edit_IP = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
-//	STDSTRING strIP = Edit_IP->GetText();
-//
-//	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
-//
-//	return m_Device;
-//}
+Device* VideoLoginUI::GetLonInDevice()
+{
+	return m_Device;
+}
