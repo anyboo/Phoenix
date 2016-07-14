@@ -4,10 +4,10 @@
 	<ListContainerElement height="30" >
 		<HorizontalLayout>
 			<Option width="22" height="22" padding="10,4,42,4" normalimage="file='skin/quanxuan.png'" selectedimage="file='skin/quanxuanzhuangtai.png'"/>
-			<Label text="name" width="240" align="center" font="2"/>
+			<Label text="name" width="320" align="center" font="2"/>
 			<Label text="Channel" width="100" font="2" align="center"/>
-			<Label text="startTime" width="200" font="2" align="center"/>
-			<Label text="stopTime" width="200" font="2" align="center"/>
+			<Label text="startTime" width="160" font="2" align="center"/>
+			<Label text="stopTime" width="160" font="2" align="center"/>
 			<Label text="size" width="100" font="2" align="center"/>
 			<Button width="40" height="30" padding="30,0,30,0" foreimage="file='skin/play.png' dest='5,0,35,30'" hotimage="file='skin/Button_Hot.png'"/>
 		</HorizontalLayout>

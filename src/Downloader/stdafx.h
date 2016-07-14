@@ -55,10 +55,8 @@ using namespace rapidjson;
 
 #ifdef _UNICODE
 #	define STDSTRING std::wstring
-#	define StringToInt	_wtoi
 #else
 #	define STDSTRING std::string
-#	define StringToInt	atoi
 #endif
 
 

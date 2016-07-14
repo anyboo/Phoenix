@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="CalendarUI.h" />
     <ClInclude Include="DownLoadWnd.h" />
+    <ClInclude Include="FileLogInfoUI.h" />
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="OtherTools.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
+    <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="OtherTools.cpp" />

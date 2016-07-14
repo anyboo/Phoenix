@@ -25,6 +25,7 @@ class Device
 {
 public:
 	Device(const AbstractVendor* sdk);
+	//Device &= (const Device* pDev);
 	Device();
 	~Device();
 

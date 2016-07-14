@@ -82,6 +82,9 @@
     <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp">
       <Filter>源文件\BusinessLayer\sdk</Filter>
     </ClCompile>
+    <ClCompile Include="FileLogInfoUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -133,6 +136,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PlayVideoWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLogInfoUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

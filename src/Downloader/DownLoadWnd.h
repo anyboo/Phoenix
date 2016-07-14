@@ -15,7 +15,7 @@
 #define BT_TIMEWND1				(_T("daytime1"))
 #define BT_TIMEWND2				(_T("daytime2"))
 #define BT_SEARCHFILE			(_T("Search"))
-
+#define BT_CLOSE_D				(_T("CloseWnd"))
 
 typedef struct 
 {
@@ -37,6 +37,9 @@ public:
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
+
+	void OnCloseWnd(TNotifyUI& msg);
+
 	void OnSelectTimeType();
 	void OnSelectCalendar(STDSTRING& SendName);
 	void OnSearchFileWnd(TNotifyUI& msg);

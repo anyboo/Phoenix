@@ -21,6 +21,7 @@ CLoginDevice& CLoginDevice::getInstance()
 bool CLoginDevice::Login(AbstractVendor* pVendor, const std::string& ip, const int port, const std::string& userName, const std::string& password)
 {
 	Device* pDev = new Device();
+	memset(pDev, 0, sizeof(Device));
 	pDev->setSDK(pVendor);
 
 	std::string sUserName = userName;

@@ -675,7 +675,6 @@ std::string JXJ_MakeFileName(int channel, const std::string& startTime, const st
 
 void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
-	JStoreLog m_storeLog;
 
 	JXJ_MakeStoreLog(m_storeLog, ALL_RECODE, m_iBeginNode, m_iEndNode, m_iSsid, range.start, range.end);
 

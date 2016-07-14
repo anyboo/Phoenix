@@ -23,7 +23,7 @@ void CVendor::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 
 void CVendor::AddChannelsList(int CurSel, size_t Channel_Count)
 {
-	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
+	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CListContainerElementUI* SubContList = new CListContainerElementUI;
 
 	SubContList = AddChannels(Channel_Count);
@@ -33,20 +33,20 @@ void CVendor::AddChannelsList(int CurSel, size_t Channel_Count)
 
 void CVendor::AddVendorList(STDSTRING& VendorName, STDSTRING& VendorIP)
 {
-	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
+	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
 	pList->Add(SubList);
 
 	STDSTRING SubListName = STDSTRING(_T("VendorContList")) + to_string(m_ContListSel);
 	STDSTRING bt_deleteName = STDSTRING(_T("BT_delete")) + to_string(m_ContListSel);
-	CButtonUI* btn = static_cast<CButtonUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+	CButtonUI* btn = dynamic_cast<CButtonUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 	SubList->SetName(SubListName.c_str());
 	btn->SetName(bt_deleteName.c_str());
 	m_ContListSel = m_ContListSel + 1;
 
-	CLabelUI* Lab_Name = static_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
-	CLabelUI* Lab_IP = static_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	CLabelUI* Lab_Name = dynamic_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
 	Lab_Name->SetText(VendorName.c_str());
 	Lab_IP->SetText(VendorIP.c_str());
 }
@@ -84,23 +84,22 @@ CListContainerElementUI* CVendor::AddChannels(size_t Channel_Count)
 			subLab->SetText(strChannelName.c_str());
 		}		
 	}
-
 	return ContList;
 }
 
 void CVendor::ShowOfflineVendor()
 {
-	CListUI* pList = static_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
+	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	int CurSel = pList->GetCurSel();
-	CListContainerElementUI* SubList = static_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
+	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
 	STDSTRING str = SubList->GetName();
-	CControlUI* network = static_cast<CControlUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_CONTROL, 0));
+	CControlUI* network = dynamic_cast<CControlUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_CONTROL, 0));
 	network->SetAttribute(_T("bkimage"), _T("file='skin/network_offline.png' dest='10,20,39,48'"));
 	SubList->SetBkImage(_T("skin/tdxzanniu.png"));
 	SubList->Select(false);
 	SubList->SetMouseEnabled(false);
 
-	CListContainerElementUI* nextList = static_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
+	CListContainerElementUI* nextList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
 	if (nextList != NULL && nextList->GetName() == _T("Channel_List"))
 	{
 		pList->Remove(nextList, true);
