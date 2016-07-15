@@ -160,7 +160,11 @@
     <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
+    <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp" />
+    <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp" />
     <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />
+    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp" />
+    <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp" />
     <ClCompile Include="..\BusinessLayer\SearchVideo.cpp" />
     <ClCompile Include="..\BusinessLayer\TestWindows.cpp" />
     <ClCompile Include="App.cpp" />

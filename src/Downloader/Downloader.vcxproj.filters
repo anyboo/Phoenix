@@ -85,6 +85,18 @@
     <ClCompile Include="FileLogInfoUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">

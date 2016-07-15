@@ -2,7 +2,7 @@
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Include source="scrollbar.xml" />
-	<VerticalLayout bkimage="file='skin/bsbj.png'" width="1024" height="768" >
+	<VerticalLayout bkimage="file='skin/bsbj.png'" width="1024" height="768" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
 		<HorizontalLayout height="60" width="1024" bkimage="file='skin/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="日志管理" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />
@@ -42,8 +42,8 @@
 				<Button name="export" width="80" height="80" padding="20,0,0,0" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/save.png' dest='21,8,59,46'" normalimage="file='skin/chaxunanniu.png'"/>
 			</HorizontalLayout>
 		</HorizontalLayout>
-		<VerticalLayout  name="ListLyt" height="590" bkimage="file='skin/bsbj.png'" >
-			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" >
+		<VerticalLayout  name="ListLyt" height="570" bkimage="file='skin/bsbj.png'" >
+			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" bordersize="1" bordercolor="0x12345678" inset="1,1,1,1" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" >
 				<ListHeader name="list_head" height="31" width="980">
 					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
 					<ListHeaderItem name="Item2" text="操作" font="1" width="300" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>

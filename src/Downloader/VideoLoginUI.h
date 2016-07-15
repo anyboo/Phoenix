@@ -1,7 +1,9 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
-#define BT_VideoVendor			(_T("Vendor"))
+#include "QMSqlite.h"
+
+#define BT_VideoVendor			(_T("select_Vendor"))
 #define BT_LOGIN				(_T("LogIn"))
 #define BT_PREVPAGE				(_T("Prev_page"))
 #define BT_NEXTPAGE				(_T("Next_page"))
@@ -42,6 +44,11 @@ public:
 
 	void CountDevice();
 
+	void InsertVendorToDB();
+	void SearchVendorList();
+	void InsertVendorToList();
+
+	void CreateSubvLyt();
 private:
 	DEVICE_INFO_LIST		m_DeviceList;
 	ISLogIn			m_IsLogIn;
@@ -49,6 +56,8 @@ private:
 	bool			m_Init;
 	size_t						m_page_Count;
 	size_t				m_pages;
+	QMSqlite*				m_pDb;
+	std::vector<string> m_sRecord;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

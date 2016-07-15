@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
-	<VerticalLayout bkimage="file='skin/bsbj.png'"  inset="3,3,3,3" width="700" bordersize="3" bordercolor="0xf1234567">
+	<VerticalLayout name="MainWnd" bkimage="file='skin/bsbj.png'"  inset="3,3,3,3" width="700" bordersize="3" bordercolor="0xf1234567">
 		<HorizontalLayout height="60" width="1024" bkimage="file='skin/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="视频登录" textcolor="#FFFFFFFF" font="1" width="860" align="center"/>
@@ -11,9 +11,8 @@
 		</HorizontalLayout>
 		<HorizontalLayout >
 			<VerticalLayout width="383" height="477" padding="91,75,0,0" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888" >
-				<HorizontalLayout height="70" bkimage="file='skin/hsbj.png'  source='100,100,483,577'">
-					<Button name="Vendor" height="40" width="120" padding="40,15,0,15" text="添加厂商" font="1" textpadding="20,0,0,0" bordersize="2" bordercolor="0x88888888" foreimage="file='skin/user_male.png' dest='11,8,30,32'" bkimage="file='skin/cxbt.png'"/>
-					<Label name="VendorCount" width="200" height="40" align="left" padding="20,15,0,0" font="1" textcolor="0xFFFF0000"/>
+				<HorizontalLayout height="50" bkimage="file='skin/hsbj.png'  source='100,100,483,577'">
+					<Label name="VendorCount" width="380" height="40" align="left" padding="0,5,0,0" font="1" textcolor="0xFFFF0000" align="center"/>
 				</HorizontalLayout>
 				<List name="Device_List" height="336" itemlinecolor="0x12345678" itemhotbkcolor="0x00000000" headerbkimage="file='skin/lbl.png'" bkimage="skin/bsbj.png">
 				<ListHeader height="28" menu="true">

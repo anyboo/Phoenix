@@ -36,14 +36,17 @@ void CPlayVideoWnd::OnFinalMessage(HWND hWnd)
 
 void CPlayVideoWnd::Notify(TNotifyUI& msg)
 {
-	
-
 	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("close"))
 	{
 		CVerticalLayoutUI* PlayLyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("wnd_lyt")));
-		HWND m_hWnd = PlayLyt->GetNativeWindow();
-		
+		CPaintManagerUI* vLytppm = PlayLyt->GetManager();
+		HWND play_hwnd = vLytppm->GetPaintWindow();
 		Close();
 	}
 	WindowImplBase::Notify(msg);
+}
+
+void CPlayVideoWnd::GetPlayHwnd()
+{
+
 }
