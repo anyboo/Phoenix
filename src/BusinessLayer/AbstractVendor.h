@@ -14,7 +14,7 @@ typedef struct _time_range
 } time_range, *ptime_range;
 #endif
 
-#define  MAX_IPADDR_LEN				16       //ip address length    
+#define  MAX_IPADDR_LEN				16       //\ length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
 
 typedef enum tagSDK_TYPE
@@ -25,6 +25,27 @@ typedef enum tagSDK_TYPE
 	DH_SDK,
 	HK_SDK,
 }NET_SDK_TYPE;
+
+typedef enum
+{
+	Notification_Type_None = 0,
+	Notification_Type_Network_status_Connect,
+	Notification_Type_Network_status_Disconnect,
+	Notification_Type_Search_Device_Finish,
+	Notification_Type_Search_Device_Cancel,
+	Notification_Type_Device_Manager_Online,
+	Notification_Type_Device_Manager_Dropped,
+	Notification_Type_Device_Manager_Cancel,
+	Notification_Type_Search_File_Process,
+	Notification_Type_Search_File_Finish,
+	Notification_Type_Search_File_Cancel,
+	Notification_Type_Download_File_Process,
+	Notification_Type_Download_File_Finish,
+	Notification_Type_Download_File_Cancel,
+	Notification_Type_Port_Scan_Finish,
+	Notification_Type_Express,
+
+}NOTIFICATION_TYPE;
 
 class AbstractVendor;
 
@@ -162,7 +183,9 @@ public:
 
 	virtual std::string GetDefUsearName() = 0;
 	virtual std::string GetDefPassword() = 0;
+	virtual int GetDefPort() = 0;
 	virtual NET_SDK_TYPE GetSDKType() = 0;
+	virtual bool IsSearchDeviceAPIExist() = 0;
 
 	virtual void StartSearchDevice() = 0;
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;

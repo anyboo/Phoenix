@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TestWindows.h"
 #include <Poco/SingletonHolder.h>
 

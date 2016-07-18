@@ -8,7 +8,6 @@
 #include "Poco/Data/SQLite/Connector.h"
 #include <iostream>
 #include <vector>
-#include "DatabaseException.h"
 
 using namespace std;
 using Poco::Data::Session;
@@ -16,12 +15,14 @@ using Poco::Data::Statement;
 using Poco::Data::Statement;
 
 //登录信息保存表
-#define CREATE_LOGIN_DEVICE_INFO_TABLE      "CREATE TABLE LoginDeviceInfo(name VARCHAR(100), ip VARCHAR(20), port INTEGER, user VARCHAR(50), pass VARCHAR(50), factory INTEGER, id VARCHAR(100))"
-#define DELETE_ALL_LOGIN_DEVICE_INFO		"DELETE from LoginDeviceInfo"
+#define CREATE_LOGIN_DEVICE_INFO_TABLE      "CREATE TABLE LoginDeviceInfo(type INTEGER, ip VARCHAR(30), port INTEGER, username VARCHAR(50), password VARCHAR(50), maxchannel INTEGER)"
 #define DROP_LOGIN_DEVICE_INFO_TABLE		"DROP TABLE IF EXISTS LoginDeviceInfo"
+#define DELETE_ALL_LOGIN_DEVICE_INFO		"DELETE from LoginDeviceInfo"
+#define DELETE_IP_LOGIN_DEVICE				"DELETE from LoginDeviceInfo where ip="
 #define SELECT_ALL_LOGIN_DEVICE_INFO		"SELECT * FROM LoginDeviceInfo"
-#define INSERT_LOGIN_DEVICE_INFO			"INSERT INTO LoginDeviceInfo VALUES(:name, :ip, :port, :user, :pass, :factory, :id)"
-typedef Poco::Tuple<std::string, std::string, int, std::string, std::string, int, std::string> LoginDeviceInfo;
+#define SELECT_IP_LOGIN_VIDEO				"SELECT * FROM LoginDeviceInfo where ip="
+#define INSERT_LOGIN_DEVICE_INFO			"INSERT INTO LoginDeviceInfo VALUES(:type, :ip, :port, :username, :password, :maxchannel)"
+typedef Poco::Tuple<int, std::string, int, std::string, std::string, int> LoginDeviceInfo;
 
 //下载信息保存表
 #define CREATE_DOWNLOAD_VIDEO_INFO_TABLE	"CREATE TABLE DownloadVideoInfo()"
@@ -46,34 +47,32 @@ typedef Poco::Tuple<std::string, std::string, int, std::string, std::string, int
 
 class QFileSqlite
 {
-public:	
-	
+public:
+
 	static QFileSqlite *getInstance();
 private:
 	QFileSqlite();
-	~QFileSqlite();	
-	QFileSqlite(QFileSqlite const& other);            
-	QFileSqlite& operator=(QFileSqlite const& other); 
+	~QFileSqlite();
+	QFileSqlite(QFileSqlite const& other);
+	QFileSqlite& operator=(QFileSqlite const& other);
 
-	
+
 public:
-	template<typename T> 
+	template<typename T>
 	bool GetData(string sql, std::vector<T>& Record)
 	{
-		if (sql.empty())
-			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
 		try
 		{
 			Statement select(sess);
-			select << sql, into(Record), now;
+			select << sql, Poco::Data::Keywords::into(Record), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw DatabaseException(ex.displayText());
+			throw(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -83,8 +82,6 @@ public:
 	template<typename T>
 	bool writeData(string sql, T searchrecode)
 	{
-		if (sql.empty())
-			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
@@ -95,19 +92,17 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw DatabaseException(ex.displayText());
+			throw(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
 
 		return true;
 	}
-	
+
 	template<typename T>
 	bool writeDataByVector(string sql, std::vector<T>& Record)
 	{
-		if (sql.empty() || Record.empty())
-			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
@@ -119,15 +114,15 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw DatabaseException(ex.displayText());
+			throw(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
 		return true;
-	}	
+	}
 	bool cleanData(string sql);
 	bool dropTable(string sql);
-	bool createTable(string sql);	
+	bool createTable(string sql);
 private:
 	bool Initialize();
 	bool creatSessionPool();
@@ -138,7 +133,7 @@ private:
 	bool execSql(string sql);
 	Session connectDb();
 	Poco::Data::SessionPool *m_pool;
-	
+
 };
 
 

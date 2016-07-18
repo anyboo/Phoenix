@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "Device.h"
 
+#include "Device.h"
 
 Device::Device(const AbstractVendor* sdk)
 {
@@ -69,10 +68,22 @@ void Device::Init()
 
 bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& indexVendor)
 {
-	if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
+	
+	if (m_pVendor->GetDefPort() == pDevInfoSimple->nPort)
 	{
-		Logout();
-		return true;
+		if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
+		{
+			//Logout();
+			return true;
+		}
+		else
+		{
+			if (GetNextDevice() != NULL)
+			{
+				indexVendor++;
+				GetNextDevice()->LoginChain(pDevInfoSimple, indexVendor);
+			}
+		}
 	}
 	else
 	{
