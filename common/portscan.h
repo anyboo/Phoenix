@@ -49,7 +49,7 @@ struct SendPacket
 	{
 		if (nullptr != packet)
 		{
-			delete packet;
+			delete[] packet;
 			packet = nullptr;
 			size = 0;
 		}
@@ -74,7 +74,7 @@ struct SendPacket
 	{
 		if (nullptr != packet)
 		{
-			delete packet;
+			delete[] packet;
 			packet = nullptr;
 			size = 0;
 		}
