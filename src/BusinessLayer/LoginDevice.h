@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Device.h"
+#include "QMFileSqlite.h"
+
+class Device;
+class AbstractVendor;
 
 class CLoginDevice
 {
@@ -15,9 +18,7 @@ public:
 	Device* GetDevice(const std::string ip);
 	std::vector<Device*>& GetDeviceList(){ return m_listDevice; }
 
-protected:
-	void AddDevice(Device* pDev);
-	void DeleteDevice(const std::string ip);
+	std::vector<LoginDeviceInfo> GetLoginDeviceFromDB();
 
 private:
 	std::vector<Device*> m_listDevice;

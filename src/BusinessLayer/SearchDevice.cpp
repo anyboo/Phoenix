@@ -1,9 +1,10 @@
 
+#include "WindowUtils.h"
 #include "SearchDevice.h"
-#include <Poco/SingletonHolder.h>
 
 
-NET_SDK_TYPE g_SDKTypeLimit = NONE_SDK;
+DEVICE_INFO_LIST CSearchDevice::m_listDeviceInfo;
+FastMutex CSearchDevice::m_mutex;
 
 bool CheckDeviceInfo(const NET_DEVICE_INFO* devInfo, const DEVICE_INFO_LIST& list)
 {
@@ -21,13 +22,12 @@ void AddListToList(DEVICE_INFO_LIST& listDest, const DEVICE_INFO_LIST& listSrc)
 {
 	for (auto v : listSrc)
 	{
-		if (!CheckDeviceInfo(v,listDest))
+		if (!CheckDeviceInfo(v, listDest))
 		{
 			listDest.push_back(v);
 		}
 	}
 }
-
 DEVICE_INFO_SIMPLE_LIST MakeDeviceInfoSimpleList(const DEVICE_INFO_LIST& listDeviceInfo, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfo)
 {
 	DEVICE_INFO_SIMPLE_LIST list;
@@ -52,20 +52,15 @@ DEVICE_INFO_SIMPLE_LIST MakeDeviceInfoSimpleList(const DEVICE_INFO_LIST& listDev
 	return list;
 }
 
-CSearchDevice::CSearchDevice()
+CSearchDevice::CSearchDevice(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfo, NotificationQueue& queue) :
+	m_pVendorList(pVendorList),
+	m_listDeviceSimpleInfo(listDeviceSimpleInfo),
+	m_queue(queue)
 {
 }
-
 CSearchDevice::~CSearchDevice()
 {
 }
-
-CSearchDevice& CSearchDevice::getInstance()
-{
-	static Poco::SingletonHolder<CSearchDevice> shSearchDevice;
-	return *shSearchDevice.get();
-}
-
 void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 {
 	if (pVendorList.size() <= 0)
@@ -78,7 +73,7 @@ void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 	{
 		Device* pDev = new Device;
 		pDev->setSDK(pVendor);
-		if (pDev->GetSDKType() <= g_SDKTypeLimit)
+		if (pDev->IsSearchDeviceAPIExist() == true)
 		{
 			m_listDeviceKnown.push_back(pDev);
 		}
@@ -86,7 +81,7 @@ void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 		{
 			m_listDeviceUnknown.push_back(pDev);
 		}
-		
+
 	}
 	if (m_listDeviceUnknown.size() > 0)
 	{
@@ -109,25 +104,16 @@ void CSearchDevice::Search(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIM
 	// Known Situation: SDK Search Function Exist
 	for (auto pDev : m_listDeviceKnown)
 	{
-		if (pDev->GetSDKType() <= g_SDKTypeLimit)
-		{
-			pDev->StartSearchDevice();
-		}
+		pDev->StartSearchDevice();
 	}
 	::Sleep(3000);
 	for (auto pDev : m_listDeviceKnown)
 	{
-		if (pDev->GetSDKType() <= g_SDKTypeLimit)
-		{
-			pDev->StopSearchDevice();
-		}
+		pDev->StopSearchDevice();
 	}
 	for (auto pDev : m_listDeviceKnown)
 	{
-		if (pDev->GetSDKType() <= g_SDKTypeLimit)
-		{
-			AddListToList(m_listDeviceInfo, pDev->GetDeviceInfoList());
-		}
+		AddListToList(m_listDeviceInfo, pDev->GetDeviceInfoList());
 	}
 	// Screen Device Simple Info List
 	DEVICE_INFO_SIMPLE_LIST list = MakeDeviceInfoSimpleList(m_listDeviceInfo, listDeviceSimpleInfo);
@@ -160,6 +146,8 @@ void CSearchDevice::Search(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIM
 
 void CSearchDevice::DeleteDeviceList()
 {
+	int a = 0;
+
 	for (auto pDev : m_listDeviceKnown)
 	{
 		delete pDev;
@@ -176,6 +164,8 @@ void CSearchDevice::DeleteDeviceList()
 }
 void CSearchDevice::DeleteDeviceInfoList()
 {
+	int a = 0;
+
 	for (auto pDevInfo : m_listDeviceInfo)
 	{
 		delete pDevInfo;
@@ -183,4 +173,38 @@ void CSearchDevice::DeleteDeviceInfoList()
 	}
 
 	m_listDeviceInfo.clear();
+}
+
+void CSearchDevice::run()
+{
+	static bool bNetStatusLast = false;
+	for (;;)
+	{
+		// Cancel Search Device Thread
+		Notification::Ptr pNf(m_queue.waitDequeueNotification(1000));
+		if (pNf)
+		{
+			CNotificationSearchDevice::Ptr pSearchDeviceNf = pNf.cast<CNotificationSearchDevice>();
+			if (pSearchDeviceNf)
+			{
+				if (pSearchDeviceNf->GetNotificationType() == Notification_Type_Search_Device_Cancel)
+				{
+					FastMutex::ScopedLock lock(m_mutex);
+					std::cout << "Search Device Process Cancel Success!" << std::endl;
+					break;
+				}
+			}
+		}
+
+		bool bNetStatus = WindowUtils::isOnLine();
+		if (bNetStatusLast != bNetStatus)
+		{
+			NotificationQueue& queue = NotificationQueue::defaultQueue();
+			NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
+			queue.enqueueNotification(new CNotificationNetworkStatus(NfType));
+			bNetStatusLast = bNetStatus;
+			Search(m_pVendorList, m_listDeviceSimpleInfo);
+			queue.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Finish));
+		}
+	}
 }
