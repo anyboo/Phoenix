@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<ListContainerElement height="80" width="185" bordersize="1" bordercolor="0xFFFFFFFF">
+		<HorizontalLayout >
+			<Control name="IsOnlineIcon" width="40" bkimage="file = 'skin/network_online.png' dest = '10,20,38,47'" />
+			<VerticalLayout width="110">
+				<Label text="" width="" font="5" padding="10, 30, 0, 0" textcolor="#FFFFFFFF"/>
+				<Label text="" font="4" padding="10, 0, 0, 0" textcolor="#FFFFFFFF" />
+			</VerticalLayout>
+			<Control width="19" bkimage="file='skin/xxzk.png' dest = '0,36,19,48'"/>
+			<Button name="delete" width="14" height="14" padding="0,2,2,0" normalimage="file='skin/hot_del.png' dest='1,0,15,15'" hotimage="file='skin/del_download.png' dest='1,0,15,15'" />
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>
+

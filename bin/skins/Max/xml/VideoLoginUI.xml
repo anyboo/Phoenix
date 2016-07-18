@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1280,800" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout padding="4,4,4,4" width="700" bordersize="3" bordercolor="0xf1234567">
+		<HorizontalLayout height="60" width="1280" bkimage="file='skin/beijing.png'">
+			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
+			<Label text="视频登录" textcolor="#FFFFFFFF" font="1" width="1100" align="center"/>
+			<Control name="Network" width="30" height="30" padding="20,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" value="100" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
+			<Label text="100%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>
+		</HorizontalLayout>
+		<HorizontalLayout bkimage="file='skin/bsbj.png'">
+			<VerticalLayout width="475" height="495" inset="3,3,3,3" padding="119,85,0,0"  bordersize="3" bordercolor="0x88888888" >
+				<HorizontalLayout height="70" bkimage="file='skin/hsbj.png'">
+					<Button name="Vendor" height="50" width="150" padding="25,10,10,15" text="搜索厂商" font="1" textpadding="35,0,0,0" foreimage="file='skin/user_male.png' dest='18,8,37,32'" normalimage="file='skin/cxbt.png'" bordersize="2" bordercolor="0x12345678"/>
+					<Label name="Lab_Search" text="*搜索到2台设备" textcolor="#FFFF3399" font="1" />
+				</HorizontalLayout>
+			</VerticalLayout>
+			<VerticalLayout width="475" height="497" padding="87,85,0,0" bordersize="3" bordercolor="0x88888888">
+				<HorizontalLayout height="60" padding="60,60,0,0,">
+					<Label text="品牌:" font="1" width="60"/>
+					<Edit name="brand_Edit" width="260" height="45" font="1" bordersize="2" bordercolor="0x88888888"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="60" padding="60,15,0,0">
+					<Label text="IP:" font="1" width="60"/>
+					<Edit name="brand_Edit" width="260" height="45" font="1" bordersize="2" bordercolor="0x88888888"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="60" padding="60,15,0,0">
+					<Label text="端口:" font="1" width="60"/>
+					<Edit name="brand_Edit" width="260" height="45" font="1" bordersize="2" bordercolor="0x88888888"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="60" padding="60,15,0,0">
+					<Label text="用户:" font="1" width="60"/>
+					<Edit name="brand_Edit" width="260" height="45" font="1" bordersize="2" bordercolor="0x88888888"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="60" padding="60,15,0,0">
+					<Label text="密码:" font="1" width="60"/>
+					<Edit name="brand_Edit" width="260" height="45" font="1" bordersize="2" bordercolor="0x88888888"/>
+				</HorizontalLayout>
+				<Button name="LogIn" width="120" height="50" padding="300,20,0,0" text="登录" font="1" bordersize="2" bordercolor="0x88888888"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

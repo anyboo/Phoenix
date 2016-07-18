@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<ListContainerElement height="30" >
+		<HorizontalLayout>
+			<Label text="name" width="150" font="2" align="center"/>
+			<Label text="size" width="100" font="2" align="center"/>
+			<Progress width="140" height="12" padding="10,8,10,8" font="3" bordersize="1" bordercolor="0xf1234567" foreimage="file='skin/jindutiao.png'"/>
+			<Label text="speed" width="100" font="2" align="center"/>
+			<Label text="LastTime" width="100" font="2" align="center"/>
+			<Label text="State" width="100" font="2" align="center"/>
+			<Button width="30" height="20" padding="35,5,35,5" normalimage="file='skin/hot_del.png' dest='8,3,22,17'" hotimage="file='skin/del_download.png' dest='8,3,22,17'"/>
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>

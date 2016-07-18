@@ -62,7 +62,6 @@ void CTimeUI::Notify(TNotifyUI& msg)
 		}
 		if (strSendName == _T("bt_ok"))
 		{
-			GetTime();
 			Close();
 		}
 	}

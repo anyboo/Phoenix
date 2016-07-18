@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,700" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<Include source="scrollbar.xml" />
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="700" >
+		<HorizontalLayout width="1024" height="60" bkimage="file='skin/beijing.png'">
+			<Button name="close_bt" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
+			<Label text="下载视频" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+		</HorizontalLayout>
+		<VerticalLayout height="570" >
+			<List name="domainlist" padding="10,0,10,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
+				<ListHeader height="30" width="1004" menu="true">
+					<option name="All" width="22" height="22" padding="10,5,2,4" normalimage="file='skin/quanxuan.png'" selectedimage="file='skin/quanxuanzhuangtai.png'"/>
+					<Label text="全选" width="40" font="1" align="center" />
+					<ListHeaderItem text="名称" font="1" width="320" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="通道" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="开始时间" font="1" width="160" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="结束时间" font="1" width="160" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="大小" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="操作" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				</ListHeader>
+			</List>	
+		</VerticalLayout>
+		<HorizontalLayout height="70" bkcolor="0xc3324534">
+			<Label name="file_Count" text="" width="400" height="50" font="1" padding="30,10,0,0," />
+			<Button name="BT_Download" width="117" height="50" padding="20,10,0,0" text="开始下载" font="1" normalimage="file='skin/cxbt.png'" />
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

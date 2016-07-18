@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Include source="skin/scrollbar.xml" />
+	<VerticalLayout name="LogIn_Info_Lyt" width="290" height="430">
+		<HorizontalLayout height="42" padding="0,20,0,0">
+		<Edit name="IP_Edit" width="236" height="42"  font="1" bordersize="1" bordercolor="0x88888888"/>
+		</HorizontalLayout>
+		<HorizontalLayout height="42" padding="0,20,0,0">
+			<Edit name="Port_Edit" width="236" height="42"  font="1" bordersize="1" bordercolor="0x88888888"/>
+		</HorizontalLayout>
+		<HorizontalLayout height="42" padding="0,20,0,0">
+			<Edit name="UserName" width="236" height="42" font="1" bordersize="1" bordercolor="0x88888888"/>
+		</HorizontalLayout>
+		<HorizontalLayout height="42" padding="0,20,0,0">
+			<Edit name="UserPswd" width="236" height="42" font="1" bordersize="1" bordercolor="0x88888888"/>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

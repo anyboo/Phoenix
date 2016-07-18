@@ -1,17 +1,18 @@
 #pragma once
-
 #include <string>
 #include <ctime>
 #include <list>
 #include <vector>
 #include <Windows.h>
 
+#ifndef _TIME_RANGE
+#define _TIME_RANGE
 typedef struct _time_range
 {
 	std::time_t start;
 	std::time_t end;
 } time_range, *ptime_range;
-
+#endif
 
 #define  MAX_IPADDR_LEN				16       //\ length    
 #define  MAX_MACADDR_LEN			32		 //mac address length

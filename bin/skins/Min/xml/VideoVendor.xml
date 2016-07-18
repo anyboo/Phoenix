@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="840,670" caption="0,0,0,0"  showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout height="500" width="350" bkimage="file='skin/bsbj.png'" bordersize="3" bordercolor="0x88888888">
+		<HorizontalLayout height="40" bkimage="file='skin/beijing.png'" bordersize="3" bordercolor="0x88888888">
+			<Label text="视频厂商" font="1" textcolor="#FFFFFFFF" width="200" align="center" padding="300,0,0,0"/>
+			<Button name="close_btn" width="30" height="30" padding="296,5,0,0" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
+		</HorizontalLayout>
+		<HorizontalLayout>
+			<VerticalLayout width="420" height="630" >
+				<VerticalLayout height="45" padding="20,30,0,0" >
+					<HorizontalLayout height="20">
+						<Label text="A:" font="1" width="30" height="20"/>
+						<Button name="VendorName_a1" width="50" height="20" padding="10,0,0,0" text="安居鸟" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_a2" width="50" height="20" padding="10,0,0,0" text="安尼" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_a3" width="50" height="20" padding="10,0,0,0" text="奥威拓" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_a4" width="50" height="20" padding="10,0,0,0" text="安之讯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_a5" width="60" height="20" padding="10,0,0,0" text="安联锐视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_a7" width="50" height="20" padding="40,0,0,0" text="澳科森" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_a8" width="60" height="20" padding="10,0,0,0" text="安嘉科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout height="45" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="B:" font="1" width="30" height="20"/>
+						<Button name="VendorName_b1" width="50" height="20" padding="10,0,0,0" text="宝欣盛" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b2" width="120" height="20" padding="10,0,0,0" text="北京正方时代OEM海康" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b3" width="80" height="20" padding="10,0,0,0" text="北京益融冠世" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b4" width="50" height="20" padding="10,0,0,0" text="波利" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_b5" width="50" height="20" padding="40,0,0,0" text="百科博" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b6" width="50" height="20" padding="10,0,0,0" text="宝视佳" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b7" width="50" height="20" padding="10,0,0,0" text="北视通" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_b8" width="80" height="20" padding="10,0,0,0" text="北京英康嘉业" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					</HorizontalLayout>
+				</VerticalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="C:" font="1" width="30" height="20"/>
+					<Button name="VendorName_c1" width="50" height="20" padding="10,0,0,0" text="超本乐" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<VerticalLayout height="45" padding="20,10,0,0">
+					<HorizontalLayout>
+						<Label text="D:" font="1" width="30" height="20"/>		
+						<Button name="VendorName_d1" width="50" height="20" padding="10,0,0,0" text="大华" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_d2" width="50" height="20" padding="10,0,0,0" text="迪智浦" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_d3" width="50" height="20" padding="10,0,0,0" text="德加拉" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_d4" width="60" height="20" padding="10,0,0,0" text="东阳国际" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_d5" width="60" height="20" padding="10,0,0,0" text="大立科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_d6" width="80" height="20" padding="40,0,0,0" text="东大金智平台" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_d7" width="60" height="20" padding="10,0,0,0" text="大唐华强" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_d8" width="60" height="20" padding="10,0,0,0" text="点博电子" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="E:" font="1" width="30" height="20"/>
+					<Button name="VendorName_e1" width="60" height="20" padding="10,0,0,0" text="尔佳" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+				</HorizontalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="F:" font="1" width="30" height="20"/>
+					<Button name="VendorName_f1" width="60" height="20" padding="10,0,0,0" text="飞鸿信" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+				</HorizontalLayout>
+				<VerticalLayout height="70" padding="20,10,0,0">
+					<HorizontalLayout height="20">	
+						<Label text="G:" font="1" width="30" height="20"/>
+						<Button name="VendorName_g1" width="60" height="20" padding="10,0,0,0" text="广州利凌" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_g2" width="60" height="20" padding="10,0,0,0" text="广东领域" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_g3" width="80" height="20" padding="10,0,0,0" text="广州邦世电子" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_g4" width="80" height="20" padding="10,0,0,0" text="广州视安安防" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_g5" width="60" height="20" padding="40,0,0,0" text="广州亿视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_g6" width="80" height="20" padding="10,0,0,0" text="GE硬盘录像机" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_g7" width="60" height="20" padding="10,0,0,0" text="广州宏翔" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_g8" width="60" height="20" padding="10,0,0,0" text="广州左田" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>						
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_g9" width="100" height="20" padding="40,0,0,0" text="广州米卡61系列" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>								
+						<Button name="VendorName_g10" width="120" height="20" padding="10,0,0,0" text="广州米卡8081系列NVR" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>															
+						<Button name="VendorName_g11" width="80" height="20" padding="10,0,0,0" text="广州市泰豪" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>															
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout height="70" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="H:" font="1" width="30" height="20"/>
+						<Button name="VendorName_h1" width="60" height="20" padding="10,0,0,0" text="海视泰" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h2" width="60" height="20" padding="10,0,0,0" text="宏康威视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h3" width="60" height="20" padding="10,0,0,0" text="霍尼韦尔" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h4" width="60" height="20" padding="10,0,0,0" text="航景科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_h5" width="60" height="20" padding="10,0,0,0" text="华邦海视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_h6" width="60" height="20" padding="40,0,0,0" text="恒忆" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h7" width="60" height="20" padding="10,0,0,0" text="汉邦" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h8" width="60" height="20" padding="10,0,0,0" text="海康" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_h9" width="60" height="20" padding="10,0,0,0" text="华洋" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h10" width="60" height="20" padding="10,0,0,0" text="海伊" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">					
+						<Button name="VendorName_h11" width="60" height="20" padding="40,0,0,0" text="华翔国际" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h12" width="60" height="20" padding="10,0,0,0" text="宏为视讯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_h13" width="60" height="20" padding="10,0,0,0" text="恒润睿视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h14" width="60" height="20" padding="10,0,0,0" text="杭州圣尚" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_h15" width="60" height="20" padding="10,0,0,0" text="汉和东方" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout height="70" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="J:" font="1" width="30" height="20"/>
+						<Button name="VendorName_j1" width="60" height="20" padding="10,0,0,0" text="俊明视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j2" width="60" height="20" padding="10,0,0,0" text="九安光电" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j3" width="60" height="20" padding="10,0,0,0" text="吉锐" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j4" width="60" height="20" padding="10,0,0,0" text="巨峰" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_j5" width="60" height="20" padding="40,0,0,0" text="佳信捷" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j6" width="60" height="20" padding="10,0,0,0" text="金山品科" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j7" width="60" height="20" padding="10,0,0,0" text="佳视安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j8" width="60" height="20" padding="10,0,0,0" text="君安安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_j9" width="60" height="20" padding="40,0,0,0" text="居安宝" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j10" width="60" height="20" padding="10,0,0,0" text="精达锐" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_j11" width="60" height="20" padding="10,0,0,0" text="吉田" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="K:" font="1" width="30" height="20"/>
+					<Button name="VendorName_k1" width="50" height="20" padding="10,0,0,0" text="旷视安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_k2" width="50" height="20" padding="10,0,0,0" text="科恩" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_k3" width="50" height="20" padding="10,0,0,0" text="开尔瑞" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_k4" width="50" height="20" padding="10,0,0,0" text="科兰" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_k5" width="60" height="20" padding="10,0,0,0" text="科达科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<VerticalLayout height="45" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="L:" font="1" width="30" height="20"/>
+						<Button name="VendorName_l1" width="60" height="20" padding="10,0,0,0" text="蓝色星际" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_l2" width="60" height="20" padding="10,0,0,0" text="立安达" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_l3" width="100" height="20" padding="10,0,0,0" text="立安达OEM海康" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_l4" width="60" height="20" padding="10,0,0,0" text="朗视兴" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_l5" width="60" height="20" padding="40,0,0,0" text="龙之净" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_l6" width="60" height="20" padding="10,0,0,0" text="蓝图视讯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_l7" width="60" height="20" padding="10,0,0,0" text="龙安天下" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+			</VerticalLayout>
+			<Control width="2" height="570" padding="0,30,0,0" bkcolor="0x12345678" />
+			<VerticalLayout width="420" height="630">
+				<HorizontalLayout height="20" padding="20,30,0,0">
+					<Label text="M:" font="1" width="30" height="20"/>
+					<Button name="VendorName_m1" width="60" height="20" padding="10,0,0,0" text="美防伟业" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="N:" font="1" width="30" height="20"/>
+					<Button name="VendorName_n1" width="60" height="20" padding="10,0,0,0" text="南宁冠泰" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_n2" width="60" height="20" padding="10,0,0,0" text="南中" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_n3" width="60" height="20" padding="10,0,0,0" text="尼安科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="P:" font="1" width="30" height="20"/>
+					<Button name="VendorName_p1" width="60" height="20" padding="10,0,0,0" text="帕尼柯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="Q:" font="1" width="30" height="20"/>
+					<Button name="VendorName_q1" width="60" height="20" padding="10,0,0,0" text="乔安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_q2" width="60" height="20" padding="10,0,0,0" text="巧芯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="R:" font="1" width="30" height="20"/>
+					<Button name="VendorName_r1" width="60" height="20" padding="10,0,0,0" text="锐郎特" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<VerticalLayout height="120" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="S:" font="1" width="30" height="20"/>
+						<Button name="VendorName_s1" width="60" height="20" padding="10,0,0,0" text="深圳思浪" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s2" width="60" height="20" padding="10,0,0,0" text="深圳同为" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s3" width="60" height="20" padding="10,0,0,0" text="世星安防" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s4" width="60" height="20" padding="10,0,0,0" text="守卫者" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_s5" width="130" height="20" padding="40,0,0,0" text="深圳宏康威视OEM雄迈" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s6" width="60" height="20" padding="10,0,0,0" text="深圳八安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s7" width="80" height="20" padding="10,0,0,0" text="深圳海视安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_s8" width="60" height="20" padding="40,0,0,0" text="深圳巨罦" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s9" width="60" height="20" padding="10,0,0,0" text="深圳赛清" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s10" width="80" height="20" padding="10,0,0,0" text="深圳兴科安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s11" width="60" height="20" padding="10,0,0,0" text="施耐安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_s12" width="60" height="20" padding="40,0,0,0" text="深圳百汇" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s13" width="60" height="20" padding="10,0,0,0" text="狮安联讯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s14" width="60" height="20" padding="10,0,0,0" text="世星" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s15" width="80" height="20" padding="10,0,0,0" text="深圳市本德" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_s16" width="60" height="20" padding="40,0,0,0" text="山本智能" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_s17" width="80" height="20" padding="10,0,0,0" text="深圳市安裕" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>										
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout height="45" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="T:" font="1" width="30" height="20"/>
+						<Button name="VendorName_t1" width="60" height="20" padding="10,0,0,0" text="泰康伟业" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_t2" width="60" height="20" padding="10,0,0,0" text="天视达" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_t3" width="60" height="20" padding="10,0,0,0" text="泰威高科" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_t4" width="60" height="20" padding="10,0,0,0" text="天天佑" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_t5" width="60" height="20" padding="40,0,0,0" text="天敏" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_t6" width="60" height="20" padding="10,0,0,0" text="天地伟业" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_t7" width="120" height="20" padding="10,0,0,0" text="泰康伟业OEM海康" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+				<HorizontalLayout height="20" padding="20,10,0,0">
+					<Label text="W:" font="1" width="30" height="20"/>
+					<Button name="VendorName_w1" width="60" height="20" padding="10,0,0,0" text="沃仕达" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					<Button name="VendorName_w2" width="60" height="20" padding="10,0,0,0" text="玮特视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					<Button name="VendorName_w3" width="60" height="20" padding="10,0,0,0" text="威迪斯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					<Button name="VendorName_w4" width="60" height="20" padding="10,0,0,0" text="维邦电子" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+				</HorizontalLayout>
+				<VerticalLayout height="70" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="X:" font="1" width="30" height="20"/>
+						<Button name="VendorName_x1" width="50" height="20" padding="10,0,0,0" text="雄迈" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x2" width="50" height="20" padding="10,0,0,0" text="欣视宝" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x3" width="50" height="20" padding="10,0,0,0" text="鑫捷讯" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x4" width="50" height="20" padding="10,0,0,0" text="欣荣泉" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+						<Button name="VendorName_x5" width="60" height="20" padding="10,0,0,0" text="新达共创" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_x6" width="60" height="20" padding="40,0,0,0" text="鑫鹏安防" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x7" width="60" height="20" padding="10,0,0,0" text="星网锐捷" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x8" width="80" height="20" padding="10,0,0,0" text="旭峰威视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x9" width="60" height="20" padding="10,0,0,0" text="旭霆科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_x10" width="60" height="20" padding="40,0,0,0" text="谐美电子" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x11" width="60" height="20" padding="10,0,0,0" text="新锐华科" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x12" width="60" height="20" padding="10,0,0,0" text="星宝威视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_x13" width="120" height="20" padding="10,0,0,0" text="西安海方OEM海康" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout height="45" padding="20,10,0,0">
+					<HorizontalLayout height="20">
+						<Label text="Y:" font="1" width="30" height="20"/>
+						<Button name="VendorName_y1" width="60" height="20" padding="10,0,0,0" text="云典视" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_y2" width="60" height="20" padding="10,0,0,0" text="亚安" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_y3" width="60" height="20" padding="10,0,0,0" text="宇视科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_y4" width="60" height="20" padding="10,0,0,0" text="邮科" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+					</HorizontalLayout>
+					<HorizontalLayout height="20" padding="0,5,0,0">
+						<Button name="VendorName_y5" width="60" height="20" padding="40,0,0,0" text="印梦科技" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+						<Button name="VendorName_y6" width="60" height="20" padding="10,0,0,0" text="英飞拓" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+						<Button name="VendorName_y7" width="60" height="20" padding="10,0,0,0" text="宇烁商贸" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>											
+					</HorizontalLayout>
+				</VerticalLayout>
+				<HorizontalLayout height="40" padding="20,10,0,0">
+					<Label text="Z:" font="1" width="30" height="20"/>
+					<Button name="VendorName_z1" width="60" height="20" padding="10,0,0,0" text="中田安保" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>					
+					<Button name="VendorName_z2" width="60" height="20" padding="10,0,0,0" text="中维" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>
+					<Button name="VendorName_z3" width="60" height="20" padding="10,0,0,0" text="臻视顺" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/Button.png' source='0,3,120,23'" hotimage="file='skin/Button.png' source='0,156,120,176'"/>	
+				</HorizontalLayout>
+			</VerticalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

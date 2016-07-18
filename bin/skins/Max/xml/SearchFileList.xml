@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<ListContainerElement height="30" width="1220">
+		<HorizontalLayout>
+			<Option width="22" height="22" padding="10,4,42,4" normalimage="file='skin/quanxuan.png'" selectedimage="file='skin/quanxuanzhuangtai.png'"/>
+			<Label text="name" width="285" align="center" font="2"/>
+			<Label text="Channel" width="125" font="2" align="center"/>
+			<Label text="startTime" width="250" font="2" align="center"/>
+			<Label text="stopTime" width="250" font="2" align="center"/>
+			<Label text="size" width="125" font="2" align="center"/>
+			<Button width="40" height="30" padding="45,0,30,0" foreimage="file='skin/play.png' dest='5,0,35,30'" hotimage="file='skin/Button_Hot.png'"/>
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>
+

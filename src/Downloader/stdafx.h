@@ -22,7 +22,16 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
+#include "CommonUtrl.h"
+#include "Device.h"
+#include "JXJVendor.h"
+#include "DZPVendor.h"
+#include "DHVendor.h"
+#include "HKVendor.h"
 
+//#include "SearchDevice.h"
+//#include "LoginDevice.h"
+//#include "SearchVideo.h"
 
 
 using namespace DuiLib;
@@ -46,10 +55,8 @@ using namespace rapidjson;
 
 #ifdef _UNICODE
 #	define STDSTRING std::wstring
-#	define StringToInt	_wtoi
 #else
 #	define STDSTRING std::string
-#	define StringToInt	atoi
 #endif
 
 
