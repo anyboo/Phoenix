@@ -1,9 +1,12 @@
-
 #include "DZPVendor.h"
+
+#include "Poco/NotificationQueue.h"
 
 // JXJ DZP
 #include "netsdk.h"
 #include "H264Play.h"
+
+using Poco::NotificationQueue;
 
 #pragma comment(lib, "NetSdk")
 #pragma comment(lib, "H264Play")
@@ -12,8 +15,9 @@ std::string DZP_MakeFileName(int channel, const std::string& startTime);
 void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
 void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
-int DZP_GetDownloadPos(const long loginHandle);
+int DZP_GetDownloadPos(const int fileHandle);
 
+int m_lFileHandle = 0;
 static bool DZP_Init_Flag = false;
 
 std::string GZLL_GetLastErrorString(int error)
@@ -109,9 +113,12 @@ void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
 CDZPVendor::CDZPVendor()
 {
 	m_eSDKType = DZP_SDK;
-
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
+	m_iDefPort = 34567;
+	m_iMaxChannel = 0;
+	m_lSearchDeviceHandle = -1;
 }
 
 CDZPVendor::~CDZPVendor()
@@ -182,6 +189,8 @@ void CDZPVendor::Logout(const long loginHandle)
 void CDZPVendor::StartSearchDevice()
 {
 	std::cout << "DZP 搜索设备 开始！" << std::endl;
+
+	m_listDeviceInfo.clear();
 
 	SDK_CONFIG_NET_COMMON_V2 Device[256] = { 0 };
 	int nRetLength = 0;
@@ -292,8 +301,8 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
-	int hdl = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DZP_DownLoadPosCallBack, 0);
-	if (hdl <= 0)
+	m_lFileHandle = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DZP_DownLoadPosCallBack, 0);
+	if (m_lFileHandle <= 0)
 	{
 		std::string m_sLastError = std::string("下载失败！错误为:") + GZLL_GetLastErrorString();
 		return;
@@ -346,8 +355,8 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const st
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
 	strPath.append(file.name);
 	H264_DVR_FILE_DATA* pData = (H264_DVR_FILE_DATA*)file.getPrivateData();
-	int hdl = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DZP_DownLoadPosCallBack, 0);
-	if (0 == hdl)
+	m_lFileHandle = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DZP_DownLoadPosCallBack, 0);
+	if (m_lFileHandle <= 0)
 	{
 		std::string m_sLastError = GZLL_GetLastErrorString();
 		throw std::exception(m_sLastError.c_str());
@@ -521,20 +530,29 @@ void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 
 void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
 {
-	std::cout << lDownLoadSize << "/" << lTotalSize << std::endl;
+	static int prePos = 0;
+	int curPos = 0;
 
+	curPos = DZP_GetDownloadPos(m_lFileHandle);
+
+	if (curPos != prePos)
+	{
+		std::cout << lDownLoadSize << "/" << lTotalSize << " - " << curPos << std::endl;
+		prePos = curPos;
+	}
+	
 	if (lDownLoadSize == -1)
 	{
-		std::cout << "Finish Download File" << std::endl;
+		prePos = 0;
 	}
 }
 int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)
 {
 	return 0;
 }
-int DZP_GetDownloadPos(const long loginHandle)
+int DZP_GetDownloadPos(const int fileHandle)
 {
-	int pos = H264_DVR_GetDownloadPos(loginHandle);
+	int pos = H264_DVR_GetDownloadPos(fileHandle);
 
 	return pos;
 }

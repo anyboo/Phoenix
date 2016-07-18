@@ -26,10 +26,11 @@ void DH_CreatePath(const size_t channel);
 DHVendor::DHVendor()
 {
 	m_eSDKType = DH_SDK;
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
+	m_iDefPort = 37777;
 	m_iMaxChannel = 0;
-
 	m_lSearchDeviceHandle = -1;
 }
 
@@ -60,14 +61,14 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 	if (0 != nError)
 	{
-		//std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
 		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}
 
 	if (0 == lLoginHandle)
 	{
-		//std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
 		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}
@@ -118,6 +119,8 @@ void DHVendor::Logout(const long loginHandle)
 void DHVendor::StartSearchDevice()
 {
 	std::cout << "DH ËÑË÷Éè±¸ ¿ªÊ¼£¡" << std::endl;
+
+	m_listDeviceInfo.clear();
 
  	DEVICE_NET_INFO Device[256] = { 0 };
  	int nLength = 0;
