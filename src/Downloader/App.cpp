@@ -15,6 +15,7 @@
 #include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
+#include "MessagePump.h"
 
 static VENDOR_LIST pVendorList;
 
@@ -23,7 +24,7 @@ DEVICE_INFO_SIMPLE_LIST GetDeviceInfoSimpleList()
 	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 
 	std::vector<ScanPortRecord> scanResults;
-	//ªÒ»°÷∏’Î
+	//Ëé∑ÂèñÊåáÈíà
 	QMSqlite *pDb = QMSqlite::getInstance();
 	std::string sql = SELECT_ALL_SCAN_PORT;
 	pDb->GetData(sql, scanResults);
@@ -49,6 +50,8 @@ DEVICE_INFO_SIMPLE_LIST GetDeviceInfoSimpleList()
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
+	MessagePump pump;
+	pump.start();
 
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
@@ -80,7 +83,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 		SHAppBarMessage(ABM_SETSTATE, &apBar);
 	}*/
 
-	/************************* ≥ı ºªØSDK≥ß…Ã **********************/
+	/************************* ÂàùÂßãÂåñSDKÂéÇÂïÜ **********************/
 	
 	CJXJVendor* jxjVendor = new CJXJVendor();
 	CDZPVendor* dzpVendor = new CDZPVendor();
@@ -92,11 +95,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//pVendorList.push_back(dhVendor);
 	//pVendorList.push_back(hkVendor);
 
-	/************************* ≥ı ºªØIP¡–±Ì **********************/
+	/************************* ÂàùÂßãÂåñIPÂàóË°® **********************/
 	//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
 	//NotificationQueue queuePortScan;
 	//PortScan portScan(queuePortScan);
-	////ø™ º…®√Ë
+	////ÂºÄÂßãÊâ´Êèè
 	//ThreadPool::defaultPool().start(portScan);
 
 	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
@@ -115,15 +118,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//	}
 	//}
 
-	/************************* …Ë±∏∑¢œ÷¿‡≤‚ ‘ **********************/
+	/************************* ËÆæÂ§áÂèëÁé∞Á±ªÊµãËØï **********************/
 	std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
-	NotificationQueue queueSearchDevice; // …Ë±∏∑¢œ÷œ˚œ¢∂”¡–
+	NotificationQueue queueSearchDevice; // ËÆæÂ§áÂèëÁé∞Ê∂àÊÅØÈòüÂàó
 	CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
 	ThreadPool::defaultPool().start(sd);
 	//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
 
-	/************************* …Ë±∏π‹¿Ì¿‡≤‚ ‘ **********************/
-	//NotificationQueue queueDeviceManager; // …Ë±∏π‹¿Ìœ˚œ¢∂”¡–
+	/************************* ËÆæÂ§áÁÆ°ÁêÜÁ±ªÊµãËØï **********************/
+	//NotificationQueue queueDeviceManager; // ËÆæÂ§áÁÆ°ÁêÜÊ∂àÊÅØÈòüÂàó
 	//CDeviceManager dm(pVendorList, queueDeviceManager);
 	//ThreadPool::defaultPool().start(dm);
 	//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
@@ -150,6 +153,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();
+	
+	pump.stop();
+
 	return 0;
 }
 
