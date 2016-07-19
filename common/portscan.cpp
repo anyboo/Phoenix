@@ -67,30 +67,7 @@ void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<lon
 		in_addr srcaddr;
 		srcaddr.S_un.S_addr = ip->sourceIP;
 		string srcip(inet_ntoa(srcaddr));
-		//cout << "src ip:" << srcip << endl;
-
-		/*int i, j;
-		for (i = 0; i < ips.size(); i++)
-		{
-		if (ip->sourceIP == ips[i])
-		{
-		for (j = 0; j < ports.size(); j++)
-		{
-		if (htons(tcp->sport) == ports[j])
-		{
-		char log[512] = { 0 };
-		sprintf_s(log, " port src: %d, dst: %d, len: %d, flag: %02x\n",
-		htons(tcp->sport), htons(tcp->dport), size, tcp->flag);
-		cout << string(log) << endl;
-		SCANRESULT out = { 0 };
-		char *sip = inet_ntoa(srcaddr);
-		memcpy(out.ip, sip, strlen(sip));
-		out.port = htons(tcp->sport);
-		outIps.push_back(out);
-		}
-		}
-		}
-		}		*/
+				
 		SCANRESULT out = { 0 };
 		char *sip = inet_ntoa(srcaddr);
 		memcpy(out.ip, sip, strlen(sip));
@@ -528,14 +505,14 @@ void PortScan::setDefaultScanPorts()
 	_scanPorts.push_back(80);
 	//俊明视
 	_scanPorts.push_back(8670);
-	//天地伟业(192.168.0.23,无法返回正确值，待确认)
-	//_scanPorts.push_back(3000);
+	//天地伟业
+	_scanPorts.push_back(3001);
 	//同为
 	_scanPorts.push_back(6036);
 	//星网锐捷
 	_scanPorts.push_back(8081);
 	//宇视科技
-	//scanports.push_back(0);
+	_scanPorts.push_back(82);
 	//中维
 	_scanPorts.push_back(9101);
 }
