@@ -60,7 +60,7 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-//	Close();
+	Close();
 }
 
 void SearchFileUI::Notify(TNotifyUI& msg)
@@ -92,15 +92,6 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 				}
 			}
 			GetFileCountAndSize(SendName);
-		}
-		if (!SendName.compare(0, 7, _T("BT_Play")))
-		{
-			std::auto_ptr<CPlayVideoWnd> pSearchDlg(new CPlayVideoWnd);
-			assert(pSearchDlg.get());
-			pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
-			pSearchDlg->CenterWindow();
-			pSearchDlg->ShowModal();
-		//	GetFileInfo(SendName);
 		}
 	}
 

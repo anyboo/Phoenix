@@ -114,8 +114,10 @@ CJXJVendor::CJXJVendor()
 {
 	// Init Param
 	m_eSDKType = JXJ_SDK;
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "admin";
+	m_iDefPort = 3321;
 	m_iMaxChannel = 0;
 
 	m_lSearchDeviceHandle = -1;

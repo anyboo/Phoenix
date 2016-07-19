@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\common\windowutils.cpp" />
     <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp" />
     <ClCompile Include="..\BusinessLayer\Device.cpp" />
+    <ClCompile Include="..\BusinessLayer\DeviceManager.cpp" />
     <ClCompile Include="..\BusinessLayer\DHVendor\DHVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp" />
@@ -179,7 +180,6 @@
     <ClCompile Include="OVPlayerUI.cpp" />
     <ClCompile Include="PlayVideoWnd.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
-    <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">

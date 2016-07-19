@@ -174,7 +174,7 @@ public:
 		_ips(ips),
 		_ports(ports)
 	{
-
+		_break = false;
 	};
 	void onEvent(const void* pSender, bool& arg);
 

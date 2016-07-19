@@ -8,6 +8,7 @@
 #include "Poco/Data/SQLite/Connector.h"
 #include <iostream>
 #include <vector>
+#include "DatabaseException.h"
 
 using namespace std;
 using Poco::Data::Session;
