@@ -10,85 +10,85 @@ VideoLoginUI::VideoLoginUI()
 :m_Init(false), m_pages(1)
 {
 	/************************* 初始化播放窗帘句柄 **********************/
-	TestWindows::getInstance().Init();
-
-	/************************* 初始化数据库 **********************/
-	//获取指针
-	QMSqlite *pDb = QMSqlite::getInstance();
-	//删除表
-	pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-	//创建记录表
-	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
-
-	/************************* 初始化SDK厂商 **********************/
-	VENDOR_LIST pVendorList;
-	CJXJVendor jxjVendor;
-	CDZPVendor dzpVendor;
-	DHVendor dhVendor;
-	HKVendor hkVendor;
-
-	pVendorList.push_back(&jxjVendor);
-//	pVendorList.push_back(&dzpVendor);
-	//pVendorList.push_back(&dhVendor);
-	//pVendorList.push_back(&hkVendor);
-
-	/************************* 初始化IP列表 **********************/
-	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-	std::string strIP = "";
-	int nPort = 0;
-
-	// DZP
-#if 0
-	NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
-	memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-	strIP = "192.168.0.66";
-	nPort = 34567;
-	memcpy(devInfoSimple1->szIP, strIP.c_str(), strIP.length());
-	devInfoSimple1->nPort = nPort;
-	listDeviceSimpleInfo.push_back(devInfoSimple1);
-#endif
-
-	// JXJ
-#if 1
-	NET_DEVICE_INFO_SIMPLE* devInfoSimple2 = new NET_DEVICE_INFO_SIMPLE;
-	memset(devInfoSimple2, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-	strIP = "192.168.0.89";
-	nPort = 3321;
-	memcpy(devInfoSimple2->szIP, strIP.c_str(), strIP.length());
-	devInfoSimple2->nPort = nPort;
-	listDeviceSimpleInfo.push_back(devInfoSimple2);
-#endif
-
-	// HK
-#if 0
-	NET_DEVICE_INFO_SIMPLE* devInfoSimple3 = new NET_DEVICE_INFO_SIMPLE;
-	memset(devInfoSimple3, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-	strIP = "192.168.0.92";
-	nPort = 8000;
-	memcpy(devInfoSimple3->szIP, strIP.c_str(), strIP.length());
-	devInfoSimple3->nPort = nPort;
-	listDeviceSimpleInfo.push_back(devInfoSimple3);
-#endif
-
-	// DH
-#if 0
-	NET_DEVICE_INFO_SIMPLE* devInfoSimple4 = new NET_DEVICE_INFO_SIMPLE;
-	memset(devInfoSimple4, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-	strIP = "192.168.0.96";
-	nPort = 37777;
-	memcpy(devInfoSimple4->szIP, strIP.c_str(), strIP.length());
-	devInfoSimple4->nPort = nPort;
-	listDeviceSimpleInfo.push_back(devInfoSimple4);
-#endif
-
-	/************************* 设备发现 **********************/
-	CSearchDevice::getInstance().Search(pVendorList, listDeviceSimpleInfo);
-	m_DeviceList = CSearchDevice::getInstance().GetDeviceInfoList();
-	m_page_Count = m_DeviceList.size() / 5;
-	if (m_DeviceList.size() % 5 != 0)
-	{
-		m_page_Count += 1;
-	}
+//	TestWindows::getInstance().Init();
+//
+//	/************************* 初始化数据库 **********************/
+//	//获取指针
+//	QMSqlite *pDb = QMSqlite::getInstance();
+//	//删除表
+//	pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+//	//创建记录表
+//	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+//
+//	/************************* 初始化SDK厂商 **********************/
+//	VENDOR_LIST pVendorList;
+//	CJXJVendor jxjVendor;
+//	CDZPVendor dzpVendor;
+//	DHVendor dhVendor;
+//	HKVendor hkVendor;
+//
+//	pVendorList.push_back(&jxjVendor);
+////	pVendorList.push_back(&dzpVendor);
+//	//pVendorList.push_back(&dhVendor);
+//	//pVendorList.push_back(&hkVendor);
+//
+//	/************************* 初始化IP列表 **********************/
+//	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
+//	std::string strIP = "";
+//	int nPort = 0;
+//
+//	// DZP
+//#if 0
+//	NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
+//	memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+//	strIP = "192.168.0.66";
+//	nPort = 34567;
+//	memcpy(devInfoSimple1->szIP, strIP.c_str(), strIP.length());
+//	devInfoSimple1->nPort = nPort;
+//	listDeviceSimpleInfo.push_back(devInfoSimple1);
+//#endif
+//
+//	// JXJ
+//#if 1
+//	NET_DEVICE_INFO_SIMPLE* devInfoSimple2 = new NET_DEVICE_INFO_SIMPLE;
+//	memset(devInfoSimple2, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+//	strIP = "192.168.0.89";
+//	nPort = 3321;
+//	memcpy(devInfoSimple2->szIP, strIP.c_str(), strIP.length());
+//	devInfoSimple2->nPort = nPort;
+//	listDeviceSimpleInfo.push_back(devInfoSimple2);
+//#endif
+//
+//	// HK
+//#if 0
+//	NET_DEVICE_INFO_SIMPLE* devInfoSimple3 = new NET_DEVICE_INFO_SIMPLE;
+//	memset(devInfoSimple3, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+//	strIP = "192.168.0.92";
+//	nPort = 8000;
+//	memcpy(devInfoSimple3->szIP, strIP.c_str(), strIP.length());
+//	devInfoSimple3->nPort = nPort;
+//	listDeviceSimpleInfo.push_back(devInfoSimple3);
+//#endif
+//
+//	// DH
+//#if 0
+//	NET_DEVICE_INFO_SIMPLE* devInfoSimple4 = new NET_DEVICE_INFO_SIMPLE;
+//	memset(devInfoSimple4, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+//	strIP = "192.168.0.96";
+//	nPort = 37777;
+//	memcpy(devInfoSimple4->szIP, strIP.c_str(), strIP.length());
+//	devInfoSimple4->nPort = nPort;
+//	listDeviceSimpleInfo.push_back(devInfoSimple4);
+//#endif
+//
+//	/************************* 设备发现 **********************/
+//	CSearchDevice::getInstance().Search(pVendorList, listDeviceSimpleInfo);
+//	m_DeviceList = CSearchDevice::getInstance().GetDeviceInfoList();
+//	m_page_Count = m_DeviceList.size() / 5;
+//	if (m_DeviceList.size() % 5 != 0)
+//	{
+//		m_page_Count += 1;
+//	}
 
 	m_pDb = QMSqlite::getInstance();
 	m_pDb->dropTable(DROP_SEARCH_FACTORY_TABLE);
@@ -332,9 +332,9 @@ void VideoLoginUI::LogIn()
 	int port = stoi(strPort.c_str());
 
 //	CDZPVendor* pDzp = new CDZPVendor();
-	CJXJVendor* pJxj = new CJXJVendor();
+//	CJXJVendor* pJxj = new CJXJVendor();
 
-	CLoginDevice::getInstance().Login(pJxj, strIP, port);
+//	CLoginDevice::getInstance().Login(pJxj, strIP, port);
 }
 
 Device* VideoLoginUI::GetLonInDevice()
@@ -343,7 +343,7 @@ Device* VideoLoginUI::GetLonInDevice()
 		return nullptr;
 	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
 	STDSTRING strIP = Edit_IP->GetText();
-	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
+//	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	return m_Device;
 }
 

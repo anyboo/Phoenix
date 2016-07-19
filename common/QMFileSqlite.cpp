@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "QMFileSqlite.h"
 #include <stdio.h>
 #include <iostream>

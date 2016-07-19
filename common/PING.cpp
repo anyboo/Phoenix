@@ -1,4 +1,4 @@
-// #include "stdafx.h"
+ #include "stdafx.h"
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "ping.h"
 #include <winsock2.h>

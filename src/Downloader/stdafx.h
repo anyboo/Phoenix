@@ -6,6 +6,7 @@
 #define WIN32_LEAN_AND_MEAN	
 #define _CRT_SECURE_NO_DEPRECATE
 
+#include <WinSock2.h>
 #include <windows.h>
 #include <objbase.h>
 #include <shellapi.h>
@@ -22,12 +23,12 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-#include "CommonUtrl.h"
+//#include "CommonUtrl.h"
 #include "Device.h"
-#include "JXJVendor.h"
-#include "DZPVendor.h"
-#include "DHVendor.h"
-#include "HKVendor.h"
+//#include "JXJVendor.h"
+//#include "DZPVendor.h"
+//#include "DHVendor.h"
+//#include "HKVendor.h"
 
 //#include "SearchDevice.h"
 //#include "LoginDevice.h"

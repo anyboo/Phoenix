@@ -5,7 +5,7 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
-#include "SearchVideo.h"
+//#include "SearchVideo.h"
 #include "SearchDevice.h"
 
 DownLoadWnd::DownLoadWnd()
@@ -196,9 +196,9 @@ void DownLoadWnd::SearchFile()
 	CListContainerElementUI* CurSel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSel_List, DUI_CTR_LABEL, 1));
 	STDSTRING strIP = Lab_IP->GetText();
-	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
+//	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	
-  	CSearchVideo::getInstance().SearchFile(m_Device, m_timeRangeSearch, m_Channel);
+//  CSearchVideo::getInstance().SearchFile(m_Device, m_timeRangeSearch, m_Channel);
 
 }
 

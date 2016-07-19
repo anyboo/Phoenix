@@ -2,7 +2,7 @@
 #include "SearchFileUI.h"
 #include "PlayVideoWnd.h"
 
-#include "SearchVideo.h"
+//#include "SearchVideo.h"
 
 #include "SearchDevice.h"
 
@@ -11,7 +11,7 @@
 SearchFileUI::SearchFileUI()
 :m_InitShowFileList(false)
 {
-	CSearchVideo::getInstance().ReadDataFromTable(m_FileList);	
+//	CSearchVideo::getInstance().ReadDataFromTable(m_FileList);	
 }
 
 

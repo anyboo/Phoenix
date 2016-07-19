@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "windowutils.h"
 #include "pcap.h"
 #include <windows.h>
