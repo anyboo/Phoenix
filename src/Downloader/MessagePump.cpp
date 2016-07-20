@@ -3,10 +3,12 @@
 #include <Poco/Thread.h>
 #include <Poco/Notification.h>
 #include <Poco/NotificationQueue.h>
+#include <Poco/NotificationCenter.h>
 
 using Poco::Thread;
 using Poco::Notification;
 using Poco::NotificationQueue;
+using Poco::NotificationCenter;
 
 MessagePump::MessagePump()
 :_pump(this, &MessagePump::runActivity)
@@ -29,19 +31,23 @@ void MessagePump::stop()
 	_pump.wait();
 }
 
+/*
+runActivity can't dispatch download thread's notification,
+because download notification will be freq.
+*/
+
 void MessagePump::runActivity()
 {
+	NotificationQueue& queue = NotificationQueue::defaultQueue();
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+
 	while (!_pump.isStopped())
 	{
-		NotificationQueue& queue = NotificationQueue::defaultQueue();
 		Notification::Ptr pNf = queue.waitDequeueNotification();
-		if (pNf)
+		
+		if (pNf && nc.hasObservers())
 		{
-			/*WorkNotification::Ptr pWorkNf = pNf.cast<WorkNotification>();
-			if (pWorkNf)
-			{
-				nc.notify();
-			}*/
+			nc.postNotification(pNf);
 		}
 		else Thread::sleep(200);
 	}
