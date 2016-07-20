@@ -103,7 +103,22 @@
     <ClCompile Include="..\BusinessLayer\DeviceManager.cpp">
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
+
     <ClCompile Include="MessagePump.cpp" />
+
+    <ClCompile Include="..\BusinessLayer\SearchFileException.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">

@@ -8,6 +8,8 @@
 #include "LoginDevice.h"
 
 #include "SearchDevice.h"
+#include "ReciveUIQunue.h"
+#include "SearchFileWorker.h"
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
@@ -67,6 +69,16 @@ void DownLoadWnd::OnSelectTimeType()
 	}
 }
 
+void DownLoadWnd::ShowOnlineDevice()
+{
+	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
+	for (int i = 0; i < m_listDevice.size(); i++)
+	{
+		m_Vendor.AddVendorList(to_string(m_listDevice[i]->GetSDKType()), m_listDevice[i]->getIP());
+		m_onlineIP.push_back(m_listDevice[i]->getIP());
+	}
+}
+
 void DownLoadWnd::OnSelectCalendar(STDSTRING& SendName)
 {
 	
@@ -116,8 +128,15 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	NET_SDK_TYPE VendorType = m_Device->GetSDKType();
 	STDSTRING strVendor = to_string(VendorType);
 	STDSTRING strIP = m_Device->getIP();
+	for (size_t i = 0; i < m_onlineIP.size(); i++)
+	{
+		if (m_onlineIP[i] == strIP)
+		{
+			return;
+		}
+	}
 	m_Vendor.AddVendorList(strVendor, strIP);
-
+	m_onlineIP.push_back(strIP);
 }
 
 void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
@@ -141,6 +160,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	if (m_beginTag)
 	{
 		InitTime();
+		ShowOnlineDevice();
 		m_beginTag = FALSE;
 	}
 	STDSTRING strSendName = msg.pSender->GetName();
@@ -168,7 +188,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	}
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !strSendName.compare(0, 14, _T("VendorContList")))
 	{
-		Show_Off_VendorList(strSendName, m_ChannelCount);
+		Show_Off_VendorList(strSendName);
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && strSendName == _T("quanxuan"))
 	{
@@ -199,8 +219,8 @@ void DownLoadWnd::SearchFile()
 	STDSTRING strIP = Lab_IP->GetText();
 	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	
-//    CSearchVideo::getInstance().SearchFile(m_Device, m_timeRangeSearch, m_Channel);
-
+	//ReciveUIQunue queue1;
+	//SearchFileWorker SearchWork(m_Device, m_timeRangeSearch, m_Channel, queue1);
 }
 
 void DownLoadWnd::GetChannel()
@@ -333,7 +353,7 @@ void DownLoadWnd::Show_Off_SubList(STDSTRING& strSendName)
 		if (ContList->GetUserData() != _T("0") && SubContList->GetUserData() == _T("Sub"))
 		{
 			strUserData = ContList->GetUserData();
-			int Count = stoi(strUserData.c_str());
+			int Count = stoi(strUserData);
 
 			for (int j = CurSel + 1; j <= CurSel + Count; j++)
 			{
@@ -354,7 +374,7 @@ void DownLoadWnd::RemoveSubList(STDSTRING& strSendName)
 	CListContainerElementUI* ContList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SubListName.c_str()));
 	int ContListserial = GetSubListCurSel(ContList, pList);
 	STDSTRING SubListCount = ContList->GetUserData();
-	int Count = stoi(SubListCount.c_str());
+	int Count = stoi(SubListCount);
 
 	for (int i = 0; i <= Count; i++)
 	{
@@ -362,12 +382,16 @@ void DownLoadWnd::RemoveSubList(STDSTRING& strSendName)
 	}
 }
 
-void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName, size_t Channel_Count)
+void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 {
 	CListUI* VendorList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
 	CListContainerElementUI* Channel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, _T("Channel_List")));
 	CListContainerElementUI* CurSelList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, strSendName.c_str()));
+	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSelList, DUI_CTR_LABEL, 1));
+	STDSTRING strIP = Lab_IP->GetText();
 	int CurSel = GetSubListCurSel(CurSelList, VendorList);
+	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
+	size_t Channel_Count = m_Device->getMaxChannel();
 	if (Channel_List == NULL)
 	{
 		m_Vendor.AddChannelsList(CurSel, Channel_Count);
@@ -414,11 +438,22 @@ void DownLoadWnd::RemoveVendor(STDSTRING& strSendName)
 	CListContainerElementUI* CurSelList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, ContListName.c_str()));
 	int CurSel = GetSubListCurSel(CurSelList, VendorList);
 	CListContainerElementUI* NextList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(VendorList, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
+	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSelList, DUI_CTR_LABEL, 1));
 	if (NextList != NULL && NextList->GetName() == _T("Channel_List"))
 	{
 		VendorList->RemoveAt(CurSel + 1, true);
 	}
 	VendorList->RemoveAt(CurSel, true);
+	
+	STDSTRING strIP = Lab_IP->GetText();
+	CLoginDevice::getInstance().Logout(strIP);
+	for (size_t i = 0; i < m_onlineIP.size(); i++)
+	{
+		if (m_onlineIP[i] == strIP)
+		{
+			m_onlineIP.erase(m_onlineIP.begin() + i);
+		}
+	}
 }
 
 void DownLoadWnd::InitTime()

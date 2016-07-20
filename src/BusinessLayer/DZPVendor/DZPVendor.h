@@ -17,6 +17,7 @@ public:
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
+	void ClearLocalRecordFiles();
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);

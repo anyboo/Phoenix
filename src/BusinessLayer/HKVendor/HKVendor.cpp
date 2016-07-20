@@ -108,6 +108,10 @@ void HKVendor::SearchAll(const long loginHandle)
 {
 
 }
+void HKVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
+}
 
 void HKVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {

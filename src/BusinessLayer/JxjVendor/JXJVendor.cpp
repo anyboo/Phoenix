@@ -232,6 +232,10 @@ void CJXJVendor::SearchAll(const long loginHandle)
 {
 
 }
+void CJXJVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
+}
 
 void CJXJVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {

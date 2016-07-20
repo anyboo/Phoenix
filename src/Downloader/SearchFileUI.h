@@ -3,6 +3,7 @@
 
 #include "QMSqlite.h"
 
+
 #define BT_CLOSE_SEARCHWND		(_T("close_bt"))
 #define BT_BEGINDOWNLOAD		(_T("BT_Download"))
 

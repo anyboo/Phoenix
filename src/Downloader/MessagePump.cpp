@@ -43,7 +43,7 @@ void MessagePump::runActivity()
 
 	while (!_pump.isStopped())
 	{
-		Notification::Ptr pNf = queue.waitDequeueNotification();
+		Notification::Ptr pNf = queue.waitDequeueNotification(2000);
 		
 		if (pNf && nc.hasObservers())
 		{

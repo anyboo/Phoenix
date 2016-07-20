@@ -256,14 +256,20 @@ void VideoLoginUI::LogIn()
 	CEditUI* Edit_Port = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Port_Edit")));
 	STDSTRING strIP = Edit_IP->GetText();
 	STDSTRING strPort = Edit_Port->GetText();
-	int port = stoi(strPort.c_str());
-	
+	int DevicePort = stoi(strPort);
+	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
+	for (size_t i = 0; i < m_listDevice.size(); i++)
+	{
+		if (m_listDevice[i]->getIP() == strIP)
+		{
+			return;
+		}
+	}
 	for (size_t i = 0; i < m_DeviceList.size(); i++)
 	{
-	//	std::string ip(m_DeviceList[i]->szIp);
 		if (string(m_DeviceList[i]->szIp) == strIP)
 		{
-			CLoginDevice::getInstance().Login(m_DeviceList[i]->pVendor, strIP, port);
+			CLoginDevice::getInstance().Login(m_DeviceList[i]->pVendor, strIP, DevicePort);
 			m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 		}
 	}	
