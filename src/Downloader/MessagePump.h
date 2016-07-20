@@ -14,5 +14,10 @@ protected:
 
 private:
 	Poco::Activity<MessagePump> _pump;
-};
+
+public:
+	static NotificationQueue queuePortScan;
+	static NotificationQueue queueSearchDevice;
+	static NotificationQueue queueDeviceManager;
+}; 
 

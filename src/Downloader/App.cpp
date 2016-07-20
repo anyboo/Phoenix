@@ -4,17 +4,6 @@
 #include "MainWnd.h"
 #include "resource.h"
 
-#include "portscan.h"
-#include "QMFileSqlite.h"
-#include "QMSqlite.h"
-
-#include "SearchDevice.h"
-#include "DeviceManager.h"
-
-#include "JXJVendor.h"
-#include "DZPVendor.h"
-#include "DHVendor.h"
-#include "HKVendor.h"
 #include "MessagePump.h"
 
 void HideTaskBar()
@@ -53,8 +42,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
-	HideTaskBar();
-
+//	HideTaskBar();
 
 	CPaintManagerUI::MessageLoop();
 

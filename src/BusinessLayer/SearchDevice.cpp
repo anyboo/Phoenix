@@ -176,6 +176,39 @@ void CSearchDevice::DeleteDeviceInfoList()
 	m_listDeviceInfo.clear();
 }
 
+#include "portscan.h"
+#include "QMFileSqlite.h"
+#include "QMSqlite.h"
+
+DEVICE_INFO_SIMPLE_LIST CSearchDevice::GetDeviceInfoSimpleList()
+{
+	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
+
+	std::vector<ScanPortRecord> scanResults;
+	//
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string sql = SELECT_ALL_SCAN_PORT;
+	pDb->GetData(sql, scanResults);
+
+	for (size_t i = 0; i < scanResults.size(); i++)
+	{
+		ScanPortRecord spr = scanResults[i];
+		if (spr.get<1>() == 80)
+		{
+			continue;
+		}
+
+		NET_DEVICE_INFO_SIMPLE* devInfoSimple = new NET_DEVICE_INFO_SIMPLE;
+		memset(devInfoSimple, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+		std::string ip = spr.get<0>();
+		memcpy(devInfoSimple->szIP, ip.c_str(), ip.length());
+		devInfoSimple->nPort = spr.get<1>();
+		listDeviceSimpleInfo.push_back(devInfoSimple);
+	}
+
+	return listDeviceSimpleInfo;
+}
+
 void CSearchDevice::run()
 {
 	static bool bNetStatusLast = false;

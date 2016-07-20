@@ -24,6 +24,7 @@ public:
 	CSearchDevice(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfom, NotificationQueue& queue);
 	~CSearchDevice();
 
+	static DEVICE_INFO_SIMPLE_LIST GetDeviceInfoSimpleList();
 	static DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 
 protected:
@@ -31,6 +32,8 @@ protected:
 	void Search(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfo);
 	void DeleteDeviceList();
 	void DeleteDeviceInfoList();
+
+	
 
 	virtual void run();
 

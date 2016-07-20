@@ -10,6 +10,10 @@ using Poco::Notification;
 using Poco::NotificationQueue;
 using Poco::NotificationCenter;
 
+NotificationQueue MessagePump::queuePortScan;
+NotificationQueue MessagePump::queueSearchDevice;
+NotificationQueue MessagePump::queueDeviceManager;
+
 MessagePump::MessagePump()
 :_pump(this, &MessagePump::runActivity)
 {
@@ -43,12 +47,25 @@ void MessagePump::runActivity()
 
 	while (!_pump.isStopped())
 	{
-		Notification::Ptr pNf = queue.waitDequeueNotification(2000);
-		
+		Notification::Ptr pNf = queue.waitDequeueNotification(1000);
 		if (pNf && nc.hasObservers())
 		{
 			nc.postNotification(pNf);
 		}
-		else Thread::sleep(200);
+
+		Notification::Ptr pPortScanNf = queuePortScan.waitDequeueNotification(1000);
+		if (pPortScanNf && nc.hasObservers())
+		{
+			nc.postNotification(pPortScanNf);
+		}
+
+		Notification::Ptr pSearchDeviceNf = queueSearchDevice.waitDequeueNotification(1000);
+		if (pSearchDeviceNf && nc.hasObservers())
+		{
+			nc.postNotification(pSearchDeviceNf);
+		}
+		
+		Thread::sleep(200);
+		
 	}
 }

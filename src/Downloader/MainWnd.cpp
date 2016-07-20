@@ -6,12 +6,97 @@
 #include "OtherTools.h"
 #include "SetIpWnd.h"
 #include "OVPlayerUI.h"
-
 #include "MenuWnd.h"
+
+#include "portscan.h"
+#include "QMFileSqlite.h"
+#include "QMSqlite.h"
+
+#include "SearchDevice.h"
+#include "DeviceManager.h"
+
+#include "JXJVendor.h"
+#include "DZPVendor.h"
+#include "DHVendor.h"
+#include "HKVendor.h"
+
+#include <fstream>
+
+#include <Poco/NotificationCenter.h>
+#include "Poco/Observer.h"
+
+#include "MessagePump.h"
+
+using Poco::NotificationCenter;
+using Poco::Observer;
+
+static VENDOR_LIST pVendorList;
+
+//extern NotificationQueue queuePortScan;
+//extern NotificationQueue queueSearchDevice;
+
+void  CheckDB()
+{
+	fstream _file;
+	_file.open("phoenix.db", ios::in);
+	if (!_file)
+	{
+		QFileSqlite *pFileDb = QFileSqlite::getInstance();
+		pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
+		pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
+	}
+}
+
+void InitSDK()
+{
+	CJXJVendor* jxjVendor = new CJXJVendor();
+	CDZPVendor* dzpVendor = new CDZPVendor();
+	DHVendor* dhVendor = new DHVendor();
+	HKVendor* hkVendor = new HKVendor();
+
+	pVendorList.push_back(jxjVendor);
+	//pVendorList.push_back(dzpVendor);
+	//pVendorList.push_back(dhVendor);
+	//pVendorList.push_back(hkVendor);
+}
+
+void InitIP()
+{
+	/************************* Init IP **********************/
+	PortScan portScan(MessagePump::queuePortScan);
+	ThreadPool::defaultPool().start(portScan);
+}
+
+void InitSearchDevice()
+{
+	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
+
+	std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
+	CSearchDevice sd(pVendorList, listDeviceSimpleInfo, MessagePump::queueSearchDevice);
+	ThreadPool::defaultPool().start(sd);
+
+	//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
+}
+
+void InitDeviceManager()
+{
+	CDeviceManager dm(pVendorList, MessagePump::queueDeviceManager);
+	ThreadPool::defaultPool().start(dm);
+
+	//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
+}
+
 CMainWnd::CMainWnd()
 :m_IsMinWnd(FALSE), m_IsMaxWnd(FALSE)
 {
-	
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
+	nc.addObserver(Observer<CMainWnd, ScanNotification>(*this, &CMainWnd::HandleNotificationScanPort));
+	nc.addObserver(Observer<CMainWnd, CNotificationSearchDevice>(*this, &CMainWnd::HandleNotificationSearchDevice));
+
+	CheckDB();
+	InitSDK();
+	InitIP();
 }
 
 
@@ -20,6 +105,22 @@ CMainWnd::~CMainWnd()
 	
 }
 
+void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf->name().compare("CNotificationNetworkStatus"))
+	{
+		int a = 0;
+	}
+}
+void CMainWnd::HandleNotificationScanPort(ScanNotification* pNf)
+{
+	InitSearchDevice();
+	InitDeviceManager();
+}
+void CMainWnd::HandleNotificationSearchDevice(CNotificationSearchDevice* pNf)
+{
+	int a = 0;
+}
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE, OnClose)
@@ -29,6 +130,7 @@ DUI_ON_CLICK_CTRNAME(BT_LogWnd, OnLogWnd)
 DUI_ON_CLICK_CTRNAME(BT_OtherTools, OnOtherToolsWnd)
 DUI_ON_CLICK_CTRNAME(BT_VideoPlay, OnVideoPlayWnd)
 DUI_END_MESSAGE_MAP()
+
 
 LPCTSTR CMainWnd::GetWindowClassName() const
 {
