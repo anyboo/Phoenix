@@ -60,6 +60,13 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+
+
+
+
+
+
 	Close();
 }
 
