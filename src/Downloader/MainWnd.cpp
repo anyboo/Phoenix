@@ -32,6 +32,9 @@ using Poco::Observer;
 
 static VENDOR_LIST pVendorList;
 
+//extern NotificationQueue queuePortScan;
+//extern NotificationQueue queueSearchDevice;
+
 void  CheckDB()
 {
 	fstream _file;
