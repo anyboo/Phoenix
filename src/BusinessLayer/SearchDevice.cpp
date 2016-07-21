@@ -58,6 +58,7 @@ CSearchDevice::CSearchDevice(const VENDOR_LIST& pVendorList, const DEVICE_INFO_S
 	m_listDeviceSimpleInfo(listDeviceSimpleInfo),
 	m_queue(queue)
 {
+
 }
 CSearchDevice::~CSearchDevice()
 {

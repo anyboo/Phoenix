@@ -2,7 +2,7 @@
 #include <DuiLib/UIlib.h>
 
 #include "QMSqlite.h"
-
+#include "SearchFileNotification.h"
 
 #define BT_CLOSE_SEARCHWND		(_T("close_bt"))
 #define BT_BEGINDOWNLOAD		(_T("BT_Download"))
@@ -33,6 +33,11 @@ public:
 	void GetFileCountAndSize(STDSTRING& optionName);
 	void GetFileInfo(STDSTRING& SendName);
 	void OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime);
+
+	void ReceiveSearchFile(SearchFileNotification* pNf);
+
+	bool ReadDataFromTable();
+
 private:
 	bool		m_InitShowFileList;
 	std::vector<readSearchVideo>  m_FileList;

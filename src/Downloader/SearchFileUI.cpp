@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "SearchFileUI.h"
 #include "PlayVideoWnd.h"
-
-//#include "SearchVideo.h"
+#include "SearchFileWorker.h"
 
 #include "SearchDevice.h"
 
 #include "FileLogInfoUI.h"
 
+
 SearchFileUI::SearchFileUI()
 :m_InitShowFileList(false)
 {
-//	CSearchVideo::getInstance().ReadDataFromTable(m_FileList);	
+	ReadDataFromTable();
 }
 
 
@@ -231,4 +231,13 @@ void SearchFileUI::GetFileCountAndSize(STDSTRING& optionName)
 	sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
 	STDSTRING LabText(str);
 	Lab->SetText(LabText.c_str());
+}
+
+bool SearchFileUI ::ReadDataFromTable()
+{
+	m_FileList.clear();
+
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
+	return pDb->GetData(strSql, m_FileList);
 }

@@ -13,6 +13,7 @@ m_queue(queue)
 }
 
 
+
 SearchFileWorker::~SearchFileWorker()
 {
 }
@@ -28,7 +29,7 @@ void SearchFileWorker::run()
 	int nChannelList = m_channelList.size();
 
 	NotificationQueue& queue = NotificationQueue::defaultQueue();
-	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
+	
 
 	m_pDevice->ClearLocalRecordFiles();
 
@@ -45,12 +46,12 @@ void SearchFileWorker::run()
 				std::cout << SearchFileExc.displayText() << std::endl;
 				queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Failure, SEARCHFILE_DEFAULT));
 			}
-			
-			
 
 			nPos++;
 			//NotificationQueue& queue = NotificationQueue::defaultQueue();
+			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
+
 
 
 			if (!m_queue.empty())
@@ -81,3 +82,5 @@ void SearchFileWorker::run()
 
 	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Finish, SEARCHFILE_DEFAULT));
 }
+
+

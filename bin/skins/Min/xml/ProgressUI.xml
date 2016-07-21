@@ -6,8 +6,11 @@
 			<Label text="提示" font="1" width="60" align="center" padding="0,6,0,0," textcolor="#FFFFFFFF"/>
 		</VerticalLayout>
 		<VerticalLayout bkimage="file='skin/bsbj.png'" width="394" padding="3,0,3,2">
-		<Progress name="electric" width="250" height="10" foreimage="file='skin/jindutiao.png'" value="30" padding="70,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
-		<Label name="text" width="200" text="正在搜索文件中:12/38"  padding="100" font="1"/>
+		<Progress name="electric" width="250" height="10" foreimage="file='skin/jindutiao.png'" value="0" padding="70,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
+		<HorizontalLayout>
+			<Label name="text1" width="160" text="正在搜索文件中:"  padding="75" font="1" align="right"/>
+			<Label name="text2" width="30" font="1" align="left"/>
+		</HorizontalLayout>
 		</VerticalLayout>
 	</VerticalLayout>
 </Window>

@@ -11,11 +11,16 @@
 #include "ReciveUIQunue.h"
 #include "SearchFileWorker.h"
 
+#include <poco/ThreadPool.h>
+
+using Poco::ThreadPool;
+
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
 	m_Vendor.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &m_Vendor);
+	m_Device = new Device;
 }
 
 
@@ -141,13 +146,19 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 {
-	/*std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
-	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
-	pDlg->CenterWindow();
-	pDlg->ShowModal();*/
+	GetChannel();
+	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	int CurSelList = pList->GetCurSel();
+	if (m_Channel.size() == 0 || CurSelList == -1)
+		return;
 	SearchFile();
 
+	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+	
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
@@ -204,23 +215,19 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 
 void DownLoadWnd::SearchFile()
 {	
-	GetChannel();
 	GetDataTime();
-
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
 	CListContainerElementUI* Channel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, _T("Channel_List")));
-	if (Channel_List == NULL)
-	{
-		return;
-	}
+
 	int CurSel = GetSubListCurSel(Channel_List, pList) - 1;
 	CListContainerElementUI* CurSel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSel_List, DUI_CTR_LABEL, 1));
 	STDSTRING strIP = Lab_IP->GetText();
 	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	
-	//ReciveUIQunue queue1;
-	//SearchFileWorker SearchWork(m_Device, m_timeRangeSearch, m_Channel, queue1);
+	ReciveUIQunue *queue1 = new ReciveUIQunue();;
+	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *queue1);
+	ThreadPool::defaultPool().start(*sfw);
 }
 
 void DownLoadWnd::GetChannel()

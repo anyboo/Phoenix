@@ -116,18 +116,27 @@ Device* CLoginDevice::GetDevice(const std::string ip)
 {
 	assert(&ip || ip.empty());
 
-	for (std::vector<Device*>::iterator iter = m_listDevice.begin(); iter != m_listDevice.end();)
+	for (int i = 0; i < m_listDevice.size();i++)
 	{
-		Device* pDev = *iter;
+		Device* pDev = m_listDevice[i];
 		if (ip == pDev->getIP())
 		{
 			return pDev;
 		}
-		else
-		{
-			iter++;
-		}
 	}
+
+	/*for (std::vector<Device*>::iterator iter = m_listDevice.begin(); iter != m_listDevice.end();)
+	{
+	Device* pDev = *iter;
+	if (ip == pDev->getIP())
+	{
+	return pDev;
+	}
+	else
+	{
+	iter++;
+	}
+	}*/
 
 	return NULL;
 }

@@ -9,8 +9,6 @@
 #define BT_VideoPlay		(_T("VideoPlay"))
 
 #include "NotificationNetworkStatus.h"
-#include "portscan.h"
-#include "NotificationSearchDevice.h"
 
 class CMainWnd :
 	public WindowImplBase
@@ -36,8 +34,6 @@ public:
 	void Show_HideTask(BOOL IsHide);
 
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
-	void HandleNotificationScanPort(ScanNotification* pNf);
-	void HandleNotificationSearchDevice(CNotificationSearchDevice* pNf);
 
 private:
 	BOOL	m_IsMinWnd;
