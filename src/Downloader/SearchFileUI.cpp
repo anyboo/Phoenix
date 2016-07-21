@@ -228,7 +228,14 @@ void SearchFileUI::GetFileCountAndSize(STDSTRING& optionName)
 	CLabelUI* Lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("file_Count")));
 	char str[200] = { 0 };
 	filesize = filesize / (1024 * 1024);
-	sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
+	if (filesize > 1024)
+	{
+		float file_size = (float)filesize / 1024;
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%6.2fG！", fileCount, file_size);
+	}
+	else{
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
+	}
 	STDSTRING LabText(str);
 	Lab->SetText(LabText.c_str());
 }

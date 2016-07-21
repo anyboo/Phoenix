@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="400,140" caption="0,0,0,0" roundcorner="4,4" showdirty="false" >
+<Window size="400,160" caption="0,0,0,0" roundcorner="4,4" showdirty="false" >
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<VerticalLayout height="200" bkimage="file='skin/beijing.png'" bordersize="3" bordercolor="0xf1234567">
 		<VerticalLayout height="40">
 			<Label text="提示" font="1" width="60" align="center" padding="0,6,0,0," textcolor="#FFFFFFFF"/>
 		</VerticalLayout>
 		<VerticalLayout bkimage="file='skin/bsbj.png'" width="394" padding="3,0,3,2">
-		<Progress name="electric" width="250" height="10" foreimage="file='skin/jindutiao.png'" value="0" padding="70,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
-		<HorizontalLayout>
+		<Progress name="electric" width="250" height="10" foreimage="file='skin/jindutiao.png'" value="0" padding="70,20,1,0" bordersize="1" bordercolor="0xf1234567"/>
+		<HorizontalLayout height="40">
 			<Label name="text1" width="160" text="正在搜索文件中:"  padding="75" font="1" align="right"/>
 			<Label name="text2" width="30" font="1" align="left"/>
 		</HorizontalLayout>
+		<Button name="Search_cel" width="120" height="30" padding="120,0,0,0" text="取消查询" bordersize="1" bordercolor="0xf1234567" bkimage="file='skin/Button.png' source='0,152,120,180'" hotimage="file='skin/Button.png' source='0,92,120,120'"/>
 		</VerticalLayout>
 	</VerticalLayout>
 </Window>

@@ -15,6 +15,8 @@
 
 using Poco::ThreadPool;
 
+
+
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
@@ -225,8 +227,9 @@ void DownLoadWnd::SearchFile()
 	STDSTRING strIP = Lab_IP->GetText();
 	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	
-	ReciveUIQunue *queue1 = new ReciveUIQunue();;
-	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *queue1);
+	//ReciveUIQunue* queue1 = new ReciveUIQunue();
+	
+	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *ReciveUIQunue::GetInstance());
 	ThreadPool::defaultPool().start(*sfw);
 }
 

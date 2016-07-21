@@ -4,6 +4,8 @@
 #include <Poco/NotificationCenter.h>
 #include "Poco/Observer.h"
 
+#include "ReciveUIQunue.h"
+#include "ReciveUINotification.h"
 
 using Poco::NotificationCenter;
 using Poco::Observer;
@@ -53,7 +55,7 @@ void CProgtessUI::ReceiveSearchFile(SearchFileNotification* pNf)
 }
 
 DUI_BEGIN_MESSAGE_MAP(CProgtessUI, WindowImplBase)
-
+DUI_ON_CLICK_CTRNAME(BT_SEARCH_CANCEL, OnCancelSearch)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CProgtessUI::GetWindowClassName() const
@@ -101,5 +103,14 @@ void CProgtessUI::ShowProgress()
 	Lab_pro->SetText(progress.c_str());
 	int pro_value = m_CountFile == 0 ? 0 : (100 * m_Searchfile_count) / m_CountFile;
 	Search_Pro->SetValue(pro_value);
+}
+
+
+void CProgtessUI::OnCancelSearch(TNotifyUI& msg)
+{
+	//ReciveUIQunue *queue1 = new ReciveUIQunue();;
+	bool b = true;
+	//g_queue1->enqueueNotification(new ReciveUINotification(b));
+	ReciveUIQunue::GetInstance()->enqueueNotification(new ReciveUINotification(b));
 }
 

@@ -13,6 +13,13 @@ class ReciveUIQunue:public NotificationQueue
 public:
 	ReciveUIQunue();
 	~ReciveUIQunue();
+
+	static ReciveUIQunue* GetInstance();
+
+	static void DestroyInstance();
+
+protected:
+	static ReciveUIQunue *m_pReceiveUIQueue;
 };
 
 #endif 

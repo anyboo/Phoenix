@@ -62,11 +62,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	/************************* 初始化数据库 **********************/
 	//获取指针
-	QFileSqlite *pFileDb = QFileSqlite::getInstance();
-	//删除表
-	pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
-	//创建记录表
-	pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
+	fstream _file;
+	_file.open("phoenix.db", ios::in);
+	if (!_file)
+	{
+		QFileSqlite *pFileDb = QFileSqlite::getInstance();
+		//删除表
+		pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
+		//创建记录表
+		pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
+	}
 
 	//获取指针
 	QMSqlite *pDb = QMSqlite::getInstance();
