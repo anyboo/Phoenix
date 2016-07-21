@@ -12,9 +12,10 @@ typedef struct _time_range
 	std::time_t start;
 	std::time_t end;
 } time_range, *ptime_range;
-#endif
+#endif 
 
-#define  MAX_IPADDR_LEN				16       //\ length    
+
+#define  MAX_IPADDR_LEN				16       //ip address length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
 
 typedef enum tagSDK_TYPE
@@ -37,13 +38,15 @@ typedef enum
 	Notification_Type_Device_Manager_Dropped,
 	Notification_Type_Device_Manager_Cancel,
 	Notification_Type_Search_File_Process,
+	Notification_Type_Search_File_TotalSize,
+	Notification_Type_Search_File_Failure,
 	Notification_Type_Search_File_Finish,
 	Notification_Type_Search_File_Cancel,
 	Notification_Type_Download_File_Process,
 	Notification_Type_Download_File_Finish,
 	Notification_Type_Download_File_Cancel,
 	Notification_Type_Port_Scan_Finish,
-	Notification_Type_Express,
+	Notification_Type_Exception_Login,
 
 }NOTIFICATION_TYPE;
 
@@ -90,10 +93,8 @@ struct RecordFile
 		channel = other.channel;
 		size = other.size;
 		name = other.name;
-		strTimeSection = other.strTimeSection;
 		beginTime = other.beginTime;
 		endTime = other.endTime;
-		duration = other.duration;
 		pPrivateData = nullptr;
 		PrivateDataDataSize = 0;
 		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
@@ -108,10 +109,8 @@ struct RecordFile
 		channel = other.channel;
 		size = other.size;
 		name = other.name;
-		strTimeSection = other.strTimeSection;
 		beginTime = other.beginTime;
 		endTime = other.endTime;
-		duration = other.duration;
 		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
 		return *this;
 	}
@@ -150,10 +149,8 @@ struct RecordFile
 	int channel;
 	int size;
 	std::string name;
-	std::string strTimeSection;
 	std::time_t beginTime;
 	std::time_t endTime;
-	unsigned long duration;
 	char* pPrivateData;   //Private Data
 	__int32 PrivateDataDataSize;//Private Data Size
 };
@@ -172,10 +169,11 @@ public:
 
 	virtual void SearchAll(const long loginHandle) = 0;
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void Download(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void PlayVideo(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename) = 0;
-	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename) = 0;
+	virtual void ClearLocalRecordFiles() = 0;
+
+	virtual void Download(const long loginHandle, const size_t channel, const RecordFile& file) = 0;
+	virtual void PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file) = 0;
+	virtual bool StopDownload() = 0;
 
 	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;
@@ -183,9 +181,9 @@ public:
 
 	virtual std::string GetDefUsearName() = 0;
 	virtual std::string GetDefPassword() = 0;
-	virtual int GetDefPort() = 0;
 	virtual NET_SDK_TYPE GetSDKType() = 0;
 	virtual bool IsSearchDeviceAPIExist() = 0;
+
 
 	virtual void StartSearchDevice() = 0;
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;

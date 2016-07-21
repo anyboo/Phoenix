@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "Device.h"
 #include "LoginDevice.h"
 #include "DeviceManager.h"

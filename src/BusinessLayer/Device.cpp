@@ -1,6 +1,7 @@
-#include "stdafx.h"
 
 #include "Device.h"
+
+#pragma comment(lib, "Ws2_32.lib")
 
 Device::Device(const AbstractVendor* sdk)
 {
@@ -69,22 +70,10 @@ void Device::Init()
 
 bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& indexVendor)
 {
-	
-	if (m_pVendor->GetDefPort() == pDevInfoSimple->nPort)
+	if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
 	{
-		if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
-		{
-			//Logout();
-			return true;
-		}
-		else
-		{
-			if (GetNextDevice() != NULL)
-			{
-				indexVendor++;
-				GetNextDevice()->LoginChain(pDevInfoSimple, indexVendor);
-			}
-		}
+		//Logout();
+		return true;
 	}
 	else
 	{
@@ -156,32 +145,18 @@ void Device::Search(const size_t channel, const time_range& range)
 	m_pVendor->Search(m_lLoginHandle, channel, range);
 }
 
-void Device::Download(const size_t channel, const time_range& range)
+void Device::Download(const size_t channel, const RecordFile& recordFile)
 {
 	assert(m_pVendor);
-	m_pVendor->Download(m_lLoginHandle, channel, range);
+	m_pVendor->Download(m_lLoginHandle, channel, recordFile);
 }
 
-void Device::PlayVideo(const HWND hWnd, const size_t channel, const time_range& range)
+void Device::PlayVideo(const HWND hWnd, const size_t channel, const RecordFile& recordFile)
 {
 	assert(m_pVendor);
 	m_pVendor->SetHWnd(hWnd);
 	ShowWindow(hWnd, SW_SHOW);
-	m_pVendor->PlayVideo(m_lLoginHandle, channel, range);
-}
-
-void Device::Download(const size_t channel, const std::string& fileName)
-{
-	assert(m_pVendor);
-	m_pVendor->Download(m_lLoginHandle, channel, fileName);
-}
-
-void Device::PlayVideo(const HWND hWnd, const size_t channel, const std::string& fileName)
-{
-	assert(m_pVendor);
-	m_pVendor->SetHWnd(hWnd);
-	ShowWindow(hWnd, SW_SHOW);
-	m_pVendor->PlayVideo(m_lLoginHandle, channel, fileName);
+	m_pVendor->PlayVideo(m_lLoginHandle, channel, recordFile);
 }
 
 void Device::SetDownloadPath(const std::string& root)

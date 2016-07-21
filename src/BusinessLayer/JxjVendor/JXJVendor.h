@@ -2,6 +2,14 @@
 
 #include "CommonUtrl.h"
 
+typedef enum
+{
+	Err_No = 0,
+	Err_LoginSuccess, // Login Success
+	Err_LoginFail,	// Login Fail
+	Err_DownloadSuccess, // Download Success
+}eErrCode;
+
 class CJXJVendor :
 	public AbstractVendor
 {
@@ -15,10 +23,11 @@ public:
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
-	void Download(const long loginHandle, const size_t channel, const time_range& range);
-	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-	void Download(const long loginHandle, const size_t channel, const std::string& filename);
-	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+	void ClearLocalRecordFiles();
+
+	void Download(const long loginHandle, const size_t channel, const RecordFile& file);
+	void PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file);
+	bool StopDownload(){ return true; }
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
@@ -26,8 +35,10 @@ public:
 
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }
+	int GetDefPort() { return m_iDefPort; }
 
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	bool IsSearchDeviceAPIExist(){ return m_bSearchDeviceAPI; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
@@ -40,11 +51,13 @@ private:
 	HWND m_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
+	bool m_bSearchDeviceAPI;
 
 	/* Login */
 	size_t m_iMaxChannel;
 	std::string m_sDefUserName;
 	std::string m_sDefPassword;
+	int m_iDefPort;
 
 	/* Search Device */
 	long m_lSearchDeviceHandle;
@@ -52,6 +65,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	RECORD_FILE_LIST m_files_Unit;
 
 	void* handle;
 };

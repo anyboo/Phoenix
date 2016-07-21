@@ -4,8 +4,10 @@
 #include <vector>
 #include <cassert>
 #include <iostream>
+#include <WinSock2.h>
 
 #include "AbstractVendor.h"
+
 
 /*
 Please make sure type of vendor before you create a Device Object
@@ -17,6 +19,8 @@ typedef enum
 	Login_Status_Yes
 
 }DeviceLoginStatus;
+
+class AbstractVendor;
 
 class Device
 {
@@ -34,10 +38,12 @@ public:
 	void SetDownloadPath(const std::string& root);
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
-	void Download(const size_t channel, const time_range& range);
-	void PlayVideo(const HWND hWnd, const size_t channel, const time_range& range);
-	void Download(const size_t channel, const std::string& fileName);
-	void PlayVideo(const HWND hWnd, const size_t channel, const std::string& fileName);
+	void ClearLocalRecordFiles(){ return m_pVendor->ClearLocalRecordFiles(); }
+
+	void Download(const size_t channel, const RecordFile& recordFile);
+	void PlayVideo(const HWND hWnd, const size_t channel, const RecordFile& recordFile);
+
+	bool StopDownload(){ assert(m_pVendor); return m_pVendor->StopDownload(); }
 
 	// Device Search Model
 	void StartSearchDevice();
@@ -48,7 +54,6 @@ public:
 	size_t getPort(){ return m_iPort; }
 	std::string getUserName(){ return m_sUserName; }
 	std::string getPassword(){ return m_sPassword; }
-	int getDefPort(){ return m_pVendor->GetDefPort(); }
 	size_t getMaxChannel(){ return m_iMaxChannel; }
 	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; } // Get Login Status (Unused)
 	void setLoginStatus(DeviceLoginStatus devLoginStatus){ m_eLoginStatus = devLoginStatus; }
@@ -61,7 +66,7 @@ public:
 	AbstractVendor* GetSDK(){ return m_pVendor; }
 	bool IsSearchDeviceAPIExist(){ return m_pVendor->IsSearchDeviceAPIExist(); }
 
-protected:
+//protected:
 	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
 	
 private:

@@ -1,6 +1,15 @@
-#pragma once
+#ifndef __DHVENDOR_H__
+#define __DHVENDOR_H__
+
+#include "SearchFileNotification.h"
+
+#include "Poco/NotificationQueue.h"
 
 #include "CommonUtrl.h"
+#include "SearchFileException.h"
+
+
+using Poco::NotificationQueue;
 
 class DHVendor :
 	public AbstractVendor
@@ -20,17 +29,17 @@ public:
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+	bool StopDownload();
 
-	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
+	void SetHWnd(const HWND& hWnd){ g_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }
-	int GetDefPort() { return m_iDefPort; }
 	
+	bool IsSearchDeviceAPIExist();
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
-	bool IsSearchDeviceAPIExist(){ return m_bSearchDeviceAPI; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
@@ -40,7 +49,7 @@ public:
 
 private:
 	/* Init */
-	HWND m_hWnd;
+	HWND g_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
 	bool m_bSearchDeviceAPI;
@@ -57,4 +66,11 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	RECORD_FILE_LIST m_FilesChange;
+	//int m_nPos;
+
+	/*Download*/
+	long m_lDownloadHandle;
 };
+
+#endif 

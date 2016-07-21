@@ -238,6 +238,12 @@ void CDZPVendor::SearchAll(const long loginHandle)
 {
 
 }
+
+void CDZPVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
+}
+
 void CDZPVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	std::cout << "DZP 搜索文件 开始！" << std::endl;

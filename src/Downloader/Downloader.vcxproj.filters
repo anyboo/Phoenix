@@ -43,9 +43,6 @@
     <ClCompile Include="OVPlayerUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="QMSqlite.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ProgtessUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -62,9 +59,6 @@
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
     <ClCompile Include="..\BusinessLayer\SearchDevice.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchVideo.cpp">
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
     <ClCompile Include="..\BusinessLayer\TestWindows.cpp">
@@ -85,18 +79,46 @@
     <ClCompile Include="FileLogInfoUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\DatabaseException.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\PING.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\portscan.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\QMFileSqlite.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\QMSqlite.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\windowutils.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\DeviceManager.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+
+    <ClCompile Include="MessagePump.cpp" />
+
+    <ClCompile Include="..\BusinessLayer\SearchFileException.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
     <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp">
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
     <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp">
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -153,6 +175,7 @@
     <ClInclude Include="FileLogInfoUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MessagePump.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
@@ -175,6 +198,9 @@
     </Filter>
     <Filter Include="源文件\BusinessLayer\sdk">
       <UniqueIdentifier>{6b5bd1eb-b10b-4dc4-9c17-cec550bab599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\BusinessLayer\Network">
+      <UniqueIdentifier>{6d3fdd06-0498-46bb-9245-e97dd163ea5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

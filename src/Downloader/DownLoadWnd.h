@@ -53,7 +53,7 @@ public:
 	void Show_Off_SubList(STDSTRING& strSendName);
 	void RemoveSubList(STDSTRING& strSendName);
 
-	void Show_Off_VendorList(STDSTRING& strSendName, size_t Channel_Count);
+	void Show_Off_VendorList(STDSTRING& strSendName);
 	void All_SelectChannels();
 	void RemoveVendor(STDSTRING& strSendName);
 
@@ -66,6 +66,8 @@ public:
 
 	void GetChannel();
 	void GetDataTime();
+
+	void ShowOnlineDevice();
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
@@ -83,5 +85,6 @@ private:
 	size_t			m_ChannelCount;
 	std::vector<size_t>	m_Channel;
 	time_range		m_timeRangeSearch;
+	std::vector<STDSTRING>		m_onlineIP;
 };
 
