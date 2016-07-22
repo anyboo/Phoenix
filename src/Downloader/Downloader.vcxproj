@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h" />
+    <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
     <ClInclude Include="FileLogInfoUI.h" />
     <ClInclude Include="LogUI.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="..\BusinessLayer\TestWindows.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
+    <ClCompile Include="DownloadPackage.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
