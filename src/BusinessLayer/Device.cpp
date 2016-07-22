@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "Device.h"
 
 #pragma comment(lib, "Ws2_32.lib")

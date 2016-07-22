@@ -143,6 +143,7 @@
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="PlayVideoWnd.h" />
+    <ClInclude Include="ProgressManager.h" />
     <ClInclude Include="ProgtessUI.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\DatabaseException.cpp" />
+    <ClCompile Include="..\..\common\ipset.cpp" />
     <ClCompile Include="..\..\common\PING.cpp" />
     <ClCompile Include="..\..\common\portscan.cpp" />
     <ClCompile Include="..\..\common\QMFileSqlite.cpp" />
@@ -170,6 +172,7 @@
     <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
+    <ClCompile Include="..\BusinessLayer\LoginException.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp" />
     <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />
@@ -188,6 +191,7 @@
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="OVPlayerUI.cpp" />
     <ClCompile Include="PlayVideoWnd.cpp" />
+    <ClCompile Include="ProgressManager.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
