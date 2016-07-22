@@ -4,6 +4,7 @@
 #include "Vendor.h"
 #include "TimeUI.h"
 
+#include "DownloadPackage.h"
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -50,7 +51,7 @@ public:
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
 	void SearchFile();
-	void ShowFileList();
+	void ShowTotalFileList();
 
 	void Show_Off_SubList(STDSTRING& strSendName);
 	void RemoveSubList(STDSTRING& strSendName);
@@ -64,7 +65,7 @@ public:
 
 	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
-	CListContainerElementUI* Add_FileInfoList();
+	void AddSubFileList(size_t CurSel);
 
 	void GetChannel();
 	void GetDataTime();
@@ -88,5 +89,8 @@ private:
 	std::vector<size_t>	m_Channel;
 	time_range		m_timeRangeSearch;
 	std::vector<STDSTRING>		m_onlineIP;
+
+private:
+	std::string			m_DeviceID;
 };
 

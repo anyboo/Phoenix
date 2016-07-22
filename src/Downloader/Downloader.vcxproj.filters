@@ -121,6 +121,9 @@
     <ClCompile Include="MessagePump.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DownloadPackage.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -178,6 +181,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MessagePump.h" />
+    <ClInclude Include="DownloadPackage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
