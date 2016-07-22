@@ -266,7 +266,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 	//send ICMP packet
     if (sendto(pInfo->m_sockRaw, pInfo->m_szICMPData, DEF_PACKET_SIZE + sizeof(ICMPHeader), 0, (struct sockaddr*)&sockaddrDest, nSockaddrDestSize) == SOCKET_ERROR)
 	{
-        cout << __FILE__ << __FUNCTION__ << __LINE__ << "sendto" << endl;
+		cout << __FILE__ << "-" << __FUNCTION__ << "-" << __LINE__ << "-" << "error:" << WSAGetLastError() << endl;
 		return FALSE;
 	}
 
