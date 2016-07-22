@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "CommonUtrl.h"
 #include <Poco/SingletonHolder.h>
 

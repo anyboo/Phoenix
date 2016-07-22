@@ -121,6 +121,12 @@
     <ClCompile Include="MessagePump.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\ipset.cpp">
+      <Filter>源文件\BusinessLayer\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\LoginException.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
