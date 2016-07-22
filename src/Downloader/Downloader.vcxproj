@@ -143,6 +143,7 @@
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="PlayVideoWnd.h" />
+    <ClInclude Include="ProgressManager.h" />
     <ClInclude Include="ProgtessUI.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="OVPlayerUI.cpp" />
     <ClCompile Include="PlayVideoWnd.cpp" />
+    <ClCompile Include="ProgressManager.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
