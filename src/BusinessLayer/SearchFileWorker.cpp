@@ -48,12 +48,10 @@ void SearchFileWorker::run()
 			}
 
 			nPos++;
-			//NotificationQueue& queue = NotificationQueue::defaultQueue();
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
 
-
-
+			
 			if (!m_queue.empty())
 			{
 				Notification::Ptr pNf(m_queue.waitDequeueNotification());
@@ -65,7 +63,6 @@ void SearchFileWorker::run()
 						{
 							FastMutex::ScopedLock lock(m_mutex);
 							m_bCancel = pReciveDataNf->GetData();
-							std::cout << "Cancel£º" << m_bCancel << std::endl;
 						}
 					}
 				}
