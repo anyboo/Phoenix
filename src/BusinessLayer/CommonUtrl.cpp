@@ -1,4 +1,3 @@
-#include "stdafx.h"
 
 #include "CommonUtrl.h"
 #include <Poco/SingletonHolder.h>
@@ -19,6 +18,20 @@ CCommonUtrl& CCommonUtrl::getInstance()
 	return *shCommonUtrl.get();
 }
 
+std::string CCommonUtrl::MakeFileName(int channel, const std::string& startTime, const std::string& endTime, const std::string& extensions)
+{
+	std::string strFileName;
+
+	strFileName += "channel";
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(extensions);
+
+	return strFileName;
+}
 std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)
 {
 	std::string strPath = basePath;
@@ -30,14 +43,6 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, cons
 	strPath += venderName.data();
 	strPath.append("\\");
 	strPath.append("通道");
-	if (venderName.compare(Vendor_DZP) == 0)
-	{
-		channel += 1;
-	}
-	if (channel < 10)
-	{
-		strPath += "0";
-	}
 	strPath += std::to_string(channel);
 	strPath.append("\\");
 
@@ -256,35 +261,35 @@ std::vector<RecordFile> CCommonUtrl::LoadSearchFileListFromFile()
 
 void CCommonUtrl::WriteFileListToDB(RECORD_FILE_LIST& recordFiles)
 {
-//	//获取指针
-//	QMSqlite *pDb = QMSqlite::getInstance();
-//	////删除表
-//	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-//	////创建记录表
-//	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
-//	//一次插入所有数据
-//	std::vector<writeSearchVideo> RecordList;
-//	for (size_t i = 0; i < recordFiles.size(); i++)
-//	{
-//		writeSearchVideo sr;
-//		RecordFile record = recordFiles[i];
-//		//文件名称
-//		sr.set<0>(record.name);
-//		//通道号
-//		sr.set<1>(record.channel);
-//		//开始时间
-//		sr.set<2>(record.beginTime);
-//		//结束时间
-//		sr.set<3>(record.endTime);
-//		sr.set<4>(record.size);
-//		RecordList.push_back(sr);
-//	}
-//
-//	if (RecordList.size() > 0)
-//	{
-//		std::string sql(INSERT_SEARCH_VIDEO);
-//		pDb->writeDataByVector(sql, RecordList);
-//	}
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	////删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	////创建记录表
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < recordFiles.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = recordFiles[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	if (RecordList.size() > 0)
+	{
+		std::string sql(INSERT_SEARCH_VIDEO);
+		pDb->writeDataByVector(sql, RecordList);
+	}
 }
 
 std::string CCommonUtrl::GetCurTime()
