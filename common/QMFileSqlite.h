@@ -62,6 +62,8 @@ public:
 	template<typename T>
 	bool GetData(string sql, std::vector<T>& Record)
 	{
+		if (sql.empty())
+			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
@@ -83,6 +85,8 @@ public:
 	template<typename T>
 	bool writeData(string sql, T searchrecode)
 	{
+		if (sql.empty())
+			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
@@ -104,6 +108,8 @@ public:
 	template<typename T>
 	bool writeDataByVector(string sql, std::vector<T>& Record)
 	{
+		if (sql.empty() || Record.empty())
+			return false;
 		Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
