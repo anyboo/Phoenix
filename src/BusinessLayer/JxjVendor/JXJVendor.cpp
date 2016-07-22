@@ -689,7 +689,7 @@ void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	iRet = JNetGetParam(loginHandle, channel, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
 	if (iRet != 0)
 	{
-		throw std::exception("Search Error!");
+		//throw std::exception("Search Error!");
 	}
 
 	if (m_storeLog.total_count > 0)

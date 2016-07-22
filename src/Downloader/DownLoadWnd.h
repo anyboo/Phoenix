@@ -28,6 +28,8 @@ typedef struct
 	STDSTRING	handle;
 }FILE_INFO;
 
+
+
 class DownLoadWnd :
 	public WindowImplBase
 {

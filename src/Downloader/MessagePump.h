@@ -1,6 +1,10 @@
 #pragma once
 #include <Poco/Activity.h>
 
+#include "Poco/NotificationQueue.h"
+
+using Poco::NotificationQueue;
+
 class MessagePump
 {
 public:
