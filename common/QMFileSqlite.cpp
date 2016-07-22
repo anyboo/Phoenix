@@ -141,7 +141,9 @@ bool QFileSqlite::execSql(string sql)
 		return false;
 	try
 	{
-		sess << sql, now;
+		if (sql.empty())
+			return false;
+		sess << sql , now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
