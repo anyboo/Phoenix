@@ -108,9 +108,7 @@ void CProgtessUI::ShowProgress()
 
 void CProgtessUI::OnCancelSearch(TNotifyUI& msg)
 {
-	//ReciveUIQunue *queue1 = new ReciveUIQunue();
 	bool b = true;
-	//g_queue1->enqueueNotification(new ReciveUINotification(b));
-	ReciveUIQunue::GetInstance()->enqueueUrgentNotification(new ReciveUINotification(b));
+	ReciveUIQunue::GetInstance()->enqueueNotification(new ReciveUINotification(b));
 }
 
