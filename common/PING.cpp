@@ -147,8 +147,8 @@ bool CPing::ScanOneIP(string &ip, const string& netIp, bool bArp){
     for (int i = 1; i < 255; i++)
     {
         ip = netPre + std::to_string(i);
-        cout<<ip;
-        if (netIp != ip && Ping((char *)ip.c_str(), 20, bArp))//Ping((char *)strIpTmp.c_str(), &reply, 2000)
+        //cout<<ip;
+        if (netIp != ip && Ping((char *)ip.c_str(), 8, bArp))//Ping((char *)strIpTmp.c_str(), &reply, 2000)
         {
              return true;
         }
@@ -240,20 +240,20 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
     {
         return arpPing(dwDestIP);
     }
-	//判断初始化是否成功
+	//init is sucess
     if (!init(pInfo))
 	{
-        cout << __FILE__ << __FUNCTION__ << __LINE__;
+        cout << __FILE__ << __FUNCTION__ << __LINE__ << endl;
         return FALSE;
 	}
 
-	//配置SOCKET
+	//set SOCKET
 	sockaddr_in sockaddrDest; 
 	sockaddrDest.sin_family = AF_INET; 
 	sockaddrDest.sin_addr.s_addr = dwDestIP;
 	int nSockaddrDestSize = sizeof(sockaddrDest);
 
-	//构建ICMP包
+	//build ICMP packet
 
     ICMPHeader *pICMPHeader = (ICMPHeader*)pInfo->m_szICMPData;
 	pICMPHeader->m_byType = ECHO_REQUEST; 
@@ -263,10 +263,10 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
     pICMPHeader->m_ulTimeStamp = GetTickCountCalibrate();
     pICMPHeader->m_usChecksum = CalCheckSum((USHORT*)pInfo->m_szICMPData, DEF_PACKET_SIZE + sizeof(ICMPHeader));
 
-	//发送ICMP报文
+	//send ICMP packet
     if (sendto(pInfo->m_sockRaw, pInfo->m_szICMPData, DEF_PACKET_SIZE + sizeof(ICMPHeader), 0, (struct sockaddr*)&sockaddrDest, nSockaddrDestSize) == SOCKET_ERROR)
 	{
-        cout << __FILE__ << __FUNCTION__ << __LINE__ << "sendto";
+		cout << __FILE__ << "-" << __FUNCTION__ << "-" << __LINE__ << "-" << "error:" << WSAGetLastError() << endl;
 		return FALSE;
 	}
 
@@ -287,7 +287,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 
         int nPacketSize = recvfrom(pInfo->m_sockRaw, recvbuf, 256, 0, (struct sockaddr*)&sockaddrDest, &nSockaddrDestSize);
         if (nPacketSize == SOCKET_ERROR){
-            cout << __FILE__ << __FUNCTION__ << __LINE__ << "SOCKET_ERROR";
+            cout << __FILE__ << __FUNCTION__ << __LINE__ << "SOCKET_ERROR" << endl;
             continue;
         }
                     

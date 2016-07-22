@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "SearchFileUI.h"
 #include "PlayVideoWnd.h"
-
-//#include "SearchVideo.h"
+#include "SearchFileWorker.h"
 
 #include "SearchDevice.h"
 
 #include "FileLogInfoUI.h"
 
+
 SearchFileUI::SearchFileUI()
 :m_InitShowFileList(false)
 {
-//	CSearchVideo::getInstance().ReadDataFromTable(m_FileList);	
+	ReadDataFromTable();
 }
 
 
@@ -60,6 +60,13 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+
+
+
+
+
+
 	Close();
 }
 
@@ -228,7 +235,23 @@ void SearchFileUI::GetFileCountAndSize(STDSTRING& optionName)
 	CLabelUI* Lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("file_Count")));
 	char str[200] = { 0 };
 	filesize = filesize / (1024 * 1024);
-	sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
+	if (filesize > 1024)
+	{
+		float file_size = (float)filesize / 1024;
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%6.2fG！", fileCount, file_size);
+	}
+	else{
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
+	}
 	STDSTRING LabText(str);
 	Lab->SetText(LabText.c_str());
+}
+
+bool SearchFileUI ::ReadDataFromTable()
+{
+	m_FileList.clear();
+
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
+	return pDb->GetData(strSql, m_FileList);
 }

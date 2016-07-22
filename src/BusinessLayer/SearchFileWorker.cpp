@@ -13,6 +13,7 @@ m_queue(queue)
 }
 
 
+
 SearchFileWorker::~SearchFileWorker()
 {
 }
@@ -28,7 +29,7 @@ void SearchFileWorker::run()
 	int nChannelList = m_channelList.size();
 
 	NotificationQueue& queue = NotificationQueue::defaultQueue();
-	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
+	
 
 	m_pDevice->ClearLocalRecordFiles();
 
@@ -45,14 +46,12 @@ void SearchFileWorker::run()
 				std::cout << SearchFileExc.displayText() << std::endl;
 				queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Failure, SEARCHFILE_DEFAULT));
 			}
-			
-			
 
 			nPos++;
-			//NotificationQueue& queue = NotificationQueue::defaultQueue();
+			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
 
-
+			
 			if (!m_queue.empty())
 			{
 				Notification::Ptr pNf(m_queue.waitDequeueNotification());
@@ -64,7 +63,6 @@ void SearchFileWorker::run()
 						{
 							FastMutex::ScopedLock lock(m_mutex);
 							m_bCancel = pReciveDataNf->GetData();
-							std::cout << "Cancel£º" << m_bCancel << std::endl;
 						}
 					}
 				}
@@ -81,3 +79,5 @@ void SearchFileWorker::run()
 
 	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Finish, SEARCHFILE_DEFAULT));
 }
+
+

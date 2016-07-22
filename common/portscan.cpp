@@ -93,11 +93,11 @@ bool PortScan::initPcapDev()
 
 	if (!alldevs)
 	{
-		cout << "cannot find net device!  install WinPcap?";
+		cout << "cannot find net device!  install WinPcap?" << endl;
 		return false;
 	}
 
-	cout << alldevs->description << alldevs->name;
+	cout << alldevs->description << alldevs->name << endl;
 
 	//get local device
 	string uuid = WindowUtils::getLocalUuid();
@@ -106,13 +106,13 @@ bool PortScan::initPcapDev()
 
 	if ((_adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
 	{
-		cout << "kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1";
+		cout << "kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1" << endl;
 		pcap_freealldevs(alldevs);
 		return false;
 	}
 
 	if (pcap_datalink(_adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-		cout << "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL";
+		cout << "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL" << endl;
 		return false;
 	}
 
@@ -121,20 +121,20 @@ bool PortScan::initPcapDev()
 	pcap_freealldevs(alldevs);
 
 
-	//编译过滤器，只捕获tcp包
+	//build filter, only capture tcp packet
 	char packet_filter[] = "ip and tcp";
 	struct bpf_program fcode;
 
 	if (pcap_compile(_adhandle, &fcode, packet_filter, 1, netmask) < 0)
 	{
-		cout << "unable to compile the packet filter.Check the syntax.";
+		cout << "unable to compile the packet filter.Check the syntax." << endl;
 		return false;
 	}
 
-	//设置过滤器
+	//set filter
 	if (pcap_setfilter(_adhandle, &fcode) < 0)
 	{
-		cout << "Error setting the filter.";
+		cout << "Error setting the filter." << endl;
 		return false;
 	}
 
@@ -156,7 +156,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	CPing::instance().ScanIp(Ips, false, bpCancel);
 	cout << "ping ip size: " << Ips.size() << endl;
 
-	//获取mac地址
+	//get network mac address
 	vector<IPMAC> IpMacs;
 	if (Ips.size() > 0)
 	{
@@ -204,7 +204,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	ReceiveData receiveThread(destIps, ports, _adhandle);
 	scanPool.start(receiveThread);
 
-	//send 
+	//send scan packet
 	for (int i = 0; i < sendThreads.size(); ++i)
 	{
 		queue.enqueueNotification(new ScanNotification(1));
@@ -214,12 +214,14 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 		Thread::sleep(200);
 	Thread::sleep(1000 * 9);
 
+	//close send and listen thread
 	queue.wakeUpAll();
 	_theEvent += Poco::delegate(&receiveThread, &ReceiveData::onEvent);
 	fireEvent(true);
 	_theEvent -= Poco::delegate(&receiveThread, &ReceiveData::onEvent);
 	scanPool.joinAll();
 
+	//get scan result
 	outIps = receiveThread.getScanResult();
 	cout << "scan result size: " << outIps.size() << endl;
 
@@ -235,7 +237,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr *pseudoheader, long dst_ip, USHORT dst_port)
 {
 	int len = sizeof(struct iphdr) + sizeof(struct tcphdr);
-	// IP头部数据初始化
+	//init IP head
 	ip->hl = (4 << 4 | sizeof(struct iphdr) / sizeof(unsigned int));
 	ip->tos = 0;
 	ip->total_len = htons(len);
@@ -247,7 +249,7 @@ void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr
 	//ip->sourceIP = 0;
 	ip->destIP = dst_ip;
 
-	// TCP头部数据初始化
+	// init TCP head
 	tcp->sport = htons(23456);
 	tcp->dport = htons(dst_port);
 	tcp->seq = htonl(rand() % 90000000 + 2345);
@@ -258,7 +260,7 @@ void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr
 	tcp->sum = 0;
 	tcp->urp = 0;
 
-	//TCP伪头部
+	//pseudo TCP head
 	pseudoheader->zero = 0;
 	pseudoheader->protocol = IPPROTO_TCP;
 	pseudoheader->length = htons(sizeof(struct tcphdr));
@@ -271,9 +273,9 @@ void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr
 void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, vector<SendPacket>& packets)
 {
 	int  i;
-	struct iphdr ip;		//IP头部
-	struct tcphdr tcp;		//TCP头部
-	struct pseudohdr pseudoheader;	//TCP伪头部
+	struct iphdr ip;		//IP head
+	struct tcphdr tcp;		//TCP head
+	struct pseudohdr pseudoheader;	//pseudo TCP head
 
 
 
@@ -287,7 +289,7 @@ void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, v
 
 		pseudoheader.saddr = ip.sourceIP;
 
-		//计算TCP校验和
+		//tcp check sum
 		memset(data, 0, sizeof(data));
 		memcpy(data, &pseudoheader, sizeof(pseudoheader));
 		memcpy(data + sizeof(pseudoheader), &tcp, sizeof(struct tcphdr));
@@ -362,11 +364,12 @@ void ReceiveData::run()
 			break;
 		}
 
-		//循环解析数据包
+		//get all tcp packet
 		if (pcap_next_ex(_adhandle, &header, &pkt_data) == 0){
 			continue;
 		}
 
+		//analyze tcp packet
 		analyzePacket(pkt_data, header->len, _ips, _ports, _outIps);
 
 	}
@@ -403,9 +406,7 @@ bool PortScan::UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond)
 	unsigned long lIp1 = inet_addr(srFirst.ip);
 	unsigned long lIp2 = inet_addr(srSecond.ip);
 
-
-
-	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);
+	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);	
 }
 
 bool PortScan::isNetworkSegment(string srcIP, string dstIP)
@@ -481,38 +482,38 @@ void PortScan::InitPorts(vector<u_short> ports)
 
 void PortScan::setDefaultScanPorts()
 {
-	//大华
+	//da hua
 	_scanPorts.push_back(37777);
-	//迪智浦
+	//di zhi pu
 	_scanPorts.push_back(34567);
-	//佳信捷
+	//jia xing jie
 	_scanPorts.push_back(3321);
-	//宝欣盛，海康，沃仕达,鑫鹏安防
+	//bao xing shen, hai kang, wo shi da, xing peng an fang
 	_scanPorts.push_back(8000);
-	//蓝色星际
+	//lan she xing ji
 	_scanPorts.push_back(3721);
-	//波粒
+	//bo li
 	_scanPorts.push_back(9000);
-	//大立科技
+	//da li ke ji
 	_scanPorts.push_back(9998);
-	//东阳国际
+	//dong yang guo ji
 	_scanPorts.push_back(6001);
-	//汉邦
+	//han bang
 	_scanPorts.push_back(8101);
-	//航景科技
+	//hang jin ke ji
 	_scanPorts.push_back(7777);
-	//九安光电
+	//jiu an guang dian
 	_scanPorts.push_back(80);
-	//俊明视
+	//jun ming shi
 	_scanPorts.push_back(8670);
-	//天地伟业
+	//tian di wei ye
 	_scanPorts.push_back(3001);
-	//同为
+	//tong wei
 	_scanPorts.push_back(6036);
-	//星网锐捷
+	//xing wang rui jie
 	_scanPorts.push_back(8081);
-	//宇视科技
+	//yu shi ke ji
 	_scanPorts.push_back(82);
-	//中维
+	//zhong wei
 	_scanPorts.push_back(9101);
 }
