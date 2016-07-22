@@ -406,9 +406,7 @@ bool PortScan::UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond)
 	unsigned long lIp1 = inet_addr(srFirst.ip);
 	unsigned long lIp2 = inet_addr(srSecond.ip);
 
-
-
-	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);
+	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);	
 }
 
 bool PortScan::isNetworkSegment(string srcIP, string dstIP)

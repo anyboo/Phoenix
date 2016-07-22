@@ -16,6 +16,8 @@
 #include "DHVendor.h"
 #include "HKVendor.h"
 
+#include "ipset.h"
+
 #include <fstream>
 
 #include "MessagePump.h"
@@ -92,14 +94,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	/*	pVendorList.push_back(dhVendor);
 	pVendorList.push_back(hkVendor);*/
 
+	/************************* IP setting **************************/
+	std::cout << CCommonUtrl::getInstance().GetCurTime() << "ip setting Start!" << std::endl;
+	IPSet ipset;
+	ipset.run();
+	Sleep(5000);
+
 	/************************* 初始化IP列表 **********************/
+	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 	//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-	//NotificationQueue queuePortScan;
+	//NotificationQueue queuePortScan;	
 	//PortScan portScan(queuePortScan);
 	////开始扫描
 	//ThreadPool::defaultPool().start(portScan);
 
-	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 	//while (true)
 	//{
 	//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());

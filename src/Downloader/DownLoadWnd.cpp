@@ -166,6 +166,9 @@ void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
+
+//	DownLoadWndfile(m_Device, )
+
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
@@ -192,7 +195,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		}
 		if (strSendName == _T("test2"))
 		{
-			ShowFileList();
+			ShowTotalFileList();
 		}
 		if (!strSendName.compare(0, BTNAMELONG, BTNAMETAG))
 		{
@@ -218,17 +221,8 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 void DownLoadWnd::SearchFile()
 {	
 	GetDataTime();
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
-	CListContainerElementUI* Channel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, _T("Channel_List")));
-
-	int CurSel = GetSubListCurSel(Channel_List, pList) - 1;
-	CListContainerElementUI* CurSel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
-	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSel_List, DUI_CTR_LABEL, 1));
-	STDSTRING strIP = Lab_IP->GetText();
-	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
-	
-	//ReciveUIQunue* queue1 = new ReciveUIQunue();
-	
+	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
+		
 	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *ReciveUIQunue::GetInstance());
 	ThreadPool::defaultPool().start(*sfw);
 }
@@ -278,7 +272,7 @@ void DownLoadWnd::GetDataTime()
 	m_timeRangeSearch.end = mktime(&stopTime);
 }
 
-void DownLoadWnd::ShowFileList()
+void DownLoadWnd::ShowTotalFileList()
 {
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
 	CDialogBuilder builder;
@@ -291,17 +285,22 @@ void DownLoadWnd::ShowFileList()
 	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 	STDSTRING bt_name = BTNAMETAG + to_string(m_FileCount);
 	BT_CanCel->SetName(bt_name.c_str());
+
+	CLabelUI* lab_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	CLabelUI* lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	CLabelUI* lab_speed = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
+	CLabelUI* lab_lastTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
+	CLabelUI* lab_state = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
+	lab_name->SetText("name");
+	lab_size->SetText("size");
+	lab_speed->SetText("speed");
+	lab_lastTime->SetText("01:20");
+	lab_state->SetText("finish");
+
 	m_FileCount = m_FileCount + 1;
 
 }
 
-CListContainerElementUI* DownLoadWnd::Add_FileInfoList()
-{
-	CDialogBuilder builder;
-	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, &m_PaintManager));
-	SubList->SetAttribute(_T("inset"), _T("30,0,0,0"));
-	return SubList;
-}
 
 int DownLoadWnd::GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList)
 {
@@ -319,6 +318,29 @@ int DownLoadWnd::GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pLi
 	return CurSel;
 }
 
+void DownLoadWnd::AddSubFileList(size_t CurSel)
+{
+	CDialogBuilder builder;
+	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, &m_PaintManager));
+
+	CListUI* m_List = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
+	m_List->AddAt(SubList, CurSel);
+	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+	CLabelUI* lab_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	CLabelUI* lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	CLabelUI* lab_speed = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
+	CLabelUI* lab_lastTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
+	CLabelUI* lab_state = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
+	SubList->SetAttribute(_T("inset"), _T("30,0,0,0"));
+	SubList->SetUserData(_T("Sub"));
+	BT_CanCel->SetVisible(false);
+	lab_name->SetText("name");
+	lab_size->SetText("size");
+	lab_speed->SetText("speed");
+	lab_lastTime->SetText("01:20");
+	lab_state->SetText("finish");	
+}
+
 void DownLoadWnd::Show_Off_SubList(STDSTRING& strSendName)
 {
 	CListUI* m_List = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
@@ -332,14 +354,9 @@ void DownLoadWnd::Show_Off_SubList(STDSTRING& strSendName)
 	{
 		if (ContList->GetUserData() == _T("0"))
 		{
-			CListContainerElementUI* SubList = new CListContainerElementUI;
 			for (int i = CurSel + 1; i <= CurSel + filesize; i++)
 			{
-				SubList = Add_FileInfoList();
-				SubList->SetUserData(_T("Sub"));
-				m_List->AddAt(SubList, i);
-				CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_BUTTON));
-				BT_CanCel->SetVisible(false);
+				AddSubFileList(i);
 			}
 			strUserData = to_string(filesize);
 			ContList->SetUserData(strUserData.c_str());
@@ -348,14 +365,9 @@ void DownLoadWnd::Show_Off_SubList(STDSTRING& strSendName)
 	else{
 		if (ContList->GetUserData() == _T("0") && SubContList->GetUserData() != _T("Sub"))
 		{
-			CListContainerElementUI* SubList = new CListContainerElementUI;
-			for (int i = CurSel + 1; i <= CurSel + filesize; i++)
+			for (int j = CurSel + 1; j <= CurSel + filesize; j++)
 			{
-				SubList = Add_FileInfoList();
-				SubList->SetUserData(_T("Sub"));
-				m_List->AddAt(SubList, i);
-				CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_BUTTON));
-				BT_CanCel->SetVisible(false);
+				AddSubFileList(j);
 			}
 			strUserData = to_string(filesize);
 			ContList->SetUserData(strUserData.c_str());
@@ -365,7 +377,7 @@ void DownLoadWnd::Show_Off_SubList(STDSTRING& strSendName)
 			strUserData = ContList->GetUserData();
 			int Count = stoi(strUserData);
 
-			for (int j = CurSel + 1; j <= CurSel + Count; j++)
+			for (int k = CurSel + 1; k <= CurSel + Count; k++)
 			{
 				m_List->RemoveAt(CurSel + 1, false);
 			}
@@ -398,9 +410,9 @@ void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 	CListContainerElementUI* Channel_List = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, _T("Channel_List")));
 	CListContainerElementUI* CurSelList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(VendorList, strSendName.c_str()));
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSelList, DUI_CTR_LABEL, 1));
-	STDSTRING strIP = Lab_IP->GetText();
+	m_DeviceID = Lab_IP->GetText();
 	int CurSel = GetSubListCurSel(CurSelList, VendorList);
-	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
+	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
 	size_t Channel_Count = m_Device->getMaxChannel();
 	if (Channel_List == NULL)
 	{

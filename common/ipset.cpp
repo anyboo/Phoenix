@@ -189,6 +189,24 @@ void IPSet::ipsetting()
 				}				
 			}
 		}
+		else
+		{
+			string sDhcpIP = *pIP;
+			sDhcpIP = sDhcpIP.substr(0, sDhcpIP.find_last_of("."));
+			for (itor = Domains.begin(); itor != Domains.end(); itor++)
+			{
+				if (sDhcpIP.compare(*itor) == 0)
+				{
+					Domains.erase(itor);
+					break;
+				}
+			}
+			if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
+			{
+				cout << "set ip gate error !ip: " << *pIP << " gate: " << *pNetGate << endl;
+				*bResult = false;
+			}
+		}
 addip:	
 		//add ip
 		for (itor = Domains.begin(); itor != Domains.end(); itor++)

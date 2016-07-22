@@ -2,6 +2,14 @@
 
 #include "CommonUtrl.h"
 
+typedef enum
+{
+	Err_No = 0,
+	Err_LoginSuccess, // Login Success
+	Err_LoginFail,	// Login Fail
+	Err_DownloadSuccess, // Download Success
+}eErrCode;
+
 class CJXJVendor :
 	public AbstractVendor
 {
@@ -16,10 +24,10 @@ public:
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void ClearLocalRecordFiles();
-	void Download(const long loginHandle, const size_t channel, const time_range& range);
-	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-	void Download(const long loginHandle, const size_t channel, const std::string& filename);
-	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+
+	void Download(const long loginHandle, const RecordFile& file);
+	void PlayVideo(const long loginHandle, const RecordFile& file);
+	bool StopDownload(){ return true; }
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
@@ -57,6 +65,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	RECORD_FILE_LIST m_files_Unit;
 
 	void* handle;
 };

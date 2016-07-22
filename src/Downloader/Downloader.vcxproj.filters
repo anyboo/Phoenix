@@ -121,6 +121,16 @@
     <ClCompile Include="MessagePump.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DownloadPackage.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgressManager.cpp" />
+    <ClCompile Include="..\BusinessLayer\LoginException.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\ipset.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -178,6 +188,8 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MessagePump.h" />
+    <ClInclude Include="DownloadPackage.h" />
+    <ClInclude Include="ProgressManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
@@ -203,6 +215,9 @@
     </Filter>
     <Filter Include="源文件\BusinessLayer\Network">
       <UniqueIdentifier>{6d3fdd06-0498-46bb-9245-e97dd163ea5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\common">
+      <UniqueIdentifier>{532ca23b-72b4-4ce9-921a-5f0fac0a05ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

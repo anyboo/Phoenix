@@ -790,12 +790,13 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
 	if (!WindowUtils::setNetDhcp(sName))
 		return false;
     std::vector<string> ips;
-    int maxPingTime = 1000 * 3;
-    ::Sleep(2000);
-	for (WindowUtils::GetIPfromLocalNIC(ips); ips.size() == 0 && maxPingTime > 0; WindowUtils::GetIPfromLocalNIC(ips)){
+    //int maxPingTime = 1000 * 3;
+    ::Sleep(1000*5);
+	WindowUtils::GetIPfromLocalNIC(ips);
+	/*for (WindowUtils::GetIPfromLocalNIC(ips); ips.size() == 0 && maxPingTime > 0; WindowUtils::GetIPfromLocalNIC(ips)){
         ::Sleep(1000);
         maxPingTime -= 1000;
-    }
+    }*/
     
     bool r = false;
 
