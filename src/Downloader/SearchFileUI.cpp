@@ -61,11 +61,17 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-
-
-
-
-
+	DownloadItem Item;
+	for (size_t i = 0; i < m_Select_file.size(); i++)
+	{
+		size_t n = m_Select_file[i];
+		Item.name = m_FileList[n].get<0>();
+		Item.channel = m_FileList[n].get<1>();
+		Item.startTime = m_FileList[n].get<2>();
+		Item.endTime = m_FileList[n].get<3>();
+		Item.size = m_FileList[n].get<4>();
+		Item.id = m_FileList[n].get<5>();
+	}
 
 	Close();
 }
@@ -81,10 +87,11 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 		STDSTRING SendName = msg.pSender->GetName();
 		if (!SendName.compare(0, 6, _T("option")))
 		{
-			GetFileCountAndSize(SendName);
+			GetSelectOption(SendName);
 		}
 		if (SendName == _T("All"))
 		{
+			m_Select_file.clear();
 			CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 			COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, _T("All")));
 			int nCount = pList->GetCount();
@@ -93,12 +100,13 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 				COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i));
 				if (!option_All->IsSelected()){
 					option->Selected(true);
+					m_Select_file.push_back(i - 1);
 				}
 				else{
 					option->Selected(false);
 				}
 			}
-			GetFileCountAndSize(SendName);
+			GetFileSizeAndCount();
 		}
 	}
 
@@ -109,7 +117,6 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 void SearchFileUI::OnShowFileList()
 {
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-//	pList->RemoveAll();	
 	STDSTRING optionName, buttonName, SubListName;
 	int filesize = m_FileList.size();
 	for (int i = 0; i < filesize; i++)
@@ -196,58 +203,58 @@ void SearchFileUI::OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRIN
 	pDlg->ShowModal();
 }
 
-void SearchFileUI::GetFileCountAndSize(STDSTRING& optionName)
+void SearchFileUI::GetSelectOption(STDSTRING& optionName)
 {
+	std::string strTag = optionName.substr(6);
+	size_t tag = stoi(strTag);
+
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-	int SubListCount = pList->GetCount();
-	__int64 filesize = 0;
-	int fileCount = 0;
-	if (SubListCount != 0)
+	COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, optionName.c_str()));
+	if (option->IsSelected())
 	{
-		for (int i = 0; i < SubListCount; i++)
+		for (size_t j = 0; j < m_Select_file.size(); j++)
 		{
-			COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i + 1));	
-			if (option->IsSelected())
+			if (m_Select_file[j] == tag)
 			{
-				filesize += m_FileList[i].get<4>();
-				fileCount++;
+				m_Select_file.erase(m_Select_file.begin() + j);
 			}
 		}
 	}
-	if (!optionName.compare(0, 6, _T("option")))
+	else
 	{
-		COptionUI* SelectOption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, optionName.c_str()));
-		STDSTRING nameTag = optionName.substr(6);
-		int CurSel = stoi(nameTag);
-		
-		if (!SelectOption->IsSelected())
-		{
-			filesize += m_FileList[CurSel].get<4>();
-			fileCount += 1;
-		}
-		else
-		{
-			filesize -= m_FileList[CurSel].get<4>();
-			fileCount -= 1;
-		}
+		m_Select_file.push_back(tag);
 	}
-	
+	GetFileSizeAndCount();
+}
+
+void SearchFileUI::GetFileSizeAndCount()
+{
+	__int64 file_size = 0;
+	size_t file_Count = 0;
+	float	file_Gsize = 0.0;
+
+	for (size_t i = 0; i < m_Select_file.size(); i++)
+	{
+		size_t n = m_Select_file[i];
+		file_size += m_FileList[n].get<4>();
+	}
+	file_Count = m_Select_file.size();
 	CLabelUI* Lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("file_Count")));
 	char str[200] = { 0 };
-	filesize = filesize / (1024 * 1024);
-	if (filesize > 1024)
+	file_size = file_size / (1024 * 1024);
+	if (file_size > 1024)
 	{
-		float file_size = (float)filesize / 1024;
-		sprintf_s(str, "提示：共选中文件%d个，总文件大小%6.2fG！", fileCount, file_size);
+		file_Gsize = (float)file_size / 1024;
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%6.2fG！", file_Count, file_Gsize);
 	}
 	else{
-		sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", fileCount, filesize);
+		sprintf_s(str, "提示：共选中文件%d个，总文件大小%dM！", file_Count, file_size);
 	}
 	STDSTRING LabText(str);
 	Lab->SetText(LabText.c_str());
 }
 
-bool SearchFileUI ::ReadDataFromTable()
+bool SearchFileUI::ReadDataFromTable()
 {
 	m_FileList.clear();
 
@@ -255,3 +262,4 @@ bool SearchFileUI ::ReadDataFromTable()
 	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
 	return pDb->GetData(strSql, m_FileList);
 }
+

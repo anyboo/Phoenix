@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DZPVendor.h"
 
 #include "Poco/NotificationQueue.h"

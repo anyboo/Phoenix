@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "JXJVendor.h"
 
 #include "Poco/NotificationQueue.h"
