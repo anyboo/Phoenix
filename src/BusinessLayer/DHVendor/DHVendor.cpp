@@ -226,7 +226,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		if (!bRet)
 		{
 			std::cout << "GetRecordFileList ²éÑ¯Â¼ÏñÊ§°Ü£¬´íÎóÔ­Òò£º" << DH_GetLastErrorString() << std::endl;
-			throw std::exception("Search file by time failed");
+			throw SearchFileException(DH_GetLastErrorString().c_str());
 		}
 		if (iMaxNum <= 0)
 		{

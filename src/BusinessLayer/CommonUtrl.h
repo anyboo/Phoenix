@@ -27,6 +27,9 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
+// Exception
+#include "SearchFileException.h"
+
 #define Test_Bug
 #define Test_Filename
 
