@@ -786,15 +786,15 @@ bool WindowUtils::isOnLine(){
                         cout << __FILE__ << __FUNCTION__ << __LINE__ << "Disconnected";
                         break;
                     case IF_OPER_STATUS_CONNECTING:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connecting";
+                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connecting";
                         r = true;
                         break;
                     case IF_OPER_STATUS_CONNECTED:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connected";
+                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connected";
                         r = true;
                         break;
                     case IF_OPER_STATUS_OPERATIONAL:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Operational";
+                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Operational";
                         r = true;
                         break;
                     default:
