@@ -21,6 +21,8 @@
 #include <fstream>
 
 #include "MessagePump.h"
+#include "log.h"
+
 
 static VENDOR_LIST pVendorList;
 
@@ -61,7 +63,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->ShowWindow(true);
 
 //	HideTaskBar();
-
+	Loggering::Setup_logger();
 	/************************* 初始化数据库 **********************/
 	//获取指针
 	fstream _file;
