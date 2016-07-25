@@ -5,6 +5,7 @@
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 
+
 CMainWnd::CMainWnd()
 {
 }
