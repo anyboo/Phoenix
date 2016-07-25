@@ -3,6 +3,7 @@
 #include <vector>
 #include "Vendor.h"
 #include "TimeUI.h"
+#include <map>
 
 #include "DownloadPackage.h"
 		
@@ -72,6 +73,8 @@ public:
 
 	void ShowOnlineDevice();
 
+	void ReadJsonFile();
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
@@ -92,5 +95,6 @@ private:
 
 private:
 	std::string			m_DeviceID;
+	std::map<int, string>		m_VnameAndType;
 };
 

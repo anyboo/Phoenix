@@ -157,8 +157,9 @@ void VideoLoginUI::OnShowDevice(int pages)
 		if (i < size)
 		{
 			int DeviceSType = m_DeviceList[i]->nSDKType;
+			std::string DeviceName = m_CnameAndType[DeviceSType];
 			STDSTRING IP(m_DeviceList[i]->szIp);
-			Lab_DName->SetText(to_string(DeviceSType).c_str());
+			Lab_DName->SetText(DeviceName.c_str());
 			Lab_IP->SetText(IP.c_str());
 			Lab1->SetVisible(true);
 			Lab2->SetVisible(true);
@@ -320,8 +321,9 @@ void VideoLoginUI::InsertVendorToDB()
 		sf.set<0>(spell);
 		sf.set<1>(VendorDeviceName);
 		sfRecord.push_back(sf);
+		int type = stoi(TypeName);
+		m_CnameAndType.insert(pair<int, string>(type, VendorDeviceName));
 	}
-
 	m_pDb->writeDataByVector(INSERT_SEARCH_FACTORY, sfRecord);
 }
 

@@ -348,6 +348,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 	iRet = AVP_SetCoder(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_CODER_JXJ);
 	if (iRet != AVPErrSuccess)
 	{
+		std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
 		throw std::exception("AVP_SetCoder Error!");
 		return;
 	}
