@@ -1,4 +1,3 @@
-#include "stdafx.h"
 
 #include "WindowUtils.h"
 #include "SearchDevice.h"
@@ -58,7 +57,6 @@ CSearchDevice::CSearchDevice(const VENDOR_LIST& pVendorList, const DEVICE_INFO_S
 	m_listDeviceSimpleInfo(listDeviceSimpleInfo),
 	m_queue(queue)
 {
-
 }
 CSearchDevice::~CSearchDevice()
 {
@@ -83,7 +81,6 @@ void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 		{
 			m_listDeviceUnknown.push_back(pDev);
 		}
-
 	}
 	if (m_listDeviceUnknown.size() > 0)
 	{
@@ -177,39 +174,6 @@ void CSearchDevice::DeleteDeviceInfoList()
 	m_listDeviceInfo.clear();
 }
 
-#include "portscan.h"
-#include "QMFileSqlite.h"
-#include "QMSqlite.h"
-
-DEVICE_INFO_SIMPLE_LIST CSearchDevice::GetDeviceInfoSimpleList()
-{
-	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-
-	std::vector<ScanPortRecord> scanResults;
-	//
-	QMSqlite *pDb = QMSqlite::getInstance();
-	std::string sql = SELECT_ALL_SCAN_PORT;
-	pDb->GetData(sql, scanResults);
-
-	for (size_t i = 0; i < scanResults.size(); i++)
-	{
-		ScanPortRecord spr = scanResults[i];
-		if (spr.get<1>() == 80)
-		{
-			continue;
-		}
-
-		NET_DEVICE_INFO_SIMPLE* devInfoSimple = new NET_DEVICE_INFO_SIMPLE;
-		memset(devInfoSimple, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-		std::string ip = spr.get<0>();
-		memcpy(devInfoSimple->szIP, ip.c_str(), ip.length());
-		devInfoSimple->nPort = spr.get<1>();
-		listDeviceSimpleInfo.push_back(devInfoSimple);
-	}
-
-	return listDeviceSimpleInfo;
-}
-
 void CSearchDevice::run()
 {
 	static bool bNetStatusLast = false;
@@ -232,11 +196,12 @@ void CSearchDevice::run()
 		}
 
 		bool bNetStatus = WindowUtils::isOnLine();
+		NotificationQueue& queue = NotificationQueue::defaultQueue();
+		NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
+		queue.enqueueNotification(new CNotificationNetworkStatus(NfType));
+
 		if (bNetStatusLast != bNetStatus)
-		{
-			NotificationQueue& queue = NotificationQueue::defaultQueue();
-			NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
-			queue.enqueueNotification(new CNotificationNetworkStatus(NfType));
+		{			
 			bNetStatusLast = bNetStatus;
 			Search(m_pVendorList, m_listDeviceSimpleInfo);
 			queue.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Finish));
