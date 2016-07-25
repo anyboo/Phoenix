@@ -22,7 +22,7 @@ namespace Loggering
 		file_channel->setProperty("rotation", "10M");
 		file_channel->setProperty("archive", "timestamp");
 		std::string strpath = Poco::Path::current();
-		strpath.append("Downloader.log");
+		strpath.append("log\\Downloader.log");
 		file_channel->setProperty("path", strpath);		
 		Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter(new Poco::PatternFormatter("%Y-%m-%d %H:%M:%S %s [%p] %U(%u): %t"));
 		Poco::AutoPtr<Poco::FormattingChannel> formatter_channle(new Poco::FormattingChannel(pattern_formatter, file_channel));
