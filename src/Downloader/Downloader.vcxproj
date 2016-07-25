@@ -173,6 +173,7 @@
     <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginException.cpp" />
+    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp" />
     <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />
