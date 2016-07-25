@@ -68,7 +68,7 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 						do
 						{
 							IPList.push_back(std::string(pIpAddrString->IpAddress.String));							
-							Loggering::log_information("IP address : %s", pIpAddrString->IpAddress.String);
+							poco_information_f1(logger_handle, "IP address : %s", string(pIpAddrString->IpAddress.String));
 							
 							pIpAddrString = pIpAddrString->Next;
 						} while (pIpAddrString);
@@ -267,27 +267,27 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 	//get all net device
 	if (pcap_findalldevs(&alldevs, errbuf) == -1)
 	{		
-		Loggering::log_error("Error in pcap_findalldevs:%s", errbuf);
+		poco_error_f1(logger_handle, "Error in pcap_findalldevs:%s", string(errbuf));
 		return false;
 	}
 
 	if (!alldevs)
 	{		
-		Loggering::log_error("cannot find net device!  install WinPcap?");
+		poco_error(logger_handle, "cannot find net device!  install WinPcap?");
 		return false;
 	}
 		
-	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
+	poco_information_f2(logger_handle, "desc: %s, name: %s", string(alldevs->description), string(alldevs->name));
 
 	if ((adhandle = pcap_open_live(alldevs->name, 65536, 1, 1000, errbuf)) == NULL)
 	{		
-		Loggering::log_error("pcap_open_live failed!  not surpport by WinPcap : %s", alldevs->name);
+		poco_error_f1(logger_handle, "pcap_open_live failed!  not surpport by WinPcap : %s", string(alldevs->name));
 		pcap_freealldevs(alldevs);
 		return false;
 	}
 
 	if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {		
-		Loggering::log_error("pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
+		poco_error(logger_handle, "pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
 		return false;
 	}
 
@@ -299,14 +299,14 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 	//build filter, only get ARP packet
 	if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
 	{		
-		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
+		poco_error(logger_handle, "unable to compile the packet filter.Check the syntax.");
 		return false;
 	}
 
 	//set filter
 	if (pcap_setfilter(adhandle, &fcode) < 0)
 	{
-		Loggering::log_error("Error setting the filter.");
+		poco_error(logger_handle, "Error setting the filter.");
 		return false;
 	}
 	std::vector<string> IPs;
@@ -318,7 +318,7 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 	{
 		if (GetTickCount() - start > nMaxSeconds * 1000)
 		{
-			Loggering::log_information("arp time out");
+			poco_information(logger_handle, "arp time out");
 			break;
 		}
 		//get arp packet
@@ -339,7 +339,7 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 
 			char szIP[30] = { 0 };
 			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
-			Loggering::log_information("ip 0: %s", szIP);
+			poco_information_f1(logger_handle, "ip 0: %s", string(szIP));
 
 			string source = string(szIP);
 			if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
@@ -361,7 +361,7 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 
 			char szsource[30] = { 0 };
 			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
-			Loggering::log_information("ip 6: %s", szsource);
+			poco_information_f1(logger_handle, "ip 6: %s", string(szsource));
 			string source = string(szsource);
 			if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
 				continue;
@@ -395,27 +395,27 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     //get all net device
     if (pcap_findalldevs(&alldevs, errbuf) == -1)
     {
-		Loggering::log_error("Error in pcap_findalldevs:");
+		poco_error(logger_handle, "Error in pcap_findalldevs:");
         return false;
     }
 
     if (!alldevs)
     {
-		Loggering::log_error("cannot find net device!  install WinPcap?");
+		poco_error(logger_handle, "cannot find net device!  install WinPcap?");
         return false;
     }
    
-	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
+	poco_information_f2(logger_handle, "desc: %s, name: %s", string(alldevs->description), string(alldevs->name));
 
     if ((adhandle = pcap_open_live(alldevs->name, 65536, 1, 1000, errbuf)) == NULL)
     {
-		Loggering::log_error("pcap_open_live failed!  not surpport by WinPcap ?");
+		poco_error(logger_handle, "pcap_open_live failed!  not surpport by WinPcap ?");
         pcap_freealldevs(alldevs);
         return false;
     }
 
     if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {       
-		Loggering::log_error("pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
+		poco_error(logger_handle, "pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
         return false;
     }
 
@@ -427,14 +427,14 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     //build filter, only get ARP packet
     if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
     {
-		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
+		poco_error(logger_handle, "unable to compile the packet filter.Check the syntax.");
         return false;
     }
 
     //set filter
     if (pcap_setfilter(adhandle, &fcode) < 0)
     {
-		Loggering::log_error("Error setting the filter.");
+		poco_error(logger_handle, "Error setting the filter.");
         return false;
     }
     std::vector<string> IPs;
@@ -446,7 +446,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     {
 		if (GetTickCount() - start > nMaxSeconds * 1000)
         {
-            Loggering::log_information( "arp time out");
+			poco_information(logger_handle, "arp time out");
             break;
         }
         //get arp packet
@@ -467,7 +467,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szIP[30] = { 0 };
 			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
-			Loggering::log_information("ip 0: %s", szIP);
+			poco_information_f1(logger_handle, "ip 0: %s", string(szIP));
 			
 			string source = string(szIP);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
@@ -485,7 +485,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szdIP[30] = { 0 };
 			sprintf_s(szdIP, "%d.%d.%d.%d", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
-			Loggering::log_information("ip 1: %s", szdIP);
+			poco_information_f1(logger_handle, "ip 1: %s", string(szdIP));
 			
 			ip = string(szdIP);
             if (arph->dip[0] != arph->sip[0] || arph->dip[1] != arph->sip[1] || arph->dip[2] != arph->sip[2] || ip == netGate)
@@ -495,17 +495,17 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
-					Loggering::log_information("ip 2: %s", ip.c_str());					
+					poco_information_f1(logger_handle, "ip 2: %s", ip);
                 }
                 else{
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
-					Loggering::log_information("ip 3: %s", ip.c_str());					
+					poco_information_f1(logger_handle, "ip 3: %s", ip);
                 }
             }
             
-			Loggering::log_information("arp: %s, gate: %s", ip.c_str(), netGate.c_str());
+			poco_information_f2(logger_handle, "arp: %s, gate: %s", ip, netGate);
         }
         else
         {
@@ -520,7 +520,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szsource[30] = { 0 };
 			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
-			Loggering::log_information("ip 3: %s", szsource);
+			poco_information_f1(logger_handle, "ip 3: %s", string(szsource));
 			string source = string(szsource);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
@@ -537,13 +537,13 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 				ip = string(sztmp);
-				Loggering::log_information("ip 4: %s", ip.c_str());				
+				poco_information_f1(logger_handle, "ip 4: %s", ip);
             }
             else{
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
 				ip = string(sztmp);				
-				Loggering::log_information("ip 5: %s", ip.c_str());
+				poco_information_f1(logger_handle, "ip 5: %s", ip);
             }
            
             break;
@@ -572,17 +572,17 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     //get all net device
     if (pcap_findalldevs(&alldevs, errbuf) == -1)
     {        
-		Loggering::log_error("Error in pcap_findalldevs: %s", errbuf);
+		poco_error_f1(logger_handle, "Error in pcap_findalldevs: %s", string(errbuf));
         return false;
     }
 
     if (!alldevs)
     {
-		Loggering::log_error("cannot find net device!  install WinPcap?");
+		poco_error(logger_handle, "cannot find net device!  install WinPcap?");
         return false;
     }
    	
-	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
+	poco_information_f2(logger_handle, "desc: %s, name: %s", string(alldevs->description), string(alldevs->name));
 	
 	string uuid = WindowUtils::getLocalUuid();
 	
@@ -590,13 +590,13 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 
 	if ((adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
     {
-		Loggering::log_error("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ");
+		poco_error(logger_handle, "kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ");
         pcap_freealldevs(alldevs);
         return false;
     }
 
     if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-		Loggering::log_error("kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
+		poco_error(logger_handle, "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
         return false;
     }
 
@@ -608,14 +608,14 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     //build filter, only get ARP packet
     if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
     {
-		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
+		poco_error(logger_handle, "unable to compile the packet filter.Check the syntax.");
         return false;
     }
 
     //set filter
     if (pcap_setfilter(adhandle, &fcode) < 0)
     {
-		Loggering::log_error("Error setting the filter.");		
+		poco_error(logger_handle, "Error setting the filter.");
         return false;
     }
     string specialIP;
@@ -627,7 +627,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     {
         if (GetTickCount() - start > secondsWait * 1000)
         {
-            Loggering::log_information("arp time out");
+			poco_information(logger_handle, "arp time out");
 			pcap_close(adhandle);
             break;
         }
@@ -698,7 +698,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 mpDestSource[destIP].insert(source);
             }
  
-            Loggering::log_information("arp : %s, %s", source.c_str(), destIP.c_str());
+			poco_information_f2(logger_handle, "arp : %s, %s", source, destIP);
         }
         else
         {
@@ -735,7 +735,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 			char sztmp[30] = { 0 };
 			sprintf_s(sztmp, "%s.%s.%s.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 			ip = string(sztmp);
-            Loggering::log_information( "aarp :%s, %s", source.c_str(), dest.c_str());           
+			poco_information_f2(logger_handle, "aarp :%s, %s", source, dest);
         }
 
     }
@@ -907,39 +907,39 @@ bool WindowUtils::isOnLine(){
                     
                     switch (IfRow.dwOperStatus) {
                     case IF_OPER_STATUS_NON_OPERATIONAL:                        
-						Loggering::log_information("Non Operational");
+						poco_information(logger_handle, "Non Operational");
                         break;
                     case IF_OPER_STATUS_UNREACHABLE:
-						Loggering::log_information("Unreasonable");
+						poco_information(logger_handle, "Unreasonable");
                         break;
                     case IF_OPER_STATUS_DISCONNECTED:
-						Loggering::log_information("Disconnected");
+						poco_information(logger_handle, "Disconnected");
                         break;
                     case IF_OPER_STATUS_CONNECTING:						
-						Loggering::log_information("Connecting");
+						poco_information(logger_handle, "Connecting");
                         r = true;
                         break;
                     case IF_OPER_STATUS_CONNECTED:                        
-						Loggering::log_information("Connected");
+						poco_information(logger_handle, "Connected");
                         r = true;
                         break;
                     case IF_OPER_STATUS_OPERATIONAL:
-						Loggering::log_information("Operational");                        
+						poco_information(logger_handle, "Operational");
                         r = true;
                         break;
                     default:                        
-						Loggering::log_information("Unknown status: %d", IfRow.dwAdminStatus);
+						poco_information_f1(logger_handle, "Unknown status: %d", IfRow.dwAdminStatus);
                         break;
                     }
                 }
 
                 else {                   
-					Loggering::log_error("GetIfEntry failed for index with error: %d", dwRetVal);
+					poco_error_f1(logger_handle, "GetIfEntry failed for index with error: %d", dwRetVal);
                 }
             }
         }
         else {			
-			Loggering::log_error("GetIfTable failed with error: %d", dwRetVal);
+			poco_error_f1(logger_handle, "GetIfTable failed with error: %d", dwRetVal);
         }
 
     }

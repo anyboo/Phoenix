@@ -172,22 +172,22 @@ bool arpPing(DWORD dwDestIP){
 
     switch (dwRetVal) {
     case ERROR_GEN_FAILURE:
-        Loggering::log_error("ERROR_GEN_FAILURE");
+		poco_error(logger_handle, "ERROR_GEN_FAILURE");
         break;
     case ERROR_INVALID_PARAMETER:
-		Loggering::log_error("ERROR_INVALID_PARAMETER");
+		poco_error(logger_handle, "ERROR_INVALID_PARAMETER");
         break;
     case ERROR_INVALID_USER_BUFFER:
-		Loggering::log_error("ERROR_INVALID_USER_BUFFER");
+		poco_error(logger_handle, "ERROR_INVALID_USER_BUFFER");
         break;
     case ERROR_BAD_NET_NAME:
-		Loggering::log_error("ERROR_GEN_FAILURE");
+		poco_error(logger_handle, "ERROR_GEN_FAILURE");
         break;
     case ERROR_BUFFER_OVERFLOW:
-		Loggering::log_error("ERROR_BUFFER_OVERFLOW");
+		poco_error(logger_handle, "ERROR_BUFFER_OVERFLOW");
         break;
     case ERROR_NOT_FOUND:
-		Loggering::log_error("ERROR_NOT_FOUND");
+		poco_error(logger_handle, "ERROR_NOT_FOUND");
         break;
     default:
         break;
@@ -241,7 +241,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 	//init is sucess
     if (!init(pInfo))
 	{
-		Loggering::log_error("init failed");
+		poco_error(logger_handle, "init failed");
         return FALSE;
 	}
 
@@ -264,7 +264,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 	//send ICMP packet
     if (sendto(pInfo->m_sockRaw, pInfo->m_szICMPData, DEF_PACKET_SIZE + sizeof(ICMPHeader), 0, (struct sockaddr*)&sockaddrDest, nSockaddrDestSize) == SOCKET_ERROR)
 	{		
-		Loggering::log_error("error: %d", WSAGetLastError());
+		poco_error_f1(logger_handle, "error: %d", WSAGetLastError());
 		return FALSE;
 	}
 
@@ -285,7 +285,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 
         int nPacketSize = recvfrom(pInfo->m_sockRaw, recvbuf, 256, 0, (struct sockaddr*)&sockaddrDest, &nSockaddrDestSize);
         if (nPacketSize == SOCKET_ERROR){           
-			Loggering::log_error("SOCKET_ERROR: %d", WSAGetLastError());
+			poco_error_f1(logger_handle, "SOCKET_ERROR: %d", WSAGetLastError());
             continue;
         }
                     

@@ -88,17 +88,17 @@ bool PortScan::initPcapDev()
 	//get all net device
 	if (pcap_findalldevs_ex(PCAP_SRC_IF_STRING, NULL, &alldevs, errbuf) == -1)
 	{
-		Loggering::log_error( "Error in pcap_findalldevs: %s", errbuf);
+		poco_error_f1(logger_handle, "Error in pcap_findalldevs: %s", string(errbuf));
 		return false;
 	}
 
 	if (!alldevs)
 	{
-		Loggering::log_error( "cannot find net device!  install WinPcap?");
+		poco_error(logger_handle, "cannot find net device!  install WinPcap?");
 		return false;
 	}
 
-	Loggering::log_information("desc: %s, %s", alldevs->description, alldevs->name);
+	poco_information_f2(logger_handle, "desc: %s, %s", string(alldevs->description), string(alldevs->name));
 
 	//get local device
 	string uuid = WindowUtils::getLocalUuid();
@@ -107,13 +107,13 @@ bool PortScan::initPcapDev()
 
 	if ((_adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
 	{
-		Loggering::log_error("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1");
+		poco_error(logger_handle, "kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1");
 		pcap_freealldevs(alldevs);
 		return false;
 	}
 
 	if (pcap_datalink(_adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-		Loggering::log_error("kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
+		poco_error(logger_handle, "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
 		return false;
 	}
 
@@ -128,14 +128,14 @@ bool PortScan::initPcapDev()
 
 	if (pcap_compile(_adhandle, &fcode, packet_filter, 1, netmask) < 0)
 	{
-		Loggering::log_error("unable to compile the packet filter.Check the syntax.");		
+		poco_error(logger_handle, "unable to compile the packet filter.Check the syntax.");
 		return false;
 	}
 
 	//set filter
 	if (pcap_setfilter(_adhandle, &fcode) < 0)
 	{
-		Loggering::log_error("Error setting the filter.");
+		poco_error(logger_handle, "Error setting the filter.");
 		return false;
 	}
 
@@ -154,16 +154,16 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	vector<string> Ips;
 	std::shared_ptr<bool> bpCancel = std::make_shared<bool>(false);
 
-	CPing::instance().ScanIp(Ips, false, bpCancel);
-	Loggering::log_information("ping ip size: %d", Ips.size());
+	CPing::instance().ScanIp(Ips, false, bpCancel);	;
+	poco_information_f1(logger_handle, "ping ip size: %d", (int)Ips.size());
 
 	//get network mac address
 	vector<IPMAC> IpMacs;
 	if (Ips.size() > 0)
 	{
 		WindowUtils::getMacByArpTable(Ips, IpMacs);
-	}
-	Loggering::log_information(" get mac size: %d", IpMacs.size());	
+	}	
+	poco_information_f1(logger_handle, " get mac size: %d", (int)IpMacs.size());
 
 	vector <SendData> sendThreads;
 	for (i = 0; i < _localIps.size(); i++)
@@ -185,8 +185,8 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 				sendThreads.push_back(sendthread);
 			}
 		}
-	}
-	Loggering::log_information("sendThreads size: %d", sendThreads.size());
+	}	
+	poco_information_f1(logger_handle, "sendThreads size: %d", (int)sendThreads.size());
 
 	Poco::ThreadPool scanPool;
 	scanPool.addCapacity(sendThreads.size());
@@ -223,8 +223,8 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	scanPool.joinAll();
 
 	//get scan result
-	outIps = receiveThread.getScanResult();
-	Loggering::log_information( "scan result size: %d", outIps.size());
+	outIps = receiveThread.getScanResult();	
+	poco_information_f1(logger_handle, "scan result size: %d", (int)outIps.size());
 
 	std::sort(outIps.begin(), outIps.end(), sortByIp);
 	std::unique(outIps.begin(), outIps.end(), UniqueByIp);
@@ -318,7 +318,7 @@ void SendData::send(pcap_t * adhandle, vector<SendPacket> packets)
 	{
 		if (pcap_sendpacket(adhandle, (const u_char *)packets[i].getPacket(), packets[i].getPacketSize()) != 0)
 		{			
-			Loggering::log_error("send error: %s", pcap_geterr(adhandle));
+			poco_error_f1(logger_handle, "send error: %s", string(pcap_geterr(adhandle)));
 		}
 	}
 }
@@ -361,7 +361,7 @@ void ReceiveData::run()
 
 		if (_break)
 		{
-			Loggering::log_information("listen is break");
+			poco_information(logger_handle, "listen is break");
 			break;
 		}
 
@@ -384,7 +384,7 @@ vector<SCANRESULT> ReceiveData::getScanResult()
 
 void ReceiveData::onEvent(const void* pSender, bool& arg)
 {
-	Loggering::log_information("onEvent: %d", arg);
+	poco_information_f1(logger_handle, "onEvent: %d", (int)arg);
 	_break = arg;
 }
 
@@ -428,7 +428,7 @@ void PortScan::run()
 	t_start = time(NULL);
 	searchFactory(_scanPorts, _outReuslts);
 	t_end = time(NULL);
-	Loggering::log_information("0 time: %.0f s\n", difftime(t_end, t_start));
+	poco_information_f1(logger_handle, "0 time: %.0f s\n", difftime(t_end, t_start));
 
 	_queue.enqueueNotification(new ScanNotification(0));
 }
@@ -455,7 +455,7 @@ bool PortScan::writeDb()
 	}
 	catch (DatabaseException& ex)
 	{
-		Loggering::log_error(" error: %s", ex.displayText());
+		poco_error_f1(logger_handle, " error: %s", ex.displayText());
 	}
 
 
