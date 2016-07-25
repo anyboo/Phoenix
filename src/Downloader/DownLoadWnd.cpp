@@ -161,7 +161,7 @@ void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 	
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
