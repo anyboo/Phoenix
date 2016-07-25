@@ -18,6 +18,7 @@
 #include "Poco/Delegate.h"
 #include "PING.h"
 #include "QMSqlite.h"
+#include "log.h"
 
 using Poco::Notification;
 using Poco::NotificationQueue;
@@ -87,17 +88,17 @@ bool PortScan::initPcapDev()
 	//get all net device
 	if (pcap_findalldevs_ex(PCAP_SRC_IF_STRING, NULL, &alldevs, errbuf) == -1)
 	{
-		cout << "Error in pcap_findalldevs: " << errbuf << endl;
+		Loggering::log_error( "Error in pcap_findalldevs: %s", errbuf);
 		return false;
 	}
 
 	if (!alldevs)
 	{
-		cout << "cannot find net device!  install WinPcap?" << endl;
+		Loggering::log_error( "cannot find net device!  install WinPcap?");
 		return false;
 	}
 
-	cout << alldevs->description << alldevs->name << endl;
+	Loggering::log_information("desc: %s, %s", alldevs->description, alldevs->name);
 
 	//get local device
 	string uuid = WindowUtils::getLocalUuid();
@@ -106,13 +107,13 @@ bool PortScan::initPcapDev()
 
 	if ((_adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
 	{
-		cout << "kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1" << endl;
+		Loggering::log_error("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1");
 		pcap_freealldevs(alldevs);
 		return false;
 	}
 
 	if (pcap_datalink(_adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-		cout << "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL" << endl;
+		Loggering::log_error("kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
 		return false;
 	}
 
@@ -127,14 +128,14 @@ bool PortScan::initPcapDev()
 
 	if (pcap_compile(_adhandle, &fcode, packet_filter, 1, netmask) < 0)
 	{
-		cout << "unable to compile the packet filter.Check the syntax." << endl;
+		Loggering::log_error("unable to compile the packet filter.Check the syntax.");		
 		return false;
 	}
 
 	//set filter
 	if (pcap_setfilter(_adhandle, &fcode) < 0)
 	{
-		cout << "Error setting the filter." << endl;
+		Loggering::log_error("Error setting the filter.");
 		return false;
 	}
 
@@ -154,7 +155,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	std::shared_ptr<bool> bpCancel = std::make_shared<bool>(false);
 
 	CPing::instance().ScanIp(Ips, false, bpCancel);
-	cout << "ping ip size: " << Ips.size() << endl;
+	Loggering::log_information("ping ip size: %d", Ips.size());
 
 	//get network mac address
 	vector<IPMAC> IpMacs;
@@ -162,7 +163,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 	{
 		WindowUtils::getMacByArpTable(Ips, IpMacs);
 	}
-	cout << " get mac size: " << IpMacs.size() << endl;
+	Loggering::log_information(" get mac size: %d", IpMacs.size());	
 
 	vector <SendData> sendThreads;
 	for (i = 0; i < _localIps.size(); i++)
@@ -185,7 +186,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 			}
 		}
 	}
-	cout << "sendThreads size: " << sendThreads.size() << endl;
+	Loggering::log_information("sendThreads size: %d", sendThreads.size());
 
 	Poco::ThreadPool scanPool;
 	scanPool.addCapacity(sendThreads.size());
@@ -223,7 +224,7 @@ bool PortScan::searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps)
 
 	//get scan result
 	outIps = receiveThread.getScanResult();
-	cout << "scan result size: " << outIps.size() << endl;
+	Loggering::log_information( "scan result size: %d", outIps.size());
 
 	std::sort(outIps.begin(), outIps.end(), sortByIp);
 	std::unique(outIps.begin(), outIps.end(), UniqueByIp);
@@ -316,8 +317,8 @@ void SendData::send(pcap_t * adhandle, vector<SendPacket> packets)
 	for (i = 0; i < packets.size(); i++)
 	{
 		if (pcap_sendpacket(adhandle, (const u_char *)packets[i].getPacket(), packets[i].getPacketSize()) != 0)
-		{
-			cout << "send error: " << string(pcap_geterr(adhandle)) << endl;
+		{			
+			Loggering::log_error("send error: %s", pcap_geterr(adhandle));
 		}
 	}
 }
@@ -360,7 +361,7 @@ void ReceiveData::run()
 
 		if (_break)
 		{
-			cout << "listen is break" << endl;
+			Loggering::log_information("listen is break");
 			break;
 		}
 
@@ -383,7 +384,7 @@ vector<SCANRESULT> ReceiveData::getScanResult()
 
 void ReceiveData::onEvent(const void* pSender, bool& arg)
 {
-	std::cout << "onEvent: " << arg << std::endl;
+	Loggering::log_information("onEvent: %d", arg);
 	_break = arg;
 }
 
@@ -427,7 +428,7 @@ void PortScan::run()
 	t_start = time(NULL);
 	searchFactory(_scanPorts, _outReuslts);
 	t_end = time(NULL);
-	printf("0 time: %.0f s\n", difftime(t_end, t_start));
+	Loggering::log_information("0 time: %.0f s\n", difftime(t_end, t_start));
 
 	_queue.enqueueNotification(new ScanNotification(0));
 }
@@ -454,7 +455,7 @@ bool PortScan::writeDb()
 	}
 	catch (DatabaseException& ex)
 	{
-		cout << " error: " << ex.displayText() << endl;
+		Loggering::log_error(" error: %s", ex.displayText());
 	}
 
 
