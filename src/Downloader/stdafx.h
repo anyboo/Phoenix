@@ -25,8 +25,11 @@
 
 #include "Device.h"
 
+
+
 using namespace DuiLib;
 using namespace rapidjson;
+
 
 
 #ifdef _DEBUG
@@ -49,6 +52,7 @@ using namespace rapidjson;
 #else
 #	define STDSTRING std::string
 #endif
+
 
 
 //{{AFX_INSERT_LOCATION}}

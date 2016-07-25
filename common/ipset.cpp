@@ -8,6 +8,7 @@
 #include <set>
 #include "windowutils.h"
 #include "PING.h"
+#include "log.h"
 
 using namespace std;
 
@@ -35,8 +36,8 @@ void IPSet::ipsetting()
 
 
 	//dhcp setting ip
-	WindowUtils::setIPByDHCP(*pIP, *pMask, *pNetGate);
-	cout << "Dhcp set ip:" << *pIP << " netgate: " << *pNetGate << endl;
+	WindowUtils::setIPByDHCP(*pIP, *pMask, *pNetGate);	
+	poco_information_f2(logger_handle, "Dhcp set ip : %s, netgate: %s", *pIP, *pNetGate);
 	//listen arp packet
 	*bResult = WindowUtils::getDirectDevice(Ips, findIps);
 	if (*bResult)
@@ -53,8 +54,8 @@ void IPSet::ipsetting()
 			*pIP = strIp;
 			*pNetGate = *itor;
 			if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
-			{
-				cout << "direct set ip error : " <<  endl;
+			{				
+				poco_error(logger_handle, "direct set ip error ! ");
 			}
 			return;
 		}
@@ -99,11 +100,11 @@ void IPSet::ipsetting()
 			}
 		}
 		Sleep(1000*2);		
-		WindowUtils::getMacByArpTable(scanips, findIps);
-		cout << "get arp table size: " << findIps.size() << endl;
+		WindowUtils::getMacByArpTable(scanips, findIps);			
+		poco_information_f1(logger_handle, "get arp table size: %d", (int)findIps.size());
 		for (itor = findIps.begin(); itor != findIps.end(); itor++)
-		{
-			cout << "find ips, ip: " << *itor << endl;
+		{						
+			poco_information_f1(logger_handle, "find ips, ip:  %s", *itor);
 		}
 		
 		vector<string>::iterator vitor;
@@ -175,11 +176,11 @@ void IPSet::ipsetting()
 							{
 								*pNetGate = tmp;
 								Domains.erase(itor);
-								bSetGate = true;
-								cout << "ip: " << *pIP << " gate: " << *pNetGate << endl;
+								bSetGate = true;								
+								poco_information_f2(logger_handle, "ip: %s, gate: %s", *pIP, *pNetGate);
 								if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
-								{
-									cout << "set ip gate error !ip: " << *pIP << " gate: " << *pNetGate << endl;
+								{									
+									poco_error_f2(logger_handle, "set ip gate error !ip: %s,  gate: %s", *pIP, *pNetGate);
 									*bResult = false;
 								}
 								goto addip;
@@ -202,8 +203,8 @@ void IPSet::ipsetting()
 				}
 			}
 			if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
-			{
-				cout << "set ip gate error !ip: " << *pIP << " gate: " << *pNetGate << endl;
+			{				
+				poco_error_f2(logger_handle, "set ip gate error !ip: %s, gate: %s", *pIP, *pNetGate);
 				*bResult = false;
 			}
 		}
@@ -220,11 +221,11 @@ addip:
 				*pNetGate = "";
 				if (domaintmp.compare(*itor) == 0)
 				{
-					*pIP = iptmp;
-					cout << "ip: " << *pIP << " gate: " << *pNetGate << endl;
+					*pIP = iptmp;					
+					poco_information_f2(logger_handle, "0 ip: %s, gate: %s", *pIP, *pNetGate);
 					if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
-					{
-						cout << "error set ip: " << *pIP << " net gate: " << *pNetGate << endl;
+					{						
+						poco_error_f2(logger_handle, "error set ip: %s, net gate: %s", *pIP, *pNetGate);
 					}
 					break;
 				}
@@ -239,7 +240,7 @@ void IPSet::run()
 	t_start = time(NULL);
 	ipsetting();
 	t_end = time(NULL);
-	printf("0 time: %.0f s\n", difftime(t_end, t_start));
+	poco_information_f1(logger_handle, "0 time: %.0f s\n", difftime(t_end, t_start));
 
 }
 
