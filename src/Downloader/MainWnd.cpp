@@ -18,23 +18,13 @@
 using Poco::NotificationCenter;
 using Poco::Observer;
 
-static void OpenConsole()
-{
-	AllocConsole();
-	HANDLE   handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	int   hCrt = _open_osfhandle((long)handle, _O_TEXT);
-	FILE   *   hf = _fdopen(hCrt, "w");
-	*stdout = *hf;
-}
+
 
 CMainWnd::CMainWnd()
 :m_IsMinWnd(FALSE), m_IsMaxWnd(FALSE)
 {
 	//NotificationCenter& nc = NotificationCenter::defaultCenter();
 	//nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
-#ifdef _DEBUG  
-	OpenConsole();
-#endif 
 }
 
 

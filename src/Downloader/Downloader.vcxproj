@@ -133,6 +133,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\log.h" />
     <ClInclude Include="CalendarUI.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\common\DatabaseException.cpp" />
     <ClCompile Include="..\..\common\ipset.cpp" />
+    <ClCompile Include="..\..\common\log.cpp" />
     <ClCompile Include="..\..\common\PING.cpp" />
     <ClCompile Include="..\..\common\portscan.cpp" />
     <ClCompile Include="..\..\common\QMFileSqlite.cpp" />
@@ -173,6 +175,7 @@
     <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginException.cpp" />
+    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp" />
     <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp" />
     <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />

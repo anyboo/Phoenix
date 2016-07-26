@@ -6,11 +6,13 @@
 #include "SearchDevice.h"
 
 #include "FileLogInfoUI.h"
+#include "CommonUtrl.h"
 
 
-SearchFileUI::SearchFileUI()
+SearchFileUI::SearchFileUI(Device* device)
 :m_InitShowFileList(false)
 {
+	m_device = device;
 	ReadDataFromTable();
 }
 
@@ -108,6 +110,12 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 			}
 			GetFileSizeAndCount();
 		}
+		if (!SendName.compare(0, 7, _T("BT_Play")))
+		{
+			std::string strTag = SendName.substr(7);
+			int CurSel = stoi(strTag);
+			OnPlayVideo(CurSel);
+		}
 	}
 
 	WindowImplBase::Notify(msg);
@@ -191,12 +199,14 @@ void SearchFileUI::GetFileInfo(STDSTRING& SendName)
 	STDSTRING stime = Lab_stime->GetText();
 	STDSTRING etime = Lab_etime->GetText();
 
-	OnPlayVideo(filename, channel, stime, etime);
 }
 
-void SearchFileUI::OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime)
+void SearchFileUI::OnPlayVideo(int CurSel)
 {
-	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd);
+	readSearchVideo rsv = m_FileList[CurSel];
+	RecordFile file = CCommonUtrl::getInstance().MakeDBFileToRecordFile(rsv);
+
+	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(m_device, file));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();

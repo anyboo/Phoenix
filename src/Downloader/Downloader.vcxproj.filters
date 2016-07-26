@@ -131,6 +131,12 @@
     <ClCompile Include="..\..\common\ipset.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\log.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -190,6 +196,9 @@
     <ClInclude Include="MessagePump.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="ProgressManager.h" />
+    <ClInclude Include="..\..\common\log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

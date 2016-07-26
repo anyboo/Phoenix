@@ -14,6 +14,7 @@
 #include <tchar.h>
 #include <Shellapi.h>
 #include <NetCon.h>  
+#include "log.h"
 
 
 
@@ -66,8 +67,9 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 						IP_ADDR_STRING *pIpAddrString = &(pIpAdapterInfo->IpAddressList);
 						do
 						{
-							IPList.push_back(std::string(pIpAddrString->IpAddress.String));
-							cout << "IP address:" << pIpAddrString->IpAddress.String << endl;							
+							IPList.push_back(std::string(pIpAddrString->IpAddress.String));							
+							Loggering::log_information("IP address : %s", pIpAddrString->IpAddress.String);
+							
 							pIpAddrString = pIpAddrString->Next;
 						} while (pIpAddrString);
 
@@ -264,28 +266,28 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 
 	//get all net device
 	if (pcap_findalldevs(&alldevs, errbuf) == -1)
-	{
-		cout << "Error in pcap_findalldevs:" << errbuf << endl;
+	{		
+		Loggering::log_error("Error in pcap_findalldevs:%s", errbuf);
 		return false;
 	}
 
 	if (!alldevs)
-	{
-		cout << "cannot find net device!  install WinPcap?" << endl;
+	{		
+		Loggering::log_error("cannot find net device!  install WinPcap?");
 		return false;
 	}
-
-	cout << alldevs->description << alldevs->name << endl;
+		
+	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
 
 	if ((adhandle = pcap_open_live(alldevs->name, 65536, 1, 1000, errbuf)) == NULL)
-	{
-		cout << "pcap_open_live failed!  not surpport by WinPcap ?" << alldevs->name << endl;
+	{		
+		Loggering::log_error("pcap_open_live failed!  not surpport by WinPcap : %s", alldevs->name);
 		pcap_freealldevs(alldevs);
 		return false;
 	}
 
-	if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-		cout << "pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL" << endl;
+	if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {		
+		Loggering::log_error("pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
 		return false;
 	}
 
@@ -296,15 +298,15 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 
 	//build filter, only get ARP packet
 	if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
-	{
-		cout << "unable to compile the packet filter.Check the syntax." << endl;
+	{		
+		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
 		return false;
 	}
 
 	//set filter
 	if (pcap_setfilter(adhandle, &fcode) < 0)
 	{
-		cout << "Error setting the filter." << endl;
+		Loggering::log_error("Error setting the filter.");
 		return false;
 	}
 	std::vector<string> IPs;
@@ -316,7 +318,7 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 	{
 		if (GetTickCount() - start > nMaxSeconds * 1000)
 		{
-			cout << "arp time out" << endl;
+			Loggering::log_information("arp time out");
 			break;
 		}
 		//get arp packet
@@ -336,8 +338,8 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 			}
 
 			char szIP[30] = { 0 };
-			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
-			cout << "ip 0: " << szIP << endl;
+			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
+			Loggering::log_information("ip 0: %s", szIP);
 
 			string source = string(szIP);
 			if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
@@ -358,8 +360,8 @@ bool WindowUtils::getDirectDevice(set<string>& ipList, set<string>& dstList)
 			}
 
 			char szsource[30] = { 0 };
-			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
-			cout << "ip 6: " << szsource << endl;
+			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
+			Loggering::log_information("ip 6: %s", szsource);
 			string source = string(szsource);
 			if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
 				continue;
@@ -393,27 +395,27 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     //get all net device
     if (pcap_findalldevs(&alldevs, errbuf) == -1)
     {
-        cout << "Error in pcap_findalldevs:" << errbuf << endl;
+		Loggering::log_error("Error in pcap_findalldevs:");
         return false;
     }
 
     if (!alldevs)
     {
-        cout << "cannot find net device!  install WinPcap?" << endl;
+		Loggering::log_error("cannot find net device!  install WinPcap?");
         return false;
     }
-
-    cout << alldevs->description << alldevs->name << endl;
+   
+	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
 
     if ((adhandle = pcap_open_live(alldevs->name, 65536, 1, 1000, errbuf)) == NULL)
     {
-        cout << "pcap_open_live failed!  not surpport by WinPcap ?" << alldevs->name << endl;
+		Loggering::log_error("pcap_open_live failed!  not surpport by WinPcap ?");
         pcap_freealldevs(alldevs);
         return false;
     }
 
-    if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-        cout << "pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL" << endl;
+    if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {       
+		Loggering::log_error("pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
         return false;
     }
 
@@ -425,14 +427,14 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     //build filter, only get ARP packet
     if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
     {
-        cout << "unable to compile the packet filter.Check the syntax." << endl;
+		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
         return false;
     }
 
     //set filter
     if (pcap_setfilter(adhandle, &fcode) < 0)
     {
-        cout << "Error setting the filter." << endl;
+		Loggering::log_error("Error setting the filter.");
         return false;
     }
     std::vector<string> IPs;
@@ -444,7 +446,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     {
 		if (GetTickCount() - start > nMaxSeconds * 1000)
         {
-            cout << "arp time out" << endl;
+            Loggering::log_information( "arp time out");
             break;
         }
         //get arp packet
@@ -465,8 +467,8 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szIP[30] = { 0 };
 			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
-			cout << "ip 0: " << szIP << endl;
-
+			Loggering::log_information("ip 0: %s", szIP);
+			
 			string source = string(szIP);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
@@ -483,7 +485,8 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szdIP[30] = { 0 };
 			sprintf_s(szdIP, "%d.%d.%d.%d", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
-			cout << "ip 1: " << szdIP << endl;
+			Loggering::log_information("ip 1: %s", szdIP);
+			
 			ip = string(szdIP);
             if (arph->dip[0] != arph->sip[0] || arph->dip[1] != arph->sip[1] || arph->dip[2] != arph->sip[2] || ip == netGate)
             {
@@ -492,17 +495,17 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
-					cout << "ip 2: " << ip << endl;
+					Loggering::log_information("ip 2: %s", ip.c_str());					
                 }
                 else{
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
-					cout << "ip 3: " << ip << endl;
+					Loggering::log_information("ip 3: %s", ip.c_str());					
                 }
             }
-
-            cout << "arp    " << ip << "  " << netGate << endl;
+            
+			Loggering::log_information("arp: %s, gate: %s", ip.c_str(), netGate.c_str());
         }
         else
         {
@@ -516,8 +519,8 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
             }
 
 			char szsource[30] = { 0 };
-			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
-			cout << "ip 3: " << szsource << endl;
+			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);			
+			Loggering::log_information("ip 3: %s", szsource);
 			string source = string(szsource);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
@@ -534,13 +537,13 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 				ip = string(sztmp);
-				cout << "ip 4: " << ip << endl;
+				Loggering::log_information("ip 4: %s", ip.c_str());				
             }
             else{
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
-				ip = string(sztmp);
-				cout << "ip 5: " << ip << endl;
+				ip = string(sztmp);				
+				Loggering::log_information("ip 5: %s", ip.c_str());
             }
            
             break;
@@ -568,18 +571,18 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 
     //get all net device
     if (pcap_findalldevs(&alldevs, errbuf) == -1)
-    {
-        cout << "Error in pcap_findalldevs:" << errbuf << endl;
+    {        
+		Loggering::log_error("Error in pcap_findalldevs: %s", errbuf);
         return false;
     }
 
     if (!alldevs)
     {
-        cout << "cannot find net device!  install WinPcap?" << endl;
+		Loggering::log_error("cannot find net device!  install WinPcap?");
         return false;
     }
-
-    cout << alldevs->description << alldevs->name << endl;	
+   	
+	Loggering::log_information("desc: %s, name: %s", alldevs->description, alldevs->name);
 	
 	string uuid = WindowUtils::getLocalUuid();
 	
@@ -587,13 +590,13 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 
 	if ((adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
     {
-       cout << string("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ") << endl;
+		Loggering::log_error("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ");
         pcap_freealldevs(alldevs);
         return false;
     }
 
     if (pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL) {
-        cout << "kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL" << endl;
+		Loggering::log_error("kevin : pcap_datalink(adhandle) != DLT_EN10MB || alldevs->addresses == NULL");
         return false;
     }
 
@@ -605,14 +608,14 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     //build filter, only get ARP packet
     if (pcap_compile(adhandle, &fcode, packet_filter, 1, netmask) < 0)
     {
-        cout << "unable to compile the packet filter.Check the syntax." << endl;
+		Loggering::log_error("unable to compile the packet filter.Check the syntax.");
         return false;
     }
 
     //set filter
     if (pcap_setfilter(adhandle, &fcode) < 0)
     {
-        cout << "Error setting the filter." << endl;
+		Loggering::log_error("Error setting the filter.");		
         return false;
     }
     string specialIP;
@@ -624,7 +627,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     {
         if (GetTickCount() - start > secondsWait * 1000)
         {
-            cout << "arp time out" <<  endl;
+            Loggering::log_information("arp time out");
 			pcap_close(adhandle);
             break;
         }
@@ -695,7 +698,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 mpDestSource[destIP].insert(source);
             }
  
-            cout << "arp" << source << destIP << endl;
+            Loggering::log_information("arp : %s, %s", source.c_str(), destIP.c_str());
         }
         else
         {
@@ -732,7 +735,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 			char sztmp[30] = { 0 };
 			sprintf_s(sztmp, "%s.%s.%s.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 			ip = string(sztmp);
-            cout << "aarp" << source << dest << endl;           
+            Loggering::log_information( "aarp :%s, %s", source.c_str(), dest.c_str());           
         }
 
     }
@@ -829,7 +832,7 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
             {
                 for (IP_ADDR_STRING *pIpAddrString = &(pIpAdapterInfo->IpAddressList);
                     pIpAddrString != NULL && (!r); pIpAddrString = pIpAddrString->Next){
-					//cout << "ips.begin: " << *ips.begin() << " size: " << ips.size() << endl;
+					
                     if (*ips.begin() == pIpAddrString->IpAddress.String)
                     {						
                         ip = *ips.begin();
@@ -903,41 +906,40 @@ bool WindowUtils::isOnLine(){
                     }
                     
                     switch (IfRow.dwOperStatus) {
-                    case IF_OPER_STATUS_NON_OPERATIONAL:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Non Operational" << endl;
+                    case IF_OPER_STATUS_NON_OPERATIONAL:                        
+						Loggering::log_information("Non Operational");
                         break;
                     case IF_OPER_STATUS_UNREACHABLE:
-						cout << __FILE__ << __FUNCTION__ << __LINE__ << "Unreasonable" << endl;
+						Loggering::log_information("Unreasonable");
                         break;
                     case IF_OPER_STATUS_DISCONNECTED:
-						cout << __FILE__ << __FUNCTION__ << __LINE__ << "Disconnected" << endl;
+						Loggering::log_information("Disconnected");
                         break;
-                    case IF_OPER_STATUS_CONNECTING:
-						//cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connecting" << endl;
+                    case IF_OPER_STATUS_CONNECTING:						
+						Loggering::log_information("Connecting");
                         r = true;
                         break;
-                    case IF_OPER_STATUS_CONNECTED:
-                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Connected";
+                    case IF_OPER_STATUS_CONNECTED:                        
+						Loggering::log_information("Connected");
                         r = true;
                         break;
                     case IF_OPER_STATUS_OPERATIONAL:
-                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Operational";
+						Loggering::log_information("Operational");                        
                         r = true;
                         break;
-                    default:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Unknown status" << IfRow.dwAdminStatus;
+                    default:                        
+						Loggering::log_information("Unknown status: %d", IfRow.dwAdminStatus);
                         break;
                     }
                 }
 
-                else {
-                    cout << __FILE__ << __FUNCTION__ << __LINE__ << "GetIfEntry failed for index with error:" <<
-						dwRetVal << endl;
+                else {                   
+					Loggering::log_error("GetIfEntry failed for index with error: %d", dwRetVal);
                 }
             }
         }
-        else {
-			cout << __FILE__ << __FUNCTION__ << __LINE__ << "GetIfTable failed with error:" << dwRetVal << endl;
+        else {			
+			Loggering::log_error("GetIfTable failed with error: %d", dwRetVal);
         }
 
     }
@@ -979,13 +981,7 @@ void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
 					if (inet_addr(Ips[j].c_str()) == ipNetTable->table[i].dwAddr) 					
 					{						
 						IPMAC ipmac = { 0 };
-						ipmac.ip = ipNetTable->table[i].dwAddr;
-						/*char sztmp[80] = { 0 };
-						sprintf_s(sztmp, "i: %d, ip: %02x, mac:%02x-%02x-%02x-%02x-%02x-%02x\n", i, ipNetTable->table[i].dwAddr
-							, ipNetTable->table[i].bPhysAddr[0], ipNetTable->table[i].bPhysAddr[1]
-							, ipNetTable->table[i].bPhysAddr[2], ipNetTable->table[i].bPhysAddr[3]
-							, ipNetTable->table[i].bPhysAddr[4], ipNetTable->table[i].bPhysAddr[5]);
-						printf(sztmp);*/
+						ipmac.ip = ipNetTable->table[i].dwAddr;						
 						if (ipNetTable->table[i].bPhysAddr[0] == 0
 							&& ipNetTable->table[i].bPhysAddr[1] == 0
 							&& ipNetTable->table[i].bPhysAddr[2] == 0
@@ -1040,13 +1036,7 @@ void WindowUtils::getMacByArpTable(vector<string>Ips, set<string>& findIps)
 
 						}
 						else
-						{
-							/*char sztmp[80] = { 0 };
-							sprintf_s(sztmp, "i: %d, ip: %02x, mac:%02x-%02x-%02x-%02x-%02x-%02x\n", i, ipNetTable->table[i].dwAddr
-							, ipNetTable->table[i].bPhysAddr[0], ipNetTable->table[i].bPhysAddr[1]
-							, ipNetTable->table[i].bPhysAddr[2], ipNetTable->table[i].bPhysAddr[3]
-							, ipNetTable->table[i].bPhysAddr[4], ipNetTable->table[i].bPhysAddr[5]);
-							printf(sztmp);*/
+						{							
 							findIps.insert(Ips[j]);
 						}						
 						break;
