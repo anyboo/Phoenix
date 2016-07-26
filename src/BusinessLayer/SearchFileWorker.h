@@ -26,17 +26,15 @@ using Poco::Thread;
 
 class SearchFileWorker :public Runnable
 {
-public:   
-	///     Function:  Query video file
-	///     Parameter: Device* pDevice -- A pointer to the object of device class
-	///				   const time_range& range -- The time range query video files     
-	///				   const std::vector<size_t> channelList -- The channel number
-	///				   ReciveUIQunue& queue -- Receive a message queue
-	///     Return:	   None
-	///     Note:      When creating a class object, needs to be the object into the thread pool
-
-	//查询视频文件
-	//注：shou
+public:
+	///     Query video file
+	///     @param		Device* pDevice -- A pointer to the object of device class
+	///		@param		const time_range& range -- The time range query video files     
+	///		@param		const std::vector<size_t> channelList -- The channel number
+	///		@param		ReciveUIQunue& queue -- Receive a message queue
+	///     @return 	None
+	///     @see 		
+	///     @note      When creating a class object, needs to be the object into the thread pool
 	SearchFileWorker(Device* pDevice, const time_range& range, const std::vector<size_t> channelList, ReciveUIQunue& queue);
 
 	~SearchFileWorker();

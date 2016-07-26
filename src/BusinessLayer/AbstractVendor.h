@@ -162,39 +162,154 @@ typedef std::vector<NET_DEVICE_INFO_SIMPLE*> DEVICE_INFO_SIMPLE_LIST;
 typedef std::vector<AbstractVendor*> VENDOR_LIST;
 typedef std::vector<RecordFile> RECORD_FILE_LIST;
 
+
+///    Class function: This class is an abstract base class of the SDK, to provide external interface.
 class AbstractVendor
 {
 public:
+	///     Init SDK
+	///     @param		None
+	///		@see
+	///		@note		None
 	virtual void Init() = 0;
+
+	///     SDK vendor's login
+	///     @param		const std::string& ip -- The IP address of the manufacturer's server connected
+	///		@param		size_t port -- Connect the manufacturer server port number
+	///		@param		const std::string& user -- Login user name
+	///		@return		const std::string& password -- The login password
+	///     @see		None
+	///     @note		Must be initialized before login
 	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password) = 0;
+
+	///     SDK vendor's logout
+	///     @param		const long loginHandle -- Login the returned  value
+	///     @return		None
+	///     @see		
+	///		@note		After Login
 	virtual void Logout(const long loginHandle) = 0;
 
 	virtual void SearchAll(const long loginHandle) = 0;
+
+	///     Query video file
+	///     @param		const long loginHandle -- Login the returned  value
+	///		@param		const size_t channel -- Query the channel
+	///		@param		const time_range& range -- Query the time range
+	///     @return		None
+	///     @see	 
+	///		@note		After Login
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
+
+	///     Clean up the local video query file
+	///     @param		None		   
+	///     @return		None
+	///     @see		
+	///		@note		After Login
 	virtual void ClearLocalRecordFiles() = 0;
 
-	virtual void Download(const long loginHandle, const RecordFile& file) = 0;	
+	///     Through the file information to download video files
+	///     @param		const long loginHandle -- Login the returned  value	
+	///		@param	    const RecordFile& file -- File information structure
+	///     @return	    None
+	///     @see	   
+	///		@note		After Login
+	virtual void Download(const long loginHandle, const RecordFile& file) = 0;
+	
+	///     Stop the file download
+	///     @param		None
+	///     @return		None
+	///     @see		
+	///		@note		After Login
 	virtual bool StopDownload() = 0;
 
+	///     Through the file information to download video files
+	///     @param		const long loginHandle -- Login the returned  value	
+	///		@param		const RecordFile& file -- File information structure
+	///     @return		None
+	///     @see	 
+	//		@note		After download
 	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
+	
+	///     Set the progress of the video
+	///     @param		int pos -- 100
+	///     @return		None
+	///     @see		None
+	///		@note	
 	virtual void SetPlayVideoPos(int pos) = 0;
+	///     Stop play video 
+	///     @param	 int pos -- 100
+	///     @return	 None
+	///     @see	 
+	///		@note	After play video
 	virtual void StopPlayVideo() = 0;
 
+	///     Get the window's play handle 
+	///     @param		const HWND& hWnd -- play handle 
+	///     @return		None
+	///     @see		
+	//		@note		None
 	virtual void SetHWnd(const HWND& hWnd) = 0;
-	virtual void SetDownloadPath(const std::string& Root) = 0;
+
+	///     Set the download path
+	///     @param		const std::string& Root -- The root directory
+	///     @return		None
+	///     @see	
+	///     @note		None
+	virtual void SetDownloadPath(const std::string& Root) = 0; 
 	virtual void throwException() = 0;
 
+	///     Get the user name
+	///     @param		None
+	///     @return		None
+	///     @see	
+	///     @note		None
 	virtual std::string GetDefUsearName() = 0;
+
+	///      Get the password
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
+	
 	virtual std::string GetDefPassword() = 0;
+
+	///      Access to the SDK manufacturer's type
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
 	virtual NET_SDK_TYPE GetSDKType() = 0;
+
+	///      Judge whether the interface of the SDK support equipment
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
 	virtual bool IsSearchDeviceAPIExist() = 0;
 
-
+	///      The equipment query
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
 	virtual void StartSearchDevice() = 0;
-	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;
-	virtual void StopSearchDevice() = 0;
-	virtual size_t GetMaxChannel() = 0;
 
+	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;
+
+	///      Stop equipment query
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
+	virtual void StopSearchDevice() = 0;
+
+	///      The channel maximum number
+	///      @param		None
+	///      @return	None
+	///      @see	
+	///      @note		None
+	virtual size_t GetMaxChannel() = 0;
+	
 	//virtual RECORD_FILE_LIST GetRecordFileList() = 0;
 
 };

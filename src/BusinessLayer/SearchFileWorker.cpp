@@ -39,7 +39,7 @@ void SearchFileWorker::run()
 		{
 			try
 			{
-				m_pDevice->Search(channel, m_range);
+				m_pDevice->Search(channel, day);
 			}
 			catch (SearchFileException &SearchFileExc)
 			{
