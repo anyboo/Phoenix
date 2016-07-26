@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Mversion.h"
 
-MVerion::MVerion()
+MVersion::MVersion()
 {
 }
 
-MVerion::~MVerion()
+MVersion::~MVersion()
 {
 }

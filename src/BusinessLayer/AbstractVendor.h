@@ -45,8 +45,10 @@ typedef enum
 	Notification_Type_Download_File_Process,
 	Notification_Type_Download_File_Finish,
 	Notification_Type_Download_File_Cancel,
+	Notification_Type_Play_Video_Play,
 	Notification_Type_Play_Video_Pos,
 	Notification_Type_Play_Video_Stop,
+	Notification_Type_Play_Video_Replay,
 	Notification_Type_Port_Scan_Finish,
 	Notification_Type_Exception_Login,
 
@@ -162,11 +164,10 @@ typedef std::vector<NET_DEVICE_INFO_SIMPLE*> DEVICE_INFO_SIMPLE_LIST;
 typedef std::vector<AbstractVendor*> VENDOR_LIST;
 typedef std::vector<RecordFile> RECORD_FILE_LIST;
 
-
-///    Class function: This class is an abstract base class of the SDK, to provide external interface.
 class AbstractVendor
 {
 public:
+
 	///     Init SDK
 	///     @param		None
 	///		@see
@@ -213,8 +214,8 @@ public:
 	///     @return	    None
 	///     @see	   
 	///		@note		After Login
-	virtual void Download(const long loginHandle, const RecordFile& file) = 0;
-	
+	virtual void Download(const long loginHandle, const RecordFile& file) = 0;	
+
 	///     Stop the file download
 	///     @param		None
 	///     @return		None
@@ -229,23 +230,32 @@ public:
 	///     @see	 
 	//		@note		After download
 	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
-	
+
 	///     Set the progress of the video
 	///     @param		int pos -- 100
 	///     @return		None
 	///     @see		None
 	///		@note	
 	virtual void SetPlayVideoPos(int pos) = 0;
+
 	///     Stop play video 
-	///     @param	 int pos -- 100
+	///     @param	 None
 	///     @return	 None
 	///     @see	 
 	///		@note	After play video
 	virtual void StopPlayVideo() = 0;
 
+
+	///     Get the progress of the video
+	///     @param		None
+	///     @return		None
+	///     @see		None
+	///		@note	
+	virtual int GetPlayVideoPos() = 0;
+
 	///     Get the window's play handle 
 	///     @param		const HWND& hWnd -- play handle 
-	///     @return		None
+	///     @return		int -- Get progress
 	///     @see		
 	//		@note		None
 	virtual void SetHWnd(const HWND& hWnd) = 0;
@@ -255,7 +265,7 @@ public:
 	///     @return		None
 	///     @see	
 	///     @note		None
-	virtual void SetDownloadPath(const std::string& Root) = 0; 
+	virtual void SetDownloadPath(const std::string& Root) = 0;
 	virtual void throwException() = 0;
 
 	///     Get the user name
@@ -270,7 +280,6 @@ public:
 	///      @return	None
 	///      @see	
 	///      @note		None
-	
 	virtual std::string GetDefPassword() = 0;
 
 	///      Access to the SDK manufacturer's type
@@ -294,9 +303,14 @@ public:
 	///      @note		None
 	virtual void StartSearchDevice() = 0;
 
+	///      Get equipment Information
+	///      @param		None
+	///      @return	DEVICE_INFO_LIST& -- Get device information
+	///      @see	
+	///      @note		None
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;
 
-	///      Stop equipment query
+	///      Stop device query
 	///      @param		None
 	///      @return	None
 	///      @see	
@@ -309,7 +323,7 @@ public:
 	///      @see	
 	///      @note		None
 	virtual size_t GetMaxChannel() = 0;
-	
+
 	//virtual RECORD_FILE_LIST GetRecordFileList() = 0;
 
 };

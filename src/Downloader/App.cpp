@@ -118,7 +118,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 			ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
 			if (pWorkNf)
 			{
-				listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
+				//listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
 				std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
 				break;
 			}
