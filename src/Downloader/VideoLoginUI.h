@@ -23,6 +23,7 @@ public:
 	~VideoLoginUI();
 
 	void LogIn();
+
 	Device* GetLonInDevice();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -58,6 +59,7 @@ private:
 	size_t				m_pages;
 	QMSqlite*				m_pDb;
 	std::vector<string> m_sRecord;
+	std::map<int, string>		m_CnameAndType;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

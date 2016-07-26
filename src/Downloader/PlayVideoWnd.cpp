@@ -15,16 +15,21 @@ CPlayVideoWnd::CPlayVideoWnd(Device* device, RecordFile& rf)
 {
 	m_Device = device;
 	m_rf = rf;
-
-
+	queuePlayVideo = new NotificationQueue();
 }
 
 
 CPlayVideoWnd::~CPlayVideoWnd()
 {
+	delete queuePlayVideo;
+	queuePlayVideo = nullptr;
+
+	delete pv;
+	pv = nullptr;
 }
 
 DUI_BEGIN_MESSAGE_MAP(CPlayVideoWnd, WindowImplBase)
+DUI_ON_CLICK_CTRNAME(BT_CLOSE_PLWND, OnCloseWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CPlayVideoWnd::GetWindowClassName() const
@@ -39,12 +44,16 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 
 void CPlayVideoWnd::InitWindow()
 {
-	HWND m_hWnd;
-	m_hWnd = GetPlayHwnd();
+	HWND play_Hwnd;
+	play_Hwnd = GetPlayHwnd();
+	if (!play_Hwnd)
+	{
+		return;
+	}
 
-	NotificationQueue* queuePlayVideo = new NotificationQueue(); // 设备管理消息队列
-	CPlayVideoWorker pv(m_Device, m_rf, m_hWnd, *queuePlayVideo);
-	ThreadPool::defaultPool().start(pv);
+	pv = new CPlayVideoWorker(m_Device, m_rf, play_Hwnd, *queuePlayVideo);
+	ThreadPool::defaultPool().start(*pv);
+
 }
 
 CDuiString CPlayVideoWnd::GetSkinFile()
@@ -53,7 +62,7 @@ CDuiString CPlayVideoWnd::GetSkinFile()
 }
 
 void CPlayVideoWnd::OnFinalMessage(HWND hWnd)
-{
+{	
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -66,12 +75,24 @@ void CPlayVideoWnd::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
-HWND CPlayVideoWnd::GetPlayHwnd()
+void CPlayVideoWnd::OnCloseWnd(TNotifyUI& msg)
 {
-	 
-	CVerticalLayoutUI* PlayLyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("wnd_lyt")));
-	CPaintManagerUI* vLytppm = PlayLyt->GetManager();
-	HWND m_hwnd = vLytppm->GetPaintWindow();
+	queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Stop));
+	Sleep(1000);
+	Close();
+}
 
-	return m_hwnd;
+HWND CPlayVideoWnd::GetPlayHwnd()
+{	 
+	CVerticalLayoutUI* PlayLyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("wnd_lyt")));
+	
+	CDialogBuilder builder;
+	CHorizontalLayoutUI* subLyt = (CHorizontalLayoutUI*)(builder.Create(_T("xml//playLyt.xml"), (UINT)0, NULL, &m_PaintManager));
+	PlayLyt->Add(subLyt);
+	CPaintManagerUI* vLytppm = subLyt->GetManager();
+	
+	HWND vHwnd = vLytppm->GetPaintWindow();
+	HWND playHwnd = PlayLyt->GetNativeWindow();
+	HWND hhhwnd = this->GetHWND();
+	return vHwnd;
 }

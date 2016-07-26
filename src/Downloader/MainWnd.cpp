@@ -21,24 +21,23 @@ using Poco::Observer;
 
 
 CMainWnd::CMainWnd()
-:m_IsMinWnd(FALSE), m_IsMaxWnd(FALSE)
+:m_IsMinWnd(false), m_IsMaxWnd(false)
 {
+<<<<<<< HEAD
+
+#ifdef _DEBUG  
+	OpenConsole();
+#endif 
+=======
 	//NotificationCenter& nc = NotificationCenter::defaultCenter();
 	//nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
+>>>>>>> b9d78a3a4cb8dd926ac3b5bcbc1ab2644109189b
 }
 
 
 CMainWnd::~CMainWnd()
 {
 	
-}
-
-void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
-{
-	if (pNf->name().compare("CNotificationNetworkStatus"))
-	{
-		int a = 0;
-	}
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
@@ -69,6 +68,13 @@ CDuiString CMainWnd::GetSkinFile()
 void CMainWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
+}
+
+void CMainWnd::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
+
 }
 
 void CMainWnd::OnClose(TNotifyUI& msg)
@@ -124,12 +130,12 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	if (m_IsMinWnd)
 	{
-		Show_HideTask(TRUE);
+		Show_HideTask(true);
 	}
-	m_IsMinWnd = FALSE;
+	m_IsMinWnd = false;
 
-	bHandled = FALSE;
-	return FALSE;
+	bHandled = false;
+	return false;
 }
 
 
@@ -155,22 +161,44 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	{
 		if (!m_IsMaxWnd)
 		{
+			ResizeClient(1280, 800);
 			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
-			CPaintManagerUI::ReloadSkin();
+			CPaintManagerUI::ReloadSkin();	
 			m_IsMaxWnd = TRUE;
 		}
 		else
 		{
 			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
 			CPaintManagerUI::ReloadSkin();
+			ResizeClient(1024, 768);
 			m_IsMaxWnd = FALSE;
 		}
 	}
 	return WindowImplBase::NotifyPump(msg);
 }
 
+void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+}
 
-void CMainWnd::Show_HideTask(BOOL IsHide)
+void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void CMainWnd::Show_HideTask(bool IsHide)
 {
 	int nCwdShow = -1;
 	LPARAM lParam;

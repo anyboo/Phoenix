@@ -24,7 +24,7 @@ namespace Loggering
 		std::string strpath = Poco::Path::current();
 		strpath.append("log\\Downloader.log");
 		file_channel->setProperty("path", strpath);		
-		Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter(new Poco::PatternFormatter("%Y-%m-%d %H:%M:%S %s [%p] %U(%u): %t"));
+		Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter(new Poco::PatternFormatter("%Y-%m-%d %L%H:%M:%S [%p] %U(%u): %t"));
 		Poco::AutoPtr<Poco::FormattingChannel> formatter_channle(new Poco::FormattingChannel(pattern_formatter, file_channel));
 		Poco::Logger::root().setChannel(formatter_channle);
 		///- finish logger initiation
@@ -40,23 +40,4 @@ namespace Loggering
 		}
 	}
 
-	void log_information(char *format, ...)
-	{
-		char buffer[1024] = { 0 };
-		va_list aptr;
-		va_start(aptr, format);
-		vsprintf(buffer, format, aptr);
-		va_end(aptr);
-		poco_information(logger_handle, buffer);
-	}
-
-	void log_error(char *format, ...)
-	{
-		char buffer[1024] = { 0 };
-		va_list aptr;
-		va_start(aptr, format);
-		vsprintf(buffer, format, aptr);
-		va_end(aptr);
-		poco_error(logger_handle, buffer);
-	}
 }

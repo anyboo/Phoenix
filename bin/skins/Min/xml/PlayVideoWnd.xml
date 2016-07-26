@@ -6,8 +6,7 @@
 			<Button name="close" width="30" height="20" padding="560,5,5,5" normalimage="file='skin/hot_del.png' dest='8,3,22,17'" hotimage="file='skin/del_download.png' dest='8,3,22,17'"/>
 		</VerticalLayout>
 		<VerticalLayout name="wnd_lyt" height="400" >
-			<Window name="play_wnd" size="400,500" showdirty="true">
-			</Window>
+			
 		</VerticalLayout>
 		<HorizontalLayout bkimage="file='skin/hsbj.png'">
 			<Button name="Start_stop" width="60" height="40" text="开始" font="1" padding="20,10,0,0" bordersize="2" bordercolor="0xf1234567" />
