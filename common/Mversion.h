@@ -1,7 +1,7 @@
 #ifndef M_VERSION_H
 #define M_VERSION_H
 
-class MVerion
+class MVersion
 {
 public:
 	
@@ -12,8 +12,8 @@ public:
 		return "V2.0.0.0";
 	}
 private:
-	MVerion();
-	~MVerion();
+	MVersion();
+	~MVersion();
 };
 
 
