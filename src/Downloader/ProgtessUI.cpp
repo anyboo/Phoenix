@@ -26,8 +26,9 @@ CProgtessUI::~CProgtessUI()
 void CProgtessUI::ReceiveSearchFile(SearchFileNotification* pNf)
 {
 	std::string SendName(_T("SearchFileNotification"));
+	std::string str = pNf->name();
 	if (SendName == pNf->name() || !pNf) return;
-
+	//std::string str = pNf->name();
 	NOTIFICATION_TYPE eNotify;
 	int nData;
 

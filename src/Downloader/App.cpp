@@ -103,13 +103,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	Sleep(5000);
 
 	/************************* 初始化IP列表 **********************/
+	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 	std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
 	NotificationQueue queuePortScan;	
 	PortScan portScan(queuePortScan);
 	//开始扫描
 	ThreadPool::defaultPool().start(portScan);
 
-	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 	while (true)
 	{
 		Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
@@ -138,22 +138,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	ThreadPool::defaultPool().start(dm);
 	//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
 
-	while (true)
-	{
-		Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
-		if (pNf)
-		{
-			CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
-			//CNotificationDeviceManager::Ptr pWorkNf = pNf.cast<CNotificationDeviceManager>();
-			if (pWorkNf)
-			{
-				if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
-				{
-					break;
-				}
-			}
-		}
-	}
+	//while (true)
+	//{
+	//	Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
+	//	if (pNf)
+	//	{
+	//		CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
+	//		//CNotificationDeviceManager::Ptr pWorkNf = pNf.cast<CNotificationDeviceManager>();
+	//		if (pWorkNf)
+	//		{
+	//			if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
+	//			{
+	//				break;
+	//			}
+	//		}
+	//	}
+	//}
 
 	DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
 

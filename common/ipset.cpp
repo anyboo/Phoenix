@@ -37,7 +37,7 @@ void IPSet::ipsetting()
 
 	//dhcp setting ip
 	WindowUtils::setIPByDHCP(*pIP, *pMask, *pNetGate);	
-	Loggering::log_information("Dhcp set ip : %s, netgate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+	poco_information_f2(logger_handle, "Dhcp set ip : %s, netgate: %s", *pIP, *pNetGate);
 	//listen arp packet
 	*bResult = WindowUtils::getDirectDevice(Ips, findIps);
 	if (*bResult)
@@ -55,7 +55,7 @@ void IPSet::ipsetting()
 			*pNetGate = *itor;
 			if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
 			{				
-				Loggering::log_error("direct set ip error ! ");
+				poco_error(logger_handle, "direct set ip error ! ");
 			}
 			return;
 		}
@@ -101,10 +101,10 @@ void IPSet::ipsetting()
 		}
 		Sleep(1000*2);		
 		WindowUtils::getMacByArpTable(scanips, findIps);			
-		Loggering::log_information("get arp table size: %d", findIps.size());
+		poco_information_f1(logger_handle, "get arp table size: %d", (int)findIps.size());
 		for (itor = findIps.begin(); itor != findIps.end(); itor++)
 		{						
-			Loggering::log_information("find ips, ip:  %s", (*itor).c_str());
+			poco_information_f1(logger_handle, "find ips, ip:  %s", *itor);
 		}
 		
 		vector<string>::iterator vitor;
@@ -177,10 +177,10 @@ void IPSet::ipsetting()
 								*pNetGate = tmp;
 								Domains.erase(itor);
 								bSetGate = true;								
-								Loggering::log_information("ip: %s, gate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+								poco_information_f2(logger_handle, "ip: %s, gate: %s", *pIP, *pNetGate);
 								if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
 								{									
-									Loggering::log_error("set ip gate error !ip: %s,  gate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+									poco_error_f2(logger_handle, "set ip gate error !ip: %s,  gate: %s", *pIP, *pNetGate);
 									*bResult = false;
 								}
 								goto addip;
@@ -204,7 +204,7 @@ void IPSet::ipsetting()
 			}
 			if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
 			{				
-				Loggering::log_error("set ip gate error !ip: %s, gate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+				poco_error_f2(logger_handle, "set ip gate error !ip: %s, gate: %s", *pIP, *pNetGate);
 				*bResult = false;
 			}
 		}
@@ -222,10 +222,10 @@ addip:
 				if (domaintmp.compare(*itor) == 0)
 				{
 					*pIP = iptmp;					
-					Loggering::log_information("0 ip: %s, gate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+					poco_information_f2(logger_handle, "0 ip: %s, gate: %s", *pIP, *pNetGate);
 					if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
 					{						
-						Loggering::log_error("error set ip: %s, net gate: %s", (*pIP).c_str(), (*pNetGate).c_str());
+						poco_error_f2(logger_handle, "error set ip: %s, net gate: %s", *pIP, *pNetGate);
 					}
 					break;
 				}
@@ -240,7 +240,7 @@ void IPSet::run()
 	t_start = time(NULL);
 	ipsetting();
 	t_end = time(NULL);
-	Loggering::log_information("0 time: %.0f s\n", difftime(t_end, t_start));
+	poco_information_f1(logger_handle, "0 time: %.0f s\n", difftime(t_end, t_start));
 
 }
 

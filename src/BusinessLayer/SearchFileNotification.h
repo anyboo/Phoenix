@@ -11,7 +11,7 @@ using Poco::AutoPtr;
 
 #define SEARCHFILE_DEFAULT -1
 
-class SearchFileNotification :public Notification
+class SearchFileNotification : public Notification
 {
 public:
 	typedef AutoPtr<SearchFileNotification> Ptr;

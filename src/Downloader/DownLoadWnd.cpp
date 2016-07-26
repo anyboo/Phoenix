@@ -20,6 +20,7 @@ using Poco::ThreadPool;
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
+	ReadJsonFile();
 	m_Vendor.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &m_Vendor);
 	m_Device = new Device;
@@ -79,9 +80,11 @@ void DownLoadWnd::OnSelectTimeType()
 void DownLoadWnd::ShowOnlineDevice()
 {
 	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
+	std::string VendName;
 	for (int i = 0; i < m_listDevice.size(); i++)
 	{
-		m_Vendor.AddVendorList(to_string(m_listDevice[i]->GetSDKType()), m_listDevice[i]->getIP());
+		VendName = m_VnameAndType[m_listDevice[i]->GetSDKType()];
+		m_Vendor.AddVendorList(VendName, m_listDevice[i]->getIP());
 		m_onlineIP.push_back(m_listDevice[i]->getIP());
 	}
 }
@@ -132,9 +135,10 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	if (m_Device == nullptr)
 		return;
 	m_ChannelCount = m_Device->getMaxChannel();
-	NET_SDK_TYPE VendorType = m_Device->GetSDKType();
-	STDSTRING strVendor = to_string(VendorType);
-	STDSTRING strIP = m_Device->getIP();
+	NET_SDK_TYPE DevideType = m_Device->GetSDKType();
+	std::string DeviceName = m_VnameAndType[DevideType];
+
+	std::string strIP = m_Device->getIP();
 	for (size_t i = 0; i < m_onlineIP.size(); i++)
 	{
 		if (m_onlineIP[i] == strIP)
@@ -142,7 +146,7 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 			return;
 		}
 	}
-	m_Vendor.AddVendorList(strVendor, strIP);
+	m_Vendor.AddVendorList(DeviceName, strIP);
 	m_onlineIP.push_back(strIP);
 }
 
@@ -161,13 +165,11 @@ void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 	
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
-
-//	DownLoadWndfile(m_Device, )
 
 }
 
@@ -508,4 +510,37 @@ void DownLoadWnd::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
 	STDSTRING pictureInfo(strValue);
 	CButtonUI* btn_data = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
 	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
+}
+
+void DownLoadWnd::ReadJsonFile()
+{
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Device.json"));
+
+	ifstream ifs(configFile);
+	locale utf8;
+	ifs.imbue(utf8);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
+
+	typedef Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
+	{
+		STDSTRING TypeName = it->name.GetString();
+		const Value& a = d[TypeName.c_str()];
+		assert(a.IsArray());
+		if (!a.IsArray())
+			continue;
+		STDSTRING spell = a[0].GetString();
+		STDSTRING VendorDeviceName = a[1].GetString();
+
+		int type = stoi(TypeName);
+		m_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
+	}
 }

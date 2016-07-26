@@ -6,6 +6,7 @@
 #include "windowutils.h"
 #include <memory>
 #include <mutex>
+#include "log.h"
 
 OnePingInfo::OnePingInfo(){
     m_bStop = false;
@@ -146,8 +147,7 @@ bool CPing::ScanOneIP(string &ip, const string& netIp, bool bArp){
 	string netPre = netIp.substr(0, netIp.find_last_of(".") + 1);    
     for (int i = 1; i < 255; i++)
     {
-        ip = netPre + std::to_string(i);
-        //cout<<ip;
+        ip = netPre + std::to_string(i);        
         if (netIp != ip && Ping((char *)ip.c_str(), 8, bArp))//Ping((char *)strIpTmp.c_str(), &reply, 2000)
         {
              return true;
@@ -168,27 +168,26 @@ bool arpPing(DWORD dwDestIP){
  
     memset(&MacAddr, 0xff, sizeof (MacAddr));
 
-    dwRetVal = SendARP(dwDestIP, 0, &MacAddr, &PhysAddrLen);
-  //  cout<<dwRetVal;
+    dwRetVal = SendARP(dwDestIP, 0, &MacAddr, &PhysAddrLen);  
 
     switch (dwRetVal) {
     case ERROR_GEN_FAILURE:
-//        cout << " (ERROR_GEN_FAILURE)";
+		poco_error(logger_handle, "ERROR_GEN_FAILURE");
         break;
     case ERROR_INVALID_PARAMETER:
-//        cout << " (ERROR_INVALID_PARAMETER)";
+		poco_error(logger_handle, "ERROR_INVALID_PARAMETER");
         break;
     case ERROR_INVALID_USER_BUFFER:
-//        cout << " (ERROR_INVALID_USER_BUFFER)";
+		poco_error(logger_handle, "ERROR_INVALID_USER_BUFFER");
         break;
     case ERROR_BAD_NET_NAME:
-//        cout << " (ERROR_GEN_FAILURE)";
+		poco_error(logger_handle, "ERROR_GEN_FAILURE");
         break;
     case ERROR_BUFFER_OVERFLOW:
-//        cout << " (ERROR_BUFFER_OVERFLOW)";
+		poco_error(logger_handle, "ERROR_BUFFER_OVERFLOW");
         break;
     case ERROR_NOT_FOUND:
-//        cout << " (ERROR_NOT_FOUND)";
+		poco_error(logger_handle, "ERROR_NOT_FOUND");
         break;
     default:
         break;
@@ -207,8 +206,7 @@ BOOL CPing::Ping(DWORD dwDestIP, long dwTimeout, bool bArp)
         mpLastPingInfo = std::make_shared<OnePingInfo>();
         mpLastPingInfo->m_pReadThread = std::shared_ptr<std::thread>(new std::thread([=](){
             *b = PingCore(dwDestIP, dwTimeout, mpLastPingInfo, bArp);
-            //*b = arpPing(dwDestIP);
-           // cout << "PingCore" << *b;
+            //*b = arpPing(dwDestIP);           
             *bStop = true;
             if (pInfo && pInfo->m_pReadThread)
             {
@@ -243,7 +241,7 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 	//init is sucess
     if (!init(pInfo))
 	{
-        cout << __FILE__ << __FUNCTION__ << __LINE__ << endl;
+		poco_error(logger_handle, "init failed");
         return FALSE;
 	}
 
@@ -265,8 +263,8 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
 
 	//send ICMP packet
     if (sendto(pInfo->m_sockRaw, pInfo->m_szICMPData, DEF_PACKET_SIZE + sizeof(ICMPHeader), 0, (struct sockaddr*)&sockaddrDest, nSockaddrDestSize) == SOCKET_ERROR)
-	{
-		cout << __FILE__ << "-" << __FUNCTION__ << "-" << __LINE__ << "-" << "error:" << WSAGetLastError() << endl;
+	{		
+		poco_error_f1(logger_handle, "error: %d", WSAGetLastError());
 		return FALSE;
 	}
 
@@ -286,8 +284,8 @@ BOOL CPing::PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo
         }
 
         int nPacketSize = recvfrom(pInfo->m_sockRaw, recvbuf, 256, 0, (struct sockaddr*)&sockaddrDest, &nSockaddrDestSize);
-        if (nPacketSize == SOCKET_ERROR){
-            cout << __FILE__ << __FUNCTION__ << __LINE__ << "SOCKET_ERROR" << endl;
+        if (nPacketSize == SOCKET_ERROR){           
+			poco_error_f1(logger_handle, "SOCKET_ERROR: %d", WSAGetLastError());
             continue;
         }
                     

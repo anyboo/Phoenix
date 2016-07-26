@@ -119,12 +119,7 @@ bool isInner(long userIp, long begin, long end){
 bool Utils::isInnerIP(const std::string& ipAddress){
     bool isInnerIp = false;
     long ipNum = getIpNum(ipAddress);
-    /**
-    私有IP：A类  10.0.0.0-10.255.255.255
-    B类  172.16.0.0-172.31.255.255
-    C类  192.168.0.0-192.168.255.255
-    当然，还有127这个网段是环回地址
-    **/
+   
     long aBegin = getIpNum(std::string("10.0.0.0"));
     long aEnd = getIpNum(std::string("10.255.255.255"));
     long bBegin = getIpNum(std::string("172.16.0.0"));
