@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<VerticalLayout bkimage="file='skin/bg1.png'" >
 		<HorizontalLayout name="HLyt" height="60">
 			<Control width="45" height="45" padding="30,7,10,7" bkimage="skin/logo.png"/>
@@ -12,10 +13,10 @@
 			<Button name="minbtn" width="30" height="30" padding="9,10,1,5" tooltip="最小化" normalimage="file='skin/reduce.png' source='0,90,30,120'" hotimage="file='skin/reduce.png' source='0,60,30,90'" />
 			<Button name="closebtn" width="30" height="30" padding="9,10,5,5" tooltip="关闭" normalimage="file='skin/close.png' source='0,90,30,120'" hotimage="file='skin/close.png' source='0,60,30,90'" />
 		</HorizontalLayout>
-		<Button name="download" float="true" pos="235,134,512,390" width="275" height="256" normalimage="file='skin/download_normal.png'" hotimage="file='skin/download_normal.png'" pushedimage="file='skin/download_normal.png"/>
-		<Button name="VideoPlay" float="true" pos="515,134,789,389" width="274" height="255" normalimage="file='skin/video_normal.png'" hotimage="file='skin/video_normal.png'" pushedimage="file='skin/video_normal.png"/>
-		<Button name="Log_manager" float="true" pos="235,393,512,649" width="274" height="254" normalimage="file='skin/log_normal.png'" hotimage="file='skin/log_normal.png'" pushedimage="file='skin/log_normal.png"/>
-		<Button name="Other_tools" float="true" pos="515,393,789,649" width="274" height="254" normalimage="file='skin/tool_normal.png'" hotimage="file='skin/tool_normal.png'" pushedimage="file='skin/tool_normal.png"/>
+		<Button name="download" float="true" pos="235,134,512,390"  normalimage="file='skin/download_normal.png'" />
+		<Button name="VideoPlay" float="true" pos="515,134,789,389"  normalimage="file='skin/video_normal.png'" />
+		<Button name="Log_manager" float="true" pos="235,393,512,649"  normalimage="file='skin/log_normal.png'" />
+		<Button name="Other_tools" float="true" pos="515,393,789,649"  normalimage="file='skin/tool_normal.png'" />
 		<Control name="un_use" float="true" pos="483,361,543,421" />
 	</VerticalLayout>
 </Window>

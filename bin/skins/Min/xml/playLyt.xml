@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="600,400" showdirty="false">
-	<VerticalLayout bkimage="file='skin/bsbj.png'" >
+	<VerticalLayout width="600" height="400" >
 	
 	</VerticalLayout>
 </Window>

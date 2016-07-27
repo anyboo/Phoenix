@@ -6,7 +6,11 @@
 #include "NotificationQueue.h"
 #include "PlayVideoWorker.h"
 
+
+
 #define BT_CLOSE_PLWND			(_T("close"))
+#define BT_PLAY_STOP			(_T("Start_stop"))
+#define SLIDER_PLAYPOS			(_T("play_progress"))
 
 class CPlayVideoWnd :
 	public WindowImplBase
@@ -22,12 +26,24 @@ public:
 
 	void OnCloseWnd(TNotifyUI& msg);
 
+	void OnStartStop(TNotifyUI& msg);
+
+	void OnAdjustPlayPos(TNotifyUI& msg);
+
+	int GetCountTime();
+
+	void HandleNotificationPlayPos(CNotificationPlayVideo* pNf);
+
+
 	HWND GetPlayHwnd();
 private:
 	Device*		m_Device;
 	RecordFile	m_rf;
 	NotificationQueue* queuePlayVideo; 
 	CPlayVideoWorker* pv;
+	bool		m_IsPlay;
+	time_t			m_TimeCount;
+	int			m_stopPos;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

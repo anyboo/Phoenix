@@ -17,8 +17,8 @@
 		</HorizontalLayout>
 		<HorizontalLayout height="708">
 			<VerticalLayout width="200" height="708" bkimage="file='skin/beijing.png'">
-				<HorizontalLayout  width="120" height="80" padding="40,30,40,10," bkimage="file='skin/cxbt.png'" >				
-					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" colorhsl="true" textpadding="0,40,0,2" foreimage="file='skin/tianjia.png' dest='47,10,70,33'" pushedimage="file='skin/cxbt.png'" normalimage="skin/cxbt.png"  />
+				<HorizontalLayout  width="117" height="80" padding="40,30,40,10," bkimage="file='skin/cxbt.png'" >				
+					<Button width="117" height="80" name="Add_device" text="添加设备" textcolor="#00000000" font="1" colorhsl="true" textpadding="0,40,0,2" foreimage="file='skin/tianjia.png' dest='47,10,70,33'" pushedimage="file='skin/add_push.png'" normalimage="skin/add_normal.png" hotimage="skin/cxbt.png" />
 				</HorizontalLayout>
 				<VerticalLayout width="200" height="585" >					
 					<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
@@ -68,7 +68,7 @@
 							<label name="offset2" text="00:00" font="1" align="center" width="73" />
 						</HorizontalLayout>
 					</VerticalLayout>
-					<Button name="Search" width="80" height="80" padding="15,30,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'"/>
+					<Button name="Search" width="80" height="80" padding="15,30,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/pushed.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/normal.png'"/>
 				</HorizontalLayout>
 				<VerticalLayout  height="550" padding="0,13,0,0" >
 					<List name="DownloadList" padding="10,0,5,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true">

@@ -17,5 +17,8 @@
 		<Button name="Log_manager" float="true" pos="293,414,636,680" width="343" height="267" normalimage="file='skin/log_normal.png'" hotimage="file='skin/log_normal.png'" pushedimage="file='skin/log_normal.png"/>
 		<Button name="Other_tools" float="true" pos="642,414,985,680" width="343" height="267" normalimage="file='skin/tool_normal.png'" hotimage="file='skin/tool_normal.png'" pushedimage="file='skin/tool_normal.png"/>
 		<Control float="true" pos="606,375,672,444" />
+		<HorizontalLayout padding="40,600,0,0" height="40">
+			<Label text="版本：" textcolor="#FFFFFFFF" font="1" width="80" height="40"/>
+		</HorizontalLayout>
 	</VerticalLayout>
 </Window>

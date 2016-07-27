@@ -157,8 +157,7 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	{
 		if (!m_IsMaxWnd)
 		{	
-			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));	
-			CPaintManagerUI::ReloadSkin();	
+		
 			ResizeClient(1280, 800);
 			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
 			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
@@ -168,16 +167,17 @@ void CMainWnd::Notify(TNotifyUI& msg)
 			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
 			contrl->SetAttribute(_T("padding"), _T("660,10,10,5"));
 			contrl2->SetAttribute(_T("pos"), _T("606,375,672,444"));
-			button1->SetAttribute(_T("pos"), _T("293,140,636,405"));
-			button2->SetAttribute(_T("pos"), _T("642,140,985,405"));
-			button3->SetAttribute(_T("pos"), _T("293,414,636,680"));
-			button4->SetAttribute(_T("pos"), _T("642,414,985,680"));
+			button1->SetAttributeList(_T("pos=\"293,140,636,405\" normalimage=\"file='skin/mdownload_normal.png'\""));
+			button2->SetAttributeList(_T("pos=\"642,140,985,405\" normalimage=\"file='skin/mvideo_normal.png'\""));
+			button3->SetAttributeList(_T("pos=\"293,414,636,680\" normalimage=\"file='skin/mlog_normal.png'\""));
+			button4->SetAttributeList(_T("pos=\"642,414,985,680\" normalimage=\"file='skin/mtool_normal.png'\""));
+			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
+			CPaintManagerUI::ReloadSkin();
 			m_IsMaxWnd = TRUE;
 		}
 		else
 		{
-			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
-			CPaintManagerUI::ReloadSkin();	
+			
 			ResizeClient(1024, 768);
 			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
 			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
@@ -187,10 +187,12 @@ void CMainWnd::Notify(TNotifyUI& msg)
 			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
 			contrl->SetAttribute(_T("padding"), _T("400,10,10,5"));
 			contrl2->SetAttribute(_T("pos"), _T("483,361,543,421"));
-			button1->SetAttribute(_T("pos"), _T("235,134,512,390"));
-			button2->SetAttribute(_T("pos"), _T("515,134,789,389"));
-			button3->SetAttribute(_T("pos"), _T("235,393,512,649"));
-			button4->SetAttribute(_T("pos"), _T("515,393,789,649"));
+			button1->SetAttributeList(_T("pos=\"235,134,512,390\" normalimage=\"skin/download_normal.png\""));
+			button2->SetAttributeList(_T("pos=\"515,134,789,389\" normalimage=\"skin/video_normal.png\""));
+			button3->SetAttributeList(_T("pos=\"235,393,512,649\" normalimage=\"skin/log_normal.png\""));
+			button4->SetAttributeList(_T("pos=\"515,393,789,649\" normalimage=\"skin/tool_normal.png\""));
+			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
+			CPaintManagerUI::ReloadSkin();
 			m_IsMaxWnd = FALSE;
 		}
 	}
