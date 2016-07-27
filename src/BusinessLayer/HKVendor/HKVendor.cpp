@@ -107,6 +107,7 @@ void HKVendor::ClearLocalRecordFiles()
 
 void HKVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
+	assert(range.end - range.start <= 24 * 3600);
 	if (-1 == loginHandle)
 	{
 		std::cout << "Please login first!" << std::endl;
