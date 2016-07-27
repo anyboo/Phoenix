@@ -23,6 +23,15 @@ using Poco::Observer;
 CMainWnd::CMainWnd()
 :m_IsMinWnd(false), m_IsMaxWnd(false)
 {
+
+
+/*#ifdef _DEBUG  
+	OpenConsole();
+#endif*/ 
+
+	//NotificationCenter& nc = NotificationCenter::defaultCenter();
+	//nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
+
 }
 
 
