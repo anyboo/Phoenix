@@ -22,6 +22,8 @@ namespace Loggering
 		file_channel->setProperty("rotation", "10M");
 		file_channel->setProperty("archive", "timestamp");
 		std::string strpath = Poco::Path::current();
+		std::wstring dump_path = L"log\\";
+		::CreateDirectoryW(dump_path.c_str(), NULL);
 		strpath.append("log\\Downloader.log");
 		file_channel->setProperty("path", strpath);		
 		Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter(new Poco::PatternFormatter("%Y-%m-%d %L%H:%M:%S [%p] %U(%u): %t"));
