@@ -7,5 +7,7 @@ namespace Loggering {
 
 	void Logger_initiation();  // initiation
 	void Setup_logger();       // init only once 
+	void log_information(char *format, ...);
+	void log_error(char *format, ...);
 
 }

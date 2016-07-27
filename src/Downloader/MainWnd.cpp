@@ -67,8 +67,8 @@ void CMainWnd::OnFinalMessage(HWND hWnd)
 
 void CMainWnd::InitWindow()
 {
-	/*NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));*/
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
 
 }
 

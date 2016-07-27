@@ -197,6 +197,7 @@ void DHVendor::ClearLocalRecordFiles()
 
 void DHVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
+	assert(range.end - range.start <= 24 * 3600);
 	if (0 >= loginHandle)
 	{
 		std::cout << "Please login first!" << std::endl;

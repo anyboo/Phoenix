@@ -23,6 +23,9 @@
 #include "MessagePump.h"
 #include "log.h"
 
+#include <DbgHelp.h>
+#pragma comment(lib, "DbgHelp.lib")
+
 
 static VENDOR_LIST pVendorList;
 
@@ -44,10 +47,55 @@ void HideTaskBar()
 	}
 }
 
+string getTime()
+{
+	time_t rawtime;
+	struct tm * timeinfo;
+	string name;
+	char szname[30] = { 0 };
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	sprintf(szname, "%04d%02d%02d%02d%02d%02d",
+		timeinfo->tm_year + 1900,
+		timeinfo->tm_mon + 1,
+		timeinfo->tm_mday,
+		timeinfo->tm_hour,
+		timeinfo->tm_min,
+		timeinfo->tm_sec);
+	name = string(szname);
+	return name;
+}
+
+LONG WINAPI MyUnhandledExceptionFilter(EXCEPTION_POINTERS* pep)
+{
+	_TCHAR path[100] = { 0 };
+
+	string dumpname = getTime();
+	strncat(path, _T("dump//Dump"), strlen(_T("dump//Dump")));
+	strncat(path, dumpname.data(), dumpname.size());
+	strncat(path, _T(".dmp"), strlen(_T(".dmp")));
+
+
+	HANDLE lhDumpFile = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	MINIDUMP_EXCEPTION_INFORMATION loExceptionInfo;
+	loExceptionInfo.ExceptionPointers = pep;
+	loExceptionInfo.ThreadId = GetCurrentThreadId();
+	loExceptionInfo.ClientPointers = TRUE;
+	MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), lhDumpFile, MiniDumpNormal, &loExceptionInfo, NULL, NULL);
+	CloseHandle(lhDumpFile);
+
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
+	SetUnhandledExceptionFilter(MyUnhandledExceptionFilter);
+
 	MessagePump pump;
-	pump.start();
+	pump.start();	
 
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
@@ -97,10 +145,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pVendorList.push_back(hkVendor);*/
 
 	/************************* IP setting **************************/
+
 	//std::cout << CCommonUtrl::getInstance().GetCurTime() << "ip setting Start!" << std::endl;
 	//IPSet ipset;
 	//ipset.run();
 	//Sleep(5000);
+
+	/*std::cout << CCommonUtrl::getInstance().GetCurTime() << "ip setting Start!" << std::endl;
+	IPSet ipset;
+	ipset.run();
+	Sleep(5000);*/
+
 
 	///************************* 初始化IP列表 **********************/
 	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
@@ -119,6 +174,21 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//		if (pWorkNf)
 	//		{
 	//			listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
+	//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+	//			break;
+	//		}
+	//	}
+	//}
+
+	//while (true)
+	//{
+	//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+	//	if (pNf)
+	//	{
+	//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+	//		if (pWorkNf)
+	//		{
+	//			//listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
 	//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
 	//			break;
 	//		}
