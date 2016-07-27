@@ -7,6 +7,7 @@
 #define BT_LogWnd			(_T("Log_manager"))
 #define BT_OtherTools		(_T("Other_tools"))
 #define BT_VideoPlay		(_T("VideoPlay"))
+#define BT_ABOUT			(_T("aboutbt"))
 
 #include "NotificationNetworkStatus.h"
 
@@ -25,6 +26,7 @@ public:
 
 	void OnMin(TNotifyUI& msg);
 	void OnClose(TNotifyUI& msg);
+	void OnAbout(TNotifyUI& msg);
 	
 	void OnDownLoadWnd(TNotifyUI& msg);
 	void OnLogWnd(TNotifyUI& msg);

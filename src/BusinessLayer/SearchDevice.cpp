@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "WindowUtils.h"
 #include "SearchDevice.h"
 

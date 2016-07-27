@@ -7,6 +7,8 @@
 #include <Poco/NotificationQueue.h>
 #include <Poco/ThreadPool.h>
 
+#include "PlayWndUI.h"
+
 using Poco::NotificationQueue;
 using Poco::ThreadPool;
 
@@ -21,11 +23,11 @@ CPlayVideoWnd::CPlayVideoWnd(Device* device, RecordFile& rf)
 
 CPlayVideoWnd::~CPlayVideoWnd()
 {
-	delete queuePlayVideo;
-	queuePlayVideo = nullptr;
+	//delete queuePlayVideo;
+	//queuePlayVideo = nullptr;
 
-	delete pv;
-	pv = nullptr;
+	//delete pv;
+	//pv = nullptr;
 }
 
 DUI_BEGIN_MESSAGE_MAP(CPlayVideoWnd, WindowImplBase)
@@ -42,18 +44,11 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 	return _T("skin");
 }
 
+
 void CPlayVideoWnd::InitWindow()
 {
-	HWND play_Hwnd;
-	play_Hwnd = GetPlayHwnd();
-	if (!play_Hwnd)
-	{
-		return;
-	}
-
-	pv = new CPlayVideoWorker(m_Device, m_rf, play_Hwnd, *queuePlayVideo);
+	pv = new CPlayVideoWorker(m_Device, m_rf, GetPlayHwnd(), *queuePlayVideo);
 	ThreadPool::defaultPool().start(*pv);
-
 }
 
 CDuiString CPlayVideoWnd::GetSkinFile()
@@ -68,10 +63,6 @@ void CPlayVideoWnd::OnFinalMessage(HWND hWnd)
 
 void CPlayVideoWnd::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("close"))
-	{
-		
-	}
 	WindowImplBase::Notify(msg);
 }
 
@@ -84,15 +75,13 @@ void CPlayVideoWnd::OnCloseWnd(TNotifyUI& msg)
 
 HWND CPlayVideoWnd::GetPlayHwnd()
 {	 
-	CVerticalLayoutUI* PlayLyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("wnd_lyt")));
-	
-	CDialogBuilder builder;
-	CHorizontalLayoutUI* subLyt = (CHorizontalLayoutUI*)(builder.Create(_T("xml//playLyt.xml"), (UINT)0, NULL, &m_PaintManager));
-	PlayLyt->Add(subLyt);
-	CPaintManagerUI* vLytppm = subLyt->GetManager();
-	
-	HWND vHwnd = vLytppm->GetPaintWindow();
-	HWND playHwnd = PlayLyt->GetNativeWindow();
-	HWND hhhwnd = this->GetHWND();
-	return vHwnd;
+	std::auto_ptr<CPlayWndUI> pDlg(new CPlayWndUI);
+	assert(pDlg.get());
+	HWND pHwnd = pDlg->Create(GetHWND(), NULL, UI_WNDSTYLE_CHILD, NULL, 0, 0, 0, 0, 0);
+
+	CDuiRect rcWnd;
+	GetWindowRect(pHwnd, &rcWnd);
+	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
+
+	return pHwnd;
 }

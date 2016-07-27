@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="600,500" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="500" width="600" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888">
+		<VerticalLayout height="50" bkimage="file='skin/hsbj.png'">
+			<Label width="200" height="30" text="日志记录信息" font="1" padding="230,10,0,0" algin="center" />
+		</VerticalLayout>
+		<HorizontalLayout height="390" bordersize="1" bordercolor="0x12345678">
+			<VerticalLayout width="100">
+				<Label text="案件名称：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="采集人：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="时间：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="地点：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="案件描述：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="设备IP：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+				<Label text="描述：" font="1" algin="left" width="90" height="40" padding="10,15,0,0"/>
+			</VerticalLayout>
+			<VerticalLayout width="500">
+				<Edit name="Case_name" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="collect_men" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="collect_time" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="address" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="Case_describe" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="Device_IP" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="describe" height="40" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+		<VerticalLayout height="60" bkcolor="0xc3324534">
+			<Button name="ok_btn" height="40" width="100" padding="230,10,0,0" text="确定" font="1" tooltip="确定" bordersize="1" bordercolor="0x12345678" bkimage="skin/bsbj.png"/>
+		</VerticalLayout>
+	</VerticalLayout>
+</Window>

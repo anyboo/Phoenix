@@ -25,9 +25,9 @@ CProgtessUI::~CProgtessUI()
 
 void CProgtessUI::ReceiveSearchFile(SearchFileNotification* pNf)
 {
-	std::string SendName(_T("SearchFileNotification"));
+	std::string SendName(_T("class SearchFileNotification"));
 	std::string str = pNf->name();
-	if (SendName == pNf->name() || !pNf) return;
+	if (SendName != pNf->name() || !pNf) return;
 	//std::string str = pNf->name();
 	NOTIFICATION_TYPE eNotify;
 	int nData;
@@ -111,5 +111,7 @@ void CProgtessUI::OnCancelSearch(TNotifyUI& msg)
 {
 	bool b = true;
 	ReciveUIQunue::GetInstance()->enqueueNotification(new ReciveUINotification(b));
+	Sleep(1000);
+	Close();
 }
 

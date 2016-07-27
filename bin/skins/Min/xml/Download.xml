@@ -18,7 +18,7 @@
 		<HorizontalLayout height="708">
 			<VerticalLayout width="200" height="708" bkimage="file='skin/beijing.png'">
 				<HorizontalLayout  width="120" height="80" padding="40,30,40,10," bkimage="file='skin/cxbt.png'" >				
-					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" textpadding="0,40,0,2" foreimage="file='skin/tianjia.png' dest='47,10,70,33'" pushedimage="file='skin/cxbt.png'" normalimage="skin/cxbt.png"  />
+					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" colorhsl="true" textpadding="0,40,0,2" foreimage="file='skin/tianjia.png' dest='47,10,70,33'" pushedimage="file='skin/cxbt.png'" normalimage="skin/cxbt.png"  />
 				</HorizontalLayout>
 				<VerticalLayout width="200" height="585" >					
 					<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">

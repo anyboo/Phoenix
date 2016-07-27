@@ -12,9 +12,14 @@
 #include "SearchFileWorker.h"
 
 #include <poco/ThreadPool.h>
+#include "Poco/Observer.h"
+#include <Poco/NotificationCenter.h>
+
+#include "NotificationNetworkStatus.h"
 
 using Poco::ThreadPool;
-
+using Poco::NotificationCenter;
+using Poco::Observer;
 
 
 DownLoadWnd::DownLoadWnd()
@@ -62,6 +67,12 @@ void DownLoadWnd::OnFinalMessage(HWND hWnd)
 void DownLoadWnd::OnCloseWnd(TNotifyUI& msg)
 {
 	Close();
+}
+
+void DownLoadWnd::InitWindow()
+{
+	/*NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));*/
 }
 
 void DownLoadWnd::OnSelectTimeType()

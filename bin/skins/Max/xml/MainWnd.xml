@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1280,800" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
-	<VerticalLayout bkimage="file='skin/bg1.png'" height="800" >
+	<VerticalLayout bkimage="file='skin/beijing.png'" height="800" >
 		<HorizontalLayout height="60" width="1280">
 			<Control width="45" height="45" padding="30,7,10,7" bkimage="skin/logo.png"/>
 			<Label text="视频高速下载器" textcolor="#FFFFFFFF" font="0" width="300" align="left"/>
