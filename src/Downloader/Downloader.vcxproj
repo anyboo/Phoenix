@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -158,7 +158,15 @@
     <ClInclude Include="VideoVendorUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\client_info.cc" />
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\crash_generation_client.cc" />
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\crash_generation_server.cc" />
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\minidump_generator.cc" />
+    <ClCompile Include="..\..\breakpad\src\client\windows\handler\exception_handler.cc" />
+    <ClCompile Include="..\..\breakpad\src\common\windows\guid_string.cc" />
+    <ClCompile Include="..\..\common\cmdline_parse.cc" />
     <ClCompile Include="..\..\common\DatabaseException.cpp" />
+    <ClCompile Include="..\..\common\guardprocess.cpp" />
     <ClCompile Include="..\..\common\ipset.cpp" />
     <ClCompile Include="..\..\common\log.cpp" />
     <ClCompile Include="..\..\common\PING.cpp" />
@@ -167,6 +175,7 @@
     <ClCompile Include="..\..\common\QMSqlite.cpp" />
     <ClCompile Include="..\..\common\utils.cpp" />
     <ClCompile Include="..\..\common\windowutils.cpp" />
+    <ClCompile Include="..\..\common\workprocess.cpp" />
     <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp" />
     <ClCompile Include="..\BusinessLayer\Device.cpp" />
     <ClCompile Include="..\BusinessLayer\DeviceManager.cpp" />
