@@ -230,12 +230,13 @@ void CSearchDevice::run()
 		}
 
 		bool bNetStatus = WindowUtils::isOnLine();
-		NotificationQueue& queue = NotificationQueue::defaultQueue();
-		NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
-		queue.enqueueNotification(new CNotificationNetworkStatus(NfType));
+		
 
 		if (bNetStatusLast != bNetStatus)
 		{			
+			NotificationQueue& queue = NotificationQueue::defaultQueue();
+			NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
+			queue.enqueueNotification(new CNotificationNetworkStatus(NfType));
 			bNetStatusLast = bNetStatus;
 			Search(m_pVendorList, m_listDeviceSimpleInfo);
 			queue.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Finish));

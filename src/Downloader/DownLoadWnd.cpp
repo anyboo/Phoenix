@@ -236,6 +236,10 @@ void DownLoadWnd::SearchFile()
 	GetDataTime();
 	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
 		
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string str = DELETE_ALL_SEARCH_VIDEO;
+	pDb->cleanData(str);
+
 	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *ReciveUIQunue::GetInstance());
 	ThreadPool::defaultPool().start(*sfw);
 }

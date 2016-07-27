@@ -41,7 +41,7 @@ CPlayVideoWnd::~CPlayVideoWnd()
 	pv = nullptr;
 
 	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CPlayVideoWnd, CNotificationPlayVideo>(*this, &CPlayVideoWnd::HandleNotificationPlayPos));
+	nc.removeObserver(Observer<CPlayVideoWnd, CNotificationPlayVideo>(*this, &CPlayVideoWnd::HandleNotificationPlayPos));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CPlayVideoWnd, WindowImplBase)

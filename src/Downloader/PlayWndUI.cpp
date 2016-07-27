@@ -3,7 +3,6 @@
 
 
 CPlayWndUI::CPlayWndUI()
-:m_bInit(true)
 {
 }
 
