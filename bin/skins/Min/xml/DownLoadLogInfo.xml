@@ -37,7 +37,7 @@
 			</VerticalLayout>
 		</HorizontalLayout>
 		<VerticalLayout height="60" bkcolor="0xc3324534">
-			<Button name="ok_btn" height="40" width="100" padding="230,10,0,0" text="确定" font="1" tooltip="确定" bordersize="1" bordercolor="0x12345678" bkimage="skin/bsbj.png"/>
+			<Button name="ok_btn" height="40" width="100" padding="230,10,0,0" text="确定" font="1" tooltip="确定" bordersize="1" bordercolor="0x12345678" bkimage="skin/bsbj.png" hotimage="file='skin/add_normal.png'" pushedimage="file='skin/hsbj.png'"/>
 		</VerticalLayout>
 	</VerticalLayout>
 </Window>

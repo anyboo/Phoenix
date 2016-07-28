@@ -28,7 +28,6 @@ CPlayVideoWnd::CPlayVideoWnd(Device* device, RecordFile& rf)
 	m_Device = device;
 	m_rf = rf;
 	queuePlayVideo = new NotificationQueue();
-	m_TimeCount = m_rf.endTime - m_rf.beginTime;
 }
 
 
@@ -133,11 +132,6 @@ void CPlayVideoWnd::HandleNotificationPlayPos(CNotificationPlayVideo* pNf)
 	slider->SetValue(m_stopPos);
 }
 
-int CPlayVideoWnd::GetCountTime()
-{
-	return 0;
-}
-
 HWND CPlayVideoWnd::GetPlayHwnd()
 {	 
 	std::auto_ptr<CPlayWndUI> pDlg(new CPlayWndUI);
@@ -146,7 +140,7 @@ HWND CPlayVideoWnd::GetPlayHwnd()
 
 	CDuiRect rcWnd;
 	GetWindowRect(pHwnd, &rcWnd);
-	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
+	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_DRAWFRAME);
 
 
 	return pHwnd;

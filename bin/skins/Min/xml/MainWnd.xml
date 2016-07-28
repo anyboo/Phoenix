@@ -18,5 +18,9 @@
 		<Button name="Log_manager" float="true" pos="235,393,512,649"  normalimage="file='skin/log_normal.png'" />
 		<Button name="Other_tools" float="true" pos="515,393,789,649"  normalimage="file='skin/tool_normal.png'" />
 		<Control name="un_use" float="true" pos="483,361,543,421" />
+		<HorizontalLayout height="40" padding="0,650,0,0">
+			<Label text="版本：" font="1" textcolor="#FFFFFFFF" width="60" height="40" padding="30,0,0,0" />
+			<Label name="version" text="2.0.0.1" font="1" textcolor="#FFFF0000" width="120" height="40" padding="0,0,0,0" />
+		</HorizontalLayout>
 	</VerticalLayout>
 </Window>

@@ -38,8 +38,8 @@
 				</HorizontalLayout>
 			</VerticalLayout>
 			<HorizontalLayout width="224" height="80" padding="0,15,0,15" >
-				<Button name="search" width="80" height="80" padding="10,0,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'" />
-				<Button name="export" width="80" height="80" padding="20,0,0,0" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/chaxunanniu.png" foreimage="file='skin/save.png' dest='21,8,59,46'" normalimage="file='skin/chaxunanniu.png'"/>
+				<Button name="search" width="80" height="80" padding="10,0,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/pushed.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/normal.png'"/>
+				<Button name="export" width="80" height="80" padding="20,0,0,0" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/pushed.png" foreimage="file='skin/save.png' dest='21,8,59,46'" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/normal.png'"/>
 			</HorizontalLayout>
 		</HorizontalLayout>
 		<VerticalLayout  name="ListLyt" height="570" bkimage="file='skin/bsbj.png'" >

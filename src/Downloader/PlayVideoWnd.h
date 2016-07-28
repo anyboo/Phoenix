@@ -30,8 +30,6 @@ public:
 
 	void OnAdjustPlayPos(TNotifyUI& msg);
 
-	int GetCountTime();
-
 	void HandleNotificationPlayPos(CNotificationPlayVideo* pNf);
 
 
@@ -42,7 +40,6 @@ private:
 	NotificationQueue* queuePlayVideo; 
 	CPlayVideoWorker* pv;
 	bool		m_IsPlay;
-	time_t			m_TimeCount;
 	int			m_stopPos;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
