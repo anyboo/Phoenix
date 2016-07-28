@@ -37,6 +37,8 @@ public:
 
 	void Show_HideTask(bool IsHide);
 
+	void ShowVersion();
+
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
 
 private:

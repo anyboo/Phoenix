@@ -9,6 +9,8 @@
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
 
+#include "Mversion.h"
+
 #include <io.h>
 #include <fcntl.h>
 #include <Poco/NotificationCenter.h>
@@ -70,6 +72,14 @@ void CMainWnd::InitWindow()
 	NotificationCenter& nc = NotificationCenter::defaultCenter();
 	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
 
+	ShowVersion();
+}
+
+void CMainWnd::ShowVersion()
+{
+	std::string Version = MVersion::getVersion();
+	CLabelUI* lab_version = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("version")));
+	lab_version->SetText(Version.c_str());
 }
 
 void CMainWnd::OnClose(TNotifyUI& msg)

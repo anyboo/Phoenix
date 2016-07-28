@@ -165,6 +165,9 @@
     <ClCompile Include="..\..\breakpad\src\client\windows\handler\exception_handler.cc">
       <Filter>源文件\breakpad</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\MVersion.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">

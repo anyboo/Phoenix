@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\common\guardprocess.cpp" />
     <ClCompile Include="..\..\common\ipset.cpp" />
     <ClCompile Include="..\..\common\log.cpp" />
+    <ClCompile Include="..\..\common\MVersion.cpp" />
     <ClCompile Include="..\..\common\PING.cpp" />
     <ClCompile Include="..\..\common\portscan.cpp" />
     <ClCompile Include="..\..\common\QMFileSqlite.cpp" />

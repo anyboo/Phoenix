@@ -2,6 +2,13 @@
 #include "OtherTools.h"
 
 
+#include "Poco/Observer.h"
+#include <Poco/NotificationCenter.h>
+
+#include "NotificationNetworkStatus.h"
+using Poco::NotificationCenter;
+using Poco::Observer;
+
 COtherTools::COtherTools()
 {
 }
@@ -33,6 +40,34 @@ CDuiString COtherTools::GetSkinFile()
 void COtherTools::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
+}
+
+
+void COtherTools::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<COtherTools, CNotificationNetworkStatus>(*this, &COtherTools::HandleNotificationNetworkStatus));
+}
+
+void COtherTools::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void COtherTools::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
 }
 
 void COtherTools::Notify(TNotifyUI& msg)

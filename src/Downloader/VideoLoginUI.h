@@ -3,6 +3,8 @@
 
 #include "QMSqlite.h"
 
+class CNotificationNetworkStatus;
+
 #define BT_VideoVendor			(_T("select_Vendor"))
 #define BT_LOGIN				(_T("LogIn"))
 #define BT_PREVPAGE				(_T("Prev_page"))
@@ -25,6 +27,7 @@ public:
 	void LogIn();
 
 	Device* GetLonInDevice();
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
@@ -50,6 +53,9 @@ public:
 	void InsertVendorToList();
 
 	void CreateSubvLyt();
+
+	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
+	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
 private:
 	DEVICE_INFO_LIST		m_DeviceList;
 	ISLogIn			m_IsLogIn;

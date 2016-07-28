@@ -81,6 +81,8 @@ CListContainerElementUI* CVendor::AddChannels(size_t Channel_Count)
 			subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
 			subLab->SetAttributeList(_T("font=\"5\" valign=\"center\" textcolor=\"#FFFFFFFF\""));
 			STDSTRING strChannelName = STDSTRING(_T("Í¨µÀ")) + std::to_string(i - 1);
+			std::string OptionName = std::string(_T("channel")) + std::to_string(i - 1);
+			subOption->SetName(OptionName.c_str());
 			subLab->SetText(strChannelName.c_str());
 		}		
 	}

@@ -6,7 +6,6 @@
 #include "ProgtessUI.h"
 
 #include "LoginDevice.h"
-
 #include "SearchDevice.h"
 #include "ReciveUIQunue.h"
 #include "SearchFileWorker.h"
@@ -35,6 +34,8 @@ DownLoadWnd::DownLoadWnd()
 DownLoadWnd::~DownLoadWnd()
 {
 	RemoveVirtualWnd(_T("Vendor"));
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
 }
 
 
@@ -71,8 +72,29 @@ void DownLoadWnd::OnCloseWnd(TNotifyUI& msg)
 
 void DownLoadWnd::InitWindow()
 {
-	/*NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));*/
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
+}
+
+void DownLoadWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void DownLoadWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
 }
 
 void DownLoadWnd::OnSelectTimeType()
@@ -223,6 +245,10 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	{
 		All_SelectChannels();
 	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !strSendName.compare(0, 7, _T("channel")))
+	{
+		OnUseSearchCtrl(strSendName);
+	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && !strSendName.compare(0, 9, _T("BT_delete")))
 	{
 		RemoveVendor(strSendName);
@@ -230,6 +256,30 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
+void DownLoadWnd::OnUseSearchCtrl(std::string& SendName)
+{
+	CButtonUI* bt_search = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Search")));
+	CListUI* VendorList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(VendorList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	for (int i = 1; i < option_size; i++)
+	{
+		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(VendorList, DUI_CTR_OPTION, i));
+		std::string strName = option->GetName();
+		if (option->IsSelected() && SendName != strName)
+		{
+			bt_search->SetEnabled(true);
+			return;
+		}
+	}
+	COptionUI* TOption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(VendorList, SendName.c_str()));
+	if (TOption->IsSelected() == false && SendName.compare(_T("quanxuan")))
+	{
+		bt_search->SetEnabled(true);
+		return;
+	}
+	bt_search->SetEnabled(false);
+}
 
 void DownLoadWnd::SearchFile()
 {	
@@ -456,14 +506,17 @@ void DownLoadWnd::All_SelectChannels()
 	COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(VendorList, _T("quanxuan")));
 	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(VendorList, DUI_CTR_OPTION);
 	int option_size = array->GetSize();
+	
 	for (int i = 1; i < option_size; i++)
 	{
 		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(VendorList, DUI_CTR_OPTION, i));
 		if (!option_All->IsSelected()){
 			option->Selected(true);
+			OnUseSearchCtrl(std::string(_T("quanxuan")));
 		}
 		else{
 			option->Selected(false);
+			OnUseSearchCtrl(std::string(_T("quanxuan")));
 		}
 	}
 }

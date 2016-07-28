@@ -230,7 +230,7 @@ void CSearchDevice::run()
 		}
 
 		bool bNetStatus = WindowUtils::isOnLine();
-		
+	
 
 		if (bNetStatusLast != bNetStatus)
 		{			

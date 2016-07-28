@@ -8,6 +8,8 @@
 #include "DownloadPackage.h"
 
 
+
+class CNotificationNetworkStatus;
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -43,6 +45,7 @@ public:
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
 	void SearchFile();
+	void OnUseSearchCtrl(std::string& SendName);
 	void ShowTotalFileList();
 
 	void Show_Off_SubList(STDSTRING& strSendName);
@@ -66,6 +69,8 @@ public:
 
 	void ReadJsonFile();
 
+	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
+	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

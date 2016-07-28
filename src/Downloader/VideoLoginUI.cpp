@@ -5,7 +5,13 @@
 #include "SearchDevice.h"
 #include "LoginDevice.h"
 
+#include "Poco/Observer.h"
+#include <Poco/NotificationCenter.h>
+
 extern VENDOR_LIST pVendorList;
+
+using Poco::NotificationCenter;
+using Poco::Observer;
 
 VideoLoginUI::VideoLoginUI()
 :m_Init(false), m_pages(1)
@@ -26,6 +32,8 @@ VideoLoginUI::VideoLoginUI()
 
 VideoLoginUI::~VideoLoginUI()
 {
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<VideoLoginUI, CNotificationNetworkStatus>(*this, &VideoLoginUI::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(VideoLoginUI, WindowImplBase)
@@ -54,6 +62,33 @@ CDuiString VideoLoginUI::GetSkinFile()
 void VideoLoginUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
+}
+
+void VideoLoginUI::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<VideoLoginUI, CNotificationNetworkStatus>(*this, &VideoLoginUI::HandleNotificationNetworkStatus));
+}
+
+void VideoLoginUI::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void VideoLoginUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
 }
 
 void VideoLoginUI::OnLogIn(TNotifyUI& msg)

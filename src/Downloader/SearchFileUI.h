@@ -53,7 +53,9 @@ private:
 	std::vector<readSearchVideo>  m_FileList;
 	IsDownLoadFile		m_IsDownLoad;
 	Device*				m_device;
-	DownloadItem		m_DownLoaditem;
+//	DownloadItem		m_DownLoaditem;
+	size_t					m_DownloadID;
+	DownloadPackage		m_DownLoadList;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

@@ -2,6 +2,8 @@
 #include <DuiLib/UIlib.h>
 #include <vector>
 
+class CNotificationNetworkStatus;
+
 #define  BT_SearchLog		(_T("search"))
 #define		BT_OnStartTime		(_T("DataTime1"))
 #define	 BT_OnStopTime		(_T("DataTime2"))
@@ -30,6 +32,7 @@ class CLogUI :
 public:
 	CLogUI();
 	~CLogUI();
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
@@ -50,6 +53,10 @@ public:
 	void InitTime();
 
 	void SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day);
+
+	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
+	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
+
 protected:
 	std::vector<Log_Search>		m_LogInfo;
 	std::vector<Case_Search>		m_CaseInfo;
