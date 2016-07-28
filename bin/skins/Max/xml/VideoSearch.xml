@@ -29,7 +29,7 @@
 		</VerticalLayout>
 		<HorizontalLayout height="70" bkcolor="0xc3324534">
 			<Label name="file_Count" text="" width="400" height="50" font="1" padding="30,10,0,0," />
-			<Button name="BT_Download" width="117" height="50" padding="20,10,0,0" text="开始下载" font="1" normalimage="file='skin/cxbt.png'" />
+			<Button name="BT_Download" width="117" height="50" padding="20,10,0,0" text="开始下载" font="1" normalimage="file='skin/cxbt.png'" hotimage="file='skin/add_normal.png'" pushedimage="file='skin/add_push.png'"/>
 		</HorizontalLayout>
 	</VerticalLayout>
 </Window>

@@ -14,7 +14,7 @@
 				<HorizontalLayout height="50" bkimage="file='skin/hsbj.png'  source='100,100,483,577'">
 					<Label name="VendorCount" width="380" height="40" align="left" padding="0,5,0,0" font="1" textcolor="0xFFFF0000" align="center"/>
 				</HorizontalLayout>
-				<List name="Device_List" height="336" itemlinecolor="0x12345678" itemhotbkcolor="0x00000000" headerbkimage="file='skin/lbl.png'" bkimage="skin/bsbj.png">
+				<List name="Device_List" height="336" itemlinecolor="0x12345678" itemhotbkcolor="0x64263231" headerbkimage="file='skin/lbl.png'" bkimage="skin/bsbj.png">
 				<ListHeader height="28" menu="true">
 						<ListHeaderItem text="点击选择设备品牌" font="1" width="377" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
 				</ListHeader>
@@ -86,16 +86,16 @@
 					<Control height="1" bkcolor="0x12345678"/>
 				</List>
 				<HorizontalLayout >
-					<Button name="Prev_page" width="30" height="30" padding="110,30,0,0" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/scrollbar.bmp' source='0,0,16,16'" hotimage="file='skin/scrollbar.bmp' source='18,0,34,16'"/>
+					<Button name="Prev_page" width="30" height="30" padding="110,30,0,0" bordersize="1" bordercolor="0x88888888" foreimage="file='skin/scrollbar.bmp' source='0,0,16,16'" hotimage="file='skin/scrollbar.bmp' source='18,18,34,34'"/>
 					<Label name="pages" text="1/20" width="50" font="1" align="center" padding="10,0,10,0"/>
-					<Button name="Next_page" width="30" height="30" padding="0,30,0,0" bordersize="1" bordercolor="0x88888888" normalimage="file='skin/scrollbar.bmp' source='0,18,16,34'" hotimage="file='skin/scrollbar.bmp' source='18,18,34,34'"/>
+					<Button name="Next_page" width="30" height="30" padding="0,30,0,0" bordersize="1" bordercolor="0x88888888" foreimage="file='skin/scrollbar.bmp' source='0,18,16,34'" hotimage="file='skin/scrollbar.bmp' source='18,18,34,34'"/>
 				</HorizontalLayout>
 			</VerticalLayout>
 		<VerticalLayout  width="383" height="475" padding="68,77,0,0" inset="2,2,2,2" bordersize="3" bordercolor="0x88888888">
 				<HorizontalLayout height="42" padding="0,50,0,0">
 					<Label text="品牌：" height="42" width="70" font="1" padding="20,0,0,0"/>
 					<Edit name="brand_Edit" width="200" height="42" font="1" bordersize="1" bordercolor="0x88888888"/>
-					<Button name="select_Vendor" height="42" width="50" padding="0,0,0,0" bordersize="1" bordercolor="0x88888888" foreimage="file='skin/function.png' source='0,90,30,120' dest='10,5,40,35'" normalimage="file='skin/cxbt.png'"/>
+					<Button name="select_Vendor" height="42" width="50" padding="0,0,0,0" bordersize="1" bordercolor="0x88888888" foreimage="file='skin/function.png' source='0,90,30,120' dest='10,5,40,35'" normalimage="file='skin/cxbt.png'" hotimage="file='skin/add_push.png'" pushedimage="file='skin/hsbj.png'"/>
 				</HorizontalLayout>
 			<HorizontalLayout  height="250" name="vLyt">
 				<VerticalLayout width="90" height="250">
@@ -119,7 +119,7 @@
 					</HorizontalLayout>
 				</VerticalLayout>
 			</HorizontalLayout>
-				<Button name="LogIn" width="96" height="50" text="登录" font="1" padding="250,30,0,0" bkimage="file='skin/cxbt.png'" bordersize="1" bordercolor="0x88888888"/>
+				<Button name="LogIn" width="96" height="50" text="登录" font="1" padding="250,30,0,0" bkimage="file='skin/cxbt.png'" hotimage="file='skin/add_push.png'" pushedimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
 			</VerticalLayout>
 		</HorizontalLayout>
 	</VerticalLayout>

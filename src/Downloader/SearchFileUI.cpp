@@ -208,7 +208,7 @@ void SearchFileUI::OnPlayVideo(int CurSel)
 
 	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(m_device, file));
 	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 }
