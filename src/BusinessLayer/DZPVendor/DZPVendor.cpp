@@ -345,7 +345,7 @@ void CDZPVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 void CDZPVendor::SetPlayVideoPos(int pos)
 {
-	H264_DVR_SetPlayPos(DZP_SDK_INTERFACE::m_playbackHandle, pos);
+	H264_DVR_SetPlayPos(DZP_SDK_INTERFACE::m_playbackHandle, pos/100.0);
 }
 void CDZPVendor::StopPlayVideo()
 {

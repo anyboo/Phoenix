@@ -33,13 +33,24 @@ namespace WorkProcess
 {
 	static std::wstring g_dump_path;
 
-
+	static void OpenConsole()
+	{
+		AllocConsole();
+		HANDLE   handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		int   hCrt = _open_osfhandle((long)handle, _O_TEXT);
+		FILE   *   hf = _fdopen(hCrt, "w");
+		*stdout = *hf;
+	}
 
 	int WorkProcessMain(_In_ HINSTANCE hInstance,
 		_In_opt_ HINSTANCE hPrevInstance,
 		_In_ LPTSTR    lpCmdLine,
 		_In_ int       nCmdShow)
 	{
+#ifdef _DEBUG  
+		OpenConsole();
+#endif
+
 		StartServerExe();
 		AddExceptionCatch();
 
@@ -89,12 +100,12 @@ namespace WorkProcess
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
 		CJXJVendor* jxjVendor = new CJXJVendor();
-		//CDZPVendor* dzpVendor = new CDZPVendor();
+		CDZPVendor* dzpVendor = new CDZPVendor();
 		//DHVendor* dhVendor = new DHVendor();
 		//HKVendor* hkVendor = new HKVendor();
 
 		pVendorList.push_back(jxjVendor);
-		//pVendorList.push_back(dzpVendor);
+		pVendorList.push_back(dzpVendor);
 		/*	pVendorList.push_back(dhVendor);
 		pVendorList.push_back(hkVendor);*/
 
@@ -113,41 +124,26 @@ namespace WorkProcess
 
 		///************************* 初始化IP列表 **********************/
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-		//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-		//NotificationQueue queuePortScan;	
-		//PortScan portScan(queuePortScan);
-		////开始扫描
-		//ThreadPool::defaultPool().start(portScan);
+		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+		NotificationQueue queuePortScan;	
+		PortScan portScan(queuePortScan);
+		//开始扫描
+		ThreadPool::defaultPool().start(portScan);
 
-		//while (true)
-		//{
-		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-		//	if (pNf)
-		//	{
-		//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-		//		if (pWorkNf)
-		//		{
-		//			listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
-		//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-		//			break;
-		//		}
-		//	}
-		//}
-
-		//while (true)
-		//{
-		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-		//	if (pNf)
-		//	{
-		//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-		//		if (pWorkNf)
-		//		{
-		//			//listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
-		//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-		//			break;
-		//		}
-		//	}
-		//}
+		while (true)
+		{
+			Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+			if (pNf)
+			{
+				ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+				if (pWorkNf)
+				{
+					listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
+					std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+					break;
+				}
+			}
+		}		
 
 		/************************* 设备发现类测试 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
