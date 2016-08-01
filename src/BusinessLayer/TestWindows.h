@@ -1,4 +1,7 @@
 #pragma once
+/*
+The test window can be deleted in the project later
+*/
 
 #include <Windows.h>
 
