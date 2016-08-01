@@ -19,6 +19,9 @@ public:
 	void Download(const long loginHandle, const RecordFile& file);
 	void PlayVideo(const long loginHandle, const RecordFile& file);
 	bool StopDownload();
+	void SetPlayVideoPos(int pos);
+	void StopPlayVideo();
+	int GetPlayVideoPos();
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
@@ -56,13 +59,8 @@ private:
 	RECORD_FILE_LIST m_files;
 	RECORD_FILE_LIST m_FilesChange;
 
-	//std::string m_strName;
-	//int m_dwPort;
-	//std::string m_strUser;
-	//std::string m_strPasswords;
-	//std::string m_strIP;
-	//LONG m_lLoginHandle;
-
+	/* PlayVideo */
+	long m_PlayHandle;
 
 	
 };

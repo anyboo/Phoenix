@@ -22,7 +22,11 @@ public:
 	static void DH_timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	static void DH_timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
 	static void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
+
+	static bool m_bPause;
 };
+
+bool DH_SDK_INTERFACE::m_bPause = true;
 
 
 
@@ -35,6 +39,8 @@ DHVendor::DHVendor()
 	m_lDownloadHandle = 0;
 	m_bSearchDeviceAPI = false;
 	m_iDefPort = 37777;
+	m_FileSize = 0;
+	m_PalyHandle = 0;
 
 	m_lSearchDeviceHandle = -1;
 
@@ -377,6 +383,8 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 		return;
 	}
 
+	m_FileSize = file.size;
+
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 	time_range range;
@@ -385,15 +393,51 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	DH_SDK_INTERFACE::DH_trTOnt(ntStime, ntEtime, range);
 
-	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, file.channel, &ntStime, &ntEtime, m_hWnd, DH_SDK_INTERFACE::DH_PlayCallBack, (DWORD)this, DH_SDK_INTERFACE::DH_PBDataCallBack, (DWORD)this);
+	long lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, file.channel, &ntStime, &ntEtime, m_hWnd, DH_SDK_INTERFACE::DH_PlayCallBack, (DWORD)this, DH_SDK_INTERFACE::DH_PBDataCallBack, (DWORD)this);
+	m_PalyHandle = lPlayID;
 
-	if (!lPlayID)
+	if (0 == lPlayID)
 	{
 		std::cout << "PlayVideo Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
 	//Test
 	//system("PAUSE");
+}
+
+void DHVendor::SetPlayVideoPos(int pos)
+{
+	__time64_t iPlayPos = (m_FileSize * pos) / 100;
+	iPlayPos /= 1024;
+	bool bSetPos = CLIENT_SeekPlayBack(m_PalyHandle, 0xffffffff, (unsigned int)iPlayPos);
+	if (!bSetPos)
+	{
+		cout << "Operator error!" << endl;
+	}
+}
+
+void DHVendor::StopPlayVideo()
+{
+	if (0 == m_PalyHandle)
+	{
+		return;
+	}
+
+	BOOL bPause = CLIENT_PausePlayBack(m_PalyHandle, DH_SDK_INTERFACE::m_bPause);
+
+	if (TRUE == bPause)
+	{
+		DH_SDK_INTERFACE::m_bPause = false;
+	}
+	else
+	{
+		std::cout << "StopVideo Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+	}
+}
+
+int DHVendor::GetPlayVideoPos()
+{
+	return 0;
 }
 
 void DHVendor::SetDownloadPath(const std::string& Root)
