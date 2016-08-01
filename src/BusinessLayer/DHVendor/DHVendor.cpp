@@ -396,6 +396,21 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 	//system("PAUSE");
 }
 
+void DHVendor::SetPlayVideoPos(int pos)
+{
+
+}
+
+void DHVendor::StopPlayVideo()
+{
+
+}
+
+int DHVendor::GetPlayVideoPos()
+{
+	return 0;
+}
+
 void DHVendor::SetDownloadPath(const std::string& Root)
 {
 	m_sRoot = Root;

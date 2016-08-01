@@ -309,6 +309,22 @@ bool HKVendor::StopDownload()
 	return true;
 }
 
+void HKVendor::SetPlayVideoPos(int pos)
+{
+
+}
+
+void HKVendor::StopPlayVideo()
+{
+
+}
+
+int HKVendor::GetPlayVideoPos()
+{
+	return 0;
+}
+
+
 void HKVendor::SetDownloadPath(const std::string& Root)
 {
 	m_sRoot = Root;
