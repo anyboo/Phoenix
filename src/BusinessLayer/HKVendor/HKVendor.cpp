@@ -30,6 +30,7 @@ HKVendor::HKVendor()
 	m_sDefPassword = "12345";
 	m_iMaxChannel = 0;
 	m_bSearchDeviceAPI = true;
+	m_PlayHandle = -1;
 
 	m_lSearchDeviceHandle = -1;
 
@@ -288,6 +289,7 @@ void HKVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	size_t sChannel = HK_SDK_INTERFACE::HK_getChannel(loginHandle, file.channel);
 	LONG hPlayHandle = NET_DVR_PlayBackByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, m_hWnd);
+	m_PlayHandle = hPlayHandle;
 
 	if (hPlayHandle < 0)
 	{
@@ -311,17 +313,46 @@ bool HKVendor::StopDownload()
 
 void HKVendor::SetPlayVideoPos(int pos)
 {
+	if (-1 == m_PlayHandle)
+	{
+		return;
+	}
 
+	BOOL bSet = NET_DVR_PlayBackControl_V40(m_PlayHandle, NET_DVR_PLAYSETPOS, &pos);
+
+	if (FALSE == bSet)
+	{
+		std::cout << "Set play video progress failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		return;
+	}
 }
 
 void HKVendor::StopPlayVideo()
 {
-
+	if (!NET_DVR_StopPlayBack(m_PlayHandle))
+	{
+		std::cout << "Stop play video failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		return;
+	}
 }
 
 int HKVendor::GetPlayVideoPos()
 {
-	return 0;
+	if (-1 == m_PlayHandle)
+	{
+		return -1;
+	}
+
+	int nPos = 0;
+
+	BOOL bGet = NET_DVR_PlayBackControl_V40(m_PlayHandle, NET_DVR_PLAYGETPOS, &nPos);
+
+	if (FALSE == bGet)
+	{
+		std::cout << "Get play video progress failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+	}
+
+	return nPos;
 }
 
 

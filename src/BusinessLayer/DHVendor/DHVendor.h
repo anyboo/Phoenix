@@ -70,6 +70,10 @@ private:
 
 	/*Download*/
 	long m_lDownloadHandle;
+
+	/*PlayVideo*/
+	int m_FileSize;
+	long m_PalyHandle;
 };
 
 #endif 
