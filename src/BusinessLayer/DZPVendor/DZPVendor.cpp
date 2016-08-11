@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DZPVendor.h"
 
 #include "Poco/NotificationQueue.h"
@@ -253,7 +254,7 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
-	std::cout << "DZP 搜索文件 开始！" << std::endl;	
+	std::cout << "DZP 搜索文件 开始！" << std::endl;
 	m_files_Unit.clear();
 	DZP_SDK_INTERFACE::DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	std::cout << "DZP 搜索文件 结束！" << std::endl;
@@ -272,7 +273,7 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 	{
 		m_files.push_back(m_files_Unit[i]);
 	}
-	
+
 	return;
 }
 
@@ -456,7 +457,7 @@ void __stdcall DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack(long lPlayHandle, long
 		std::cout << lDownLoadSize << "/" << lTotalSize << " - " << curPos << std::endl;
 		prePos = curPos;
 	}
-	
+
 	if (lDownLoadSize == -1)
 	{
 		prePos = 0;
@@ -497,7 +498,7 @@ H264_DVR_FILE_DATA DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(const RecordF
 	h264_file.stEndTime = DZP_MakeH264TimeToSDKTime(h264_time);
 
 	return h264_file;
-	
+
 }
 
 SDK_SYSTEM_TIME DZP_SDK_INTERFACE::DZP_MakeH264TimeToSDKTime(H264_DVR_TIME h264_time)

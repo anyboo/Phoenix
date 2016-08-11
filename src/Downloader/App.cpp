@@ -101,27 +101,27 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	Sleep(5000);
 
 	/************************* 初始化IP列表 **********************/
-	std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-	NotificationQueue queuePortScan;	
-	PortScan portScan(queuePortScan);
-	//开始扫描
-	ThreadPool::defaultPool().start(portScan);
-
 	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-	while (true)
-	{
-		Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-		if (pNf)
-		{
-			ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-			if (pWorkNf)
-			{
-				listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
-				std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-				break;
-			}
-		}
-	}
+	//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+	//NotificationQueue queuePortScan;	
+	//PortScan portScan(queuePortScan);
+	////开始扫描
+	//ThreadPool::defaultPool().start(portScan);
+
+	//while (true)
+	//{
+	//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+	//	if (pNf)
+	//	{
+	//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+	//		if (pWorkNf)
+	//		{
+	//			listDeviceSimpleInfo = CSearchDevice::GetDeviceInfoSimpleList();
+	//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+	//			break;
+	//		}
+	//	}
+	//}
 
 	/************************* 设备发现类测试 **********************/
 	std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
