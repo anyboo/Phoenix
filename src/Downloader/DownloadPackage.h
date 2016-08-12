@@ -8,7 +8,7 @@ typedef struct
 	std::string name;
 	std::time_t startTime;
 	std::time_t endTime;
-}DownloadItem;
+}DownloadItem, *pDownloadItem;
 
 typedef std::list<DownloadItem*> DownloadListItem;
 
@@ -19,7 +19,7 @@ public:
 	~DownloadPackage();
 
 public:
-	void Add(DownloadItem& item);
+	void Add(pDownloadItem& item);
 	std::string GetFileName(size_t CurSel);
 	void Remove();
 public:

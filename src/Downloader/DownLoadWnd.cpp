@@ -6,20 +6,25 @@
 #include "ProgtessUI.h"
 
 #include "LoginDevice.h"
-
 #include "SearchDevice.h"
 #include "ReciveUIQunue.h"
 #include "SearchFileWorker.h"
 
 #include <poco/ThreadPool.h>
+#include "Poco/Observer.h"
+#include <Poco/NotificationCenter.h>
+
+#include "NotificationNetworkStatus.h"
 
 using Poco::ThreadPool;
-
+using Poco::NotificationCenter;
+using Poco::Observer;
 
 
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
+	ReadJsonFile();
 	m_Vendor.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &m_Vendor);
 	m_Device = new Device;
@@ -29,6 +34,8 @@ DownLoadWnd::DownLoadWnd()
 DownLoadWnd::~DownLoadWnd()
 {
 	RemoveVirtualWnd(_T("Vendor"));
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
 }
 
 
@@ -63,6 +70,33 @@ void DownLoadWnd::OnCloseWnd(TNotifyUI& msg)
 	Close();
 }
 
+void DownLoadWnd::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
+}
+
+void DownLoadWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void DownLoadWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+}
+
 void DownLoadWnd::OnSelectTimeType()
 {
 	CSliderUI* Slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("Select_time")));
@@ -79,9 +113,11 @@ void DownLoadWnd::OnSelectTimeType()
 void DownLoadWnd::ShowOnlineDevice()
 {
 	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
+	std::string VendName;
 	for (int i = 0; i < m_listDevice.size(); i++)
 	{
-		m_Vendor.AddVendorList(to_string(m_listDevice[i]->GetSDKType()), m_listDevice[i]->getIP());
+		VendName = m_VnameAndType[m_listDevice[i]->GetSDKType()];
+		m_Vendor.AddVendorList(VendName, m_listDevice[i]->getIP());
 		m_onlineIP.push_back(m_listDevice[i]->getIP());
 	}
 }
@@ -132,9 +168,10 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	if (m_Device == nullptr)
 		return;
 	m_ChannelCount = m_Device->getMaxChannel();
-	NET_SDK_TYPE VendorType = m_Device->GetSDKType();
-	STDSTRING strVendor = to_string(VendorType);
-	STDSTRING strIP = m_Device->getIP();
+	NET_SDK_TYPE DevideType = m_Device->GetSDKType();
+	std::string DeviceName = m_VnameAndType[DevideType];
+
+	std::string strIP = m_Device->getIP();
 	for (size_t i = 0; i < m_onlineIP.size(); i++)
 	{
 		if (m_onlineIP[i] == strIP)
@@ -142,7 +179,7 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 			return;
 		}
 	}
-	m_Vendor.AddVendorList(strVendor, strIP);
+	m_Vendor.AddVendorList(DeviceName, strIP);
 	m_onlineIP.push_back(strIP);
 }
 
@@ -161,13 +198,11 @@ void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 	
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
-
-//	DownLoadWndfile(m_Device, )
 
 }
 
@@ -210,6 +245,10 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	{
 		All_SelectChannels();
 	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !strSendName.compare(0, 7, _T("channel")))
+	{
+		OnUseSearchCtrl(strSendName);
+	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && !strSendName.compare(0, 9, _T("BT_delete")))
 	{
 		RemoveVendor(strSendName);
@@ -217,12 +256,40 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
+void DownLoadWnd::OnUseSearchCtrl(std::string& SendName)
+{
+	CButtonUI* bt_search = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Search")));
+	CListUI* VendorList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(VendorList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	for (int i = 1; i < option_size; i++)
+	{
+		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(VendorList, DUI_CTR_OPTION, i));
+		std::string strName = option->GetName();
+		if (option->IsSelected() && SendName != strName)
+		{
+			bt_search->SetEnabled(true);
+			return;
+		}
+	}
+	COptionUI* TOption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(VendorList, SendName.c_str()));
+	if (TOption->IsSelected() == false && SendName.compare(_T("quanxuan")))
+	{
+		bt_search->SetEnabled(true);
+		return;
+	}
+	bt_search->SetEnabled(false);
+}
 
 void DownLoadWnd::SearchFile()
 {	
 	GetDataTime();
 	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
 		
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string str = DELETE_ALL_SEARCH_VIDEO;
+	pDb->cleanData(str);
+
 	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *ReciveUIQunue::GetInstance());
 	ThreadPool::defaultPool().start(*sfw);
 }
@@ -439,14 +506,17 @@ void DownLoadWnd::All_SelectChannels()
 	COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(VendorList, _T("quanxuan")));
 	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(VendorList, DUI_CTR_OPTION);
 	int option_size = array->GetSize();
+	
 	for (int i = 1; i < option_size; i++)
 	{
 		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(VendorList, DUI_CTR_OPTION, i));
 		if (!option_All->IsSelected()){
 			option->Selected(true);
+			OnUseSearchCtrl(std::string(_T("quanxuan")));
 		}
 		else{
 			option->Selected(false);
+			OnUseSearchCtrl(std::string(_T("quanxuan")));
 		}
 	}
 }
@@ -508,4 +578,37 @@ void DownLoadWnd::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
 	STDSTRING pictureInfo(strValue);
 	CButtonUI* btn_data = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
 	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
+}
+
+void DownLoadWnd::ReadJsonFile()
+{
+	STDSTRING configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Device.json"));
+
+	ifstream ifs(configFile);
+	locale utf8;
+	ifs.imbue(utf8);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
+
+	typedef Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
+	{
+		STDSTRING TypeName = it->name.GetString();
+		const Value& a = d[TypeName.c_str()];
+		assert(a.IsArray());
+		if (!a.IsArray())
+			continue;
+		STDSTRING spell = a[0].GetString();
+		STDSTRING VendorDeviceName = a[1].GetString();
+
+		int type = stoi(TypeName);
+		m_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
+	}
 }

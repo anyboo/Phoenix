@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainWnd.h"
+
 #include "DownLoadWnd.h"
 #include "LogUI.h"
 #include "VideoLoginUI.h"
@@ -7,6 +8,8 @@
 #include "SetIpWnd.h"
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
+
+#include "Mversion.h"
 
 #include <io.h>
 #include <fcntl.h>
@@ -18,37 +21,19 @@
 using Poco::NotificationCenter;
 using Poco::Observer;
 
-static void OpenConsole()
-{
-	AllocConsole();
-	HANDLE   handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	int   hCrt = _open_osfhandle((long)handle, _O_TEXT);
-	FILE   *   hf = _fdopen(hCrt, "w");
-	*stdout = *hf;
-}
+
 
 CMainWnd::CMainWnd()
-:m_IsMinWnd(FALSE), m_IsMaxWnd(FALSE)
+:m_IsMinWnd(false), m_IsMaxWnd(false)
 {
-	//NotificationCenter& nc = NotificationCenter::defaultCenter();
-	//nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
-#ifdef _DEBUG  
-	OpenConsole();
-#endif 
+
 }
 
 
 CMainWnd::~CMainWnd()
 {
-	
-}
-
-void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
-{
-	if (pNf->name().compare("CNotificationNetworkStatus"))
-	{
-		int a = 0;
-	}
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
@@ -58,6 +43,7 @@ DUI_ON_CLICK_CTRNAME(BT_DOWNLOAD, OnDownLoadWnd)
 DUI_ON_CLICK_CTRNAME(BT_LogWnd, OnLogWnd)
 DUI_ON_CLICK_CTRNAME(BT_OtherTools, OnOtherToolsWnd)
 DUI_ON_CLICK_CTRNAME(BT_VideoPlay, OnVideoPlayWnd)
+DUI_ON_CLICK_CTRNAME(BT_ABOUT, OnAbout)
 DUI_END_MESSAGE_MAP()
 
 
@@ -81,6 +67,21 @@ void CMainWnd::OnFinalMessage(HWND hWnd)
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
+void CMainWnd::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
+
+	ShowVersion();
+}
+
+void CMainWnd::ShowVersion()
+{
+	std::string Version = MVersion::getVersion();
+	CLabelUI* lab_version = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("version")));
+	lab_version->SetText(Version.c_str());
+}
+
 void CMainWnd::OnClose(TNotifyUI& msg)
 {
 	Show_HideTask(FALSE);
@@ -92,6 +93,15 @@ void CMainWnd::OnMin(TNotifyUI& msg)
 	Show_HideTask(FALSE);
 	m_IsMinWnd = TRUE;
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
+}
+
+void CMainWnd::OnAbout(TNotifyUI& msg)
+{
+	CMenuWnd* pMenu = new CMenuWnd();
+	if (pMenu == NULL) { return; }
+	POINT pt = { msg.ptMouse.x - 65, 30 };
+	::ClientToScreen(m_hWnd, &pt);
+	pMenu->Init(msg.pSender, pt);
 }
 
 void CMainWnd::OnDownLoadWnd(TNotifyUI& msg)
@@ -134,25 +144,17 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	if (m_IsMinWnd)
 	{
-		Show_HideTask(TRUE);
+		Show_HideTask(true);
 	}
-	m_IsMinWnd = FALSE;
+	m_IsMinWnd = false;
 
-	bHandled = FALSE;
-	return FALSE;
+	bHandled = false;
+	return false;
 }
 
 
 void CMainWnd::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("aboutbt"))
-	{
-		CMenuWnd* pMenu = new CMenuWnd();
-		if (pMenu == NULL) { return; }
-		POINT pt = { msg.ptMouse.x - 65, 30 };
-		::ClientToScreen(m_hWnd, &pt);
-		pMenu->Init(msg.pSender, pt);
-	}
 	if (msg.sType == _T("menu_SetIP"))
 	{
 		std::auto_ptr<CSetIpWnd> pDlg(new CSetIpWnd);
@@ -164,13 +166,41 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == _T("menu_Replace"))
 	{
 		if (!m_IsMaxWnd)
-		{
+		{	
+		
+			ResizeClient(1280, 800);
+			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
+			CButtonUI* button1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("download")));
+			CButtonUI* button2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("VideoPlay")));
+			CButtonUI* button3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Log_manager")));
+			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
+			contrl->SetAttribute(_T("padding"), _T("660,10,10,5"));
+			contrl2->SetAttribute(_T("pos"), _T("606,375,672,444"));
+			button1->SetAttributeList(_T("pos=\"293,140,636,405\" normalimage=\"file='skin/mdownload_normal.png'\""));
+			button2->SetAttributeList(_T("pos=\"642,140,985,405\" normalimage=\"file='skin/mvideo_normal.png'\""));
+			button3->SetAttributeList(_T("pos=\"293,414,636,680\" normalimage=\"file='skin/mlog_normal.png'\""));
+			button4->SetAttributeList(_T("pos=\"642,414,985,680\" normalimage=\"file='skin/mtool_normal.png'\""));
 			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
 			CPaintManagerUI::ReloadSkin();
 			m_IsMaxWnd = TRUE;
 		}
 		else
 		{
+			
+			ResizeClient(1024, 768);
+			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
+			CButtonUI* button1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("download")));
+			CButtonUI* button2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("VideoPlay")));
+			CButtonUI* button3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Log_manager")));
+			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
+			contrl->SetAttribute(_T("padding"), _T("400,10,10,5"));
+			contrl2->SetAttribute(_T("pos"), _T("483,361,543,421"));
+			button1->SetAttributeList(_T("pos=\"235,134,512,390\" normalimage=\"skin/download_normal.png\""));
+			button2->SetAttributeList(_T("pos=\"515,134,789,389\" normalimage=\"skin/video_normal.png\""));
+			button3->SetAttributeList(_T("pos=\"235,393,512,649\" normalimage=\"skin/log_normal.png\""));
+			button4->SetAttributeList(_T("pos=\"515,393,789,649\" normalimage=\"skin/tool_normal.png\""));
 			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
 			CPaintManagerUI::ReloadSkin();
 			m_IsMaxWnd = FALSE;
@@ -179,8 +209,28 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	return WindowImplBase::NotifyPump(msg);
 }
 
+void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+}
 
-void CMainWnd::Show_HideTask(BOOL IsHide)
+void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void CMainWnd::Show_HideTask(bool IsHide)
 {
 	int nCwdShow = -1;
 	LPARAM lParam;

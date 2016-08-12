@@ -20,8 +20,12 @@ public:
 	void ClearLocalRecordFiles();
 
 	void Download(const long loginHandle, const RecordFile& file);
-	void PlayVideo(const long loginHandle, const RecordFile& file);
 	bool StopDownload(){ return true; }
+
+	void PlayVideo(const long loginHandle, const RecordFile& file);
+	void SetPlayVideoPos(int pos);
+	void StopPlayVideo();
+	int GetPlayVideoPos();
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
@@ -39,6 +43,7 @@ public:
 	size_t GetMaxChannel(){ return m_iMaxChannel; }
 
 	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
+	void SetPlayVideoPosSub(int pos){ m_iPlayVideoPos = pos; }
 
 private:
 	/* Init */
@@ -60,6 +65,10 @@ private:
 	/* Search */
 	RECORD_FILE_LIST m_files;
 	RECORD_FILE_LIST m_files_Unit;
+
+	/* Play Video*/
+	RecordFile m_filePlay;
+	int m_iPlayVideoPos;
 
 	void* handle;
 };

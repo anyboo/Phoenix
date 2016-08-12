@@ -5,9 +5,11 @@
 #include "SearchFileNotification.h"
 
 #include "DownloadPackage.h"
+#include "Device.h"
 
 #define BT_CLOSE_SEARCHWND		(_T("close_bt"))
 #define BT_BEGINDOWNLOAD		(_T("BT_Download"))
+
 
 enum IsDownLoadFile
 {
@@ -19,7 +21,7 @@ class SearchFileUI :
 	public WindowImplBase
 {
 public:
-	SearchFileUI();
+	SearchFileUI(Device* device);
 	~SearchFileUI();
 
 
@@ -39,7 +41,7 @@ public:
 	void GetFileSizeAndCount();
 
 	void GetFileInfo(STDSTRING& SendName);
-	void OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime);
+	void OnPlayVideo(int CurSel);
 
 	void ReceiveSearchFile(SearchFileNotification* pNf);
 
@@ -50,8 +52,10 @@ private:
 	bool		m_InitShowFileList;
 	std::vector<readSearchVideo>  m_FileList;
 	IsDownLoadFile		m_IsDownLoad;
-
-	DownloadItem		m_DownLoaditem;
+	Device*				m_device;
+//	DownloadItem		m_DownLoaditem;
+	size_t					m_DownloadID;
+	DownloadPackage		m_DownLoadList;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

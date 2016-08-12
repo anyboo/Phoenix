@@ -11,9 +11,9 @@ DownloadPackage::~DownloadPackage()
 {
 }
 
-void DownloadPackage::Add(DownloadItem& item)
+void DownloadPackage::Add(pDownloadItem& item)
 {
-	downloadlist.push_back(&item);
+	downloadlist.push_back(item);
 }
 
 void DownloadPackage::Remove()

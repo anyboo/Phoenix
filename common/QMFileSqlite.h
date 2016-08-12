@@ -15,7 +15,7 @@ using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
 
-//登录信息保存表
+//login infomation table
 #define CREATE_LOGIN_DEVICE_INFO_TABLE      "CREATE TABLE LoginDeviceInfo(type INTEGER, ip VARCHAR(30), port INTEGER, username VARCHAR(50), password VARCHAR(50), maxchannel INTEGER)"
 #define DROP_LOGIN_DEVICE_INFO_TABLE		"DROP TABLE IF EXISTS LoginDeviceInfo"
 #define DELETE_ALL_LOGIN_DEVICE_INFO		"DELETE from LoginDeviceInfo"
@@ -25,21 +25,21 @@ using Poco::Data::Statement;
 #define INSERT_LOGIN_DEVICE_INFO			"INSERT INTO LoginDeviceInfo VALUES(:type, :ip, :port, :username, :password, :maxchannel)"
 typedef Poco::Tuple<int, std::string, int, std::string, std::string, int> LoginDeviceInfo;
 
-//下载信息保存表
+//download infomation table
 #define CREATE_DOWNLOAD_VIDEO_INFO_TABLE	"CREATE TABLE DownloadVideoInfo()"
 #define DELETE_ALL_DOWNLOAD_VIDEO_INFO		"DELETE from DownloadVideoInfo"
 #define DROP_DOWNLOAD_VIDEO_INFO_TABLE		"DROP TABLE IF EXISTS DownloadVideoInfo"
 #define SELECT_ALL_DOWNLOAD_VIDEO_INFO		"SELECT * FROM DownloadVideoInfo"
 #define INSERT_DOWNLOAD_VIDEO_INFO			"INSERT INTO DownloadVideoInfo VALUES()"
 
-//动作日志表
+//dong zhou ri zhi biao
 #define CREATE_MOTION_LOG_TABLE				"CREATE TABLE MotionLog(time DATETIME, operation NVARCHAR(200), describe NVARCHAR(500))"
 #define DELETE_ALL_MOTION_LOG				"DELETE from MotionLog"
 #define DROP_MOTION_LOG_TABLE				"DROP TABLE IF EXISTS MotionLog"
 #define SELECT_ALL_MOTION_LOG				"SELECT * FROM MotionLog"
 #define INSERT_MOTION_LOG					"INSERT INTO MotionLog VALUES(:time, :operation, :describe)"
 
-//案件查询表
+//an jian info cha xun biao
 #define CREATE_SEARCH_AN_JIAN_TABLE			"CREATE TABGLE SearchAnJian(time DATETIME, address NVARCHAR(300), gatherer NVARCHAR(200), casename NVARCHAR(300), casedescribe NVARCHAR(1000), IP VARCHA(20), describe NVARCHAR(1000))"
 #define DELETE_ALL_SEARCH_AN_JIAN			"DELETE from SearchAnJian"
 #define DROP_SEARCH_AN_JIAN_TABLE			"DROP TABLE IF EXISTS SearchAnJian"

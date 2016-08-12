@@ -131,6 +131,43 @@
     <ClCompile Include="..\..\common\ipset.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\log.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp">
+      <Filter>源文件\BusinessLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayWndUI.cpp" />
+    <ClCompile Include="..\..\common\cmdline_parse.cc">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\guardprocess.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\client_info.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\crash_generation_client.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\crash_generation_server.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\client\windows\crash_generation\minidump_generator.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\common\windows\guid_string.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\workprocess.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\breakpad\src\client\windows\handler\exception_handler.cc">
+      <Filter>源文件\breakpad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MVersion.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -190,6 +227,10 @@
     <ClInclude Include="MessagePump.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="ProgressManager.h" />
+    <ClInclude Include="..\..\common\log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayWndUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
@@ -218,6 +259,9 @@
     </Filter>
     <Filter Include="源文件\common">
       <UniqueIdentifier>{532ca23b-72b4-4ce9-921a-5f0fac0a05ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\breakpad">
+      <UniqueIdentifier>{211907a0-cff0-45c8-9b2c-07243363681c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

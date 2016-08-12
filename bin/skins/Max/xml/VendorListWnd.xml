@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<VerticalLayout name="VendorList" width="250" height="242" inset="1,1,1,1" bkimage="file='skin/bsbj.png'" bordersize="2" bordercolor="0x12345678">
+		<Button name="Device0" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device1" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device2" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device3" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device4" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device5" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device6" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+		<Button name="Device7" height="30" font="2" hotimage="file='skin/hsbj.png'" bordersize="1" bordercolor="0x88888888"/>
+	</VerticalLayout>
+</Window>

@@ -3,7 +3,12 @@
 #include "CalendarUI.h"
 #include "CommDlg.h"
 
+#include "Poco/Observer.h"
+#include <Poco/NotificationCenter.h>
 
+#include "NotificationNetworkStatus.h"
+using Poco::NotificationCenter;
+using Poco::Observer;
 
 CLogUI::CLogUI()
 {
@@ -12,6 +17,8 @@ CLogUI::CLogUI()
 
 CLogUI::~CLogUI()
 {
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<CLogUI, CNotificationNetworkStatus>(*this, &CLogUI::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CLogUI, WindowImplBase)
@@ -59,6 +66,33 @@ void CLogUI::Notify(TNotifyUI& msg)
 		}
 	}
 	WindowImplBase::Notify(msg);
+}
+
+void CLogUI::InitWindow()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.addObserver(Observer<CLogUI, CNotificationNetworkStatus>(*this, &CLogUI::HandleNotificationNetworkStatus));
+}
+
+void CLogUI::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
+{
+	if (pNf == nullptr)
+		return;
+	if (pNf->name().compare("class CNotificationNetworkStatus"))
+		return;
+
+	NOTIFICATION_TYPE eNotify;
+	eNotify = pNf->GetNotificationType();
+	SetNetWorkState(eNotify);
+}
+
+void CLogUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+{
+	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	if (eNotify == Notification_Type_Network_status_Connect)
+		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
+	else if (eNotify == Notification_Type_Network_status_Disconnect)
+		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
 }
 
 void CLogUI::OnBeginSearch(TNotifyUI& msg)

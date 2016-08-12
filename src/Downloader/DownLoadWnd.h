@@ -3,8 +3,13 @@
 #include <vector>
 #include "Vendor.h"
 #include "TimeUI.h"
+#include <map>
 
 #include "DownloadPackage.h"
+
+
+
+class CNotificationNetworkStatus;
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -18,18 +23,6 @@
 #define BT_SEARCHFILE			(_T("Search"))
 #define BT_CLOSE_D				(_T("CloseWnd"))
 
-typedef struct 
-{
-	STDSTRING	filename;
-	int			filesize;
-	STDSTRING	process;
-	STDSTRING	speed;
-	STDSTRING	remain_time;
-	STDSTRING	state;
-	STDSTRING	handle;
-}FILE_INFO;
-
-
 
 class DownLoadWnd :
 	public WindowImplBase
@@ -37,6 +30,7 @@ class DownLoadWnd :
 public:
 	DownLoadWnd();
 	~DownLoadWnd();
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
@@ -51,6 +45,7 @@ public:
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
 	void SearchFile();
+	void OnUseSearchCtrl(std::string& SendName);
 	void ShowTotalFileList();
 
 	void Show_Off_SubList(STDSTRING& strSendName);
@@ -72,12 +67,17 @@ public:
 
 	void ShowOnlineDevice();
 
+	void ReadJsonFile();
+
+	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
+	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 	
-	//std::vector<readSearchVideo>  m_FileInfo;
+
 private:
 	CVendor		m_Vendor;
 	CTimeUI		m_TimeUI;
@@ -92,5 +92,6 @@ private:
 
 private:
 	std::string			m_DeviceID;
+	std::map<int, string>		m_VnameAndType;
 };
 

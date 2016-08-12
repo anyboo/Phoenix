@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="600,510" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="500" width="600" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888">
+		<VerticalLayout height="40" bkimage="file='skin/beijing.png'">
+			<Label width="200" height="30" text="日志记录信息" font="1" textcolor="#FFFFFFFF" padding="230,5,0,0" algin="center" />
+		</VerticalLayout>
+		<HorizontalLayout height="50">
+			<Combo name="Case_Numb" width="90" height="30" hotimage="file='skin/hsbj.png'" padding="10,20,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,200" bordercolor="0x12345678" bordersize="1" bkimage="file='skin/hsbj.png'" itembkimage="skin/bsbj.png" itemhotimage="file='skin/hsbj.png'">
+				<ListLabelElement name="Item1" userdata="1" text="案件一" selected="true"/>
+				<ListLabelElement name="Item2" userdata="2" text="案件二" />
+				<ListLabelElement name="Item3" userdata="3" text="案件三" />
+				<ListLabelElement name="Item4" userdata="4" text="案件四" />
+				<ListLabelElement name="Item5" userdata="5" text="案件五" />
+			</Combo>
+			<Button name="select_path" width="100" height="30" text="选择路径" font="1" bordersize="1" padding="10,20,0,0" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
+			<Edit name="path" width="350" height="30" font="1" bordersize="1" padding="0,20,0,0" bordercolor="0x88888888"/>
+		</HorizontalLayout>
+		<HorizontalLayout height="360" >
+			<VerticalLayout width="100">
+				<Label text="案件名称：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="采集人：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="时间：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="地点：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="案件描述：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="设备IP：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+				<Label text="描述：" font="1" algin="left" width="90" height="30" padding="10,15,0,0"/>
+			</VerticalLayout>
+			<VerticalLayout width="500">
+				<Edit name="Case_name" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="collect_men" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="collect_time" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="address" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="Case_describe" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="Device_IP" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+				<Edit name="describe" height="30" width="450" padding="10,15,0,0," font="1" bordersize="1" bordercolor="0x88888888"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+		<VerticalLayout height="60" bkcolor="0xc3324534">
+			<Button name="ok_btn" height="40" width="100" padding="230,10,0,0" text="确定" font="1" tooltip="确定" bordersize="1" bordercolor="0x12345678" bkimage="skin/bsbj.png"/>
+		</VerticalLayout>
+	</VerticalLayout>
+</Window>

@@ -1,7 +1,9 @@
 #include "stdafx.h"
-
 #include "WindowUtils.h"
 #include "SearchDevice.h"
+#include "portscan.h"
+#include "QMFileSqlite.h"
+#include "QMSqlite.h"
 
 
 DEVICE_INFO_LIST CSearchDevice::m_listDeviceInfo;
@@ -58,7 +60,6 @@ CSearchDevice::CSearchDevice(const VENDOR_LIST& pVendorList, const DEVICE_INFO_S
 	m_listDeviceSimpleInfo(listDeviceSimpleInfo),
 	m_queue(queue)
 {
-
 }
 CSearchDevice::~CSearchDevice()
 {
@@ -83,7 +84,6 @@ void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 		{
 			m_listDeviceUnknown.push_back(pDev);
 		}
-
 	}
 	if (m_listDeviceUnknown.size() > 0)
 	{
@@ -177,9 +177,7 @@ void CSearchDevice::DeleteDeviceInfoList()
 	m_listDeviceInfo.clear();
 }
 
-#include "portscan.h"
-#include "QMFileSqlite.h"
-#include "QMSqlite.h"
+
 
 DEVICE_INFO_SIMPLE_LIST CSearchDevice::GetDeviceInfoSimpleList()
 {
@@ -232,8 +230,10 @@ void CSearchDevice::run()
 		}
 
 		bool bNetStatus = WindowUtils::isOnLine();
+	
+
 		if (bNetStatusLast != bNetStatus)
-		{
+		{			
 			NotificationQueue& queue = NotificationQueue::defaultQueue();
 			NOTIFICATION_TYPE NfType = (bNetStatus == true ? Notification_Type_Network_status_Connect : Notification_Type_Network_status_Disconnect);
 			queue.enqueueNotification(new CNotificationNetworkStatus(NfType));

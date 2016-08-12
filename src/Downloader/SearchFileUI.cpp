@@ -6,11 +6,13 @@
 #include "SearchDevice.h"
 
 #include "FileLogInfoUI.h"
+#include "CommonUtrl.h"
 
 
-SearchFileUI::SearchFileUI()
-:m_InitShowFileList(false)
+SearchFileUI::SearchFileUI(Device* device)
+:m_InitShowFileList(false), m_DownloadID(1)
 {
+	m_device = device;
 	ReadDataFromTable();
 }
 
@@ -61,18 +63,23 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	DownloadItem Item;
+	
 	for (size_t i = 0; i < m_Select_file.size(); i++)
-	{
+	{	
+		DownloadItem* Item = new DownloadItem;
 		size_t n = m_Select_file[i];
-		Item.name = m_FileList[n].get<0>();
-		Item.channel = m_FileList[n].get<1>();
-		Item.startTime = m_FileList[n].get<2>();
-		Item.endTime = m_FileList[n].get<3>();
-		Item.size = m_FileList[n].get<4>();
-		Item.id = m_FileList[n].get<5>();
+		Item->name = m_FileList[n].get<0>();
+		Item->channel = m_FileList[n].get<1>();
+		Item->startTime = m_FileList[n].get<2>();
+		Item->endTime = m_FileList[n].get<3>();
+		Item->size = m_FileList[n].get<4>();
+		Item->id = (m_DownloadID++);
+
+		m_DownLoadList.Add(Item);
 	}
 
+//	download(m_device, &m_DList);
+	
 	Close();
 }
 
@@ -107,6 +114,12 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 				}
 			}
 			GetFileSizeAndCount();
+		}
+		if (!SendName.compare(0, 7, _T("BT_Play")))
+		{
+			std::string strTag = SendName.substr(7);
+			int CurSel = stoi(strTag);
+			OnPlayVideo(CurSel);
 		}
 	}
 
@@ -173,32 +186,34 @@ STDSTRING SearchFileUI::TimeChange(__time64_t inputTime)
 
 void SearchFileUI::GetFileInfo(STDSTRING& SendName)
 {
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-	CButtonUI* bt_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByName(pList, SendName.c_str()));
-	STDSTRING btName = bt_play->GetName();
-	STDSTRING nametag = btName.substr(7);
-	STDSTRING SubListName = STDSTRING(_T("FileInfoList")) + nametag;
-	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SubListName.c_str()));
+	//CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	//CButtonUI* bt_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByName(pList, SendName.c_str()));
+	//STDSTRING btName = bt_play->GetName();
+	//STDSTRING nametag = btName.substr(7);
+	//STDSTRING SubListName = STDSTRING(_T("FileInfoList")) + nametag;
+	//CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SubListName.c_str()));
 
-	CLabelUI* Lab_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
-	CLabelUI* Lab_Channel = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
-	CLabelUI* Lab_stime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
-	CLabelUI* Lab_etime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
+	//CLabelUI* Lab_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
+	//CLabelUI* Lab_Channel = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
+	//CLabelUI* Lab_stime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
+	//CLabelUI* Lab_etime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 
-	
-	STDSTRING filename = Lab_name->GetText();
-	STDSTRING channel = Lab_Channel->GetText();
-	STDSTRING stime = Lab_stime->GetText();
-	STDSTRING etime = Lab_etime->GetText();
+	//
+	//STDSTRING filename = Lab_name->GetText();
+	//STDSTRING channel = Lab_Channel->GetText();
+	//STDSTRING stime = Lab_stime->GetText();
+	//STDSTRING etime = Lab_etime->GetText();
 
-	OnPlayVideo(filename, channel, stime, etime);
 }
 
-void SearchFileUI::OnPlayVideo(STDSTRING& filename, STDSTRING& channel, STDSTRING& stime, STDSTRING& etime)
+void SearchFileUI::OnPlayVideo(int CurSel)
 {
-	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd);
+	readSearchVideo rsv = m_FileList[CurSel];
+	RecordFile file = CCommonUtrl::getInstance().MakeDBFileToRecordFile(rsv);
+
+	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(m_device, file));
 	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 }

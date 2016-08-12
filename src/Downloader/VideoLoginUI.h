@@ -3,6 +3,8 @@
 
 #include "QMSqlite.h"
 
+class CNotificationNetworkStatus;
+
 #define BT_VideoVendor			(_T("select_Vendor"))
 #define BT_LOGIN				(_T("LogIn"))
 #define BT_PREVPAGE				(_T("Prev_page"))
@@ -23,7 +25,9 @@ public:
 	~VideoLoginUI();
 
 	void LogIn();
+
 	Device* GetLonInDevice();
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
@@ -49,6 +53,9 @@ public:
 	void InsertVendorToList();
 
 	void CreateSubvLyt();
+
+	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
+	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
 private:
 	DEVICE_INFO_LIST		m_DeviceList;
 	ISLogIn			m_IsLogIn;
@@ -58,6 +65,7 @@ private:
 	size_t				m_pages;
 	QMSqlite*				m_pDb;
 	std::vector<string> m_sRecord;
+	std::map<int, string>		m_CnameAndType;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

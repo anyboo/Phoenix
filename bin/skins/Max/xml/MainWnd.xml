@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1280,800" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
-	<VerticalLayout bkimage="file='skin/bg1.png'" height="800" >
+	<VerticalLayout bkimage="file='skin/beijing.png'" height="800" >
 		<HorizontalLayout height="60" width="1280">
 			<Control width="45" height="45" padding="30,7,10,7" bkimage="skin/logo.png"/>
 			<Label text="视频高速下载器" textcolor="#FFFFFFFF" font="0" width="300" align="left"/>
@@ -17,5 +17,8 @@
 		<Button name="Log_manager" float="true" pos="293,414,636,680" width="343" height="267" normalimage="file='skin/log_normal.png'" hotimage="file='skin/log_normal.png'" pushedimage="file='skin/log_normal.png"/>
 		<Button name="Other_tools" float="true" pos="642,414,985,680" width="343" height="267" normalimage="file='skin/tool_normal.png'" hotimage="file='skin/tool_normal.png'" pushedimage="file='skin/tool_normal.png"/>
 		<Control float="true" pos="606,375,672,444" />
+		<HorizontalLayout padding="40,600,0,0" height="40">
+			<Label text="版本：" textcolor="#FFFFFFFF" font="1" width="80" height="40"/>
+		</HorizontalLayout>
 	</VerticalLayout>
 </Window>
