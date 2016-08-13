@@ -9,20 +9,6 @@
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
 
-#include "Mversion.h"
-
-#include <io.h>
-#include <fcntl.h>
-#include <Poco/NotificationCenter.h>
-#include "Poco/Observer.h"
-
-#include "MessagePump.h"
-
-using Poco::NotificationCenter;
-using Poco::Observer;
-
-
-
 CMainWnd::CMainWnd()
 :m_IsMinWnd(false), m_IsMaxWnd(false)
 {
@@ -32,8 +18,6 @@ CMainWnd::CMainWnd()
 
 CMainWnd::~CMainWnd()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
@@ -69,15 +53,12 @@ void CMainWnd::OnFinalMessage(HWND hWnd)
 
 void CMainWnd::InitWindow()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CMainWnd, CNotificationNetworkStatus>(*this, &CMainWnd::HandleNotificationNetworkStatus));
-
 	ShowVersion();
 }
 
 void CMainWnd::ShowVersion()
 {
-	std::string Version = MVersion::getVersion();
+	std::string Version = "2.0.0.0";//MVersion::getVersion();
 	CLabelUI* lab_version = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("version")));
 	lab_version->SetText(Version.c_str());
 }

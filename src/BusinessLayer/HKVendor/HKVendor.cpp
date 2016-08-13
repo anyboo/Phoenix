@@ -4,7 +4,7 @@
 // HK SDK
 #include "HCNetSDK.h"
 
-#pragma comment(lib, "HCNetSDK")
+//#pragma comment(lib, "HCNetSDK")
 
 class HK_SDK_INTERFACE
 {
@@ -51,7 +51,7 @@ void HKVendor::Init()
 
 	if (!bInit)
 	{
-		std::cout << "The HK SDK initialization error£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "The HK SDK initialization errorï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		throw std::exception("Init failed");
 	}
 	else
@@ -248,7 +248,7 @@ void HKVendor::Download(const long loginHandle, const RecordFile& file)
 
 	if (0 < lRet)
 	{
-		std::cout << "Download videos failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Download videos failedï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		throw std::exception("Download by Record file failed");
 		return;
 	}
@@ -274,7 +274,7 @@ void HKVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
 	if (-1 == loginHandle)
 	{
-		std::cout << "Streaming video to fail£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Streaming video to failï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		throw std::exception("Login handle by Record file failed");
 		return;
 	}
@@ -293,13 +293,13 @@ void HKVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	if (hPlayHandle < 0)
 	{
-		std::cout << "Play the failure£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Play the failureï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
 
 	if (!NET_DVR_PlayBackControl(hPlayHandle, NET_DVR_PLAYSTART, NULL, 0))
 	{
-		std::cout << "Play the failure£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Play the failureï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
 
@@ -322,7 +322,7 @@ void HKVendor::SetPlayVideoPos(int pos)
 
 	if (FALSE == bSet)
 	{
-		std::cout << "Set play video progress failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Set play video progress failedï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		return;
 	}
 }
@@ -331,7 +331,7 @@ void HKVendor::StopPlayVideo()
 {
 	if (!NET_DVR_StopPlayBack(m_PlayHandle))
 	{
-		std::cout << "Stop play video failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Stop play video failedï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 		return;
 	}
 }
@@ -349,7 +349,7 @@ int HKVendor::GetPlayVideoPos()
 
 	if (FALSE == bGet)
 	{
-		std::cout << "Get play video progress failed£º" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
+		std::cout << "Get play video progress failedï¼š" << HK_SDK_INTERFACE::HK_GetLastErrorString() << std::endl;
 	}
 
 	return nPos;
@@ -432,7 +432,7 @@ bool HK_SDK_INTERFACE::HK_isGetDVRConfig(const long loginHandle)
 
 size_t HK_SDK_INTERFACE::HK_getChannel(const long loginHandle, size_t channel)
 {
-	//»ñÈ¡Éè±¸µÄÅäÖÃÐÅÏ¢³É¹¦¾ÍÆôÓÃÄ£ÄâÍ¨µÀ
+	//èŽ·å–è®¾å¤‡çš„é…ç½®ä¿¡æ¯æˆåŠŸå°±å¯ç”¨æ¨¡æ‹Ÿé€šé“
 	if (HK_isGetDVRConfig(loginHandle))
 	{
 		return channel += 33;
@@ -461,119 +461,122 @@ bool HKVendor::IsSearchDeviceAPIExist()
 
 std::string HK_SDK_INTERFACE::HK_GetLastErrorString()
 {
+	return "";
+	/*
 	DWORD dwError;
 	dwError = NET_DVR_GetLastError();
 
 	switch (dwError)
 	{
 	case NET_DVR_NOERROR: return "NOERROR";
-	case NET_DVR_PASSWORD_ERROR: return "ÓÃ»§ÃûÃÜÂë´íÎó";
-	case NET_DVR_NOENOUGHPRI: return "È¨ÏÞ²»×ã";
-	case NET_DVR_NOINIT: return "Ã»ÓÐ³õÊ¼»¯";
-	case NET_DVR_CHANNEL_ERROR: return "Í¨µÀºÅ´íÎó";
-	case NET_DVR_OVER_MAXLINK: return "Á¬½Óµ½DVRµÄ¿Í»§¶Ë¸öÊý³¬¹ý×î´ó";
-	case NET_DVR_VERSIONNOMATCH: return "°æ±¾²»Æ¥Åä";
-	case NET_DVR_NETWORK_FAIL_CONNECT: return "Á¬½Ó·þÎñÆ÷Ê§°Ü";
-	case NET_DVR_NETWORK_SEND_ERROR: return "Ïò·þÎñÆ÷·¢ËÍÊ§°Ü";
-	case NET_DVR_NETWORK_RECV_ERROR: return "´Ó·þÎñÆ÷½ÓÊÕÊý¾ÝÊ§°Ü";
-	case NET_DVR_NETWORK_RECV_TIMEOUT: return "´Ó·þÎñÆ÷½ÓÊÕÊý¾Ý³¬Ê±";
-	case NET_DVR_NETWORK_ERRORDATA: return "´«ËÍµÄÊý¾ÝÓÐÎó";
-	case NET_DVR_ORDER_ERROR: return "µ÷ÓÃ´ÎÐò´íÎó";
-	case NET_DVR_OPERNOPERMIT: return "ÎÞ´ËÈ¨ÏÞ";
-	case NET_DVR_COMMANDTIMEOUT: return "DVRÃüÁîÖ´ÐÐ³¬Ê±";
-	case NET_DVR_ERRORSERIALPORT: return "´®¿ÚºÅ´íÎó";
-	case NET_DVR_ERRORALARMPORT: return "±¨¾¯¶Ë¿Ú´íÎó";
-	case NET_DVR_PARAMETER_ERROR: return "²ÎÊý´íÎó";
-	case NET_DVR_CHAN_EXCEPTION: return "·þÎñÆ÷Í¨µÀ´¦ÓÚ´íÎó×´Ì¬";
-	case NET_DVR_NODISK: return "Ã»ÓÐÓ²ÅÌ";
-	case NET_DVR_ERRORDISKNUM: return "Ó²ÅÌºÅ´íÎó";
-	case NET_DVR_DISK_FULL: return "·þÎñÆ÷Ó²ÅÌÂú";
-	case NET_DVR_DISK_ERROR: return "·þÎñÆ÷Ó²ÅÌ³ö´í";
-	case NET_DVR_NOSUPPORT: return "·þÎñÆ÷²»Ö§³Ö";
-	case NET_DVR_BUSY: return "·þÎñÆ÷Ã¦";
-	case NET_DVR_MODIFY_FAIL: return "·þÎñÆ÷ÐÞ¸Ä²»³É¹¦";
-	case NET_DVR_PASSWORD_FORMAT_ERROR: return "ÃÜÂëÊäÈë¸ñÊ½²»ÕýÈ·";
-	case NET_DVR_DISK_FORMATING: return "Ó²ÅÌÕýÔÚ¸ñÊ½»¯£¬²»ÄÜÆô¶¯²Ù×÷";
-	case NET_DVR_DVRNORESOURCE: return "DVR×ÊÔ´²»×ã";
-	case NET_DVR_DVROPRATEFAILED: return "DVR²Ù×÷Ê§°Ü";
-	case NET_DVR_OPENHOSTSOUND_FAIL: return "´ò¿ªPCÉùÒôÊ§°Ü";
-	case NET_DVR_DVRVOICEOPENED: return "·þÎñÆ÷ÓïÒô¶Ô½²±»Õ¼ÓÃ";
-	case NET_DVR_TIMEINPUTERROR: return "Ê±¼äÊäÈë²»ÕýÈ·";
-	case NET_DVR_NOSPECFILE: return "»Ø·ÅÊ±·þÎñÆ÷Ã»ÓÐÖ¸¶¨µÄÎÄ¼þ";
-	case NET_DVR_CREATEFILE_ERROR: return "´´½¨ÎÄ¼þ³ö´í";
-	case NET_DVR_FILEOPENFAIL: return "´ò¿ªÎÄ¼þ³ö´í";
-	case NET_DVR_OPERNOTFINISH: return "ÉÏ´ÎµÄ²Ù×÷»¹Ã»ÓÐÍê³É";
-	case NET_DVR_GETPLAYTIMEFAIL: return "»ñÈ¡µ±Ç°²¥·ÅµÄÊ±¼ä³ö´í";
-	case NET_DVR_PLAYFAIL: return "²¥·Å³ö´í";
-	case NET_DVR_FILEFORMAT_ERROR: return "ÎÄ¼þ¸ñÊ½²»ÕýÈ·";
-	case NET_DVR_DIR_ERROR: return "Â·¾¶´íÎó";
-	case NET_DVR_ALLOC_RESOURCE_ERROR: return "×ÊÔ´·ÖÅä´íÎó";
-	case NET_DVR_AUDIO_MODE_ERROR: return "Éù¿¨Ä£Ê½´íÎó";
-	case NET_DVR_NOENOUGH_BUF: return "»º³åÇøÌ«Ð¡";
-	case NET_DVR_CREATESOCKET_ERROR: return "´´½¨SOCKET³ö´í";
-	case NET_DVR_SETSOCKET_ERROR: return "ÉèÖÃSOCKET³ö´í";
-	case NET_DVR_MAX_NUM: return "¸öÊý´ïµ½×î´ó";
-	case NET_DVR_USERNOTEXIST: return "ÓÃ»§²»´æÔÚ";
-	case NET_DVR_WRITEFLASHERROR: return "Ð´FLASH³ö´í";
-	case NET_DVR_UPGRADEFAIL: return "DVRÉý¼¶Ê§°Ü";
-	case NET_DVR_CARDHAVEINIT: return "½âÂë¿¨ÒÑ¾­³õÊ¼»¯¹ý";
-	case NET_DVR_PLAYERFAILED: return "µ÷ÓÃ²¥·Å¿âÖÐÄ³¸öº¯ÊýÊ§°Ü";
-	case NET_DVR_MAX_USERNUM: return "Éè±¸¶ËÓÃ»§Êý´ïµ½×î´ó";
-	case NET_DVR_GETLOCALIPANDMACFAIL: return "»ñµÃ¿Í»§¶ËµÄIPµØÖ·»òÎïÀíµØÖ·Ê§°Ü";
-	case NET_DVR_NOENCODEING: return "¸ÃÍ¨µÀÃ»ÓÐ±àÂë";
-	case NET_DVR_IPMISMATCH: return "IPµØÖ·²»Æ¥Åä";
-	case NET_DVR_MACMISMATCH: return "MACµØÖ·²»Æ¥Åä";
-	case NET_DVR_UPGRADELANGMISMATCH: return "Éý¼¶ÎÄ¼þÓïÑÔ²»Æ¥Åä";
-	case NET_DVR_MAX_PLAYERPORT: return "²¥·ÅÆ÷Â·Êý´ïµ½×î´ó";
-	case NET_DVR_NOSPACEBACKUP: return "±¸·ÝÉè±¸ÖÐÃ»ÓÐ×ã¹»¿Õ¼ä½øÐÐ±¸·Ý";
-	case NET_DVR_NODEVICEBACKUP: return "Ã»ÓÐÕÒµ½Ö¸¶¨µÄ±¸·ÝÉè±¸";
-	case NET_DVR_PICTURE_BITS_ERROR: return "Í¼ÏñËØÎ»Êý²»·û£¬ÏÞ24É«";
-	case NET_DVR_PICTURE_DIMENSION_ERROR: return "Í¼Æ¬¸ß*¿í³¬ÏÞ£¬ ÏÞ128*256";
-	case NET_DVR_PICTURE_SIZ_ERROR: return "Í¼Æ¬´óÐ¡³¬ÏÞ£¬ÏÞ100K";
-	case NET_DVR_LOADPLAYERSDKFAILED: return "ÔØÈëµ±Ç°Ä¿Â¼ÏÂPlayer Sdk³ö´í";
-	case NET_DVR_LOADPLAYERSDKPROC_ERROR: return "ÕÒ²»µ½Player SdkÖÐÄ³¸öº¯ÊýÈë¿Ú";
-	case NET_DVR_LOADDSSDKFAILED: return "ÔØÈëµ±Ç°Ä¿Â¼ÏÂDSsdk³ö´í";
-	case NET_DVR_LOADDSSDKPROC_ERROR: return "ÕÒ²»µ½DsSdkÖÐÄ³¸öº¯ÊýÈë¿Ú";
-	case NET_DVR_DSSDK_ERROR: return "µ÷ÓÃÓ²½âÂë¿âDsSdkÖÐÄ³¸öº¯ÊýÊ§°Ü";
-	case NET_DVR_VOICEMONOPOLIZE: return "Éù¿¨±»¶ÀÕ¼";
-	case NET_DVR_JOINMULTICASTFAILED: return "¼ÓÈë¶à²¥×éÊ§°Ü";
-	case NET_DVR_CREATEDIR_ERROR: return "½¨Á¢ÈÕÖ¾ÎÄ¼þÄ¿Â¼Ê§°Ü";
-	case NET_DVR_BINDSOCKET_ERROR: return "°ó¶¨Ì×½Ó×ÖÊ§°Ü";
-	case NET_DVR_SOCKETCLOSE_ERROR: return "socketÁ¬½ÓÖÐ¶Ï£¬´Ë´íÎóÍ¨³£ÊÇÓÉÓÚÁ¬½ÓÖÐ¶Ï»òÄ¿µÄµØ²»¿É´ï";
-	case NET_DVR_USERID_ISUSING: return "×¢ÏúÊ±ÓÃ»§IDÕýÔÚ½øÐÐÄ³²Ù×÷";
-	case NET_DVR_SOCKETLISTEN_ERROR: return "¼àÌýÊ§°Ü";
-	case NET_DVR_PROGRAM_EXCEPTION: return "³ÌÐòÒì³£";
-	case NET_DVR_WRITEFILE_FAILED: return "Ð´ÎÄ¼þÊ§°Ü";
-	case NET_DVR_FORMAT_READONLY: return "½ûÖ¹¸ñÊ½»¯Ö»¶ÁÓ²ÅÌ";
-	case NET_DVR_WITHSAMEUSERNAME: return "ÓÃ»§ÅäÖÃ½á¹¹ÖÐ´æÔÚÏàÍ¬µÄÓÃ»§Ãû";
-	case NET_DVR_DEVICETYPE_ERROR: return "µ¼Èë²ÎÊýÊ±Éè±¸ÐÍºÅ²»Æ¥Åä";
-	case NET_DVR_LANGUAGE_ERROR: return "µ¼Èë²ÎÊýÊ±ÓïÑÔ²»Æ¥Åä";
-	case NET_DVR_PARAVERSION_ERROR: return "µ¼Èë²ÎÊýÊ±Èí¼þ°æ±¾²»Æ¥Åä";
-	case NET_DVR_IPCHAN_NOTALIVE: return "Ô¤ÀÀÊ±Íâ½ÓIPÍ¨µÀ²»ÔÚÏß";
-	case NET_DVR_RTSP_SDK_ERROR: return "¼ÓÔØ¸ßÇåIPCÍ¨Ñ¶¿âStreamTransClient.dllÊ§°Ü";
-	case NET_DVR_CONVERT_SDK_ERROR: return "¼ÓÔØ×ªÂë¿âÊ§°Ü";
-	case NET_DVR_IPC_COUNT_OVERFLOW: return "³¬³ö×î´óµÄip½ÓÈëÍ¨µÀÊý";
-	case NET_DVR_MAX_ADD_NUM: return "Ìí¼Ó±êÇ©(Ò»¸öÎÄ¼þÆ¬¶Î64)µÈ¸öÊý´ïµ½×î´ó";
-	case NET_DVR_PARAMMODE_ERROR: return "Í¼ÏñÔöÇ¿ÒÇ£¬²ÎÊýÄ£Ê½´íÎó£¨ÓÃÓÚÓ²¼þÉèÖÃÊ±£¬¿Í»§¶Ë½øÐÐÈí¼þÉèÖÃÊ±´íÎóÖµ£©";
-	case NET_DVR_CODESPITTER_OFFLINE: return "ÊÓÆµ×ÛºÏÆ½Ì¨£¬Âë·ÖÆ÷²»ÔÚÏß";
-	case NET_DVR_BACKUP_COPYING: return "Éè±¸ÕýÔÚ±¸·Ý";
-	case NET_DVR_CHAN_NOTSUPPORT: return "Í¨µÀ²»Ö§³Ö¸Ã²Ù×÷";
-	case NET_DVR_CALLINEINVALID: return "¸ß¶ÈÏßÎ»ÖÃÌ«¼¯ÖÐ»ò³¤¶ÈÏß²»¹»ÇãÐ±";
-	case NET_DVR_CALCANCELCONFLICT: return "È¡Ïû±ê¶¨³åÍ»£¬Èç¹ûÉèÖÃÁË¹æÔò¼°È«¾ÖµÄÊµ¼Ê´óÐ¡³ß´ç¹ýÂË";
-	case NET_DVR_CALPOINTOUTRANGE: return "±ê¶¨µã³¬³ö·¶Î§";
-	case NET_DVR_FILTERRECTINVALID: return "³ß´ç¹ýÂËÆ÷²»·ûºÏÒªÇó";
-	case NET_DVR_DDNS_DEVOFFLINE: return "Éè±¸Ã»ÓÐ×¢²áµ½ddnsÉÏ";
-	case NET_DVR_DDNS_INTER_ERROR: return "DDNS ·þÎñÆ÷ÄÚ²¿´íÎó";
-	case NET_DVR_FUNCTION_NOT_SUPPORT_OS: return "´Ë¹¦ÄÜ²»Ö§³Ö¸Ã²Ù×÷ÏµÍ³";
-	case NET_DVR_DEC_CHAN_REBIND: return "½âÂëÍ¨µÀ°ó¶¨ÏÔÊ¾Êä³ö´ÎÊýÊÜÏÞ";
-	case NET_DVR_INTERCOM_SDK_ERROR: return "¼ÓÔØµ±Ç°Ä¿Â¼ÏÂµÄÓïÒô¶Ô½²¿âÊ§°Ü";
-	case NET_DVR_NO_CURRENT_UPDATEFILE: return "Ã»ÓÐÕýÈ·µÄÉý¼¶°ü";
-	case NET_DVR_USER_NOT_SUCC_LOGIN: return "ÓÃ»§»¹Ã»µÇÂ½³É¹¦";
-	case NET_DVR_USE_LOG_SWITCH_FILE: return "ÕýÔÚÊ¹ÓÃÈÕÖ¾¿ª¹ØÎÄ¼þ";
-	case NET_DVR_POOL_PORT_EXHAUST: return "¶Ë¿Ú³ØÖÐÓÃÓÚ°ó¶¨µÄ¶Ë¿ÚÒÑºÄ¾¡";
-	case NET_DVR_PACKET_TYPE_NOT_SUPPORT: return "ÂëÁ÷·â×°¸ñÊ½´íÎó";
-	case NET_DVR_ALIAS_DUPLICATE: return "±ðÃûÖØ¸´";
+	case NET_DVR_PASSWORD_ERROR: return "ç”¨æˆ·åå¯†ç é”™è¯¯";
+	case NET_DVR_NOENOUGHPRI: return "æƒé™ä¸è¶³";
+	case NET_DVR_NOINIT: return "æ²¡æœ‰åˆå§‹åŒ–";
+	case NET_DVR_CHANNEL_ERROR: return "é€šé“å·é”™è¯¯";
+	case NET_DVR_OVER_MAXLINK: return "è¿žæŽ¥åˆ°DVRçš„å®¢æˆ·ç«¯ä¸ªæ•°è¶…è¿‡æœ€å¤§";
+	case NET_DVR_VERSIONNOMATCH: return "ç‰ˆæœ¬ä¸åŒ¹é…";
+	case NET_DVR_NETWORK_FAIL_CONNECT: return "è¿žæŽ¥æœåŠ¡å™¨å¤±è´¥";
+	case NET_DVR_NETWORK_SEND_ERROR: return "å‘æœåŠ¡å™¨å‘é€å¤±è´¥";
+	case NET_DVR_NETWORK_RECV_ERROR: return "ä»ŽæœåŠ¡å™¨æŽ¥æ”¶æ•°æ®å¤±è´¥";
+	case NET_DVR_NETWORK_RECV_TIMEOUT: return "ä»ŽæœåŠ¡å™¨æŽ¥æ”¶æ•°æ®è¶…æ—¶";
+	case NET_DVR_NETWORK_ERRORDATA: return "ä¼ é€çš„æ•°æ®æœ‰è¯¯";
+	case NET_DVR_ORDER_ERROR: return "è°ƒç”¨æ¬¡åºé”™è¯¯";
+	case NET_DVR_OPERNOPERMIT: return "æ— æ­¤æƒé™";
+	case NET_DVR_COMMANDTIMEOUT: return "DVRå‘½ä»¤æ‰§è¡Œè¶…æ—¶";
+	case NET_DVR_ERRORSERIALPORT: return "ä¸²å£å·é”™è¯¯";
+	case NET_DVR_ERRORALARMPORT: return "æŠ¥è­¦ç«¯å£é”™è¯¯";
+	case NET_DVR_PARAMETER_ERROR: return "å‚æ•°é”™è¯¯";
+	case NET_DVR_CHAN_EXCEPTION: return "æœåŠ¡å™¨é€šé“å¤„äºŽé”™è¯¯çŠ¶æ€";
+	case NET_DVR_NODISK: return "æ²¡æœ‰ç¡¬ç›˜";
+	case NET_DVR_ERRORDISKNUM: return "ç¡¬ç›˜å·é”™è¯¯";
+	case NET_DVR_DISK_FULL: return "æœåŠ¡å™¨ç¡¬ç›˜æ»¡";
+	case NET_DVR_DISK_ERROR: return "æœåŠ¡å™¨ç¡¬ç›˜å‡ºé”™";
+	case NET_DVR_NOSUPPORT: return "æœåŠ¡å™¨ä¸æ”¯æŒ";
+	case NET_DVR_BUSY: return "æœåŠ¡å™¨å¿™";
+	case NET_DVR_MODIFY_FAIL: return "æœåŠ¡å™¨ä¿®æ”¹ä¸æˆåŠŸ";
+	case NET_DVR_PASSWORD_FORMAT_ERROR: return "å¯†ç è¾“å…¥æ ¼å¼ä¸æ­£ç¡®";
+	case NET_DVR_DISK_FORMATING: return "ç¡¬ç›˜æ­£åœ¨æ ¼å¼åŒ–ï¼Œä¸èƒ½å¯åŠ¨æ“ä½œ";
+	case NET_DVR_DVRNORESOURCE: return "DVRèµ„æºä¸è¶³";
+	case NET_DVR_DVROPRATEFAILED: return "DVRæ“ä½œå¤±è´¥";
+	case NET_DVR_OPENHOSTSOUND_FAIL: return "æ‰“å¼€PCå£°éŸ³å¤±è´¥";
+	case NET_DVR_DVRVOICEOPENED: return "æœåŠ¡å™¨è¯­éŸ³å¯¹è®²è¢«å ç”¨";
+	case NET_DVR_TIMEINPUTERROR: return "æ—¶é—´è¾“å…¥ä¸æ­£ç¡®";
+	case NET_DVR_NOSPECFILE: return "å›žæ”¾æ—¶æœåŠ¡å™¨æ²¡æœ‰æŒ‡å®šçš„æ–‡ä»¶";
+	case NET_DVR_CREATEFILE_ERROR: return "åˆ›å»ºæ–‡ä»¶å‡ºé”™";
+	case NET_DVR_FILEOPENFAIL: return "æ‰“å¼€æ–‡ä»¶å‡ºé”™";
+	case NET_DVR_OPERNOTFINISH: return "ä¸Šæ¬¡çš„æ“ä½œè¿˜æ²¡æœ‰å®Œæˆ";
+	case NET_DVR_GETPLAYTIMEFAIL: return "èŽ·å–å½“å‰æ’­æ”¾çš„æ—¶é—´å‡ºé”™";
+	case NET_DVR_PLAYFAIL: return "æ’­æ”¾å‡ºé”™";
+	case NET_DVR_FILEFORMAT_ERROR: return "æ–‡ä»¶æ ¼å¼ä¸æ­£ç¡®";
+	case NET_DVR_DIR_ERROR: return "è·¯å¾„é”™è¯¯";
+	case NET_DVR_ALLOC_RESOURCE_ERROR: return "èµ„æºåˆ†é…é”™è¯¯";
+	case NET_DVR_AUDIO_MODE_ERROR: return "å£°å¡æ¨¡å¼é”™è¯¯";
+	case NET_DVR_NOENOUGH_BUF: return "ç¼“å†²åŒºå¤ªå°";
+	case NET_DVR_CREATESOCKET_ERROR: return "åˆ›å»ºSOCKETå‡ºé”™";
+	case NET_DVR_SETSOCKET_ERROR: return "è®¾ç½®SOCKETå‡ºé”™";
+	case NET_DVR_MAX_NUM: return "ä¸ªæ•°è¾¾åˆ°æœ€å¤§";
+	case NET_DVR_USERNOTEXIST: return "ç”¨æˆ·ä¸å­˜åœ¨";
+	case NET_DVR_WRITEFLASHERROR: return "å†™FLASHå‡ºé”™";
+	case NET_DVR_UPGRADEFAIL: return "DVRå‡çº§å¤±è´¥";
+	case NET_DVR_CARDHAVEINIT: return "è§£ç å¡å·²ç»åˆå§‹åŒ–è¿‡";
+	case NET_DVR_PLAYERFAILED: return "è°ƒç”¨æ’­æ”¾åº“ä¸­æŸä¸ªå‡½æ•°å¤±è´¥";
+	case NET_DVR_MAX_USERNUM: return "è®¾å¤‡ç«¯ç”¨æˆ·æ•°è¾¾åˆ°æœ€å¤§";
+	case NET_DVR_GETLOCALIPANDMACFAIL: return "èŽ·å¾—å®¢æˆ·ç«¯çš„IPåœ°å€æˆ–ç‰©ç†åœ°å€å¤±è´¥";
+	case NET_DVR_NOENCODEING: return "è¯¥é€šé“æ²¡æœ‰ç¼–ç ";
+	case NET_DVR_IPMISMATCH: return "IPåœ°å€ä¸åŒ¹é…";
+	case NET_DVR_MACMISMATCH: return "MACåœ°å€ä¸åŒ¹é…";
+	case NET_DVR_UPGRADELANGMISMATCH: return "å‡çº§æ–‡ä»¶è¯­è¨€ä¸åŒ¹é…";
+	case NET_DVR_MAX_PLAYERPORT: return "æ’­æ”¾å™¨è·¯æ•°è¾¾åˆ°æœ€å¤§";
+	case NET_DVR_NOSPACEBACKUP: return "å¤‡ä»½è®¾å¤‡ä¸­æ²¡æœ‰è¶³å¤Ÿç©ºé—´è¿›è¡Œå¤‡ä»½";
+	case NET_DVR_NODEVICEBACKUP: return "æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„å¤‡ä»½è®¾å¤‡";
+	case NET_DVR_PICTURE_BITS_ERROR: return "å›¾åƒç´ ä½æ•°ä¸ç¬¦ï¼Œé™24è‰²";
+	case NET_DVR_PICTURE_DIMENSION_ERROR: return "å›¾ç‰‡é«˜*å®½è¶…é™ï¼Œ é™128*256";
+	case NET_DVR_PICTURE_SIZ_ERROR: return "å›¾ç‰‡å¤§å°è¶…é™ï¼Œé™100K";
+	case NET_DVR_LOADPLAYERSDKFAILED: return "è½½å…¥å½“å‰ç›®å½•ä¸‹Player Sdkå‡ºé”™";
+	case NET_DVR_LOADPLAYERSDKPROC_ERROR: return "æ‰¾ä¸åˆ°Player Sdkä¸­æŸä¸ªå‡½æ•°å…¥å£";
+	case NET_DVR_LOADDSSDKFAILED: return "è½½å…¥å½“å‰ç›®å½•ä¸‹DSsdkå‡ºé”™";
+	case NET_DVR_LOADDSSDKPROC_ERROR: return "æ‰¾ä¸åˆ°DsSdkä¸­æŸä¸ªå‡½æ•°å…¥å£";
+	case NET_DVR_DSSDK_ERROR: return "è°ƒç”¨ç¡¬è§£ç åº“DsSdkä¸­æŸä¸ªå‡½æ•°å¤±è´¥";
+	case NET_DVR_VOICEMONOPOLIZE: return "å£°å¡è¢«ç‹¬å ";
+	case NET_DVR_JOINMULTICASTFAILED: return "åŠ å…¥å¤šæ’­ç»„å¤±è´¥";
+	case NET_DVR_CREATEDIR_ERROR: return "å»ºç«‹æ—¥å¿—æ–‡ä»¶ç›®å½•å¤±è´¥";
+	case NET_DVR_BINDSOCKET_ERROR: return "ç»‘å®šå¥—æŽ¥å­—å¤±è´¥";
+	case NET_DVR_SOCKETCLOSE_ERROR: return "socketè¿žæŽ¥ä¸­æ–­ï¼Œæ­¤é”™è¯¯é€šå¸¸æ˜¯ç”±äºŽè¿žæŽ¥ä¸­æ–­æˆ–ç›®çš„åœ°ä¸å¯è¾¾";
+	case NET_DVR_USERID_ISUSING: return "æ³¨é”€æ—¶ç”¨æˆ·IDæ­£åœ¨è¿›è¡ŒæŸæ“ä½œ";
+	case NET_DVR_SOCKETLISTEN_ERROR: return "ç›‘å¬å¤±è´¥";
+	case NET_DVR_PROGRAM_EXCEPTION: return "ç¨‹åºå¼‚å¸¸";
+	case NET_DVR_WRITEFILE_FAILED: return "å†™æ–‡ä»¶å¤±è´¥";
+	case NET_DVR_FORMAT_READONLY: return "ç¦æ­¢æ ¼å¼åŒ–åªè¯»ç¡¬ç›˜";
+	case NET_DVR_WITHSAMEUSERNAME: return "ç”¨æˆ·é…ç½®ç»“æž„ä¸­å­˜åœ¨ç›¸åŒçš„ç”¨æˆ·å";
+	case NET_DVR_DEVICETYPE_ERROR: return "å¯¼å…¥å‚æ•°æ—¶è®¾å¤‡åž‹å·ä¸åŒ¹é…";
+	case NET_DVR_LANGUAGE_ERROR: return "å¯¼å…¥å‚æ•°æ—¶è¯­è¨€ä¸åŒ¹é…";
+	case NET_DVR_PARAVERSION_ERROR: return "å¯¼å…¥å‚æ•°æ—¶è½¯ä»¶ç‰ˆæœ¬ä¸åŒ¹é…";
+	case NET_DVR_IPCHAN_NOTALIVE: return "é¢„è§ˆæ—¶å¤–æŽ¥IPé€šé“ä¸åœ¨çº¿";
+	case NET_DVR_RTSP_SDK_ERROR: return "åŠ è½½é«˜æ¸…IPCé€šè®¯åº“StreamTransClient.dllå¤±è´¥";
+	case NET_DVR_CONVERT_SDK_ERROR: return "åŠ è½½è½¬ç åº“å¤±è´¥";
+	case NET_DVR_IPC_COUNT_OVERFLOW: return "è¶…å‡ºæœ€å¤§çš„ipæŽ¥å…¥é€šé“æ•°";
+	case NET_DVR_MAX_ADD_NUM: return "æ·»åŠ æ ‡ç­¾(ä¸€ä¸ªæ–‡ä»¶ç‰‡æ®µ64)ç­‰ä¸ªæ•°è¾¾åˆ°æœ€å¤§";
+	case NET_DVR_PARAMMODE_ERROR: return "å›¾åƒå¢žå¼ºä»ªï¼Œå‚æ•°æ¨¡å¼é”™è¯¯ï¼ˆç”¨äºŽç¡¬ä»¶è®¾ç½®æ—¶ï¼Œå®¢æˆ·ç«¯è¿›è¡Œè½¯ä»¶è®¾ç½®æ—¶é”™è¯¯å€¼ï¼‰";
+	case NET_DVR_CODESPITTER_OFFLINE: return "è§†é¢‘ç»¼åˆå¹³å°ï¼Œç åˆ†å™¨ä¸åœ¨çº¿";
+	case NET_DVR_BACKUP_COPYING: return "è®¾å¤‡æ­£åœ¨å¤‡ä»½";
+	case NET_DVR_CHAN_NOTSUPPORT: return "é€šé“ä¸æ”¯æŒè¯¥æ“ä½œ";
+	case NET_DVR_CALLINEINVALID: return "é«˜åº¦çº¿ä½ç½®å¤ªé›†ä¸­æˆ–é•¿åº¦çº¿ä¸å¤Ÿå€¾æ–œ";
+	case NET_DVR_CALCANCELCONFLICT: return "å–æ¶ˆæ ‡å®šå†²çªï¼Œå¦‚æžœè®¾ç½®äº†è§„åˆ™åŠå…¨å±€çš„å®žé™…å¤§å°å°ºå¯¸è¿‡æ»¤";
+	case NET_DVR_CALPOINTOUTRANGE: return "æ ‡å®šç‚¹è¶…å‡ºèŒƒå›´";
+	case NET_DVR_FILTERRECTINVALID: return "å°ºå¯¸è¿‡æ»¤å™¨ä¸ç¬¦åˆè¦æ±‚";
+	case NET_DVR_DDNS_DEVOFFLINE: return "è®¾å¤‡æ²¡æœ‰æ³¨å†Œåˆ°ddnsä¸Š";
+	case NET_DVR_DDNS_INTER_ERROR: return "DDNS æœåŠ¡å™¨å†…éƒ¨é”™è¯¯";
+	case NET_DVR_FUNCTION_NOT_SUPPORT_OS: return "æ­¤åŠŸèƒ½ä¸æ”¯æŒè¯¥æ“ä½œç³»ç»Ÿ";
+	case NET_DVR_DEC_CHAN_REBIND: return "è§£ç é€šé“ç»‘å®šæ˜¾ç¤ºè¾“å‡ºæ¬¡æ•°å—é™";
+	case NET_DVR_INTERCOM_SDK_ERROR: return "åŠ è½½å½“å‰ç›®å½•ä¸‹çš„è¯­éŸ³å¯¹è®²åº“å¤±è´¥";
+	case NET_DVR_NO_CURRENT_UPDATEFILE: return "æ²¡æœ‰æ­£ç¡®çš„å‡çº§åŒ…";
+	case NET_DVR_USER_NOT_SUCC_LOGIN: return "ç”¨æˆ·è¿˜æ²¡ç™»é™†æˆåŠŸ";
+	case NET_DVR_USE_LOG_SWITCH_FILE: return "æ­£åœ¨ä½¿ç”¨æ—¥å¿—å¼€å…³æ–‡ä»¶";
+	case NET_DVR_POOL_PORT_EXHAUST: return "ç«¯å£æ± ä¸­ç”¨äºŽç»‘å®šçš„ç«¯å£å·²è€—å°½";
+	case NET_DVR_PACKET_TYPE_NOT_SUPPORT: return "ç æµå°è£…æ ¼å¼é”™è¯¯";
+	case NET_DVR_ALIAS_DUPLICATE: return "åˆ«åé‡å¤";
 	default:
-		return "Î´Öª´íÎó";
+		return "æœªçŸ¥é”™è¯¯";
 	}
+	*/
 }

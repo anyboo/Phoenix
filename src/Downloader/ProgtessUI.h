@@ -1,8 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
-#include "SearchFileNotification.h"
-
 #define BT_SEARCH_CANCEL		(_T("Search_cel"))
 
 class CProgtessUI :
@@ -18,7 +16,6 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCancelSearch(TNotifyUI& msg);
-	void ReceiveSearchFile(SearchFileNotification* pNf);
 
 	void ShowProgress();
 

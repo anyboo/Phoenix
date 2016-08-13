@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Device.h"
 
-#pragma comment(lib, "Ws2_32.lib")
+//#pragma comment(lib, "Ws2_32.lib")
 
 Device::Device(const AbstractVendor* sdk)
 {

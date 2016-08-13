@@ -9,8 +9,8 @@
 
 using Poco::NotificationQueue;
 
-#pragma comment(lib, "NetSdk")
-#pragma comment(lib, "H264Play")
+//#pragma comment(lib, "NetSdk")
+//#pragma comment(lib, "H264Play")
 
 
 class DZP_SDK_INTERFACE
@@ -32,68 +32,69 @@ int DZP_SDK_INTERFACE::m_playbackHandle = 0;
 
 std::string GZLL_GetLastErrorString(int error)
 {
+	return "";
+	/*
 	switch (error)
 	{
-	case H264_DVR_NOERROR: return std::string("Ã»ÓĞ´íÎó");
-	case H264_DVR_SUCCESS: return std::string("·µ»Ø³É¹¦");
-	case H264_DVR_SDK_NOTVALID: return std::string("·Ç·¨ÇëÇó");
-	case H264_DVR_NO_INIT: return std::string("SDKÎ´¾­³õÊ¼»¯");
-	case H264_DVR_ILLEGAL_PARAM: return std::string("ÓÃ»§²ÎÊı²»ºÏ·¨");
-	case H264_DVR_INVALID_HANDLE: return std::string("¾ä±úÎŞĞ§");
-	case H264_DVR_SDK_UNINIT_ERROR: return std::string("SDKÇåÀí³ö´í");
-	case H264_DVR_SDK_TIMEOUT: return std::string("µÈ´ı³¬Ê±");
-	case H264_DVR_SDK_MEMORY_ERROR: return std::string("ÄÚ´æ´íÎó£¬´´½¨ÄÚ´æÊ§°Ü");
-	case H264_DVR_SDK_NET_ERROR: return std::string("ÍøÂç´íÎó");
-	case H264_DVR_SDK_OPEN_FILE_ERROR: return std::string("´ò¿ªÎÄ¼şÊ§°Ü");
-	case H264_DVR_SDK_UNKNOWNERROR: return std::string("Î´Öª´íÎó");
-	case H264_DVR_DEV_VER_NOMATCH: return std::string("ÊÕµ½Êı¾İ²»ÕıÈ·£¬¿ÉÄÜ°æ±¾²»Æ¥Åä");
-	case H264_DVR_SDK_NOTSUPPORT: return std::string("°æ±¾²»Ö§³Ö");
-	case H264_DVR_OPEN_CHANNEL_ERROR: return std::string("´ò¿ªÍ¨µÀÊ§°Ü");
-	case H264_DVR_CLOSE_CHANNEL_ERROR: return std::string("¹Ø±ÕÍ¨µÀÊ§°Ü");
-	case H264_DVR_SUB_CONNECT_ERROR: return std::string("½¨Á¢Ã½Ìå×ÓÁ¬½ÓÊ§°Ü");
-	case H264_DVR_SUB_CONNECT_SEND_ERROR: return std::string("Ã½Ìå×ÓÁ¬½ÓÍ¨Ñ¶Ê§°Ü");
-	case H264_DVR_NATCONNET_REACHED_MAX: return std::string("NatÊÓÆµÁ´½Ó´ïµ½×î´ó£¬²»ÔÊĞíĞÂµÄNatÊÓÆµÁ´½Ó");
-	case H264_DVR_NOPOWER: return std::string("ÎŞÈ¨ÏŞ");
-	case H264_DVR_PASSWORD_NOT_VALID: return std::string("ÕËºÅÃÜÂë²»¶Ô");
-	case H264_DVR_LOGIN_USER_NOEXIST: return std::string("ÓÃ»§²»´æÔÚ");
-	case H264_DVR_USER_LOCKED: return std::string("¸ÃÓÃ»§±»Ëø¶¨");
-	case H264_DVR_USER_IN_BLACKLIST: return std::string("¸ÃÓÃ»§²»ÔÊĞí·ÃÎÊ(ÔÚºÚÃûµ¥ÖĞ)");
-	case H264_DVR_USER_HAS_USED: return std::string("¸ÃÓÃ»§ÒÔµÇÂ½");
-	case H264_DVR_USER_NOT_LOGIN: return std::string("¸ÃÓÃ»§Ã»ÓĞµÇÂ½");
-	case H264_DVR_CONNECT_DEVICE_ERROR: return std::string("¿ÉÄÜÉè±¸²»´æÔÚ");
-	case H264_DVR_ACCOUNT_INPUT_NOT_VALID: return std::string("ÓÃ»§¹ÜÀíÊäÈë²»ºÏ·¨");
-	case H264_DVR_ACCOUNT_OVERLAP: return std::string("Ë÷ÒıÖØ¸´");
-	case H264_DVR_ACCOUNT_OBJECT_NONE: return std::string("²»´æÔÚ¶ÔÏó, ÓÃÓÚ²éÑ¯Ê±");
-	case H264_DVR_ACCOUNT_OBJECT_NOT_VALID: return std::string("²»´æÔÚ¶ÔÏó");
-	case H264_DVR_ACCOUNT_OBJECT_IN_USE: return std::string("¶ÔÏóÕıÔÚÊ¹ÓÃ");
-	case H264_DVR_ACCOUNT_SUBSET_OVERLAP: return std::string("×Ó¼¯³¬·¶Î§ (Èç×éµÄÈ¨ÏŞ³¬¹ıÈ¨ÏŞ±í£¬ÓÃ»§È¨ÏŞ³¬³ö×éµÄÈ¨ÏŞ·¶Î§µÈµÈ)");
-	case H264_DVR_ACCOUNT_PWD_NOT_VALID: return std::string("ÃÜÂë²»ÕıÈ·");
-	case H264_DVR_ACCOUNT_PWD_NOT_MATCH: return std::string("ÃÜÂë²»Æ¥Åä");
-	case H264_DVR_ACCOUNT_RESERVED: return std::string("±£ÁôÕÊºÅ");
-	case H264_DVR_OPT_RESTART: return std::string("±£´æÅäÖÃºóĞèÒªÖØÆôÓ¦ÓÃ³ÌĞò");
-	case H264_DVR_OPT_REBOOT: return std::string("ĞèÒªÖØÆôÏµÍ³");
-	case H264_DVR_OPT_FILE_ERROR: return std::string("Ğ´ÎÄ¼ş³ö´í");
-	case H264_DVR_OPT_CAPS_ERROR: return std::string("ÅäÖÃÌØĞÔ²»Ö§³Ö");
-	case H264_DVR_OPT_VALIDATE_ERROR: return std::string("ÅäÖÃĞ£ÑéÊ§°Ü");
-	case H264_DVR_OPT_CONFIG_NOT_EXIST: return std::string("ÇëÇó»òÕßÉèÖÃµÄÅäÖÃ²»´æÔÚ");
-	case H264_DVR_CTRL_PAUSE_ERROR: return std::string("ÔİÍ£Ê§°Ü");
-	case H264_DVR_SDK_NOTFOUND: return std::string("²éÕÒÊ§°Ü£¬Ã»ÓĞÕÒµ½¶ÔÓ¦ÎÄ¼ş");
-	case H264_DVR_CFG_NOT_ENABLE: return std::string("ÅäÖÃÎ´ÆôÓÃ");
-	case H264_DVR_DECORD_FAIL: return std::string("½âÂëÊ§°Ü");
-	case H264_DVR_SOCKET_ERROR: return std::string("´´½¨Ì×½Ú×ÖÊ§°Ü");
-	case H264_DVR_SOCKET_CONNECT: return std::string("Á¬½ÓÌ×½Ú×ÖÊ§°Ü");
-	case H264_DVR_SOCKET_DOMAIN: return std::string("ÓòÃû½âÎöÊ§°Ü");
-	case H264_DVR_SOCKET_SEND: return std::string("·¢ËÍÊı¾İÊ§°Ü");
-	case H264_DVR_ARSP_NO_DEVICE: return std::string("Ã»ÓĞ»ñÈ¡µ½Éè±¸ĞÅÏ¢£¬Éè±¸Ó¦¸Ã²»ÔÚÏß");
-	case H264_DVR_ARSP_BUSING: return std::string("ARSP·şÎñ·±Ã¦");
-	case H264_DVR_ARSP_BUSING_SELECT: return std::string("ARSP·şÎñ·±Ã¦,selectÊ§°Ü");
-	case H264_DVR_ARSP_BUSING_RECVICE: return std::string("ARSP·şÎñ·±Ã¦,recviceÊ§°Ü");
-	case H264_DVR_CONNECTSERVER_ERROR: return std::string("Á¬½Ó·şÎñÆ÷Ê§°Ü");
-	case H264_DVR_CONNECT_FULL: return std::string("·şÎñÆ÷Á¬½ÓÊıÒÑÂú");
-	case H264_DVR_PIRATESOFTWARE: return std::string("Éè±¸µÁ°æ");
+	case H264_DVR_NOERROR: return std::string("æ²¡æœ‰é”™è¯¯");
+	case H264_DVR_SUCCESS: return std::string("è¿”å›æˆåŠŸ");
+	case H264_DVR_SDK_NOTVALID: return std::string("éæ³•è¯·æ±‚");
+	case H264_DVR_NO_INIT: return std::string("SDKæœªç»åˆå§‹åŒ–");
+	case H264_DVR_ILLEGAL_PARAM: return std::string("ç”¨æˆ·å‚æ•°ä¸åˆæ³•");
+	case H264_DVR_INVALID_HANDLE: return std::string("å¥æŸ„æ— æ•ˆ");
+	case H264_DVR_SDK_UNINIT_ERROR: return std::string("SDKæ¸…ç†å‡ºé”™");
+	case H264_DVR_SDK_TIMEOUT: return std::string("ç­‰å¾…è¶…æ—¶");
+	case H264_DVR_SDK_MEMORY_ERROR: return std::string("å†…å­˜é”™è¯¯ï¼Œåˆ›å»ºå†…å­˜å¤±è´¥");
+	case H264_DVR_SDK_NET_ERROR: return std::string("ç½‘ç»œé”™è¯¯");
+	case H264_DVR_SDK_OPEN_FILE_ERROR: return std::string("æ‰“å¼€æ–‡ä»¶å¤±è´¥");
+	case H264_DVR_SDK_UNKNOWNERROR: return std::string("æœªçŸ¥é”™è¯¯");
+	case H264_DVR_DEV_VER_NOMATCH: return std::string("æ”¶åˆ°æ•°æ®ä¸æ­£ç¡®ï¼Œå¯èƒ½ç‰ˆæœ¬ä¸åŒ¹é…");
+	case H264_DVR_SDK_NOTSUPPORT: return std::string("ç‰ˆæœ¬ä¸æ”¯æŒ");
+	case H264_DVR_OPEN_CHANNEL_ERROR: return std::string("æ‰“å¼€é€šé“å¤±è´¥");
+	case H264_DVR_CLOSE_CHANNEL_ERROR: return std::string("å…³é—­é€šé“å¤±è´¥");
+	case H264_DVR_SUB_CONNECT_ERROR: return std::string("å»ºç«‹åª’ä½“å­è¿æ¥å¤±è´¥");
+	case H264_DVR_SUB_CONNECT_SEND_ERROR: return std::string("åª’ä½“å­è¿æ¥é€šè®¯å¤±è´¥");
+	case H264_DVR_NATCONNET_REACHED_MAX: return std::string("Natè§†é¢‘é“¾æ¥è¾¾åˆ°æœ€å¤§ï¼Œä¸å…è®¸æ–°çš„Natè§†é¢‘é“¾æ¥");
+	case H264_DVR_NOPOWER: return std::string("æ— æƒé™");
+	case H264_DVR_PASSWORD_NOT_VALID: return std::string("è´¦å·å¯†ç ä¸å¯¹");
+	case H264_DVR_LOGIN_USER_NOEXIST: return std::string("ç”¨æˆ·ä¸å­˜åœ¨");
+	case H264_DVR_USER_LOCKED: return std::string("è¯¥ç”¨æˆ·è¢«é”å®š");
+	case H264_DVR_USER_IN_BLACKLIST: return std::string("è¯¥ç”¨æˆ·ä¸å…è®¸è®¿é—®(åœ¨é»‘åå•ä¸­)");
+	case H264_DVR_USER_HAS_USED: return std::string("è¯¥ç”¨æˆ·ä»¥ç™»é™†");
+	case H264_DVR_USER_NOT_LOGIN: return std::string("è¯¥ç”¨æˆ·æ²¡æœ‰ç™»é™†");
+	case H264_DVR_CONNECT_DEVICE_ERROR: return std::string("å¯èƒ½è®¾å¤‡ä¸å­˜åœ¨");
+	case H264_DVR_ACCOUNT_INPUT_NOT_VALID: return std::string("ç”¨æˆ·ç®¡ç†è¾“å…¥ä¸åˆæ³•");
+	case H264_DVR_ACCOUNT_OVERLAP: return std::string("ç´¢å¼•é‡å¤");
+	case H264_DVR_ACCOUNT_OBJECT_NONE: return std::string("ä¸å­˜åœ¨å¯¹è±¡, ç”¨äºæŸ¥è¯¢æ—¶");
+	case H264_DVR_ACCOUNT_OBJECT_NOT_VALID: return std::string("ä¸å­˜åœ¨å¯¹è±¡");
+	case H264_DVR_ACCOUNT_OBJECT_IN_USE: return std::string("å¯¹è±¡æ­£åœ¨ä½¿ç”¨");
+	case H264_DVR_ACCOUNT_SUBSET_OVERLAP: return std::string("å­é›†è¶…èŒƒå›´ (å¦‚ç»„çš„æƒé™è¶…è¿‡æƒé™è¡¨ï¼Œç”¨æˆ·æƒé™è¶…å‡ºç»„çš„æƒé™èŒƒå›´ç­‰ç­‰)");
+	case H264_DVR_ACCOUNT_PWD_NOT_VALID: return std::string("å¯†ç ä¸æ­£ç¡®");
+	case H264_DVR_ACCOUNT_PWD_NOT_MATCH: return std::string("å¯†ç ä¸åŒ¹é…");
+	case H264_DVR_ACCOUNT_RESERVED: return std::string("ä¿ç•™å¸å·");
+	case H264_DVR_OPT_RESTART: return std::string("ä¿å­˜é…ç½®åéœ€è¦é‡å¯åº”ç”¨ç¨‹åº");
+	case H264_DVR_OPT_REBOOT: return std::string("éœ€è¦é‡å¯ç³»ç»Ÿ");
+	case H264_DVR_OPT_FILE_ERROR: return std::string("å†™æ–‡ä»¶å‡ºé”™");
+	case H264_DVR_OPT_CAPS_ERROR: return std::string("é…ç½®ç‰¹æ€§ä¸æ”¯æŒ");
+	case H264_DVR_OPT_VALIDATE_ERROR: return std::string("é…ç½®æ ¡éªŒå¤±è´¥");
+	case H264_DVR_OPT_CONFIG_NOT_EXIST: return std::string("è¯·æ±‚æˆ–è€…è®¾ç½®çš„é…ç½®ä¸å­˜åœ¨");
+	case H264_DVR_CTRL_PAUSE_ERROR: return std::string("æš‚åœå¤±è´¥");
+	case H264_DVR_SDK_NOTFOUND: return std::string("æŸ¥æ‰¾å¤±è´¥ï¼Œæ²¡æœ‰æ‰¾åˆ°å¯¹åº”æ–‡ä»¶");
+	case H264_DVR_CFG_NOT_ENABLE: return std::string("é…ç½®æœªå¯ç”¨");
+	case H264_DVR_DECORD_FAIL: return std::string("è§£ç å¤±è´¥");
+	case H264_DVR_SOCKET_ERROR: return std::string("åˆ›å»ºå¥—èŠ‚å­—å¤±è´¥");
+	case H264_DVR_SOCKET_CONNECT: return std::string("è¿æ¥å¥—èŠ‚å­—å¤±è´¥");
+	case H264_DVR_SOCKET_DOMAIN: return std::string("åŸŸåè§£æå¤±è´¥");
+	case H264_DVR_SOCKET_SEND: return std::string("å‘é€æ•°æ®å¤±è´¥");
+	case H264_DVR_ARSP_NO_DEVICE: return std::string("æ²¡æœ‰è·å–åˆ°è®¾å¤‡ä¿¡æ¯ï¼Œè®¾å¤‡åº”è¯¥ä¸åœ¨çº¿");
+	case H264_DVR_ARSP_BUSING: return std::string("ARSPæœåŠ¡ç¹å¿™");
+	case H264_DVR_ARSP_BUSING_SELECT: return std::string("ARSPæœåŠ¡ç¹å¿™,selectå¤±è´¥");
+	case H264_DVR_ARSP_BUSING_RECVICE: return std::string("ARSPæœåŠ¡ç¹å¿™,recviceå¤±è´¥");
+	case H264_DVR_CONNECTSERVER_ERROR: return std::string("è¿æ¥æœåŠ¡å™¨å¤±è´¥");
+	case H264_DVR_CONNECT_FULL: return std::string("æœåŠ¡å™¨è¿æ¥æ•°å·²æ»¡");
+	case H264_DVR_PIRATESOFTWARE: return std::string("è®¾å¤‡ç›—ç‰ˆ");
 	}
-
-	return "";
+	*/
 }
 
 std::string GZLL_GetLastErrorString()
@@ -150,7 +151,7 @@ void CDZPVendor::Init()
 
 	H264_DVR_SetConnectTime(5000, 3);
 
-	std::cout << "DZP ³õÊ¼»¯SDK ³É¹¦£¡" << std::endl;
+	//std::cout << "DZP åˆå§‹åŒ–SDK æˆåŠŸï¼" << std::endl;
 }
 
 long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -167,13 +168,13 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 	{
 		std::string m_sLastError = GZLL_GetLastErrorString(nError);
 		throw LoginException(m_sLastError.c_str());
-		std::cout << "DZP µÇÂ½ Ê§°Ü£¡" << std::endl;
+		//std::cout << "DZP ç™»é™† å¤±è´¥ï¼" << std::endl;
 		return -1;
 	}
 
 	m_iMaxChannel = OutDev.byChanNum + OutDev.iDigChannel;
 
-	std::cout << "DZP µÇÂ½ ³É¹¦£¡" << std::endl;
+	//std::cout << "DZP ç™»é™† æˆåŠŸï¼" << std::endl;
 
 	return loginHandle;
 }
@@ -184,12 +185,12 @@ void CDZPVendor::Logout(const long loginHandle)
 	{
 		if (H264_DVR_Logout(loginHandle))
 		{
-			std::cout << "DZP ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
+			//std::cout << "DZP é€€å‡ºç™»é™† æˆåŠŸï¼" << std::endl;
 		}
 		else
 		{
 			std::string m_sLastError = GZLL_GetLastErrorString();
-			std::cout << "DZP ÍË³öµÇÂ½ Ê§°Ü£¡" << std::endl;
+			//std::cout << "DZP é€€å‡ºç™»é™† å¤±è´¥ï¼" << std::endl;
 			throw std::exception(m_sLastError.c_str());
 		}
 	}
@@ -197,7 +198,7 @@ void CDZPVendor::Logout(const long loginHandle)
 
 void CDZPVendor::StartSearchDevice()
 {
-	std::cout << "DZP ËÑË÷Éè±¸ ¿ªÊ¼£¡" << std::endl;
+	//std::cout << "DZP æœç´¢è®¾å¤‡ å¼€å§‹ï¼" << std::endl;
 
 	m_listDeviceInfo.clear();
 
@@ -239,7 +240,7 @@ void CDZPVendor::StartSearchDevice()
 
 void CDZPVendor::StopSearchDevice()
 {
-	std::cout << "DZP ËÑË÷Éè±¸ ½áÊø£¡" << std::endl;
+	//std::cout << "DZP æœç´¢è®¾å¤‡ ç»“æŸï¼" << std::endl;
 }
 
 void CDZPVendor::SearchAll(const long loginHandle)
@@ -256,20 +257,20 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
-	std::cout << "DZP ËÑË÷ÎÄ¼ş ¿ªÊ¼£¡" << std::endl;
+	//std::cout << "DZP æœç´¢æ–‡ä»¶ å¼€å§‹ï¼" << std::endl;
 	m_files_Unit.clear();
 	DZP_SDK_INTERFACE::DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
-	std::cout << "DZP ËÑË÷ÎÄ¼ş ½áÊø£¡" << std::endl;
+	//std::cout << "DZP æœç´¢æ–‡ä»¶ ç»“æŸï¼" << std::endl;
 
 	// Save Search Video List Result to Config File
-	//std::cout << "DZP Ğ´JsonÊı¾İµ½ÎÄ¼ş ¿ªÊ¼£¡" << std::endl;
+	//std::cout << "DZP å†™Jsonæ•°æ®åˆ°æ–‡ä»¶ å¼€å§‹ï¼" << std::endl;
 	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_DZP_Abbr);
-	//std::cout << "DZP Ğ´JsonÊı¾İµ½ÎÄ¼ş ½áÊø£¡" << std::endl;
+	//std::cout << "DZP å†™Jsonæ•°æ®åˆ°æ–‡ä»¶ ç»“æŸï¼" << std::endl;
 
 	// Write File List to DB
-	std::cout << "DZP Ğ´ÎÄ¼şÊı¾İµ½Êı¾İ¿â ¿ªÊ¼£¡" << std::endl;
+	//std::cout << "DZP å†™æ–‡ä»¶æ•°æ®åˆ°æ•°æ®åº“ å¼€å§‹ï¼" << std::endl;
 	CCommonUtrl::getInstance().WriteFileListToDB(m_files_Unit);
-	std::cout << "DZP Ğ´ÎÄ¼şÊı¾İµ½Êı¾İ¿â ½áÊø£¡" << std::endl;
+	//std::cout << "DZP å†™æ–‡ä»¶æ•°æ®åˆ°æ•°æ®åº“ ç»“æŸï¼" << std::endl;
 
 	for (size_t i = 0; i < m_files_Unit.size(); i++)
 	{
@@ -323,7 +324,7 @@ void CDZPVendor::Download(const long loginHandle, const RecordFile& file)
 	DZP_SDK_INTERFACE::m_lFileHandle = H264_DVR_GetFileByName(loginHandle, &pData, (char*)strPath.c_str(), DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, 0);
 	if (DZP_SDK_INTERFACE::m_lFileHandle <= 0)
 	{
-		std::string m_sLastError = std::string("ÏÂÔØÊ§°Ü£¡´íÎóÎª:") + GZLL_GetLastErrorString();
+		//std::string m_sLastError = std::string("ä¸‹è½½å¤±è´¥ï¼é”™è¯¯ä¸º:") + GZLL_GetLastErrorString();
 		return;
 	}
 }
@@ -386,7 +387,7 @@ void DZP_SDK_INTERFACE::DZP_SearchUnit(const long loginHandle, const size_t chan
 	long hdl = H264_DVR_FindFile(loginHandle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &fileCount);
 	if (hdl <= 0)
 	{
-		std::string m_sLastError = std::string("²éÑ¯Ê§°Ü£¡´íÎóÎª:") + GZLL_GetLastErrorString();
+		//std::string m_sLastError = std::string("æŸ¥è¯¢å¤±è´¥ï¼é”™è¯¯ä¸º:") + GZLL_GetLastErrorString();
 		throw SearchFileException(m_sLastError.c_str());
 		return;
 	}
@@ -396,7 +397,7 @@ void DZP_SDK_INTERFACE::DZP_SearchUnit(const long loginHandle, const size_t chan
 		{
 			for (int i = 0; i < fileCount; i++)
 			{
-				if (nriFileinfo[i].size>0)//ÊÓÆµÎÄ¼ş±ØĞë´óÓÚ0(²âÊÔÖĞÓĞ·¢ÏÖÎÄ¼ş´óĞ¡Îª0Çé¿ö,ËùÒÔ±ØĞë¹ıÂËµô¸Ä²¿·Ö)
+				if (nriFileinfo[i].size>0)//è§†é¢‘æ–‡ä»¶å¿…é¡»å¤§äº0(æµ‹è¯•ä¸­æœ‰å‘ç°æ–‡ä»¶å¤§å°ä¸º0æƒ…å†µ,æ‰€ä»¥å¿…é¡»è¿‡æ»¤æ‰æ”¹éƒ¨åˆ†)
 				{
 					RecordFile record;
 

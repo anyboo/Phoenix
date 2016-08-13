@@ -5,37 +5,18 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
-#include "LoginDevice.h"
-#include "SearchDevice.h"
-#include "ReciveUIQunue.h"
-#include "SearchFileWorker.h"
-
-#include <poco/ThreadPool.h>
-#include "Poco/Observer.h"
-#include <Poco/NotificationCenter.h>
-
-#include "NotificationNetworkStatus.h"
-
-using Poco::ThreadPool;
-using Poco::NotificationCenter;
-using Poco::Observer;
-
-
 DownLoadWnd::DownLoadWnd()
 :m_FileCount(1), m_beginTag(TRUE)
 {
 	ReadJsonFile();
 	m_Vendor.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &m_Vendor);
-	m_Device = new Device;
 }
 
 
 DownLoadWnd::~DownLoadWnd()
 {
 	RemoveVirtualWnd(_T("Vendor"));
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
 }
 
 
@@ -72,20 +53,10 @@ void DownLoadWnd::OnCloseWnd(TNotifyUI& msg)
 
 void DownLoadWnd::InitWindow()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
 }
 
 void DownLoadWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
 {
-	if (pNf == nullptr)
-		return;
-	if (pNf->name().compare("class CNotificationNetworkStatus"))
-		return;
-
-	NOTIFICATION_TYPE eNotify;
-	eNotify = pNf->GetNotificationType();
-	SetNetWorkState(eNotify);
 }
 
 void DownLoadWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
@@ -112,14 +83,6 @@ void DownLoadWnd::OnSelectTimeType()
 
 void DownLoadWnd::ShowOnlineDevice()
 {
-	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
-	std::string VendName;
-	for (int i = 0; i < m_listDevice.size(); i++)
-	{
-		VendName = m_VnameAndType[m_listDevice[i]->GetSDKType()];
-		m_Vendor.AddVendorList(VendName, m_listDevice[i]->getIP());
-		m_onlineIP.push_back(m_listDevice[i]->getIP());
-	}
 }
 
 void DownLoadWnd::OnSelectCalendar(STDSTRING& SendName)
@@ -162,36 +125,11 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-
-	pDlg->LogIn();
-	m_Device = pDlg->GetLonInDevice();
-	if (m_Device == nullptr)
-		return;
-	m_ChannelCount = m_Device->getMaxChannel();
-	NET_SDK_TYPE DevideType = m_Device->GetSDKType();
-	std::string DeviceName = m_VnameAndType[DevideType];
-
-	std::string strIP = m_Device->getIP();
-	for (size_t i = 0; i < m_onlineIP.size(); i++)
-	{
-		if (m_onlineIP[i] == strIP)
-		{
-			return;
-		}
-	}
-	m_Vendor.AddVendorList(DeviceName, strIP);
-	m_onlineIP.push_back(strIP);
 }
 
 void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 {
-	GetChannel();
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
-	int CurSelList = pList->GetCurSel();
-	if (m_Channel.size() == 0 || CurSelList == -1)
-		return;
-	SearchFile();
-
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
@@ -284,14 +222,6 @@ void DownLoadWnd::OnUseSearchCtrl(std::string& SendName)
 void DownLoadWnd::SearchFile()
 {	
 	GetDataTime();
-	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
-		
-	QMSqlite *pDb = QMSqlite::getInstance();
-	std::string str = DELETE_ALL_SEARCH_VIDEO;
-	pDb->cleanData(str);
-
-	SearchFileWorker *sfw = new SearchFileWorker(m_Device, m_timeRangeSearch, m_Channel, *ReciveUIQunue::GetInstance());
-	ThreadPool::defaultPool().start(*sfw);
 }
 
 void DownLoadWnd::GetChannel()
@@ -479,11 +409,10 @@ void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(CurSelList, DUI_CTR_LABEL, 1));
 	m_DeviceID = Lab_IP->GetText();
 	int CurSel = GetSubListCurSel(CurSelList, VendorList);
-	m_Device = CLoginDevice::getInstance().GetDevice(m_DeviceID);
-	size_t Channel_Count = m_Device->getMaxChannel();
+
 	if (Channel_List == NULL)
 	{
-		m_Vendor.AddChannelsList(CurSel, Channel_Count);
+		//m_Vendor.AddChannelsList(CurSel, Channel_Count);
 	}
 	else
 	{
@@ -491,11 +420,11 @@ void DownLoadWnd::Show_Off_VendorList(STDSTRING& strSendName)
 		VendorList->RemoveAt(Channel_List_CurSel, true);
 		if (Channel_List_CurSel != CurSel + 1 && Channel_List_CurSel > CurSel)
 		{
-			m_Vendor.AddChannelsList(CurSel, Channel_Count);
+			//m_Vendor.AddChannelsList(CurSel, Channel_Count);
 		}
 		else if (Channel_List_CurSel != CurSel + 1 && Channel_List_CurSel < CurSel)
 		{
-			m_Vendor.AddChannelsList(CurSel - 1, Channel_Count);
+			//m_Vendor.AddChannelsList(CurSel - 1, Channel_Count);
 		}
 	}
 }
@@ -538,7 +467,7 @@ void DownLoadWnd::RemoveVendor(STDSTRING& strSendName)
 	VendorList->RemoveAt(CurSel, true);
 	
 	STDSTRING strIP = Lab_IP->GetText();
-	CLoginDevice::getInstance().Logout(strIP);
+	//CLoginDevice::getInstance().Logout(strIP);
 	for (size_t i = 0; i < m_onlineIP.size(); i++)
 	{
 		if (m_onlineIP[i] == strIP)

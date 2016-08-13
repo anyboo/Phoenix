@@ -84,7 +84,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
       <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>dhnetsdk.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -176,14 +177,9 @@
     <ClCompile Include="..\..\common\QMSqlite.cpp" />
     <ClCompile Include="..\..\common\utils.cpp" />
     <ClCompile Include="..\..\common\windowutils.cpp" />
-    <ClCompile Include="..\..\common\workprocess.cpp" />
     <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp" />
     <ClCompile Include="..\BusinessLayer\Device.cpp" />
     <ClCompile Include="..\BusinessLayer\DeviceManager.cpp" />
-    <ClCompile Include="..\BusinessLayer\DHVendor\DHVendor.cpp" />
-    <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp" />
-    <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp" />
-    <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
     <ClCompile Include="..\BusinessLayer\LoginException.cpp" />
     <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp" />

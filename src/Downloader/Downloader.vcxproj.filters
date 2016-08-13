@@ -64,18 +64,6 @@
     <ClCompile Include="..\BusinessLayer\TestWindows.cpp">
       <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
-    <ClCompile Include="..\BusinessLayer\JXJVendor\JXJVendor.cpp">
-      <Filter>源文件\BusinessLayer\sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\DHVendor\DHVendor.cpp">
-      <Filter>源文件\BusinessLayer\sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\HKVendor\HKVendor.cpp">
-      <Filter>源文件\BusinessLayer\sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\DZPVendor\DZPVendor.cpp">
-      <Filter>源文件\BusinessLayer\sdk</Filter>
-    </ClCompile>
     <ClCompile Include="FileLogInfoUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -158,9 +146,6 @@
     </ClCompile>
     <ClCompile Include="..\..\breakpad\src\common\windows\guid_string.cc">
       <Filter>源文件\breakpad</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\workprocess.cpp">
-      <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\breakpad\src\client\windows\handler\exception_handler.cc">
       <Filter>源文件\breakpad</Filter>

@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "ProgtessUI.h"
 
-#include <Poco/NotificationCenter.h>
-#include "Poco/Observer.h"
-
-#include "ReciveUIQunue.h"
-#include "ReciveUINotification.h"
-
-using Poco::NotificationCenter;
-using Poco::Observer;
-
-
 CProgtessUI::CProgtessUI()
 :m_Searchfile_count(0), m_CountFile(0), m_InitNotify(true)
 {
@@ -21,38 +11,6 @@ CProgtessUI::CProgtessUI()
 CProgtessUI::~CProgtessUI()
 {
 
-}
-
-void CProgtessUI::ReceiveSearchFile(SearchFileNotification* pNf)
-{
-	std::string SendName(_T("class SearchFileNotification"));
-	std::string str = pNf->name();
-	if (SendName != pNf->name() || !pNf) return;
-	//std::string str = pNf->name();
-	NOTIFICATION_TYPE eNotify;
-	int nData;
-
-	eNotify = pNf->GetNotify();
-	nData = pNf->GetData();
-
-	switch (eNotify)
-	{
-	case Notification_Type_Search_File_Process:
-		m_Searchfile_count = nData;
-		ShowProgress();
-		break;
-	case Notification_Type_Search_File_TotalSize:
-		m_CountFile = nData;
-		ShowProgress();
-		break;
-	case Notification_Type_Search_File_Finish:
-		Close();
-		break;
-	case Notification_Type_Search_File_Failure:
-		break;
-	default:
-		break;
-	}
 }
 
 DUI_BEGIN_MESSAGE_MAP(CProgtessUI, WindowImplBase)
@@ -76,15 +34,10 @@ CDuiString CProgtessUI::GetSkinFile()
 
 void CProgtessUI::InitWindow()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CProgtessUI, SearchFileNotification>(*this, &CProgtessUI::ReceiveSearchFile));
 }
 
 void CProgtessUI::OnFinalMessage(HWND hWnd)
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<CProgtessUI, SearchFileNotification>(*this, &CProgtessUI::ReceiveSearchFile));
-
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -110,8 +63,6 @@ void CProgtessUI::ShowProgress()
 void CProgtessUI::OnCancelSearch(TNotifyUI& msg)
 {
 	bool b = true;
-	ReciveUIQunue::GetInstance()->enqueueNotification(new ReciveUINotification(b));
-	Sleep(1000);
 	Close();
 }
 

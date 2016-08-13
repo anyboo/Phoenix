@@ -3,12 +3,6 @@
 #include "CalendarUI.h"
 #include "CommDlg.h"
 
-#include "Poco/Observer.h"
-#include <Poco/NotificationCenter.h>
-
-#include "NotificationNetworkStatus.h"
-using Poco::NotificationCenter;
-using Poco::Observer;
 
 CLogUI::CLogUI()
 {
@@ -17,8 +11,6 @@ CLogUI::CLogUI()
 
 CLogUI::~CLogUI()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<CLogUI, CNotificationNetworkStatus>(*this, &CLogUI::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CLogUI, WindowImplBase)
@@ -70,20 +62,10 @@ void CLogUI::Notify(TNotifyUI& msg)
 
 void CLogUI::InitWindow()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CLogUI, CNotificationNetworkStatus>(*this, &CLogUI::HandleNotificationNetworkStatus));
 }
 
 void CLogUI::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
 {
-	if (pNf == nullptr)
-		return;
-	if (pNf->name().compare("class CNotificationNetworkStatus"))
-		return;
-
-	NOTIFICATION_TYPE eNotify;
-	eNotify = pNf->GetNotificationType();
-	SetNetWorkState(eNotify);
 }
 
 void CLogUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
@@ -113,19 +95,15 @@ void CLogUI::OnBeginSearch(TNotifyUI& msg)
 void CLogUI::OnSearchLog()
 {
 	m_LogInfo.clear();
-	//Search Log infomaton
 }
 
 void CLogUI::OnSearchCaseLog()
 {
 	m_CaseInfo.clear();
-	//Search case information
 }
 
 void CLogUI::CreateLogList()
 {
-	//create log list
-
 	CDialogBuilder builder;
 	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 
@@ -138,9 +116,7 @@ void CLogUI::CreateLogList()
 
 void CLogUI::CreateCaseList()
 {
-	//create case list
 	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-//	pList->RemoveAll();
 	CDialogBuilder builder;
 	CListUI* SubList = (CListUI*)(builder.Create(_T("xml//CaseList.xml"), (UINT)0, NULL, &m_PaintManager));
 	CVerticalLayoutUI* Lyt = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("ListLyt")));
@@ -150,7 +126,6 @@ void CLogUI::CreateCaseList()
 
 void CLogUI::InsertLogInfoToList()
 {
-	//m_pList->RemoveAll();
 	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 
 	for (int i = 0; i < 10; i++)
@@ -161,20 +136,9 @@ void CLogUI::InsertLogInfoToList()
 		pListElement->SetAttribute(_T("font"), _T("1"));
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("³ÌĞòÉè¼Æ"));
+		pListElement->SetText(1, _T("ç¨‹åºè®¾è®¡"));
 		pListElement->SetText(2, _T("100"));		
 	}
-	
-	//for (UINT i = 0; i < m_LogInfo.size(); i++)
-	//{
-	//	CListTextElementUI* pListElement = new CListTextElementUI;
-	//	pListElement->SetTag(i);
-	//	m_pList->Add(pListElement);
-	//	pListElement->SetFixedHeight(30);
-	//	pListElement->SetText(0, m_LogInfo[i].Time.c_str());
-	//	pListElement->SetText(1, m_LogInfo[i].Handle.c_str());
-	//	pListElement->SetText(2, m_LogInfo[i].Description.c_str());
-	//}
 }
 
 void CLogUI::InsertCaseInfoToList()
@@ -188,10 +152,10 @@ void CLogUI::InsertCaseInfoToList()
 		pList->Add(pListElement);
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("³ÌĞòÉè¼Æ"));
+		pListElement->SetText(1, _T("ç¨‹åºè®¾è®¡"));
 		pListElement->SetText(2, _T("100"));
 		pListElement->SetText(3, _T("WHO1753"));
-		pListElement->SetText(4, _T("³ÌĞòÉè¼Æ"));
+		pListElement->SetText(4, _T("ç¨‹åºè®¾è®¡"));
 		pListElement->SetText(5, _T("100"));
 		pListElement->SetText(6, _T("100"));
 	}
@@ -205,12 +169,12 @@ void CLogUI::exportLog()
 	OPENFILENAME  ofn = { 0 };
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXTÎÄ¼ş(*.txt)\0*.txt\0ËùÓĞÎÄ¼ş(*.*)\0*.*\0");//ÒªÑ¡ÔñµÄÎÄ¼şºó×º   
-	ofn.lpstrInitialDir = _T("D:\\");//Ä¬ÈÏµÄÎÄ¼şÂ·¾¶   
-	ofn.lpstrFile = szBuffer;//´æ·ÅÎÄ¼şµÄ»º³åÇø   
+	ofn.lpstrFilter = _T("TXTæ–‡ä»¶(*.txt)\0*.txt\0æ‰€æœ‰æ–‡ä»¶(*.*)\0*.*\0");//è¦é€‰æ‹©çš„æ–‡ä»¶åç¼€   
+	ofn.lpstrInitialDir = _T("D:\\");//é»˜è®¤çš„æ–‡ä»¶è·¯å¾„   
+	ofn.lpstrFile = szBuffer;//å­˜æ”¾æ–‡ä»¶çš„ç¼“å†²åŒº   
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
 	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//±êÖ¾Èç¹ûÊÇ¶àÑ¡Òª¼ÓÉÏOFN_ALLOWMULTISELECT  
+	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//æ ‡å¿—å¦‚æœæ˜¯å¤šé€‰è¦åŠ ä¸ŠOFN_ALLOWMULTISELECT  
 	BOOL bSel = GetOpenFileName(&ofn);
 
 }

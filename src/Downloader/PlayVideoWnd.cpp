@@ -1,46 +1,14 @@
 #include "stdafx.h"
 #include "PlayVideoWnd.h"
-
-#include "PlayVideoWorker.h"
-
-#include "TestWindows.h"
-#include <Poco/NotificationQueue.h>
-#include <Poco/ThreadPool.h>
-
 #include "PlayWndUI.h"
-
-using Poco::NotificationQueue;
-using Poco::ThreadPool;
-
-#include <Poco/NotificationCenter.h>
-#include "Poco/Observer.h"
-
-#include "MessagePump.h"
-
-using Poco::NotificationCenter;
-using Poco::Observer;
-
-
 
 CPlayVideoWnd::CPlayVideoWnd(Device* device, RecordFile& rf)
 :m_IsPlay(true), m_stopPos(0)
 {
-	m_Device = device;
-	m_rf = rf;
-	queuePlayVideo = new NotificationQueue();
 }
-
 
 CPlayVideoWnd::~CPlayVideoWnd()
 {
-	delete queuePlayVideo;
-	queuePlayVideo = nullptr;
-
-	delete pv;
-	pv = nullptr;
-
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<CPlayVideoWnd, CNotificationPlayVideo>(*this, &CPlayVideoWnd::HandleNotificationPlayPos));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CPlayVideoWnd, WindowImplBase)
@@ -62,11 +30,6 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 
 void CPlayVideoWnd::InitWindow()
 {
-	pv = new CPlayVideoWorker(m_Device, m_rf, GetPlayHwnd(), *queuePlayVideo);
-	ThreadPool::defaultPool().start(*pv);
-
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<CPlayVideoWnd, CNotificationPlayVideo>(*this, &CPlayVideoWnd::HandleNotificationPlayPos));
 }
 
 CDuiString CPlayVideoWnd::GetSkinFile()
@@ -86,8 +49,6 @@ void CPlayVideoWnd::Notify(TNotifyUI& msg)
 
 void CPlayVideoWnd::OnCloseWnd(TNotifyUI& msg)
 {
-	queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Stop));
-	Sleep(1000);
 	Close();
 }
 
@@ -95,21 +56,16 @@ void CPlayVideoWnd::OnStartStop(TNotifyUI& msg)
 {
 	if (m_IsPlay)
 	{
-		queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Stop));
-		Sleep(1000);
 		CButtonUI* btn_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
-		btn_play->SetText(_T("≤•∑≈"));
+		btn_play->SetText(_T("Êí≠Êîæ"));
 		CSliderUI* slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
 		int m_stopPos = slider->GetValue();
 		m_IsPlay = false;
 	}
 	else if (!m_IsPlay)
 	{
-		ThreadPool::defaultPool().start(*pv);
-		queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, m_stopPos));
-		Sleep(1000);
 		CButtonUI* btn_stop = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
-		btn_stop->SetText(_T("‘›Õ£"));
+		btn_stop->SetText(_T("ÊöÇÂÅú"));
 		m_IsPlay = true;
 	}
 }
@@ -118,19 +74,8 @@ void CPlayVideoWnd::OnAdjustPlayPos(TNotifyUI& msg)
 {
 	CSliderUI* slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
 	m_stopPos = slider->GetValue();
-	queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, m_stopPos));
 }
 
-void CPlayVideoWnd::HandleNotificationPlayPos(CNotificationPlayVideo* pNf)
-{
-	CSliderUI* slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
-	if (!pNf || pNf->name().compare("class CNotificationPlayVideo"))
-		return;
-	if (!pNf->name().compare("class CNotificationPlayVideo"))
-		return;
-	m_stopPos = pNf->GetPos();
-	slider->SetValue(m_stopPos);
-}
 
 HWND CPlayVideoWnd::GetPlayHwnd()
 {	 

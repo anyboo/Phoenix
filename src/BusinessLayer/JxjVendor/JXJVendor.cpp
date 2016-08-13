@@ -13,8 +13,8 @@
 
 using Poco::NotificationQueue;
 
-#pragma comment(lib, "JNetSDK")
-#pragma comment(lib, "AVPlayer")
+//#pragma comment(lib, "JNetSDK")
+//#pragma comment(lib, "AVPlayer")
 
 
 class JXJ_SDK_INTERFACE
@@ -145,7 +145,7 @@ void CJXJVendor::Init()
 
 	AVP_InitRecMng(128, 8);
 
-	std::cout << "JXJ ³õÊ¼»¯SDK ³É¹¦£¡" << std::endl;
+	std::cout << "JXJ åˆå§‹åŒ–SDK æˆåŠŸï¼" << std::endl;
 }
 
 long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -156,7 +156,7 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 	int iRet = JNetLogin(ip.c_str(), port, user.c_str(), password.c_str(), 10, JXJ_SDK_INTERFACE::JXJ_ConnEventCB, NULL, JNET_PRO_T_JPF, loginHandle, NULL);
 	if (iRet < 0)
 	{
-		std::string strLoginFail = "JXJ µÇÂ½ Ê§°Ü£¡";
+		std::string strLoginFail = "JXJ ç™»é™† å¤±è´¥ï¼";
 		std::cout << strLoginFail << std::endl;
 
 		std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
@@ -171,7 +171,7 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	if (JXJ_SDK_INTERFACE::m_errCode == Err_LoginFail)
 	{
-		std::string strLoginFail = "JXJ µÇÂ½ Ê§°Ü£¡";
+		std::string strLoginFail = "JXJ ç™»é™† å¤±è´¥ï¼";
 		std::cout << strLoginFail << std::endl;
 		throw LoginException(strLoginFail.c_str());
 		return -1;
@@ -182,13 +182,13 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 	iRet = JNetGetParam(loginHandle, 0, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
 	if (iRet != 0)
 	{
-		throw LoginException("»ñÈ¡Éè±¸ÐÅÏ¢Ê§°Ü");
+		throw LoginException("èŽ·å–è®¾å¤‡ä¿¡æ¯å¤±è´¥");
 		return -1;
 	}
 
 	m_iMaxChannel = deviceinfo.channel_num;
 
-	std::cout << "JXJ µÇÂ½ ³É¹¦£¡" << std::endl;
+	std::cout << "JXJ ç™»é™† æˆåŠŸï¼" << std::endl;
 
 	return loginHandle;
 }
@@ -201,12 +201,12 @@ void CJXJVendor::Logout(const long loginHandle)
 		if (JNETErrSuccess != iRet)
 		{
 			std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
-			std::cout << "JXJ ÍË³öµÇÂ½ Ê§°Ü£¡" << std::endl;
+			std::cout << "JXJ é€€å‡ºç™»é™† å¤±è´¥ï¼" << std::endl;
 			throw std::exception(m_sLastError.c_str());
 		}
 		else
 		{
-			std::cout << "JXJ ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
+			std::cout << "JXJ é€€å‡ºç™»é™† æˆåŠŸï¼" << std::endl;
 		}
 	}
 }
@@ -220,13 +220,13 @@ void CJXJVendor::StartSearchDevice()
 	long lResult = JNetMBOpen(szIp, nPort, JXJ_SDK_INTERFACE::JXJ_JMBNotify, this, JNET_PRO_T_JPF, m_lSearchDeviceHandle);
 	lResult = JNetMBSearch(m_lSearchDeviceHandle, 5);
 
-	std::cout << "JXJ ËÑË÷Éè±¸ ¿ªÊ¼£¡" << std::endl;
+	std::cout << "JXJ æœç´¢è®¾å¤‡ å¼€å§‹ï¼" << std::endl;
 }
 void CJXJVendor::StopSearchDevice()
 {
 	JNetMBClose(m_lSearchDeviceHandle);
 
-	std::cout << "JXJ ËÑË÷Éè±¸ ½áÊø£¡" << std::endl;
+	std::cout << "JXJ æœç´¢è®¾å¤‡ ç»“æŸï¼" << std::endl;
 }
 
 void CJXJVendor::SearchAll(const long loginHandle)
@@ -243,20 +243,20 @@ void CJXJVendor::Search(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
-	std::cout << "JXJ ËÑË÷ÎÄ¼þ ¿ªÊ¼£¡" << std::endl;		
+	std::cout << "JXJ æœç´¢æ–‡ä»¶ å¼€å§‹ï¼" << std::endl;		
 	m_files_Unit.clear();	
 	JXJ_SDK_INTERFACE::JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
-	std::cout << "JXJ ËÑË÷ÎÄ¼þ ½áÊø£¡" << std::endl;
+	std::cout << "JXJ æœç´¢æ–‡ä»¶ ç»“æŸï¼" << std::endl;
 
 	// Save Search Video List Result to Config File
-	//std::cout << "JXJ Ð´JsonÊý¾Ýµ½ÎÄ¼þ ¿ªÊ¼£¡" << std::endl;
+	//std::cout << "JXJ å†™Jsonæ•°æ®åˆ°æ–‡ä»¶ å¼€å§‹ï¼" << std::endl;
 	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_JXJ_Abbr);
-	//std::cout << "JXJ Ð´JsonÊý¾Ýµ½ÎÄ¼þ ½áÊø£¡" << std::endl;
+	//std::cout << "JXJ å†™Jsonæ•°æ®åˆ°æ–‡ä»¶ ç»“æŸï¼" << std::endl;
 
 	// Write File List to DB
-	std::cout << "JXJ Ð´ÎÄ¼þÊý¾Ýµ½Êý¾Ý¿â ¿ªÊ¼£¡" << std::endl;
+	std::cout << "JXJ å†™æ–‡ä»¶æ•°æ®åˆ°æ•°æ®åº“ å¼€å§‹ï¼" << std::endl;
 	CCommonUtrl::getInstance().WriteFileListToDB(m_files_Unit);
-	std::cout << "JXJ Ð´ÎÄ¼þÊý¾Ýµ½Êý¾Ý¿â ½áÊø£¡" << std::endl;
+	std::cout << "JXJ å†™æ–‡ä»¶æ•°æ®åˆ°æ•°æ®åº“ ç»“æŸï¼" << std::endl;
 
 	for (size_t i = 0; i < m_files_Unit.size(); i++)
 	{
@@ -347,7 +347,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 	AVP_SetDataProtocol(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
 
 	//AVP_EnableYUVDraw(gChannel,TRUE);
-	// ÉèÖÃÍ¨µÀÊ¹ÓÃµÄ½âÂëÆ÷
+	// è®¾ç½®é€šé“ä½¿ç”¨çš„è§£ç å™¨
 	iRet = AVP_SetCoder(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_CODER_JXJ);
 	if (iRet != AVPErrSuccess)
 	{
@@ -358,7 +358,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	AVP_AddPlayWnd(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
 
-	// ¿ªÆô½âÂë
+	// å¼€å¯è§£ç 
 	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
 }
 
@@ -389,16 +389,16 @@ int __stdcall JXJ_SDK_INTERFACE::JXJ_ConnEventCB(long lHandle, eJNetEvent eType,
 {
 	switch (eType)
 	{
-	case JNET_EET_LOGINING:		 //ÕýÔÚµÇÂ½
+	case JNET_EET_LOGINING:		 //æ­£åœ¨ç™»é™†
 	{
 	}
 		break;
-	case JNET_EET_LOGIN_OK:		 //µÇÂ¼³É¹¦
+	case JNET_EET_LOGIN_OK:		 //ç™»å½•æˆåŠŸ
 	{
 									 m_errCode = Err_LoginSuccess;
 	}
 		break;
-	case JNET_EET_LOGIN_ERROR:   //µÇÂ¼Ê§°Ü
+	case JNET_EET_LOGIN_ERROR:   //ç™»å½•å¤±è´¥
 	{
 									 m_errCode = Err_LoginFail;
 	}
@@ -471,7 +471,7 @@ int __stdcall JXJ_SDK_INTERFACE::JXJ_JMBNotify(long lHandle, DWORD dwPortocol, i
 
 void JXJ_SDK_INTERFACE::JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end)
 {
-	//²éÑ¯Â¼Ïñ²ÎÊý
+	//æŸ¥è¯¢å½•åƒå‚æ•°
 	ZeroMemory(&storeLog, sizeof(JStoreLog));
 	storeLog.rec_type = recordType;
 	storeLog.beg_node = beginNode;
@@ -543,7 +543,7 @@ void JXJ_SDK_INTERFACE::JXJ_ReFreshVideoList(const long loginHandle, int channel
 {
 	JXJ_AddSearchFileList(channel, recordFiles);
 
-	if (m_iEndNode < (int)m_storeLog.total_count) //Ã¿´Î×î¶àÖ»ÄÜÈ¡24Ìõ £¬·ÖÅúÈ¡
+	if (m_iEndNode < (int)m_storeLog.total_count) //æ¯æ¬¡æœ€å¤šåªèƒ½å–24æ¡ ï¼Œåˆ†æ‰¹å–
 	{
 		m_iBeginNode += 24;
 		m_iEndNode += 24;
@@ -727,30 +727,33 @@ DWORD JXJ_SDK_INTERFACE::JXJ_PlayThreadFun(LPVOID lpThreadParameter)
 }
 const char* JXJ_SDK_INTERFACE::GetErrorString(int error)
 {
+	return "";
+	/*
 	switch (error)
 	{
-	case JNETErrSuccess: return "³É¹¦";
-	case JNETErrUnInit: return "Î´³õÊ¼»¯";
-	case JNETErrHandle: return "¾ä±ú²»´æÔÚ";
-	case JNETErrParam: return "²ÎÊý´íÎó";
-	case JNETErrBuffSize: return "»º´æÂú";
-	case JNETErrNoMem: return "ÄÚ´æ²»×ã";
-	case JNETErrRecv: return "½ÓÊÕ´íÎó";
-	case JNETErrSend: return "·¢ËÍ´íÎó";
-	case JNETErrOperate: return "²Ù×÷´íÎó";
-	case JNETErrURL: return "URLÓÐÎó";
-	case JNETErrLogining: return "ÓÃ»§ÕýÔÚµÇÂ¼";
-	case JNETErrLogout: return "ÒÑ¾­µÇ³ö";
-	case JNETErrNoFreePort: return "Ã»ÓÐ¿ÕÏÐÍ¨µÀ";
-	case JNETErrProtocol: return "Ð­Òé´íÎó";
-	case JNETErrXMLFormat: return "´íÎóµÄXMLÊý¾Ý";
-	case JNETErrNotSupport: return "²»Ö§³ÖµÄ²Ù×÷";
-	case JNETErrGetParam: return "»ñÈ¡²ÎÊý´íÎó";
-	case JNETErrSetParam: return "ÉèÖÃ²ÎÊý´íÎó";
-	case JNETErrOpenFile: return "´ò¿ªÎÄ¼þ³ö´í";
-	case JNETErrUpgOpen: return "Éý¼¶³ö´í";
+	case JNETErrSuccess: return "æˆåŠŸ";
+	case JNETErrUnInit: return "æœªåˆå§‹åŒ–";
+	case JNETErrHandle: return "å¥æŸ„ä¸å­˜åœ¨";
+	case JNETErrParam: return "å‚æ•°é”™è¯¯";
+	case JNETErrBuffSize: return "ç¼“å­˜æ»¡";
+	case JNETErrNoMem: return "å†…å­˜ä¸è¶³";
+	case JNETErrRecv: return "æŽ¥æ”¶é”™è¯¯";
+	case JNETErrSend: return "å‘é€é”™è¯¯";
+	case JNETErrOperate: return "æ“ä½œé”™è¯¯";
+	case JNETErrURL: return "URLæœ‰è¯¯";
+	case JNETErrLogining: return "ç”¨æˆ·æ­£åœ¨ç™»å½•";
+	case JNETErrLogout: return "å·²ç»ç™»å‡º";
+	case JNETErrNoFreePort: return "æ²¡æœ‰ç©ºé—²é€šé“";
+	case JNETErrProtocol: return "åè®®é”™è¯¯";
+	case JNETErrXMLFormat: return "é”™è¯¯çš„XMLæ•°æ®";
+	case JNETErrNotSupport: return "ä¸æ”¯æŒçš„æ“ä½œ";
+	case JNETErrGetParam: return "èŽ·å–å‚æ•°é”™è¯¯";
+	case JNETErrSetParam: return "è®¾ç½®å‚æ•°é”™è¯¯";
+	case JNETErrOpenFile: return "æ‰“å¼€æ–‡ä»¶å‡ºé”™";
+	case JNETErrUpgOpen: return "å‡çº§å‡ºé”™";
 
 	}
 
-	return "Î´¶¨Òå";
+	return "æœªå®šä¹‰";
+	*/
 }

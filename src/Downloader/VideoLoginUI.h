@@ -1,9 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-
-#include "QMSqlite.h"
-
-class CNotificationNetworkStatus;
+#include <map>
 
 #define BT_VideoVendor			(_T("select_Vendor"))
 #define BT_LOGIN				(_T("LogIn"))
@@ -55,7 +52,6 @@ public:
 	void CreateSubvLyt();
 
 	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
-	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
 private:
 	DEVICE_INFO_LIST		m_DeviceList;
 	ISLogIn			m_IsLogIn;
@@ -63,7 +59,6 @@ private:
 	bool			m_Init;
 	size_t						m_page_Count;
 	size_t				m_pages;
-	QMSqlite*				m_pDb;
 	std::vector<string> m_sRecord;
 	std::map<int, string>		m_CnameAndType;
 protected:

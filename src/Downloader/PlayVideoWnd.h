@@ -1,12 +1,5 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-#include "Device.h"
-#include "AbstractVendor.h"
-
-#include "NotificationQueue.h"
-#include "PlayVideoWorker.h"
-
-
 
 #define BT_CLOSE_PLWND			(_T("close"))
 #define BT_PLAY_STOP			(_T("Start_stop"))
@@ -30,15 +23,8 @@ public:
 
 	void OnAdjustPlayPos(TNotifyUI& msg);
 
-	void HandleNotificationPlayPos(CNotificationPlayVideo* pNf);
-
-
 	HWND GetPlayHwnd();
 private:
-	Device*		m_Device;
-	RecordFile	m_rf;
-	NotificationQueue* queuePlayVideo; 
-	CPlayVideoWorker* pv;
 	bool		m_IsPlay;
 	int			m_stopPos;
 protected:

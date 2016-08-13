@@ -2,26 +2,9 @@
 #include "VideoLoginUI.h"
 #include "VideoVendorUI.h"
 
-#include "SearchDevice.h"
-#include "LoginDevice.h"
-
-#include "Poco/Observer.h"
-#include <Poco/NotificationCenter.h>
-
-extern VENDOR_LIST pVendorList;
-
-using Poco::NotificationCenter;
-using Poco::Observer;
-
 VideoLoginUI::VideoLoginUI()
 :m_Init(false), m_pages(1)
 {
-	m_pDb = QMSqlite::getInstance();
-	m_pDb->dropTable(DROP_SEARCH_FACTORY_TABLE);
-	m_pDb->createTable(CREATE_SEARCH_FACTORY_TABLE);
-	InsertVendorToDB();
-
-	m_DeviceList = CSearchDevice::GetDeviceInfoList();
 	m_page_Count = m_DeviceList.size() / 5;
 	if (m_DeviceList.size() % 5 != 0)
 	{
@@ -32,8 +15,6 @@ VideoLoginUI::VideoLoginUI()
 
 VideoLoginUI::~VideoLoginUI()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<VideoLoginUI, CNotificationNetworkStatus>(*this, &VideoLoginUI::HandleNotificationNetworkStatus));
 }
 
 DUI_BEGIN_MESSAGE_MAP(VideoLoginUI, WindowImplBase)
@@ -66,20 +47,6 @@ void VideoLoginUI::OnFinalMessage(HWND hWnd)
 
 void VideoLoginUI::InitWindow()
 {
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.addObserver(Observer<VideoLoginUI, CNotificationNetworkStatus>(*this, &VideoLoginUI::HandleNotificationNetworkStatus));
-}
-
-void VideoLoginUI::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
-{
-	if (pNf == nullptr)
-		return;
-	if (pNf->name().compare("class CNotificationNetworkStatus"))
-		return;
-
-	NOTIFICATION_TYPE eNotify;
-	eNotify = pNf->GetNotificationType();
-	SetNetWorkState(eNotify);
 }
 
 void VideoLoginUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
@@ -279,7 +246,7 @@ void VideoLoginUI::CountDevice()
 {
 	CLabelUI* Lable_Count = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("VendorCount")));
 	char str[200] = { 0 };
-	sprintf_s(str, "*ËÑË÷µ½%dÌ¨Éè±¸", m_DeviceList.size());
+	//sprintf_s(str, "*æœç´¢åˆ°%då°è®¾å¤‡", m_DeviceList.size());
 	STDSTRING ShowText(str);
 	Lable_Count->SetText(ShowText.c_str());
 }
@@ -293,7 +260,7 @@ void VideoLoginUI::LogIn()
 	STDSTRING strIP = Edit_IP->GetText();
 	STDSTRING strPort = Edit_Port->GetText();
 	int DevicePort = stoi(strPort);
-	std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
+	/*std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
 	for (size_t i = 0; i < m_listDevice.size(); i++)
 	{
 		if (m_listDevice[i]->getIP() == strIP)
@@ -308,7 +275,7 @@ void VideoLoginUI::LogIn()
 			CLoginDevice::getInstance().Login(m_DeviceList[i]->pVendor, strIP, DevicePort);
 			m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 		}
-	}	
+	}	*/
 }
 
 Device* VideoLoginUI::GetLonInDevice()
@@ -317,7 +284,7 @@ Device* VideoLoginUI::GetLonInDevice()
 		return nullptr;
 	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
 	STDSTRING strIP = Edit_IP->GetText();
-	m_Device = CLoginDevice::getInstance().GetDevice(strIP);
+	//m_Device = CLoginDevice::getInstance().GetDevice(strIP);
 	return m_Device;
 }
 
@@ -338,7 +305,7 @@ void VideoLoginUI::InsertVendorToDB()
 	if (isw.Tell() == 0)
 		return;
 
-	std::vector<SearchFactory> sfRecord;
+	/*std::vector<SearchFactory> sfRecord;
 	SearchFactory sf;
 
 
@@ -359,7 +326,7 @@ void VideoLoginUI::InsertVendorToDB()
 		int type = stoi(TypeName);
 		m_CnameAndType.insert(pair<int, string>(type, VendorDeviceName));
 	}
-	m_pDb->writeDataByVector(INSERT_SEARCH_FACTORY, sfRecord);
+	m_pDb->writeDataByVector(INSERT_SEARCH_FACTORY, sfRecord);*/
 }
 
 void VideoLoginUI::SearchVendorList()
@@ -379,7 +346,7 @@ void VideoLoginUI::SearchVendorList()
 	}
 	m_sRecord.clear();
 	STDSTRING tmp = Input;
-	m_pDb->searchFactoryName(Input, m_sRecord);
+//	m_pDb->searchFactoryName(Input, m_sRecord);
 	std::vector<string>  text;
 	text = m_sRecord;
 	int Count = Input == _T("") ? 0 :m_sRecord.size();

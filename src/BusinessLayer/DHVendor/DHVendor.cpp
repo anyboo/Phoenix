@@ -4,7 +4,7 @@
 //DH SDK
 #include "dhnetsdk.h"
 
-#pragma comment(lib, "dhnetsdk")
+//#pragma comment(lib, "dhnetsdk")
 
 
 class DH_SDK_INTERFACE
@@ -64,7 +64,7 @@ void DHVendor::Init()
 	
 	if (!bInit)
 	{
-		std::cout << "The DH SDK initialization error£º" << CLIENT_GetLastError() << std::endl;
+		std::cout << "The DH SDK initialization errorï¼š" << CLIENT_GetLastError() << std::endl;
 		throw std::exception("Init failed");
 	}
 	else
@@ -122,7 +122,7 @@ void DHVendor::Logout(const long loginHandle)
 {
 	if (loginHandle > 0 && !CLIENT_Logout(loginHandle))
 	{
-		std::cout << "Logout Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "Logout Errorï¼š" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
 		return;
 	}
@@ -235,7 +235,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 	if (!bRet)
 	{
-		std::cout << "Search error:£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+		std::cout << "Search error:ï¼š" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw SearchFileException(DH_SDK_INTERFACE::DH_GetLastErrorString().c_str());
 	}
 
@@ -358,14 +358,14 @@ void DHVendor::Download(const long loginHandle, const RecordFile& file)
 	// 	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
 	// 	while ((cur / total) != 1)
 	// 	{
-	// 		std::cout << "½ø¶È£º" << (double)(cur / total) << std::endl;
+	// 		std::cout << "è¿›åº¦ï¼š" << (double)(cur / total) << std::endl;
 	// 	}
 
 	//bool c = CLIENT_PauseLoadPic(bRet, true);
 
 	if (0 == bRet)
 	{
-		std::cout << "Download videos failed, the reason for the error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+		std::cout << "Download videos failed, the reason for the errorï¼š" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Download by Record file failed");
 		return;
 	}
@@ -398,7 +398,7 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	if (0 == lPlayID)
 	{
-		std::cout << "PlayVideo Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+		std::cout << "PlayVideo Errorï¼š" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
 	//Test
@@ -431,7 +431,7 @@ void DHVendor::StopPlayVideo()
 	}
 	else
 	{
-		std::cout << "StopVideo Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+		std::cout << "StopVideo Errorï¼š" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 	}
 }
 
@@ -523,232 +523,235 @@ std::string DH_SDK_INTERFACE::DH_MakeStrByInteger(int data)
 
 std::string DH_SDK_INTERFACE::DH_GetLastErrorString()
 {
+	return "";
+	/*
 	DWORD dwError;
 	dwError = CLIENT_GetLastError();
 
 	switch (dwError)
 	{
-	case NET_NOERROR: return "Ã»ÓÐ´íÎó";
-	case NET_ERROR: return "Î´Öª´íÎó";
-	case NET_SYSTEM_ERROR: return "WindowsÏµÍ³³ö´í";
-	case NET_NETWORK_ERROR: return "ÍøÂç´íÎó£¬¿ÉÄÜÊÇÒòÎªÍøÂç³¬Ê±";
-	case NET_DEV_VER_NOMATCH: return "Éè±¸Ð­Òé²»Æ¥Åä";
-	case NET_INVALID_HANDLE: return "¾ä±úÎÞÐ§";
-	case NET_OPEN_CHANNEL_ERROR: return "´ò¿ªÍ¨µÀÊ§°Ü";
-	case NET_CLOSE_CHANNEL_ERROR: return "¹Ø±ÕÍ¨µÀÊ§°Ü";
-	case NET_ILLEGAL_PARAM: return "ÓÃ»§²ÎÊý²»ºÏ·¨";
-	case NET_SDK_INIT_ERROR: return "SDK³õÊ¼»¯³ö´í";
-	case NET_SDK_UNINIT_ERROR: return "SDKÇåÀí³ö´í";
-	case NET_RENDER_OPEN_ERROR: return "ÉêÇërender×ÊÔ´³ö´í";
-	case NET_DEC_OPEN_ERROR: return "´ò¿ª½âÂë¿â³ö´í";
-	case NET_DEC_CLOSE_ERROR: return "¹Ø±Õ½âÂë¿â³ö´í";
-	case NET_MULTIPLAY_NOCHANNEL: return "¶à»­ÃæÔ¤ÀÀÖÐ¼ì²âµ½Í¨µÀÊýÎª0";
-	case NET_TALK_INIT_ERROR: return "Â¼Òô¿â³õÊ¼»¯Ê§°Ü";
-	case NET_TALK_NOT_INIT: return "Â¼Òô¿âÎ´¾­³õÊ¼»¯";
-	case NET_TALK_SENDDATA_ERROR: return "·¢ËÍÒôÆµÊý¾Ý³ö´í";
-	case NET_REAL_ALREADY_SAVING: return "ÊµÊ±Êý¾ÝÒÑ¾­´¦ÓÚ±£´æ×´Ì¬";
-	case NET_NOT_SAVING: return "Î´±£´æÊµÊ±Êý¾Ý";
-	case NET_OPEN_FILE_ERROR: return "´ò¿ªÎÄ¼þ³ö´í";
-	case NET_PTZ_SET_TIMER_ERROR: return "Æô¶¯ÔÆÌ¨¿ØÖÆ¶¨Ê±Æ÷Ê§°Ü";
-	case NET_RETURN_DATA_ERROR: return "¶Ô·µ»ØÊý¾ÝµÄÐ£Ñé³ö´í";
-	case NET_INSUFFICIENT_BUFFER: return "Ã»ÓÐ×ã¹»µÄ»º´æ";
-	case NET_NOT_SUPPORTED: return "µ±Ç°SDKÎ´Ö§³Ö¸Ã¹¦ÄÜ";
-	case NET_NO_RECORD_FOUND: return "²éÑ¯²»µ½Â¼Ïó";
-	case NET_NOT_AUTHORIZED: return "ÎÞ²Ù×÷È¨ÏÞ";
-	case NET_NOT_NOW: return "ÔÝÊ±ÎÞ·¨Ö´ÐÐ";
-	case NET_NO_TALK_CHANNEL: return "Î´·¢ÏÖ¶Ô½²Í¨µÀ";
-	case NET_NO_AUDIO: return "Î´·¢ÏÖÒôÆµ";
-	case NET_NO_INIT: return "ÍøÂçSDKÎ´¾­³õÊ¼»¯";
-	case NET_DOWNLOAD_END: return "ÏÂÔØÒÑ½áÊø";
-	case NET_EMPTY_LIST: return "²éÑ¯½á¹ûÎª¿Õ";
-	case NET_ERROR_GETCFG_SYSATTR: return "»ñÈ¡ÏµÍ³ÊôÐÔÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_SERIAL: return "»ñÈ¡ÐòÁÐºÅÊ§°Ü";
-	case NET_ERROR_GETCFG_GENERAL: return "»ñÈ¡³£¹æÊôÐÔÊ§°Ü";
-	case NET_ERROR_GETCFG_DSPCAP: return "»ñÈ¡DSPÄÜÁ¦ÃèÊöÊ§°Ü";
-	case NET_ERROR_GETCFG_NETCFG: return "»ñÈ¡ÍøÂçÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_CHANNAME: return "»ñÈ¡Í¨µÀÃû³ÆÊ§°Ü";
-	case NET_ERROR_GETCFG_VIDEO: return "»ñÈ¡ÊÓÆµÊôÐÔÊ§°Ü";
-	case NET_ERROR_GETCFG_RECORD: return "»ñÈ¡Â¼ÏóÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_PRONAME: return "»ñÈ¡½âÂëÆ÷Ð­ÒéÃû³ÆÊ§°Ü";
-	case NET_ERROR_GETCFG_FUNCNAME: return "»ñÈ¡232´®¿Ú¹¦ÄÜÃû³ÆÊ§°Ü";
-	case NET_ERROR_GETCFG_485DECODER: return "»ñÈ¡½âÂëÆ÷ÊôÐÔÊ§°Ü";
-	case NET_ERROR_GETCFG_232COM: return "»ñÈ¡232´®¿ÚÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_ALARMIN: return "»ñÈ¡Íâ²¿±¨¾¯ÊäÈëÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_ALARMDET: return "»ñÈ¡¶¯Ì¬¼ì²â±¨¾¯Ê§°Ü";
-	case NET_ERROR_GETCFG_SYSTIME: return "»ñÈ¡Éè±¸Ê±¼äÊ§°Ü";
-	case NET_ERROR_GETCFG_PREVIEW: return "»ñÈ¡Ô¤ÀÀ²ÎÊýÊ§°Ü";
-	case NET_ERROR_GETCFG_AUTOMT: return "»ñÈ¡×Ô¶¯Î¬»¤ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_VIDEOMTRX: return "»ñÈ¡ÊÓÆµ¾ØÕóÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_COVER: return "»ñÈ¡ÇøÓòÕÚµ²ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_WATERMAKE: return "»ñÈ¡Í¼ÏóË®Ó¡ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_GENERAL: return "ÐÞ¸Ä³£¹æÊôÐÔÊ§°Ü";
-	case NET_ERROR_SETCFG_NETCFG: return "ÐÞ¸ÄÍøÂçÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_CHANNAME: return "ÐÞ¸ÄÍ¨µÀÃû³ÆÊ§°Ü";
-	case NET_ERROR_SETCFG_VIDEO: return "ÐÞ¸ÄÊÓÆµÊôÐÔÊ§°Ü";
-	case NET_ERROR_SETCFG_RECORD: return "ÐÞ¸ÄÂ¼ÏóÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_485DECODER: return "ÐÞ¸Ä½âÂëÆ÷ÊôÐÔÊ§°Ü";
-	case NET_ERROR_SETCFG_232COM: return "ÐÞ¸Ä232´®¿ÚÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_ALARMIN: return "ÐÞ¸ÄÍâ²¿ÊäÈë±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_ALARMDET: return "ÐÞ¸Ä¶¯Ì¬¼ì²â±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_SYSTIME: return "ÐÞ¸ÄÉè±¸Ê±¼äÊ§°Ü";
-	case NET_ERROR_SETCFG_PREVIEW: return "ÐÞ¸ÄÔ¤ÀÀ²ÎÊýÊ§°Ü";
-	case NET_ERROR_SETCFG_AUTOMT: return "ÐÞ¸Ä×Ô¶¯Î¬»¤ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_VIDEOMTRX: return "ÐÞ¸ÄÊÓÆµ¾ØÕóÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_COVER: return "ÐÞ¸ÄÇøÓòÕÚµ²ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_WATERMAKE: return "ÐÞ¸ÄÍ¼ÏóË®Ó¡ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_WLAN: return "ÐÞ¸ÄÎÞÏßÍøÂçÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_SETCFG_WLANDEV: return "Ñ¡ÔñÎÞÏßÍøÂçÉè±¸Ê§°Ü";
-	case NET_ERROR_SETCFG_REGISTER: return "ÐÞ¸ÄÖ÷¶¯×¢²á²ÎÊýÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_CAMERA: return "ÐÞ¸ÄÉãÏñÍ·ÊôÐÔÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_INFRARED: return "ÐÞ¸ÄºìÍâ±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_SOUNDALARM: return "ÐÞ¸ÄÒôÆµ±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_STORAGE: return "ÐÞ¸Ä´æ´¢Î»ÖÃÅäÖÃÊ§°Ü";
-	case NET_AUDIOENCODE_NOTINIT: return "ÒôÆµ±àÂë½Ó¿ÚÃ»ÓÐ³É¹¦³õÊ¼»¯";
-	case NET_DATA_TOOLONGH: return "Êý¾Ý¹ý³¤";
-	case NET_UNSUPPORTED: return "Éè±¸²»Ö§³Ö¸Ã²Ù×÷";
-	case NET_DEVICE_BUSY: return "Éè±¸×ÊÔ´²»×ã";
-	case NET_SERVER_STARTED: return "·þÎñÆ÷ÒÑ¾­Æô¶¯";
-	case NET_SERVER_STOPPED: return "·þÎñÆ÷ÉÐÎ´³É¹¦Æô¶¯";
-	case NET_LISTER_INCORRECT_SERIAL: return "ÊäÈëÐòÁÐºÅÓÐÎó";
-	case NET_QUERY_DISKINFO_FAILED: return "»ñÈ¡Ó²ÅÌÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_GETCFG_SESSION: return "»ñÈ¡Á¬½ÓSessionÐÅÏ¢";
-	case NET_USER_FLASEPWD_TRYTIME: return "ÊäÈëÃÜÂë´íÎó³¬¹ýÏÞÖÆ´ÎÊý";
-	case NET_LOGIN_ERROR_PASSWORD: return "ÃÜÂë²»ÕýÈ·";
-	case NET_LOGIN_ERROR_USER: return "ÕÊ»§²»´æÔÚ";
-	case NET_LOGIN_ERROR_TIMEOUT: return "µÈ´ýµÇÂ¼·µ»Ø³¬Ê±";
-	case NET_LOGIN_ERROR_RELOGGIN: return "ÕÊºÅÒÑµÇÂ¼";
-	case NET_LOGIN_ERROR_LOCKED: return "ÕÊºÅÒÑ±»Ëø¶¨";
-	case NET_LOGIN_ERROR_BLACKLIST: return "ÕÊºÅÒÑ±»ÁÐÎªºÚÃûµ¥";
-	case NET_LOGIN_ERROR_BUSY: return "×ÊÔ´²»×ã£¬ÏµÍ³Ã¦";
-	case NET_LOGIN_ERROR_CONNECT: return "µÇÂ¼Éè±¸³¬Ê±£¬Çë¼ì²éÍøÂç²¢ÖØÊÔ";
-	case NET_LOGIN_ERROR_NETWORK: return "ÍøÂçÁ¬½ÓÊ§°Ü";
-	case NET_LOGIN_ERROR_SUBCONNECT: return "µÇÂ¼Éè±¸³É¹¦£¬µ«ÎÞ·¨´´½¨ÊÓÆµÍ¨µÀ£¬Çë¼ì²éÍøÂç×´¿ö";
-	case NET_LOGIN_ERROR_MAXCONNECT: return "³¬¹ý×î´óÁ¬½ÓÊý";
-	case NET_LOGIN_ERROR_PROTOCOL3_ONLY: return "Ö»Ö§³Ö3´úÐ­Òé";
-	case NET_LOGIN_ERROR_UKEY_LOST: return "Î´²åÈëU¶Ü»òU¶ÜÐÅÏ¢´íÎó";
-	case NET_LOGIN_ERROR_NO_AUTHORIZED: return "¿Í»§¶ËIPµØÖ·Ã»ÓÐµÇÂ¼È¨ÏÞ";
-	case NET_RENDER_SOUND_ON_ERROR: return "Render¿â´ò¿ªÒôÆµ³ö´í";
-	case NET_RENDER_SOUND_OFF_ERROR: return "Render¿â¹Ø±ÕÒôÆµ³ö´í";
-	case NET_RENDER_SET_VOLUME_ERROR: return "Render¿â¿ØÖÆÒôÁ¿³ö´í";
-	case NET_RENDER_ADJUST_ERROR: return "Render¿âÉèÖÃ»­Ãæ²ÎÊý³ö´í";
-	case NET_RENDER_PAUSE_ERROR: return "Render¿âÔÝÍ£²¥·Å³ö´í";
-	case NET_RENDER_SNAP_ERROR: return "Render¿â×¥Í¼³ö´í";
-	case NET_RENDER_STEP_ERROR: return "Render¿â²½½ø³ö´í";
-	case NET_RENDER_FRAMERATE_ERROR: return "Render¿âÉèÖÃÖ¡ÂÊ³ö´í";
-	case NET_RENDER_DISPLAYREGION_ERROR: return "Render¿âÉèÖÃÏÔÊ¾ÇøÓò³ö´í";
-	case NET_GROUP_EXIST: return "×éÃûÒÑ´æÔÚ";
-	case NET_GROUP_NOEXIST: return "×éÃû²»´æÔÚ";
-	case NET_GROUP_RIGHTOVER: return "×éµÄÈ¨ÏÞ³¬³öÈ¨ÏÞÁÐ±í·¶Î§";
-	case NET_GROUP_HAVEUSER: return "×éÏÂÓÐÓÃ»§£¬²»ÄÜÉ¾³ý";
-	case NET_GROUP_RIGHTUSE: return "×éµÄÄ³¸öÈ¨ÏÞ±»ÓÃ»§Ê¹ÓÃ£¬²»ÄÜ³ö³ý";
-	case NET_GROUP_SAMENAME: return "ÐÂ×éÃûÍ¬ÒÑÓÐ×éÃûÖØ¸´";
-	case NET_USER_EXIST: return "ÓÃ»§ÒÑ´æÔÚ";
-	case NET_USER_NOEXIST: return "ÓÃ»§²»´æÔÚ";
-	case NET_USER_RIGHTOVER: return "ÓÃ»§È¨ÏÞ³¬³ö×éÈ¨ÏÞ";
-	case NET_USER_PWD: return "±£ÁôÕÊºÅ£¬²»ÈÝÐíÐÞ¸ÄÃÜÂë";
-	case NET_USER_FLASEPWD: return "ÃÜÂë²»ÕýÈ·";
-	case NET_USER_NOMATCHING: return "ÃÜÂë²»Æ¥Åä";
-	case NET_USER_INUSE: return "ÕËºÅÕýÔÚÊ¹ÓÃÖÐ";
-	case NET_ERROR_GETCFG_ETHERNET: return "»ñÈ¡Íø¿¨ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_WLAN: return "»ñÈ¡ÎÞÏßÍøÂçÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_GETCFG_WLANDEV: return "»ñÈ¡ÎÞÏßÍøÂçÉè±¸Ê§°Ü";
-	case NET_ERROR_GETCFG_REGISTER: return "»ñÈ¡Ö÷¶¯×¢²á²ÎÊýÊ§°Ü";
-	case NET_ERROR_GETCFG_CAMERA: return "»ñÈ¡ÉãÏñÍ·ÊôÐÔÊ§°Ü";
-	case NET_ERROR_GETCFG_INFRARED: return "»ñÈ¡ºìÍâ±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_SOUNDALARM: return "»ñÈ¡ÒôÆµ±¨¾¯ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_STORAGE: return "»ñÈ¡´æ´¢Î»ÖÃÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_MAIL: return "»ñÈ¡ÓÊ¼þÅäÖÃÊ§°Ü";
-	case NET_CONFIG_DEVBUSY: return "ÔÝÊ±ÎÞ·¨ÉèÖÃ";
-	case NET_CONFIG_DATAILLEGAL: return "ÅäÖÃÊý¾Ý²»ºÏ·¨";
-	case NET_ERROR_GETCFG_DST: return "»ñÈ¡ÏÄÁîÊ±ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_DST: return "ÉèÖÃÏÄÁîÊ±ÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_VIDEO_OSD: return "»ñÈ¡ÊÓÆµOSDµþ¼ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_VIDEO_OSD: return "ÉèÖÃÊÓÆµOSDµþ¼ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_GPRSCDMA: return "»ñÈ¡CDMA»òGPRSÍøÂçÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_GPRSCDMA: return "ÉèÖÃCDMA»òGPRSÍøÂçÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_IPFILTER: return "»ñÈ¡IP¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_IPFILTER: return "ÉèÖÃIP¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_TALKENCODE: return "»ñÈ¡ÓïÒô¶Ô½²±àÂëÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_TALKENCODE: return "ÉèÖÃÓïÒô¶Ô½²±àÂëÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_RECORDLEN: return "»ñÈ¡Â¼Ïñ´ò°ü³¤¶ÈÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_RECORDLEN: return "ÉèÖÃÂ¼Ïñ´ò°ü³¤¶ÈÅäÖÃÊ§°Ü";
-	case NET_DONT_SUPPORT_SUBAREA: return "²»Ö§³ÖÍøÂçÓ²ÅÌ·ÖÇø";
-	case NET_ERROR_GET_AUTOREGSERVER: return "»ñÈ¡Éè±¸ÉÏÖ÷¶¯×¢²á·þÎñÆ÷ÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_CONTROL_AUTOREGISTER: return "Ö÷¶¯×¢²áÖØ¶¨Ïò×¢²á´íÎó";
-	case NET_ERROR_DISCONNECT_AUTOREGISTER: return "¶Ï¿ªÖ÷¶¯×¢²á·þÎñÆ÷´íÎó";
-	case NET_ERROR_GETCFG_MMS: return "»ñÈ¡mmsÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_MMS: return "ÉèÖÃmmsÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_SMSACTIVATION: return "»ñÈ¡¶ÌÐÅ¼¤»îÎÞÏßÁ¬½ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_SMSACTIVATION: return "ÉèÖÃ¶ÌÐÅ¼¤»îÎÞÏßÁ¬½ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_DIALINACTIVATION: return "»ñÈ¡²¦ºÅ¼¤»îÎÞÏßÁ¬½ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_DIALINACTIVATION: return "ÉèÖÃ²¦ºÅ¼¤»îÎÞÏßÁ¬½ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_VIDEOOUT: return "²éÑ¯ÊÓÆµÊä³ö²ÎÊýÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_VIDEOOUT: return "ÉèÖÃÊÓÆµÊä³ö²ÎÊýÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_OSDENABLE: return "»ñÈ¡osdµþ¼ÓÊ¹ÄÜÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_OSDENABLE: return "ÉèÖÃosdµþ¼ÓÊ¹ÄÜÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_ENCODERINFO: return "ÉèÖÃÊý×ÖÍ¨µÀÇ°¶Ë±àÂë½ÓÈëÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_TVADJUST: return "»ñÈ¡TVµ÷½ÚÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_TVADJUST: return "ÉèÖÃTVµ÷½ÚÅäÖÃÊ§°Ü";
-	case NET_ERROR_CONNECT_FAILED: return "ÇëÇó½¨Á¢Á¬½ÓÊ§°Ü";
-	case NET_ERROR_SETCFG_BURNFILE: return "ÇëÇó¿ÌÂ¼ÎÄ¼þÉÏ´«Ê§°Ü";
-	case NET_ERROR_SNIFFER_GETCFG: return "»ñÈ¡×¥°üÅäÖÃÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_SNIFFER_SETCFG: return "ÉèÖÃ×¥°üÅäÖÃÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_DOWNLOADRATE_GETCFG: return "²éÑ¯ÏÂÔØÏÞÖÆÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_DOWNLOADRATE_SETCFG: return "ÉèÖÃÏÂÔØÏÞÖÆÐÅÏ¢Ê§°Ü";
-	case NET_ERROR_SEARCH_TRANSCOM: return "²éÑ¯´®¿Ú²ÎÊýÊ§°Ü";
-	case NET_ERROR_GETCFG_POINT: return "»ñÈ¡Ô¤ÖÆµãÐÅÏ¢´íÎó";
-	case NET_ERROR_SETCFG_POINT: return "ÉèÖÃÔ¤ÖÆµãÐÅÏ¢´íÎó";
-	case NET_SDK_LOGOUT_ERROR: return "SDKÃ»ÓÐÕý³£µÇ³öÉè±¸";
-	case NET_ERROR_GET_VEHICLE_CFG: return "»ñÈ¡³µÔØÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_VEHICLE_CFG: return "ÉèÖÃ³µÔØÅäÖÃÊ§°Ü";
-	case NET_ERROR_GET_ATM_OVERLAY_CFG: return "»ñÈ¡atmµþ¼ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_ATM_OVERLAY_CFG: return "ÉèÖÃatmµþ¼ÓÅäÖÃÊ§°Ü";
-	case NET_ERROR_GET_ATM_OVERLAY_ABILITY: return "»ñÈ¡atmµþ¼ÓÄÜÁ¦Ê§°Ü";
-	case NET_ERROR_GET_DECODER_TOUR_CFG: return "»ñÈ¡½âÂëÆ÷½âÂëÂÖÑ²ÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_DECODER_TOUR_CFG: return "ÉèÖÃ½âÂëÆ÷½âÂëÂÖÑ²ÅäÖÃÊ§°Ü";
-	case NET_ERROR_CTRL_DECODER_TOUR: return "¿ØÖÆ½âÂëÆ÷½âÂëÂÖÑ²Ê§°Ü";
-	case NET_GROUP_OVERSUPPORTNUM: return "³¬³öÉè±¸Ö§³Ö×î´óÓÃ»§×éÊýÄ¿";
-	case NET_USER_OVERSUPPORTNUM: return "³¬³öÉè±¸Ö§³Ö×î´óÓÃ»§ÊýÄ¿";
-	case NET_ERROR_GET_SIP_CFG: return "»ñÈ¡SIPÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_SIP_CFG: return "ÉèÖÃSIPÅäÖÃÊ§°Ü";
-	case NET_ERROR_GET_SIP_ABILITY: return "»ñÈ¡SIPÄÜÁ¦Ê§°Ü";
-	case NET_ERROR_GET_WIFI_AP_CFG: return "»ñÈ¡WIFI apÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_WIFI_AP_CFG: return "ÉèÖÃWIFI apÅäÖÃÊ§°Ü";
-	case NET_ERROR_GET_DECODE_POLICY: return "»ñÈ¡½âÂë²ßÂÔÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_DECODE_POLICY: return "ÉèÖÃ½âÂë²ßÂÔÅäÖÃÊ§°Ü";
-	case NET_ERROR_TALK_REJECT: return "¾Ü¾ø¶Ô½²";
-	case NET_ERROR_TALK_OPENED: return "¶Ô½²±»ÆäËû¿Í»§¶Ë´ò¿ª";
-	case NET_ERROR_TALK_RESOURCE_CONFLICIT: return "×ÊÔ´³åÍ»";
-	case NET_ERROR_TALK_UNSUPPORTED_ENCODE: return "²»Ö§³ÖµÄÓïÒô±àÂë¸ñÊ½";
-	case NET_ERROR_TALK_RIGHTLESS: return "ÎÞÈ¨ÏÞ";
-	case NET_ERROR_TALK_FAILED: return "ÇëÇó¶Ô½²Ê§°Ü";
-	case NET_ERROR_GET_MACHINE_CFG: return "»ñÈ¡»úÆ÷Ïà¹ØÅäÖÃÊ§°Ü";
-	case NET_ERROR_SET_MACHINE_CFG: return "ÉèÖÃ»úÆ÷Ïà¹ØÅäÖÃÊ§°Ü";
-	case NET_ERROR_GET_DATA_FAILED: return "Éè±¸ÎÞ·¨»ñÈ¡µ±Ç°ÇëÇóÊý¾Ý";
-	case NET_ERROR_MAC_VALIDATE_FAILED: return "MACµØÖ·ÑéÖ¤Ê§°Ü";
-	case NET_ERROR_GET_INSTANCE: return "»ñÈ¡·þÎñÆ÷ÊµÀýÊ§°Ü";
-	case NET_ERROR_JSON_REQUEST: return "Éú³ÉµÄjason×Ö·û´®´íÎó";
-	case NET_ERROR_JSON_RESPONSE: return "ÏìÓ¦µÄjason×Ö·û´®´íÎó";
-	case NET_ERROR_VERSION_HIGHER: return "Ð­Òé°æ±¾µÍÓÚµ±Ç°Ê¹ÓÃµÄ°æ±¾";
-	case NET_SPARE_NO_CAPACITY: return "ÈÈ±¸²Ù×÷Ê§°Ü, ÈÝÁ¿²»×ã";
-	case NET_ERROR_SOURCE_IN_USE: return "ÏÔÊ¾Ô´±»ÆäËûÊä³öÕ¼ÓÃ";
-	case NET_ERROR_REAVE: return "¸ß¼¶ÓÃ»§ÇÀÕ¼µÍ¼¶ÓÃ»§×ÊÔ´";
-	case NET_ERROR_NETFORBID: return "½ûÖ¹ÈëÍø";
-	case NET_ERROR_GETCFG_MACFILTER: return "»ñÈ¡MAC¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_MACFILTER: return "ÉèÖÃMAC¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_GETCFG_IPMACFILTER: return "»ñÈ¡IP/MAC¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_SETCFG_IPMACFILTER: return "ÉèÖÃIP/MAC¹ýÂËÅäÖÃÊ§°Ü";
-	case NET_ERROR_OPERATION_OVERTIME: return "µ±Ç°²Ù×÷³¬Ê±";
-	case NET_ERROR_SENIOR_VALIDATE_FAILED: return "¸ß¼¶Ð£ÑéÊ§°Ü";
-	case NET_ERROR_DEVICE_ID_NOT_EXIST: return "Éè±¸ID²»´æÔÚ";
-	case NET_ERROR_UNSUPPORTED: return "²»Ö§³Öµ±Ç°²Ù×÷";
-	case NET_ERROR_PROXY_DLLLOAD: return "´úÀí¿â¼ÓÔØÊ§°Ü";
-	case NET_ERROR_PROXY_ILLEGAL_PARAM: return "´úÀíÓÃ»§²ÎÊý²»ºÏ·¨";
-	case NET_ERROR_PROXY_INVALID_HANDLE: return "´úÀí¾ä±úÎÞÐ§";
-	case NET_ERROR_PROXY_LOGIN_DEVICE_ERROR: return "´úÀíµÇÈëÇ°¶ËÉè±¸Ê§°Ü";
-	case NET_ERROR_PROXY_START_SERVER_ERROR: return "Æô¶¯´úÀí·þÎñÊ§°Ü";
-	case NET_ERROR_SPEAK_FAILED: return "ÇëÇóº°»°Ê§°Ü";
-	case NET_ERROR_NOT_SUPPORT_F6: return "Éè±¸²»Ö§³Ö´ËF6½Ó¿Úµ÷ÓÃ";
-	default: return "Î´Öª´íÎó";
+	case NET_NOERROR: return "æ²¡æœ‰é”™è¯¯";
+	case NET_ERROR: return "æœªçŸ¥é”™è¯¯";
+	case NET_SYSTEM_ERROR: return "Windowsç³»ç»Ÿå‡ºé”™";
+	case NET_NETWORK_ERROR: return "ç½‘ç»œé”™è¯¯ï¼Œå¯èƒ½æ˜¯å› ä¸ºç½‘ç»œè¶…æ—¶";
+	case NET_DEV_VER_NOMATCH: return "è®¾å¤‡åè®®ä¸åŒ¹é…";
+	case NET_INVALID_HANDLE: return "å¥æŸ„æ— æ•ˆ";
+	case NET_OPEN_CHANNEL_ERROR: return "æ‰“å¼€é€šé“å¤±è´¥";
+	case NET_CLOSE_CHANNEL_ERROR: return "å…³é—­é€šé“å¤±è´¥";
+	case NET_ILLEGAL_PARAM: return "ç”¨æˆ·å‚æ•°ä¸åˆæ³•";
+	case NET_SDK_INIT_ERROR: return "SDKåˆå§‹åŒ–å‡ºé”™";
+	case NET_SDK_UNINIT_ERROR: return "SDKæ¸…ç†å‡ºé”™";
+	case NET_RENDER_OPEN_ERROR: return "ç”³è¯·renderèµ„æºå‡ºé”™";
+	case NET_DEC_OPEN_ERROR: return "æ‰“å¼€è§£ç åº“å‡ºé”™";
+	case NET_DEC_CLOSE_ERROR: return "å…³é—­è§£ç åº“å‡ºé”™";
+	case NET_MULTIPLAY_NOCHANNEL: return "å¤šç”»é¢é¢„è§ˆä¸­æ£€æµ‹åˆ°é€šé“æ•°ä¸º0";
+	case NET_TALK_INIT_ERROR: return "å½•éŸ³åº“åˆå§‹åŒ–å¤±è´¥";
+	case NET_TALK_NOT_INIT: return "å½•éŸ³åº“æœªç»åˆå§‹åŒ–";
+	case NET_TALK_SENDDATA_ERROR: return "å‘é€éŸ³é¢‘æ•°æ®å‡ºé”™";
+	case NET_REAL_ALREADY_SAVING: return "å®žæ—¶æ•°æ®å·²ç»å¤„äºŽä¿å­˜çŠ¶æ€";
+	case NET_NOT_SAVING: return "æœªä¿å­˜å®žæ—¶æ•°æ®";
+	case NET_OPEN_FILE_ERROR: return "æ‰“å¼€æ–‡ä»¶å‡ºé”™";
+	case NET_PTZ_SET_TIMER_ERROR: return "å¯åŠ¨äº‘å°æŽ§åˆ¶å®šæ—¶å™¨å¤±è´¥";
+	case NET_RETURN_DATA_ERROR: return "å¯¹è¿”å›žæ•°æ®çš„æ ¡éªŒå‡ºé”™";
+	case NET_INSUFFICIENT_BUFFER: return "æ²¡æœ‰è¶³å¤Ÿçš„ç¼“å­˜";
+	case NET_NOT_SUPPORTED: return "å½“å‰SDKæœªæ”¯æŒè¯¥åŠŸèƒ½";
+	case NET_NO_RECORD_FOUND: return "æŸ¥è¯¢ä¸åˆ°å½•è±¡";
+	case NET_NOT_AUTHORIZED: return "æ— æ“ä½œæƒé™";
+	case NET_NOT_NOW: return "æš‚æ—¶æ— æ³•æ‰§è¡Œ";
+	case NET_NO_TALK_CHANNEL: return "æœªå‘çŽ°å¯¹è®²é€šé“";
+	case NET_NO_AUDIO: return "æœªå‘çŽ°éŸ³é¢‘";
+	case NET_NO_INIT: return "ç½‘ç»œSDKæœªç»åˆå§‹åŒ–";
+	case NET_DOWNLOAD_END: return "ä¸‹è½½å·²ç»“æŸ";
+	case NET_EMPTY_LIST: return "æŸ¥è¯¢ç»“æžœä¸ºç©º";
+	case NET_ERROR_GETCFG_SYSATTR: return "èŽ·å–ç³»ç»Ÿå±žæ€§é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_SERIAL: return "èŽ·å–åºåˆ—å·å¤±è´¥";
+	case NET_ERROR_GETCFG_GENERAL: return "èŽ·å–å¸¸è§„å±žæ€§å¤±è´¥";
+	case NET_ERROR_GETCFG_DSPCAP: return "èŽ·å–DSPèƒ½åŠ›æè¿°å¤±è´¥";
+	case NET_ERROR_GETCFG_NETCFG: return "èŽ·å–ç½‘ç»œé…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_CHANNAME: return "èŽ·å–é€šé“åç§°å¤±è´¥";
+	case NET_ERROR_GETCFG_VIDEO: return "èŽ·å–è§†é¢‘å±žæ€§å¤±è´¥";
+	case NET_ERROR_GETCFG_RECORD: return "èŽ·å–å½•è±¡é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_PRONAME: return "èŽ·å–è§£ç å™¨åè®®åç§°å¤±è´¥";
+	case NET_ERROR_GETCFG_FUNCNAME: return "èŽ·å–232ä¸²å£åŠŸèƒ½åç§°å¤±è´¥";
+	case NET_ERROR_GETCFG_485DECODER: return "èŽ·å–è§£ç å™¨å±žæ€§å¤±è´¥";
+	case NET_ERROR_GETCFG_232COM: return "èŽ·å–232ä¸²å£é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_ALARMIN: return "èŽ·å–å¤–éƒ¨æŠ¥è­¦è¾“å…¥é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_ALARMDET: return "èŽ·å–åŠ¨æ€æ£€æµ‹æŠ¥è­¦å¤±è´¥";
+	case NET_ERROR_GETCFG_SYSTIME: return "èŽ·å–è®¾å¤‡æ—¶é—´å¤±è´¥";
+	case NET_ERROR_GETCFG_PREVIEW: return "èŽ·å–é¢„è§ˆå‚æ•°å¤±è´¥";
+	case NET_ERROR_GETCFG_AUTOMT: return "èŽ·å–è‡ªåŠ¨ç»´æŠ¤é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_VIDEOMTRX: return "èŽ·å–è§†é¢‘çŸ©é˜µé…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_COVER: return "èŽ·å–åŒºåŸŸé®æŒ¡é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_WATERMAKE: return "èŽ·å–å›¾è±¡æ°´å°é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_GENERAL: return "ä¿®æ”¹å¸¸è§„å±žæ€§å¤±è´¥";
+	case NET_ERROR_SETCFG_NETCFG: return "ä¿®æ”¹ç½‘ç»œé…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_CHANNAME: return "ä¿®æ”¹é€šé“åç§°å¤±è´¥";
+	case NET_ERROR_SETCFG_VIDEO: return "ä¿®æ”¹è§†é¢‘å±žæ€§å¤±è´¥";
+	case NET_ERROR_SETCFG_RECORD: return "ä¿®æ”¹å½•è±¡é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_485DECODER: return "ä¿®æ”¹è§£ç å™¨å±žæ€§å¤±è´¥";
+	case NET_ERROR_SETCFG_232COM: return "ä¿®æ”¹232ä¸²å£é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_ALARMIN: return "ä¿®æ”¹å¤–éƒ¨è¾“å…¥æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_ALARMDET: return "ä¿®æ”¹åŠ¨æ€æ£€æµ‹æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_SYSTIME: return "ä¿®æ”¹è®¾å¤‡æ—¶é—´å¤±è´¥";
+	case NET_ERROR_SETCFG_PREVIEW: return "ä¿®æ”¹é¢„è§ˆå‚æ•°å¤±è´¥";
+	case NET_ERROR_SETCFG_AUTOMT: return "ä¿®æ”¹è‡ªåŠ¨ç»´æŠ¤é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_VIDEOMTRX: return "ä¿®æ”¹è§†é¢‘çŸ©é˜µé…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_COVER: return "ä¿®æ”¹åŒºåŸŸé®æŒ¡é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_WATERMAKE: return "ä¿®æ”¹å›¾è±¡æ°´å°é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_WLAN: return "ä¿®æ”¹æ— çº¿ç½‘ç»œä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_SETCFG_WLANDEV: return "é€‰æ‹©æ— çº¿ç½‘ç»œè®¾å¤‡å¤±è´¥";
+	case NET_ERROR_SETCFG_REGISTER: return "ä¿®æ”¹ä¸»åŠ¨æ³¨å†Œå‚æ•°é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_CAMERA: return "ä¿®æ”¹æ‘„åƒå¤´å±žæ€§é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_INFRARED: return "ä¿®æ”¹çº¢å¤–æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_SOUNDALARM: return "ä¿®æ”¹éŸ³é¢‘æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_STORAGE: return "ä¿®æ”¹å­˜å‚¨ä½ç½®é…ç½®å¤±è´¥";
+	case NET_AUDIOENCODE_NOTINIT: return "éŸ³é¢‘ç¼–ç æŽ¥å£æ²¡æœ‰æˆåŠŸåˆå§‹åŒ–";
+	case NET_DATA_TOOLONGH: return "æ•°æ®è¿‡é•¿";
+	case NET_UNSUPPORTED: return "è®¾å¤‡ä¸æ”¯æŒè¯¥æ“ä½œ";
+	case NET_DEVICE_BUSY: return "è®¾å¤‡èµ„æºä¸è¶³";
+	case NET_SERVER_STARTED: return "æœåŠ¡å™¨å·²ç»å¯åŠ¨";
+	case NET_SERVER_STOPPED: return "æœåŠ¡å™¨å°šæœªæˆåŠŸå¯åŠ¨";
+	case NET_LISTER_INCORRECT_SERIAL: return "è¾“å…¥åºåˆ—å·æœ‰è¯¯";
+	case NET_QUERY_DISKINFO_FAILED: return "èŽ·å–ç¡¬ç›˜ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_GETCFG_SESSION: return "èŽ·å–è¿žæŽ¥Sessionä¿¡æ¯";
+	case NET_USER_FLASEPWD_TRYTIME: return "è¾“å…¥å¯†ç é”™è¯¯è¶…è¿‡é™åˆ¶æ¬¡æ•°";
+	case NET_LOGIN_ERROR_PASSWORD: return "å¯†ç ä¸æ­£ç¡®";
+	case NET_LOGIN_ERROR_USER: return "å¸æˆ·ä¸å­˜åœ¨";
+	case NET_LOGIN_ERROR_TIMEOUT: return "ç­‰å¾…ç™»å½•è¿”å›žè¶…æ—¶";
+	case NET_LOGIN_ERROR_RELOGGIN: return "å¸å·å·²ç™»å½•";
+	case NET_LOGIN_ERROR_LOCKED: return "å¸å·å·²è¢«é”å®š";
+	case NET_LOGIN_ERROR_BLACKLIST: return "å¸å·å·²è¢«åˆ—ä¸ºé»‘åå•";
+	case NET_LOGIN_ERROR_BUSY: return "èµ„æºä¸è¶³ï¼Œç³»ç»Ÿå¿™";
+	case NET_LOGIN_ERROR_CONNECT: return "ç™»å½•è®¾å¤‡è¶…æ—¶ï¼Œè¯·æ£€æŸ¥ç½‘ç»œå¹¶é‡è¯•";
+	case NET_LOGIN_ERROR_NETWORK: return "ç½‘ç»œè¿žæŽ¥å¤±è´¥";
+	case NET_LOGIN_ERROR_SUBCONNECT: return "ç™»å½•è®¾å¤‡æˆåŠŸï¼Œä½†æ— æ³•åˆ›å»ºè§†é¢‘é€šé“ï¼Œè¯·æ£€æŸ¥ç½‘ç»œçŠ¶å†µ";
+	case NET_LOGIN_ERROR_MAXCONNECT: return "è¶…è¿‡æœ€å¤§è¿žæŽ¥æ•°";
+	case NET_LOGIN_ERROR_PROTOCOL3_ONLY: return "åªæ”¯æŒ3ä»£åè®®";
+	case NET_LOGIN_ERROR_UKEY_LOST: return "æœªæ’å…¥Uç›¾æˆ–Uç›¾ä¿¡æ¯é”™è¯¯";
+	case NET_LOGIN_ERROR_NO_AUTHORIZED: return "å®¢æˆ·ç«¯IPåœ°å€æ²¡æœ‰ç™»å½•æƒé™";
+	case NET_RENDER_SOUND_ON_ERROR: return "Renderåº“æ‰“å¼€éŸ³é¢‘å‡ºé”™";
+	case NET_RENDER_SOUND_OFF_ERROR: return "Renderåº“å…³é—­éŸ³é¢‘å‡ºé”™";
+	case NET_RENDER_SET_VOLUME_ERROR: return "Renderåº“æŽ§åˆ¶éŸ³é‡å‡ºé”™";
+	case NET_RENDER_ADJUST_ERROR: return "Renderåº“è®¾ç½®ç”»é¢å‚æ•°å‡ºé”™";
+	case NET_RENDER_PAUSE_ERROR: return "Renderåº“æš‚åœæ’­æ”¾å‡ºé”™";
+	case NET_RENDER_SNAP_ERROR: return "Renderåº“æŠ“å›¾å‡ºé”™";
+	case NET_RENDER_STEP_ERROR: return "Renderåº“æ­¥è¿›å‡ºé”™";
+	case NET_RENDER_FRAMERATE_ERROR: return "Renderåº“è®¾ç½®å¸§çŽ‡å‡ºé”™";
+	case NET_RENDER_DISPLAYREGION_ERROR: return "Renderåº“è®¾ç½®æ˜¾ç¤ºåŒºåŸŸå‡ºé”™";
+	case NET_GROUP_EXIST: return "ç»„åå·²å­˜åœ¨";
+	case NET_GROUP_NOEXIST: return "ç»„åä¸å­˜åœ¨";
+	case NET_GROUP_RIGHTOVER: return "ç»„çš„æƒé™è¶…å‡ºæƒé™åˆ—è¡¨èŒƒå›´";
+	case NET_GROUP_HAVEUSER: return "ç»„ä¸‹æœ‰ç”¨æˆ·ï¼Œä¸èƒ½åˆ é™¤";
+	case NET_GROUP_RIGHTUSE: return "ç»„çš„æŸä¸ªæƒé™è¢«ç”¨æˆ·ä½¿ç”¨ï¼Œä¸èƒ½å‡ºé™¤";
+	case NET_GROUP_SAMENAME: return "æ–°ç»„ååŒå·²æœ‰ç»„åé‡å¤";
+	case NET_USER_EXIST: return "ç”¨æˆ·å·²å­˜åœ¨";
+	case NET_USER_NOEXIST: return "ç”¨æˆ·ä¸å­˜åœ¨";
+	case NET_USER_RIGHTOVER: return "ç”¨æˆ·æƒé™è¶…å‡ºç»„æƒé™";
+	case NET_USER_PWD: return "ä¿ç•™å¸å·ï¼Œä¸å®¹è®¸ä¿®æ”¹å¯†ç ";
+	case NET_USER_FLASEPWD: return "å¯†ç ä¸æ­£ç¡®";
+	case NET_USER_NOMATCHING: return "å¯†ç ä¸åŒ¹é…";
+	case NET_USER_INUSE: return "è´¦å·æ­£åœ¨ä½¿ç”¨ä¸­";
+	case NET_ERROR_GETCFG_ETHERNET: return "èŽ·å–ç½‘å¡é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_WLAN: return "èŽ·å–æ— çº¿ç½‘ç»œä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_GETCFG_WLANDEV: return "èŽ·å–æ— çº¿ç½‘ç»œè®¾å¤‡å¤±è´¥";
+	case NET_ERROR_GETCFG_REGISTER: return "èŽ·å–ä¸»åŠ¨æ³¨å†Œå‚æ•°å¤±è´¥";
+	case NET_ERROR_GETCFG_CAMERA: return "èŽ·å–æ‘„åƒå¤´å±žæ€§å¤±è´¥";
+	case NET_ERROR_GETCFG_INFRARED: return "èŽ·å–çº¢å¤–æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_SOUNDALARM: return "èŽ·å–éŸ³é¢‘æŠ¥è­¦é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_STORAGE: return "èŽ·å–å­˜å‚¨ä½ç½®é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_MAIL: return "èŽ·å–é‚®ä»¶é…ç½®å¤±è´¥";
+	case NET_CONFIG_DEVBUSY: return "æš‚æ—¶æ— æ³•è®¾ç½®";
+	case NET_CONFIG_DATAILLEGAL: return "é…ç½®æ•°æ®ä¸åˆæ³•";
+	case NET_ERROR_GETCFG_DST: return "èŽ·å–å¤ä»¤æ—¶é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_DST: return "è®¾ç½®å¤ä»¤æ—¶é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_VIDEO_OSD: return "èŽ·å–è§†é¢‘OSDå åŠ é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_VIDEO_OSD: return "è®¾ç½®è§†é¢‘OSDå åŠ é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_GPRSCDMA: return "èŽ·å–CDMAæˆ–GPRSç½‘ç»œé…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_GPRSCDMA: return "è®¾ç½®CDMAæˆ–GPRSç½‘ç»œé…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_IPFILTER: return "èŽ·å–IPè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_IPFILTER: return "è®¾ç½®IPè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_TALKENCODE: return "èŽ·å–è¯­éŸ³å¯¹è®²ç¼–ç é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_TALKENCODE: return "è®¾ç½®è¯­éŸ³å¯¹è®²ç¼–ç é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_RECORDLEN: return "èŽ·å–å½•åƒæ‰“åŒ…é•¿åº¦é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_RECORDLEN: return "è®¾ç½®å½•åƒæ‰“åŒ…é•¿åº¦é…ç½®å¤±è´¥";
+	case NET_DONT_SUPPORT_SUBAREA: return "ä¸æ”¯æŒç½‘ç»œç¡¬ç›˜åˆ†åŒº";
+	case NET_ERROR_GET_AUTOREGSERVER: return "èŽ·å–è®¾å¤‡ä¸Šä¸»åŠ¨æ³¨å†ŒæœåŠ¡å™¨ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_CONTROL_AUTOREGISTER: return "ä¸»åŠ¨æ³¨å†Œé‡å®šå‘æ³¨å†Œé”™è¯¯";
+	case NET_ERROR_DISCONNECT_AUTOREGISTER: return "æ–­å¼€ä¸»åŠ¨æ³¨å†ŒæœåŠ¡å™¨é”™è¯¯";
+	case NET_ERROR_GETCFG_MMS: return "èŽ·å–mmsé…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_MMS: return "è®¾ç½®mmsé…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_SMSACTIVATION: return "èŽ·å–çŸ­ä¿¡æ¿€æ´»æ— çº¿è¿žæŽ¥é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_SMSACTIVATION: return "è®¾ç½®çŸ­ä¿¡æ¿€æ´»æ— çº¿è¿žæŽ¥é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_DIALINACTIVATION: return "èŽ·å–æ‹¨å·æ¿€æ´»æ— çº¿è¿žæŽ¥é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_DIALINACTIVATION: return "è®¾ç½®æ‹¨å·æ¿€æ´»æ— çº¿è¿žæŽ¥é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_VIDEOOUT: return "æŸ¥è¯¢è§†é¢‘è¾“å‡ºå‚æ•°é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_VIDEOOUT: return "è®¾ç½®è§†é¢‘è¾“å‡ºå‚æ•°é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_OSDENABLE: return "èŽ·å–osdå åŠ ä½¿èƒ½é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_OSDENABLE: return "è®¾ç½®osdå åŠ ä½¿èƒ½é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_ENCODERINFO: return "è®¾ç½®æ•°å­—é€šé“å‰ç«¯ç¼–ç æŽ¥å…¥é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_TVADJUST: return "èŽ·å–TVè°ƒèŠ‚é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_TVADJUST: return "è®¾ç½®TVè°ƒèŠ‚é…ç½®å¤±è´¥";
+	case NET_ERROR_CONNECT_FAILED: return "è¯·æ±‚å»ºç«‹è¿žæŽ¥å¤±è´¥";
+	case NET_ERROR_SETCFG_BURNFILE: return "è¯·æ±‚åˆ»å½•æ–‡ä»¶ä¸Šä¼ å¤±è´¥";
+	case NET_ERROR_SNIFFER_GETCFG: return "èŽ·å–æŠ“åŒ…é…ç½®ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_SNIFFER_SETCFG: return "è®¾ç½®æŠ“åŒ…é…ç½®ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_DOWNLOADRATE_GETCFG: return "æŸ¥è¯¢ä¸‹è½½é™åˆ¶ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_DOWNLOADRATE_SETCFG: return "è®¾ç½®ä¸‹è½½é™åˆ¶ä¿¡æ¯å¤±è´¥";
+	case NET_ERROR_SEARCH_TRANSCOM: return "æŸ¥è¯¢ä¸²å£å‚æ•°å¤±è´¥";
+	case NET_ERROR_GETCFG_POINT: return "èŽ·å–é¢„åˆ¶ç‚¹ä¿¡æ¯é”™è¯¯";
+	case NET_ERROR_SETCFG_POINT: return "è®¾ç½®é¢„åˆ¶ç‚¹ä¿¡æ¯é”™è¯¯";
+	case NET_SDK_LOGOUT_ERROR: return "SDKæ²¡æœ‰æ­£å¸¸ç™»å‡ºè®¾å¤‡";
+	case NET_ERROR_GET_VEHICLE_CFG: return "èŽ·å–è½¦è½½é…ç½®å¤±è´¥";
+	case NET_ERROR_SET_VEHICLE_CFG: return "è®¾ç½®è½¦è½½é…ç½®å¤±è´¥";
+	case NET_ERROR_GET_ATM_OVERLAY_CFG: return "èŽ·å–atmå åŠ é…ç½®å¤±è´¥";
+	case NET_ERROR_SET_ATM_OVERLAY_CFG: return "è®¾ç½®atmå åŠ é…ç½®å¤±è´¥";
+	case NET_ERROR_GET_ATM_OVERLAY_ABILITY: return "èŽ·å–atmå åŠ èƒ½åŠ›å¤±è´¥";
+	case NET_ERROR_GET_DECODER_TOUR_CFG: return "èŽ·å–è§£ç å™¨è§£ç è½®å·¡é…ç½®å¤±è´¥";
+	case NET_ERROR_SET_DECODER_TOUR_CFG: return "è®¾ç½®è§£ç å™¨è§£ç è½®å·¡é…ç½®å¤±è´¥";
+	case NET_ERROR_CTRL_DECODER_TOUR: return "æŽ§åˆ¶è§£ç å™¨è§£ç è½®å·¡å¤±è´¥";
+	case NET_GROUP_OVERSUPPORTNUM: return "è¶…å‡ºè®¾å¤‡æ”¯æŒæœ€å¤§ç”¨æˆ·ç»„æ•°ç›®";
+	case NET_USER_OVERSUPPORTNUM: return "è¶…å‡ºè®¾å¤‡æ”¯æŒæœ€å¤§ç”¨æˆ·æ•°ç›®";
+	case NET_ERROR_GET_SIP_CFG: return "èŽ·å–SIPé…ç½®å¤±è´¥";
+	case NET_ERROR_SET_SIP_CFG: return "è®¾ç½®SIPé…ç½®å¤±è´¥";
+	case NET_ERROR_GET_SIP_ABILITY: return "èŽ·å–SIPèƒ½åŠ›å¤±è´¥";
+	case NET_ERROR_GET_WIFI_AP_CFG: return "èŽ·å–WIFI apé…ç½®å¤±è´¥";
+	case NET_ERROR_SET_WIFI_AP_CFG: return "è®¾ç½®WIFI apé…ç½®å¤±è´¥";
+	case NET_ERROR_GET_DECODE_POLICY: return "èŽ·å–è§£ç ç­–ç•¥é…ç½®å¤±è´¥";
+	case NET_ERROR_SET_DECODE_POLICY: return "è®¾ç½®è§£ç ç­–ç•¥é…ç½®å¤±è´¥";
+	case NET_ERROR_TALK_REJECT: return "æ‹’ç»å¯¹è®²";
+	case NET_ERROR_TALK_OPENED: return "å¯¹è®²è¢«å…¶ä»–å®¢æˆ·ç«¯æ‰“å¼€";
+	case NET_ERROR_TALK_RESOURCE_CONFLICIT: return "èµ„æºå†²çª";
+	case NET_ERROR_TALK_UNSUPPORTED_ENCODE: return "ä¸æ”¯æŒçš„è¯­éŸ³ç¼–ç æ ¼å¼";
+	case NET_ERROR_TALK_RIGHTLESS: return "æ— æƒé™";
+	case NET_ERROR_TALK_FAILED: return "è¯·æ±‚å¯¹è®²å¤±è´¥";
+	case NET_ERROR_GET_MACHINE_CFG: return "èŽ·å–æœºå™¨ç›¸å…³é…ç½®å¤±è´¥";
+	case NET_ERROR_SET_MACHINE_CFG: return "è®¾ç½®æœºå™¨ç›¸å…³é…ç½®å¤±è´¥";
+	case NET_ERROR_GET_DATA_FAILED: return "è®¾å¤‡æ— æ³•èŽ·å–å½“å‰è¯·æ±‚æ•°æ®";
+	case NET_ERROR_MAC_VALIDATE_FAILED: return "MACåœ°å€éªŒè¯å¤±è´¥";
+	case NET_ERROR_GET_INSTANCE: return "èŽ·å–æœåŠ¡å™¨å®žä¾‹å¤±è´¥";
+	case NET_ERROR_JSON_REQUEST: return "ç”Ÿæˆçš„jasonå­—ç¬¦ä¸²é”™è¯¯";
+	case NET_ERROR_JSON_RESPONSE: return "å“åº”çš„jasonå­—ç¬¦ä¸²é”™è¯¯";
+	case NET_ERROR_VERSION_HIGHER: return "åè®®ç‰ˆæœ¬ä½ŽäºŽå½“å‰ä½¿ç”¨çš„ç‰ˆæœ¬";
+	case NET_SPARE_NO_CAPACITY: return "çƒ­å¤‡æ“ä½œå¤±è´¥, å®¹é‡ä¸è¶³";
+	case NET_ERROR_SOURCE_IN_USE: return "æ˜¾ç¤ºæºè¢«å…¶ä»–è¾“å‡ºå ç”¨";
+	case NET_ERROR_REAVE: return "é«˜çº§ç”¨æˆ·æŠ¢å ä½Žçº§ç”¨æˆ·èµ„æº";
+	case NET_ERROR_NETFORBID: return "ç¦æ­¢å…¥ç½‘";
+	case NET_ERROR_GETCFG_MACFILTER: return "èŽ·å–MACè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_MACFILTER: return "è®¾ç½®MACè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_GETCFG_IPMACFILTER: return "èŽ·å–IP/MACè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_SETCFG_IPMACFILTER: return "è®¾ç½®IP/MACè¿‡æ»¤é…ç½®å¤±è´¥";
+	case NET_ERROR_OPERATION_OVERTIME: return "å½“å‰æ“ä½œè¶…æ—¶";
+	case NET_ERROR_SENIOR_VALIDATE_FAILED: return "é«˜çº§æ ¡éªŒå¤±è´¥";
+	case NET_ERROR_DEVICE_ID_NOT_EXIST: return "è®¾å¤‡IDä¸å­˜åœ¨";
+	case NET_ERROR_UNSUPPORTED: return "ä¸æ”¯æŒå½“å‰æ“ä½œ";
+	case NET_ERROR_PROXY_DLLLOAD: return "ä»£ç†åº“åŠ è½½å¤±è´¥";
+	case NET_ERROR_PROXY_ILLEGAL_PARAM: return "ä»£ç†ç”¨æˆ·å‚æ•°ä¸åˆæ³•";
+	case NET_ERROR_PROXY_INVALID_HANDLE: return "ä»£ç†å¥æŸ„æ— æ•ˆ";
+	case NET_ERROR_PROXY_LOGIN_DEVICE_ERROR: return "ä»£ç†ç™»å…¥å‰ç«¯è®¾å¤‡å¤±è´¥";
+	case NET_ERROR_PROXY_START_SERVER_ERROR: return "å¯åŠ¨ä»£ç†æœåŠ¡å¤±è´¥";
+	case NET_ERROR_SPEAK_FAILED: return "è¯·æ±‚å–Šè¯å¤±è´¥";
+	case NET_ERROR_NOT_SUPPORT_F6: return "è®¾å¤‡ä¸æ”¯æŒæ­¤F6æŽ¥å£è°ƒç”¨";
+	default: return "æœªçŸ¥é”™è¯¯";
 	}
+	*/
 }
