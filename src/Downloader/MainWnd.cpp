@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "MainWnd.h"
-
 #include "DownLoadWnd.h"
 #include "LogUI.h"
 #include "VideoLoginUI.h"
@@ -9,12 +8,22 @@
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
 
+#define BT_CLOSE			(_T("closebtn"))
+#define	BT_MINWIND			(_T("minbtn"))
+#define BT_DOWNLOAD			(_T("download"))
+#define BT_LogWnd			(_T("Log_manager"))
+#define BT_OtherTools		(_T("Other_tools"))
+#define BT_VideoPlay		(_T("VideoPlay"))
+#define BT_ABOUT			(_T("aboutbt"))
+#define BT_SKINCHANGE		(_T("menu_Replace"))
+#define BT_IPCONFIG			(_T("menu_SetIP"))
+
+
 CMainWnd::CMainWnd()
-:m_IsMinWnd(false), m_IsMaxWnd(false)
+:m_IsMinWnd(false), bMaxResolution(false)
 {
-
+	// fixed bug : need auto adjust resolution
 }
-
 
 CMainWnd::~CMainWnd()
 {
@@ -28,8 +37,9 @@ DUI_ON_CLICK_CTRNAME(BT_LogWnd, OnLogWnd)
 DUI_ON_CLICK_CTRNAME(BT_OtherTools, OnOtherToolsWnd)
 DUI_ON_CLICK_CTRNAME(BT_VideoPlay, OnVideoPlayWnd)
 DUI_ON_CLICK_CTRNAME(BT_ABOUT, OnAbout)
+DUI_ON_MSGTYPE(BT_SKINCHANGE, OnSkinChanged)
+DUI_ON_MSGTYPE(BT_IPCONFIG, OnIPConfiguration)
 DUI_END_MESSAGE_MAP()
-
 
 LPCTSTR CMainWnd::GetWindowClassName() const
 {
@@ -53,14 +63,25 @@ void CMainWnd::OnFinalMessage(HWND hWnd)
 
 void CMainWnd::InitWindow()
 {
+	BuildControlDDX();
 	ShowVersion();
+}
+
+void CMainWnd::BuildControlDDX()
+{
+	_Network		= dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
+	_un_use			= dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
+	_DownloadUI		= dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("download")));
+	_VideoUI		= dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("VideoPlay")));
+	_LogUI			= dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Log_manager")));
+	_ToolUI			= dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
+	_Version		= dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("version")));
 }
 
 void CMainWnd::ShowVersion()
 {
 	std::string Version = "2.0.0.0";//MVersion::getVersion();
-	CLabelUI* lab_version = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("version")));
-	lab_version->SetText(Version.c_str());
+	_Version->SetText(Version.c_str());
 }
 
 void CMainWnd::OnClose(TNotifyUI& msg)
@@ -78,6 +99,7 @@ void CMainWnd::OnMin(TNotifyUI& msg)
 
 void CMainWnd::OnAbout(TNotifyUI& msg)
 {
+	//fixed bug: Can not display About Dialog
 	CMenuWnd* pMenu = new CMenuWnd();
 	if (pMenu == NULL) { return; }
 	POINT pt = { msg.ptMouse.x - 65, 30 };
@@ -85,6 +107,43 @@ void CMainWnd::OnAbout(TNotifyUI& msg)
 	pMenu->Init(msg.pSender, pt);
 }
 
+void CMainWnd::OnSkinChanged(TNotifyUI& msg)
+{
+	bMaxResolution = !bMaxResolution;
+
+	if (bMaxResolution)
+	{
+		ResizeClient(1280, 800);
+		_Network->SetAttribute(_T("padding"), _T("660,10,10,5"));
+		_un_use->SetAttribute(_T("pos"), _T("606,375,672,444"));
+		_DownloadUI->SetAttributeList(_T("pos=\"293,140,636,405\" normalimage=\"file='skin/mdownload_normal.png'\""));
+		_VideoUI->SetAttributeList(_T("pos=\"642,140,985,405\" normalimage=\"file='skin/mvideo_normal.png'\""));
+		_LogUI->SetAttributeList(_T("pos=\"293,414,636,680\" normalimage=\"file='skin/mlog_normal.png'\""));
+		_ToolUI->SetAttributeList(_T("pos=\"642,414,985,680\" normalimage=\"file='skin/mtool_normal.png'\""));
+		CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
+	}
+	else
+	{
+		ResizeClient(1024, 768);
+		_Network->SetAttribute(_T("padding"), _T("400,10,10,5"));
+		_un_use->SetAttribute(_T("pos"), _T("483,361,543,421"));
+		_DownloadUI->SetAttributeList(_T("pos=\"235,134,512,390\" normalimage=\"skin/download_normal.png\""));
+		_VideoUI->SetAttributeList(_T("pos=\"515,134,789,389\" normalimage=\"skin/video_normal.png\""));
+		_LogUI->SetAttributeList(_T("pos=\"235,393,512,649\" normalimage=\"skin/log_normal.png\""));
+		_ToolUI->SetAttributeList(_T("pos=\"515,393,789,649\" normalimage=\"skin/tool_normal.png\""));
+		CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
+	}
+
+	CPaintManagerUI::ReloadSkin();
+}
+void CMainWnd::OnIPConfiguration(TNotifyUI& msg)
+{
+	std::auto_ptr<CSetIpWnd> pDlg(new CSetIpWnd);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
 void CMainWnd::OnDownLoadWnd(TNotifyUI& msg)
 {
 	std::auto_ptr<DownLoadWnd> pDlg(new DownLoadWnd);
@@ -136,57 +195,6 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 void CMainWnd::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == _T("menu_SetIP"))
-	{
-		std::auto_ptr<CSetIpWnd> pDlg(new CSetIpWnd);
-		assert(pDlg.get());
-		pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
-		pDlg->CenterWindow();
-		pDlg->ShowModal();
-	}
-	if (msg.sType == _T("menu_Replace"))
-	{
-		if (!m_IsMaxWnd)
-		{	
-		
-			ResizeClient(1280, 800);
-			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
-			CButtonUI* button1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("download")));
-			CButtonUI* button2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("VideoPlay")));
-			CButtonUI* button3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Log_manager")));
-			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
-			contrl->SetAttribute(_T("padding"), _T("660,10,10,5"));
-			contrl2->SetAttribute(_T("pos"), _T("606,375,672,444"));
-			button1->SetAttributeList(_T("pos=\"293,140,636,405\" normalimage=\"file='skin/mdownload_normal.png'\""));
-			button2->SetAttributeList(_T("pos=\"642,140,985,405\" normalimage=\"file='skin/mvideo_normal.png'\""));
-			button3->SetAttributeList(_T("pos=\"293,414,636,680\" normalimage=\"file='skin/mlog_normal.png'\""));
-			button4->SetAttributeList(_T("pos=\"642,414,985,680\" normalimage=\"file='skin/mtool_normal.png'\""));
-			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Max"));
-			CPaintManagerUI::ReloadSkin();
-			m_IsMaxWnd = TRUE;
-		}
-		else
-		{
-			
-			ResizeClient(1024, 768);
-			CControlUI* contrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-			CControlUI* contrl2 = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("un_use")));
-			CButtonUI* button1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("download")));
-			CButtonUI* button2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("VideoPlay")));
-			CButtonUI* button3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Log_manager")));
-			CButtonUI* button4 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Other_tools")));
-			contrl->SetAttribute(_T("padding"), _T("400,10,10,5"));
-			contrl2->SetAttribute(_T("pos"), _T("483,361,543,421"));
-			button1->SetAttributeList(_T("pos=\"235,134,512,390\" normalimage=\"skin/download_normal.png\""));
-			button2->SetAttributeList(_T("pos=\"515,134,789,389\" normalimage=\"skin/video_normal.png\""));
-			button3->SetAttributeList(_T("pos=\"235,393,512,649\" normalimage=\"skin/log_normal.png\""));
-			button4->SetAttributeList(_T("pos=\"515,393,789,649\" normalimage=\"skin/tool_normal.png\""));
-			CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
-			CPaintManagerUI::ReloadSkin();
-			m_IsMaxWnd = FALSE;
-		}
-	}
 	return WindowImplBase::NotifyPump(msg);
 }
 
@@ -197,18 +205,6 @@ void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
 		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
 	else if (eNotify == Notification_Type_Network_status_Disconnect)
 		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
-}
-
-void CMainWnd::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
-{
-	if (pNf == nullptr)
-		return;
-	if (pNf->name().compare("class CNotificationNetworkStatus"))
-		return;
-
-	NOTIFICATION_TYPE eNotify;
-	eNotify = pNf->GetNotificationType();
-	SetNetWorkState(eNotify);
 }
 
 void CMainWnd::Show_HideTask(bool IsHide)
