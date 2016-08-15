@@ -1,4 +1,4 @@
 # Phoenix
 Rebuilt App
 
-<image src="https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true" width="100">
+<image src="https://ci.appveyor.com/api/projects/status/ch6bo8hxbx53c8i9?svg=true" width="100">
