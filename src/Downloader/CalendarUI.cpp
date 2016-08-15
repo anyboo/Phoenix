@@ -1,10 +1,19 @@
 #include "stdafx.h"
 #include "CalendarUI.h"
 
+#define CTR_NEXTYEAR	_T("Add_Year")
+#define CTR_PREYEAR		_T("Sub_Year")
+#define CTR_INPUTYEAR	_T("InputYear")
+#define CTR_MONTH		_T("CB_month")
+#define CTR_INPUTDAY	_T("Button")
+
+#define BT_BKCOLOR1		0x64263231
+#define BT_BKCOLOR2		0xc3324534
+#define BT_BKCOLOR3		0x64263232
+
 CalendarUI::CalendarUI()
-:m_bTag(true)
-{
-	
+:m_bTag(true), _PrevMonth(0)
+{	
 }
 
 
@@ -13,7 +22,9 @@ CalendarUI::~CalendarUI()
 }
 
 DUI_BEGIN_MESSAGE_MAP(CalendarUI, WindowImplBase)
-DUI_ON_CLICK_CTRNAME(BT_CANCEL, OnClose)
+DUI_ON_CLICK_CTRNAME(CTR_NEXTYEAR, OnNextYear)
+DUI_ON_CLICK_CTRNAME(CTR_PREYEAR, OnPreYear)
+DUI_ON_MSGTYPE_CTRNAME(DUI_MSGTYPE_ITEMSELECT, CTR_MONTH, OnSelectedMonth)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CalendarUI::GetWindowClassName() const
@@ -31,172 +42,207 @@ CDuiString CalendarUI::GetSkinFile()
 	return _T("xml\\CalendarUI.xml");
 }
 
+void CalendarUI::InitWindow()
+{
+	BuildControlDDX();
+	OnPrepare();
+}
+
 void CalendarUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
-void CalendarUI::Notify(TNotifyUI& msg)
+void CalendarUI::BuildControlDDX()
 {
-	if (msg.sType == DUI_MSGTYPE_CLICK)
-	{
-		STDSTRING btnName = msg.pSender->GetName();
-		STDSTRING strTag(_T("Button"));
-		int iRet = btnName.compare(0, 6, strTag);
-		if (iRet == 0){
-			SaveData(btnName);
-			Close();
-		}
-		if (btnName == _T("Add_Year")){
-			m_sysTime.wYear = m_sysTime.wYear + 1;
-			DrawCalendar(m_sysTime);
-		}
-		if (btnName == _T("Sub_Year")){
-			m_sysTime.wYear = m_sysTime.wYear - 1;
-			DrawCalendar(m_sysTime);
-		}
-	}
-	if (m_bTag)
-	{	
-		OnPrepare();
-		m_PrevMonth = m_sysTime.wMonth;
-		m_bTag = false;
-	}
-	if (msg.sType == DUI_MSGTYPE_ITEMSELECT && msg.pSender->GetName() == _T("CB_month"))
-	{
-		CComboUI* Comb = static_cast<CComboUI*>(m_PaintManager.FindControl(_T("CB_month")));
-		int newmonth = Comb->GetCurSel() + 1;
-		if (newmonth > m_PrevMonth){
-			m_sysTime.wMonth = m_sysTime.wMonth + newmonth - m_PrevMonth;
-			DrawCalendar(m_sysTime);
-		}
-		else if(newmonth < m_PrevMonth){
-			m_sysTime.wMonth = m_sysTime.wMonth + newmonth - m_PrevMonth;
-			DrawCalendar(m_sysTime);
-		}
-		m_PrevMonth = newmonth;		
-	}
-	WindowImplBase::Notify(msg);
+	_month = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(CTR_MONTH));
+	_year  = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(CTR_INPUTYEAR));
+
+	InitDays();
 }
 
-void CalendarUI::OnClose(TNotifyUI& msg)
+void CalendarUI::OnNextYear(TNotifyUI& msg)
 {
+	m_sysTime.wYear = m_sysTime.wYear + 1;
+	DrawCalendar(m_sysTime);
+}
+
+void CalendarUI::OnPreYear(TNotifyUI& msg)
+{
+	m_sysTime.wYear = m_sysTime.wYear - 1;
+	DrawCalendar(m_sysTime);
+}
+
+void CalendarUI::OnInputDay(TNotifyUI& msg)
+{
+	CDuiString str = msg.pSender->GetName();
+	str.Replace(CTR_INPUTDAY, "");
+	int i = std::stoi(str.GetData());
+	_user_selected_day = _days[i];
+
+	SaveData();
 	Close();
+}
+
+void CalendarUI::OnSelectedMonth(TNotifyUI& msg)
+{
+	int newmonth = _month->GetCurSel() + 1;
+	if (newmonth > _PrevMonth){
+		m_sysTime.wMonth = m_sysTime.wMonth + newmonth - _PrevMonth;
+		DrawCalendar(m_sysTime);
+	}
+	else if (newmonth < _PrevMonth){
+		m_sysTime.wMonth = m_sysTime.wMonth + newmonth - _PrevMonth;
+		DrawCalendar(m_sysTime);
+	}
+	_PrevMonth = newmonth;
+}
+
+void CalendarUI::Notify(TNotifyUI& msg)
+{
+	DUI__Trace(msg.pSender->GetName());
+	if(!msg.pSender->GetName().Find(CTR_INPUTDAY))
+		OnInputDay(msg);
+	WindowImplBase::Notify(msg);
 }
 
 void CalendarUI::OnPrepare()
 {
 	::GetLocalTime(&m_sysTime);
+	_PrevMonth = m_sysTime.wMonth;
 	DrawCalendar(m_sysTime);
 }
 
+void CalendarUI::InitDays()
+{
+	for (int i = 0; i < 42; i++) // need fixed 42, auto by xml
+	{
+		std::string name("Button");
+		name += std::to_string(i);
+		CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(name.c_str()));
+		if (btn) _days.push_back(btn);
+	}
+}
+
+void CalendarUI::SelectMonth(size_t month)
+{
+	int index = month - 1;
+	_month->SelectItem(index, false, false);
+}
 //绘制日历
 void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 {
-	int iDay = 0;
-	STDSTRING cDay, cMonth, cYear;
-	STDSTRING itemName, BtnName;
-	//int iStartDay = m_sysTime.wDayOfWeek;
 	m_sysTime.wDay = 1;
-	int iStartDay = GetDayOfWeek(m_sysTime);
-	//上月天数
-	int iLastMonthStartDays = 31 - iStartDay;
+	size_t iStartDay = GetDayOfWeek(m_sysTime);
+	//days of the previous month
+	size_t iLastMonthStartDays = 31 - iStartDay;
 	if (m_sysTime.wMonth > 1)
 		iLastMonthStartDays = GetMonthDays(m_sysTime.wYear, m_sysTime.wMonth - 1) - iStartDay;
-	//本月天数
-	int iMonthDays = GetMonthDays(m_sysTime.wYear, m_sysTime.wMonth);
-	//下月天数
-	int iNextMonthDays = 0;
-	
-	for (int i = 0; i < 42; i++)
+	//days of the month
+	size_t iMonthDays = GetMonthDays(m_sysTime.wYear, m_sysTime.wMonth);
+	//days of the next month
+	size_t iNextMonthDays = 0;
+	size_t iDay = 0;
+
+	for (size_t i = 0; i < _days.size(); i++)
 	{
-		BtnName = _T("Button") + std::to_string(i);
-		CButtonUI* btn = static_cast<CButtonUI*>(m_PaintManager.FindControl(BtnName.c_str()));
-		//上月
+		CButtonUI& btn = *(_days[i]);
+		std::string date;
+		unsigned long color;
+		
 		if (i<iStartDay)
 		{
 			iLastMonthStartDays++;
-			cDay = std::to_string(iLastMonthStartDays);
-			btn->SetText(cDay.c_str());
-			btn->SetBkColor(BT_BKCOLOR1);
+			date = std::to_string(iLastMonthStartDays);
+			color = BT_BKCOLOR1;
 		}
-		else if (i>iStartDay - 1 && iDay < iMonthDays)
+		else if (i >= iStartDay && iDay < iMonthDays)
 		{
 			iDay++;
-			cDay = std::to_string(iDay);
-			btn->SetText(cDay.c_str());
-			btn->SetBkColor(BT_BKCOLOR2);
+			date = std::to_string(iDay);
+			color = BT_BKCOLOR2;
 		}
 		else
 		{
 			iNextMonthDays++;
-			cDay = std::to_string(iNextMonthDays);
-			btn->SetText(cDay.c_str());
-			btn->SetBkColor(BT_BKCOLOR3);
+			date = std::to_string(iNextMonthDays);
+			color = BT_BKCOLOR3;
 		}
+
+		btn.SetText(date.c_str());
+		btn.SetBkColor(color);
 	}
 
-	itemName = STDSTRING(("Item")) + std::to_string(m_sysTime.wMonth);
-	CListLabelElementUI* itemLabe = static_cast<CListLabelElementUI*>(m_PaintManager.FindControl(itemName.c_str()));
-	itemLabe->Select(true);
+	SelectMonth(m_sysTime.wMonth);
 
-	cYear = std::to_string(m_sysTime.wYear);
-	CLabelUI* edit_year = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("InputYear")));
-	edit_year->SetText(cYear.c_str());
+	_year->SetText(std::to_string(m_sysTime.wYear).c_str());
 }
 
-int CalendarUI::GetMonthDays(int iY, int iM)
+size_t CalendarUI::GetMonthDays(size_t year, size_t month)
 {
-	int iTotalDay = 31;
-	if (iM == 2)
+	size_t TotalDay = 31;
+	if (month == 2)
 	{
-		if (iY % 4 == 0 && iY % 100 != 0 || iY % 400 == 0)
-			iTotalDay = 29;
+		if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
+			TotalDay = 29;
 		else
-			iTotalDay = 28;
+			TotalDay = 28;
 	}
-	else if (iM == 4 || iM == 6 || iM == 9 || iM == 11)
-		iTotalDay = 30;
-	return iTotalDay;
+	else if (month == 4 || month == 6 || month == 9 || month == 11)
+		TotalDay = 30;
+	return TotalDay;
 }
 
-int CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
+size_t CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
 {
 	m_ctime.SetDate(m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
 	return m_ctime.GetDayOfWeek() - 1;
 }
 
-void CalendarUI::SaveData(STDSTRING& btnName)
+std::string CalendarUI::GetMonth()
 {
-	CComboUI* CB_Month = static_cast<CComboUI*>(m_PaintManager.FindControl(_T("CB_month")));
-	CLabelUI* LB_Year = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("InputYear")));
-	CButtonUI* BT_Input = static_cast<CButtonUI*>(m_PaintManager.FindControl(btnName.c_str()));
-	DWORD bkcolor = BT_Input->GetBkColor();
-	int month = CB_Month->GetCurSel() + 1;
+	DWORD bkcolor = _user_selected_day->GetBkColor();
+	int month = _month->GetCurSel() + 1;
 	if (bkcolor == BT_BKCOLOR1)
 	{
-		month = month - 1;
+		month--;
 	}
-	if (bkcolor == BT_BKCOLOR3)
+	else if (bkcolor == BT_BKCOLOR3)
 	{
-		month = month + 1;
+		month++;
 	}
-	STDSTRING strMonth = to_string(month);
-	STDSTRING strYear = LB_Year->GetText();
-	STDSTRING Day = BT_Input->GetText();
-	if (Day.size() == 1)
-	{
-		Day = STDSTRING(_T("0")) + Day;
-	}
-	if (strMonth.size() == 1)
-	{
-		strMonth = STDSTRING(_T("0")) + strMonth;
-	}
-	m_strData = strYear + STDSTRING(_T("-")) + strMonth + STDSTRING(_T("-")) + Day;
+	
+	assert(month < 10 && month > 0);
+	if (month < 10 && month > 0)
+		return std::to_string(month).insert(0, "0");
+
+	return std::to_string(month);
+}
+
+std::string CalendarUI::GetDay()
+{
+	std::string d = _user_selected_day->GetText();
+
+	if (d.size() < 2)
+		d.insert(0, "0");
+
+	return d;
+}
+
+void CalendarUI::SaveData()
+{
+	std::string data;
+	std::string year = _year->GetText();
+	std::string day = GetDay();
+	std::string month = GetMonth();
+
+	_data = year + month + day;
+
+	DUI__Trace("user select date : %s", _data.c_str());
 }
 
 
-STDSTRING CalendarUI::GetData()
+std::string CalendarUI::GetData()
 {
-	return m_strData;
+	return _data;
 }
