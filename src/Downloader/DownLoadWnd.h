@@ -82,7 +82,6 @@ private:
 	CVendor		m_Vendor;
 	CTimeUI		m_TimeUI;
 	int			m_FileCount;
-	BOOL		m_beginTag;
 	SYSTEMTIME		 m_sysTime;
 	Device*		m_Device;
 	size_t			m_ChannelCount;

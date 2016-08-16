@@ -87,6 +87,7 @@
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
+    <ClInclude Include="RegisterInfo.h" />
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
+    <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="stdafx.cpp">

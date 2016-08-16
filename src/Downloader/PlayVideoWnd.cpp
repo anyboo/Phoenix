@@ -140,7 +140,7 @@ HWND CPlayVideoWnd::GetPlayHwnd()
 
 	CDuiRect rcWnd;
 	GetWindowRect(pHwnd, &rcWnd);
-	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_DRAWFRAME | SWP_SHOWWINDOW);
+	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(),  SWP_NOSIZE | SWP_DRAWFRAME | SWP_NOOWNERZORDER);
 
 	GetWindowRect(pHwnd, &rcWnd);
 	return pHwnd;

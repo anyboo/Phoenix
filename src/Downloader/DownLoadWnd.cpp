@@ -22,7 +22,7 @@ using Poco::Observer;
 
 
 DownLoadWnd::DownLoadWnd()
-:m_FileCount(1), m_beginTag(TRUE)
+:m_FileCount(1)
 {
 	ReadJsonFile();
 	m_Vendor.SetPaintMagager(&m_PaintManager);
@@ -72,6 +72,8 @@ void DownLoadWnd::OnCloseWnd(TNotifyUI& msg)
 
 void DownLoadWnd::InitWindow()
 {
+	InitTime();
+	ShowOnlineDevice();
 	NotificationCenter& nc = NotificationCenter::defaultCenter();
 	nc.addObserver(Observer<DownLoadWnd, CNotificationNetworkStatus>(*this, &DownLoadWnd::HandleNotificationNetworkStatus));
 }
@@ -100,14 +102,8 @@ void DownLoadWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
 void DownLoadWnd::OnSelectTimeType()
 {
 	CSliderUI* Slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("Select_time")));
-	if (Slider->GetValue() > 50)
-	{
-		Slider->SetValue(100);
-	}
-	else
-	{
-		Slider->SetValue(0);
-	}
+	int sValue = Slider->GetValue() > 50 ? 100 : 0;
+	Slider->SetValue(sValue);
 }
 
 void DownLoadWnd::ShowOnlineDevice()
@@ -208,12 +204,6 @@ void DownLoadWnd::OnSearchFileWnd(TNotifyUI& msg)
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
 {
-	if (m_beginTag)
-	{
-		InitTime();
-		ShowOnlineDevice();
-		m_beginTag = FALSE;
-	}
 	STDSTRING strSendName = msg.pSender->GetName();
 	if (msg.sType == DUI_MSGTYPE_VALUECHANGED && strSendName == _T("Select_time")){
 		OnSelectTimeType();

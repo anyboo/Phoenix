@@ -16,6 +16,8 @@
 #include <memory.h>
 #include <tchar.h>
 #include "DuiLib\UIlib.h"
+
+#include <string>
 using namespace DuiLib;
 
 #ifdef _DEBUG

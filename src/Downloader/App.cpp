@@ -29,6 +29,8 @@ void HideTaskBar()
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {	
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+
 	string strCmdLine(lpCmdLine);
 	wstring wsCmdLine(strCmdLine.begin(), strCmdLine.end());
 	

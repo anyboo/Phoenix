@@ -200,3 +200,13 @@ STDSTRING CalendarUI::GetData()
 {
 	return m_strData;
 }
+
+LRESULT CalendarUI::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_NCLBUTTONDOWN || wParam == WM_NCLBUTTONDOWN || lParam == WM_NCLBUTTONDOWN)
+	{
+		Close();
+	}
+	bHandled = FALSE;
+	return 0;
+}

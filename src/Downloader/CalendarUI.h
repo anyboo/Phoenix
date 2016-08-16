@@ -28,7 +28,7 @@ public:
 	int GetDayOfWeek(SYSTEMTIME m_sysTime);
 	int GetMonthDays(int iY, int iM);
 	
-
+	LRESULT OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 private:
 	BOOL			m_bTag;
 	SYSTEMTIME		 m_sysTime;

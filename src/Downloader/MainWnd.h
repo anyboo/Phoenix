@@ -35,8 +35,6 @@ public:
 
 	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
 
-	void Show_HideTask(bool IsHide);
-
 	void ShowVersion();
 
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
