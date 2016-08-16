@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\common\MVersion.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
+    <ClCompile Include="NICStatus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -216,6 +217,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PlayWndUI.h" />
+    <ClInclude Include="NICStatus.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

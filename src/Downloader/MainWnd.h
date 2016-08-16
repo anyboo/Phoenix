@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
+
 class CMainWnd :
 	public WindowImplBase
 {
@@ -30,9 +31,10 @@ protected:
 	void OnOtherToolsWnd(TNotifyUI& msg);
 	void OnVideoPlayWnd(TNotifyUI& msg);
 	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
-	void Show_HideTask(bool IsHide);
+
 	void ShowVersion();
 	void BuildControlDDX();
+
 private:
 	bool	m_IsMinWnd;
 	bool	bMaxResolution;
