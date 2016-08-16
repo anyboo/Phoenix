@@ -170,6 +170,7 @@ public:
 
 	///     Init SDK
 	///     @param		None
+	///		@return		None
 	///		@see
 	///		@note		None
 	virtual void Init() = 0;
@@ -185,7 +186,7 @@ public:
 
 	///     SDK vendor's logout
 	///     @param		const long loginHandle -- Login the returned  value
-	///     @return		None
+	///     @return		Login handle
 	///     @see		
 	///		@note		After Login
 	virtual void Logout(const long loginHandle) = 0;
@@ -226,7 +227,7 @@ public:
 	///     Through the file information to download video files
 	///     @param		const long loginHandle -- Login the returned  value	
 	///		@param		const RecordFile& file -- File information structure
-	///     @return		None
+	///     @return		Stop download success return true, otherwise return false
 	///     @see	 
 	//		@note		After download
 	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
@@ -255,7 +256,7 @@ public:
 
 	///     Get the window's play handle 
 	///     @param		const HWND& hWnd -- play handle 
-	///     @return		int -- Get progress
+	///     @return		Get progress
 	///     @see		
 	//		@note		None
 	virtual void SetHWnd(const HWND& hWnd) = 0;
@@ -291,28 +292,28 @@ public:
 
 	///      Judge whether the interface of the SDK support equipment
 	///      @param		None
-	///      @return	None
+	///      @return	An enumeration of the object, get the SDK manufacturers
 	///      @see	
 	///      @note		None
 	virtual bool IsSearchDeviceAPIExist() = 0;
 
 	///      The equipment query
 	///      @param		None
-	///      @return	None
+	///      @return	The SDK presence of equipment found in the interface
 	///      @see	
 	///      @note		None
 	virtual void StartSearchDevice() = 0;
 
 	///      Get equipment Information
 	///      @param		None
-	///      @return	DEVICE_INFO_LIST& -- Get device information
+	///      @return	Get device information
 	///      @see	
 	///      @note		None
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;
 
 	///      Stop device query
 	///      @param		None
-	///      @return	None
+	///      @return	List for equipment information
 	///      @see	
 	///      @note		None
 	virtual void StopSearchDevice() = 0;

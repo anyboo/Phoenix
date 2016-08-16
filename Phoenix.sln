@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Downloader", "src\Downloader\Downloader.vcxproj", "{CCF86175-4572-490D-977E-9ECA4D24E79E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "src\FaceRecognition\ConsoleApplication1.vcxproj", "{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wrapper", "src\Wrapper\Wrapper.vcxproj", "{66EBA924-9534-451C-BBAF-65B4F9760DE4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "src\Scene\Scene.vcxproj", "{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +25,22 @@ Global
 		{CCF86175-4572-490D-977E-9ECA4D24E79E}.UnicodeDebug|Win32.Build.0 = Debug|Win32
 		{CCF86175-4572-490D-977E-9ECA4D24E79E}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{CCF86175-4572-490D-977E-9ECA4D24E79E}.UnicodeRelease|Win32.Build.0 = Release|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.Build.0 = Debug|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.ActiveCfg = Release|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.Build.0 = Release|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.UnicodeDebug|Win32.Build.0 = Debug|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
-		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.Debug|Win32.Build.0 = Debug|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.Release|Win32.ActiveCfg = Release|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.Release|Win32.Build.0 = Release|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{66EBA924-9534-451C-BBAF-65B4F9760DE4}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.Debug|Win32.Build.0 = Debug|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.Release|Win32.ActiveCfg = Release|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.Release|Win32.Build.0 = Release|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeRelease|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
