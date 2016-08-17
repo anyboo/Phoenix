@@ -142,6 +142,7 @@
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MessagePump.h" />
+    <ClInclude Include="NICStatus.h" />
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="PlayVideoWnd.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MessagePump.cpp" />
+    <ClCompile Include="NICStatus.cpp" />
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="OVPlayerUI.cpp" />
     <ClCompile Include="PlayVideoWnd.cpp" />
