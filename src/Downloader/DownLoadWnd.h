@@ -16,13 +16,6 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 	
-	void SearchFile();
-	
-	void SetBtDataImage(std::string& BT_Name, std::string& day);
-	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
-	void AddSubFileList(size_t CurSel);
-	void GetChannel();
-	void GetDataTime();
 	void ReadJsonFile();
 
 protected:
@@ -32,35 +25,56 @@ protected:
 
 	void OnSearch(TNotifyUI& msg);
 	void OnLogin(TNotifyUI& msg);
-	void OnCloseWnd(TNotifyUI& msg);
+	void OnBackward(TNotifyUI& msg);
 
-	void OnUseSearchCtrl(TNotifyUI& msg);
 	void OnSelectCalendar(TNotifyUI& msg);
 	void OnSelectDayTime(TNotifyUI& msg);
-	void OnSelectTimeType(TNotifyUI& msg);
+	void FixedSliderPosition(TNotifyUI& msg);
 
 	void InitTime();
 	void BuildControlDDX();
-	
+
+	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
+	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);
+	CDuiString AppenText(const CDuiString& str);
+
+	template<class T>
+	void AddControl(CDuiString ctr_name)
+	{
+		T* c = dynamic_cast<T*>(m_PaintManager.FindControl(ctr_name));
+		assert(c);
+		if (c){
+			ctr_name.MakeLower();
+			_ControlMatrix.Insert(ctr_name, c);
+		}
+	}
+
+	template<class T>
+	T* GetControl(CDuiString ctr_name)
+	{
+		ctr_name.MakeLower();
+		assert(_ControlMatrix.Find(ctr_name));
+		T* c = static_cast<T*>(_ControlMatrix.Find(ctr_name));
+		assert(c);
+		return c;
+	}
+
 private:
 	CVendor		m_Vendor;
-	int			m_FileCount;
-	BOOL		m_beginTag;
 	SYSTEMTIME		 m_sysTime;
-	Device*		m_Device;
-	size_t			m_ChannelCount;
-	std::vector<size_t>	m_Channel;
-	time_range		m_timeRangeSearch;
-	std::vector<std::string>		m_onlineIP;
-	std::string			m_DeviceID;
-	std::map<int, string>		m_VnameAndType;
 
 	CTimeUI*	_TimeControl;
 	CButtonUI*  _SearchControl;
 	CListUI*	_VendorList;
-	CLabelUI*	_StartDate;
-	CLabelUI*	_StopDate;
-	CLabelUI*	_StartTime;
-	CLabelUI*	_StopTime;
+
+	CDuiStringPtrMap _ControlMatrix;
+
+	const CDuiString ico_startdate = _T("DataTime1");
+	const CDuiString ico_stopdate = _T("DataTime2");
+	const CDuiString startdate = _T("DatatimeText1");
+	const CDuiString stopdate = _T("DatatimeText2");
+	const CDuiString starttime = _T("daytimeText1");
+	const CDuiString stoptime = _T("daytimeText2");
+	const CDuiString timetype = _T("Select_time");
 };
 

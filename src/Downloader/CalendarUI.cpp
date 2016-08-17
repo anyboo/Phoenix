@@ -117,9 +117,9 @@ void CalendarUI::InitDays()
 {
 	for (int i = 0; i < 42; i++) // need fixed 42, auto by xml
 	{
-		std::string name("Button");
-		name += std::to_string(i);
-		CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(name.c_str()));
+		CDuiString name("Button");
+		name += std::to_string(i).c_str();
+		CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(name));
 		if (btn) _days.push_back(btn);
 	}
 }
@@ -147,29 +147,29 @@ void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 	for (size_t i = 0; i < _days.size(); i++)
 	{
 		CButtonUI& btn = *(_days[i]);
-		std::string date;
+		CDuiString date;
 		unsigned long color;
 		
 		if (i<iStartDay)
 		{
 			iLastMonthStartDays++;
-			date = std::to_string(iLastMonthStartDays);
+			date = std::to_string(iLastMonthStartDays).c_str();
 			color = BT_BKCOLOR1;
 		}
 		else if (i >= iStartDay && iDay < iMonthDays)
 		{
 			iDay++;
-			date = std::to_string(iDay);
+			date = std::to_string(iDay).c_str();
 			color = BT_BKCOLOR2;
 		}
 		else
 		{
 			iNextMonthDays++;
-			date = std::to_string(iNextMonthDays);
+			date = std::to_string(iNextMonthDays).c_str();
 			color = BT_BKCOLOR3;
 		}
 
-		btn.SetText(date.c_str());
+		btn.SetText(date);
 		btn.SetBkColor(color);
 	}
 
@@ -199,7 +199,7 @@ size_t CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
 	return m_ctime.GetDayOfWeek() - 1;
 }
 
-std::string CalendarUI::GetMonth()
+CDuiString CalendarUI::GetMonth()
 {
 	DWORD bkcolor = _user_selected_day->GetBkColor();
 	int month = _month->GetCurSel() + 1;
@@ -211,38 +211,44 @@ std::string CalendarUI::GetMonth()
 	{
 		month++;
 	}
-	
-	assert(month < 10 && month > 0);
-	if (month < 10 && month > 0)
-		return std::to_string(month).insert(0, "0");
 
-	return std::to_string(month);
+	assert(month < 10 && month > 0);
+	CDuiString str, format;
+	if (month < 10 && month > 0)
+		format = "0%d";
+	else format = "%d";
+	str.Format(format, month);
+	return str;
 }
 
-std::string CalendarUI::GetDay()
+CDuiString CalendarUI::GetDay()
 {
-	std::string d = _user_selected_day->GetText();
+	CDuiString d = _user_selected_day->GetText();
 
-	if (d.size() < 2)
-		d.insert(0, "0");
+	if (d.GetLength() < 2)
+		d.Format("0%s",d);
 
 	return d;
 }
 
 void CalendarUI::SaveData()
 {
-	std::string data;
-	std::string year = _year->GetText();
-	std::string day = GetDay();
-	std::string month = GetMonth();
+	CDuiString year = _year->GetText();
+	CDuiString day = GetDay();
+	CDuiString month = GetMonth();
 
-	_data = year + month + day;
+	_data.Empty();
+	_data += year;
+	_data += "-";
+	_data += month;
+	_data += "-";
+	_data += day;
 
-	DUI__Trace("user select date : %s", _data.c_str());
+	DUI__Trace("user select date : %s", _data);
 }
 
 
-std::string CalendarUI::GetData()
+CDuiString CalendarUI::GetData()
 {
 	return _data;
 }
