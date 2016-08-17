@@ -86,13 +86,13 @@ void CMainWnd::ShowVersion()
 
 void CMainWnd::OnClose(TNotifyUI& msg)
 {
-	Show_HideTask(FALSE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 	::PostQuitMessage(0L);
 }
 
 void CMainWnd::OnMin(TNotifyUI& msg)
 {
-	Show_HideTask(FALSE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 	m_IsMinWnd = TRUE;
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
 }
@@ -184,7 +184,7 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	if (m_IsMinWnd)
 	{
-		Show_HideTask(true);
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	}
 	m_IsMinWnd = false;
 
@@ -207,31 +207,3 @@ void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
 		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
 }
 
-void CMainWnd::Show_HideTask(bool IsHide)
-{
-	int nCwdShow = -1;
-	LPARAM lParam;
-	HWND task = FindWindow(_T("Shell_TrayWnd"), NULL);
-	if (IsHide)
-	{
-		lParam = ABS_AUTOHIDE | ABS_ALWAYSONTOP;
-		nCwdShow = SW_HIDE;
-	}
-	else
-	{
-		lParam = ABS_ALWAYSONTOP;
-		nCwdShow = SW_SHOW;
-	}
-
-	::ShowWindow(task, nCwdShow);
-
-	APPBARDATA apBar;
-	memset(&apBar, 0, sizeof(apBar));
-	apBar.cbSize = sizeof(apBar);
-	apBar.hWnd = task;
-	if (apBar.hWnd != NULL)
-	{
-		apBar.lParam = lParam;
-		SHAppBarMessage(ABM_SETSTATE, &apBar);
-	}
-}

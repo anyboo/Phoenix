@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "MainWnd.h"
 #include "resource.h"
+#include "NICStatus.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
