@@ -273,7 +273,7 @@ void DownLoadWnd::ShowTotalFileList()
 {
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
 	CDialogBuilder builder;
-	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, &m_PaintManager));
+	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, &m_PaintManager));	
 	pList->Add(SubList);
 
 	STDSTRING SubListName = SUBLISTNAMETAG + to_string(m_FileCount);
