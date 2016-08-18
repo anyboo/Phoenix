@@ -154,6 +154,12 @@
       <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="NICStatus.cpp" />
+    <ClCompile Include="AppInitialize.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkStatus.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -218,6 +224,8 @@
     </ClInclude>
     <ClInclude Include="PlayWndUI.h" />
     <ClInclude Include="NICStatus.h" />
+    <ClInclude Include="AppInitialize.h" />
+    <ClInclude Include="NetworkStatus.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
