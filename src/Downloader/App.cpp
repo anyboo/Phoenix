@@ -22,8 +22,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
-	bool bNetStatus = WindowUtils::isOnLine();
-	Poco::NotificationCenter::defaultCenter().postNotification(new StatusNotification(bNetStatus));
+
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();
