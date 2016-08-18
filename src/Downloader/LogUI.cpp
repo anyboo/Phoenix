@@ -136,7 +136,7 @@ void CLogUI::InsertLogInfoToList()
 		pListElement->SetAttribute(_T("font"), _T("1"));
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("程序设计"));
+		pListElement->SetText(1, _T("Program"));
 		pListElement->SetText(2, _T("100"));		
 	}
 }
@@ -152,10 +152,10 @@ void CLogUI::InsertCaseInfoToList()
 		pList->Add(pListElement);
 		pListElement->SetFixedHeight(30);
 		pListElement->SetText(0, _T("WHO1753"));
-		pListElement->SetText(1, _T("程序设计"));
+		pListElement->SetText(1, _T("Program"));
 		pListElement->SetText(2, _T("100"));
 		pListElement->SetText(3, _T("WHO1753"));
-		pListElement->SetText(4, _T("程序设计"));
+		pListElement->SetText(4, _T("Program"));
 		pListElement->SetText(5, _T("100"));
 		pListElement->SetText(6, _T("100"));
 	}
@@ -169,12 +169,12 @@ void CLogUI::exportLog()
 	OPENFILENAME  ofn = { 0 };
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");//要选择的文件后缀   
-	ofn.lpstrInitialDir = _T("D:\\");//默认的文件路径   
-	ofn.lpstrFile = szBuffer;//存放文件的缓冲区   
+	ofn.lpstrFilter = _T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");//file subfix   
+	ofn.lpstrInitialDir = _T("D:\\");//Default Path
+	ofn.lpstrFile = szBuffer;//File Buffer  
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
 	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//标志如果是多选要加上OFN_ALLOWMULTISELECT  
+	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT ;//add OFN_ALLOWMULTISELECT if need multiple selection
 	BOOL bSel = GetOpenFileName(&ofn);
 
 }

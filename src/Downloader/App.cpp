@@ -4,12 +4,14 @@
 #include "MainWnd.h"
 #include "resource.h"
 #include "NICStatus.h"
+#include "windowutils.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
 	
+
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
@@ -20,6 +22,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
+	bool bNetStatus = WindowUtils::isOnLine();
+	Poco::NotificationCenter::defaultCenter().postNotification(new StatusNotification(bNetStatus));
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();

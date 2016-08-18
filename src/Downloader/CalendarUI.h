@@ -11,7 +11,7 @@ public:
 	CalendarUI();
 	~CalendarUI();
 
-	STDSTRING GetData();
+	CDuiString GetData();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -34,8 +34,8 @@ protected:
 	void DrawCalendar(SYSTEMTIME m_sysTime);
 	size_t GetDayOfWeek(SYSTEMTIME m_sysTime);
 	size_t GetMonthDays(size_t year, size_t month);
-	std::string GetMonth();
-	std::string GetDay();
+	CDuiString GetMonth();
+	CDuiString GetDay();
 	void BuildControlDDX();
 	void InitDays();
 	void SelectMonth(size_t month);
@@ -44,9 +44,8 @@ private:
 	SYSTEMTIME		 m_sysTime;
 	COleDateTime	m_ctime;
 
-
 	unsigned short	_PrevMonth;
-	std::string	_data;
+	CDuiString	_data;
 
 	CComboUI*	_month;
 	CLabelUI*	_year;
