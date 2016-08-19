@@ -1,22 +1,8 @@
 #pragma once
-#include "Poco/Net/NetworkInterface.h"
-#include "Poco/Exception.h"
-#include "Poco/Net/IPAddress.h"
-#include "Poco/Activity.h"
-#include "Poco/Thread.h"
+
+#include <Poco/Activity.h>
+#include <Poco/NotificationCenter.h>
 #include "NICStatus.h"
-
-
-using Poco::Activity;
-using Poco::Thread;
-
-
-enum NETWORK_STATUS
-{
-	OFF_LINE = 0,
-	ON_LINE,
-	DISABLE,
-};
 
 class CNetworkStatus
 {
@@ -31,8 +17,9 @@ protected:
 	void runActivity();
 
 private:
-	Activity<CNetworkStatus>	_activity;
+	Poco::Activity<CNetworkStatus>	_activity;
 	NETWORK_STATUS				_NetStatus;
-	NETWORK_STATUS				_NetStatus_Tmp;
+	NETWORK_STATUS				_previousStaus;
+	Poco::NotificationCenter&	_nc;
 };
 

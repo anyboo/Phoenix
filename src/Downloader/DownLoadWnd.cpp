@@ -5,6 +5,8 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
+
+
 DownLoadWnd::DownLoadWnd()
 {
 	ReadJsonFile();

@@ -145,6 +145,7 @@
     <ClInclude Include="MessagePump.h" />
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatus.h" />
+    <ClInclude Include="NICStatusNotification.h" />
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="PlayVideoWnd.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
+    <ClInclude Include="SetIPAddress.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TimeUI.h" />
@@ -211,6 +213,7 @@
     <ClCompile Include="ProgressManager.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
+    <ClCompile Include="SetIPAddress.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

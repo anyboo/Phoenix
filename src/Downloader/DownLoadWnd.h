@@ -4,9 +4,13 @@
 #include "Vendor.h"
 #include "TimeUI.h"
 #include <map>
+//#include "NICStatus.h"
+
+//class NICStatusChanged;
 
 class DownLoadWnd :
 	public WindowImplBase
+//	public NICStatusChanged
 {
 public:
 	DownLoadWnd();
@@ -34,6 +38,7 @@ protected:
 	void InitTime();
 	void BuildControlDDX();
 
+//	virtual void OnStatusChanged(NETWORK_STATUS st);
 	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
 	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);
 	CDuiString AppenText(const CDuiString& str);

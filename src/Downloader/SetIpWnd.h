@@ -1,10 +1,11 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-
+#include "SetIPAddress.h"
 
 #define BT_ADDSET			(_T("Add_Setting"))
 #define BT_DELSET			(_T("Delete"))
 #define BT_CLOSEIPWND		(_T("bt_close"))
+#define BT_USE_IP			(_T("Add_Use"))
 
 class CSetIpWnd :
 	public WindowImplBase
@@ -21,19 +22,25 @@ public:
 	void OnAddIPSet(TNotifyUI& msg);
 	void OnDelIPSet(TNotifyUI& msg);
 	void OnInputNum(TNotifyUI& msg);
+	void OnUseSelectIP(TNotifyUI& msg);
 
-	void EditInput(CDuiString& SendName);
+	void NextInput(CDuiString& SendName);
 
 	void AddIP_Address();
 
 	void InsertList(CDuiString& strIP, CDuiString& strSubNet, CDuiString& strGateWay);
 	void RemoveSubList();
 
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 
+	void InitShowCurIPAddress();
+
+private:
+	CSetIPAddress	setip;
 private:
 	CEditUI*		_edit_ip1;
 	CEditUI*		_edit_ip2;
@@ -48,4 +55,7 @@ private:
 	CEditUI*		_edit_broadcast3;
 	CEditUI*		_edit_broadcast4;
 	CListUI*		_pList;
+	CLabelUI*		_lab_setIPaddress;
+	CLabelUI*		_lab_setSubNetAddress;
+	CLabelUI*		_lab_setBroadcastAddress;
 };

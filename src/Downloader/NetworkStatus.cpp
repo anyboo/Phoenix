@@ -1,13 +1,21 @@
 #include "stdafx.h"
 #include "NetworkStatus.h"
+#include "NICStatus.h"
+#include <Poco/Net/NetworkInterface.h>
+#include <Poco/Exception.h>
+#include <Poco/Net/IPAddress.h>
+#include <Poco/Thread.h>
 
-
+using Poco::Activity;
+using Poco::Thread;
 using Poco::Exception;
 using Poco::Net::IPAddress;
 using Poco::Net::NetworkInterface;
 
 CNetworkStatus::CNetworkStatus()
-:_activity(this, &CNetworkStatus::runActivity), _NetStatus_Tmp(OFF_LINE)
+:_activity(this, &CNetworkStatus::runActivity)
+, _previousStaus(OFF_LINE)
+, _nc(Poco::NotificationCenter::defaultCenter())
 {
 
 }
@@ -55,12 +63,12 @@ void CNetworkStatus::runActivity()
 {
 	while (!_activity.isStopped())
 	{
-		Thread::sleep(2000);
+		Thread::sleep(1000);
 		_NetStatus = GetNetStatus();
-		while (_NetStatus != _NetStatus_Tmp)
+		if (_previousStaus != _NetStatus)
 		{
-			_NetStatus_Tmp = _NetStatus;
-			Poco::NotificationCenter::defaultCenter().postNotification(new StatusNotification(_NetStatus));
+			_previousStaus = _NetStatus;
+			_nc.postNotification(new NICStatusNotification(_NetStatus));
 		}
 	}
 }

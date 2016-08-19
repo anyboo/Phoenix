@@ -8,6 +8,7 @@
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
 
+
 #define BT_CLOSE			(_T("closebtn"))
 #define	BT_MINWIND			(_T("minbtn"))
 #define BT_DOWNLOAD			(_T("download"))
@@ -198,12 +199,12 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	return WindowImplBase::NotifyPump(msg);
 }
 
-void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+
+void CMainWnd::OnStatusChanged(NETWORK_STATUS st)
 {
-	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-	if (eNotify == Notification_Type_Network_status_Connect)
-		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
-	else if (eNotify == Notification_Type_Network_status_Disconnect)
-		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+	if (st == ON_LINE)
+		_Network->SetBkImage(_T("skin/network_online.png"));
+	else if (st == OFF_LINE)
+		_Network->SetBkImage(_T("skin/network_offline.png"));
 }
 

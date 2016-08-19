@@ -17,6 +17,7 @@ DUI_ON_CLICK_CTRNAME(BT_CLOSEIPWND, OnCloseWnd)
 DUI_ON_CLICK_CTRNAME(BT_ADDSET, OnAddIPSet)
 DUI_ON_CLICK_CTRNAME(BT_DELSET, OnDelIPSet)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_TEXTCHANGED, OnInputNum)
+DUI_ON_CLICK_CTRNAME(BT_USE_IP, OnUseSelectIP)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CSetIpWnd::GetWindowClassName() const
@@ -54,6 +55,10 @@ void CSetIpWnd::InitWindow()
 	_edit_broadcast3 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("gateway3")));
 	_edit_broadcast4 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("gateway4")));
 	_pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("IP_List")));
+	_lab_setIPaddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("IP_Address")));
+	_lab_setSubNetAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Sub_net")));
+	_lab_setBroadcastAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Mr_netAddress")));
+	InitShowCurIPAddress();
 }
 
 void CSetIpWnd::Notify(TNotifyUI& msg)
@@ -76,19 +81,37 @@ void CSetIpWnd::OnDelIPSet(TNotifyUI& msg)
 	RemoveSubList();
 }
 
+void CSetIpWnd::OnUseSelectIP(TNotifyUI& msg)
+{
+	if (_pList->GetCurSel() == -1)
+		return;
+	CListTextElementUI* ListText = dynamic_cast<CListTextElementUI*>(m_PaintManager.FindSubControlByClass(_pList, DUI_CTR_LISTTEXTELEMENT, _pList->GetCurSel()));
+	std::string ipAddress = ListText->GetText(0);
+	std::string subnetAddress = ListText->GetText(2);
+	std::string BroadcastAddress = ListText->GetText(4);
+	_lab_setIPaddress->SetText(ipAddress.c_str());
+	_lab_setSubNetAddress->SetText(subnetAddress.c_str());
+	_lab_setBroadcastAddress->SetText(BroadcastAddress.c_str());
+	setip.SetIPAddress(ipAddress, subnetAddress, BroadcastAddress);
+}
+
 void CSetIpWnd::OnInputNum(TNotifyUI& msg)
 {
 	CDuiString SendName = msg.pSender->GetName();
-	EditInput(SendName);
-}
-
-void CSetIpWnd::EditInput(CDuiString& SendName)
-{
 	CEditUI* input_edit = static_cast<CEditUI*>(m_PaintManager.FindControl(SendName));
 	CDuiString strInput = input_edit->GetText();
 	int n = strInput.GetLength() - 1;
-	if (n < 0 || strInput[n] < '9' || strInput[n] > '0')
-		return;
+	if (n < 0 || (strInput[n] <= '9' && strInput[n] >= '0'))
+	{
+		if (n == 2)
+		{
+			NextInput(SendName);
+		}
+		else
+		{
+			return;
+		}
+	}
 	else
 	{
 		strInput.SetAt(n, '\0');
@@ -96,28 +119,46 @@ void CSetIpWnd::EditInput(CDuiString& SendName)
 	}
 }
 
+void CSetIpWnd::NextInput(CDuiString& SendName)
+{
+	std::string tag = SendName.Right(1);
+	int CurSel = stoi(tag);
+	if (CurSel < 4)
+	{
+		SendName.SetAt(SendName.GetLength() - 1, SendName[SendName.GetLength() - 1] + 1);
+		CEditUI* input_edit_next = static_cast<CEditUI*>(m_PaintManager.FindControl(SendName));
+		if (input_edit_next->GetText() != _T(""))
+		{
+			input_edit_next->SetText(_T(""));
+		}
+		input_edit_next->SetFocus();
+	}
+}
+
 void CSetIpWnd::AddIP_Address()
 {
+	CDuiString Apoint(".");
 	CDuiString strIP_Address;
-	CDuiString strIP_Address1 = _edit_ip1->GetText();
-	CDuiString strIP_Address2 = _edit_ip2->GetText();
-	CDuiString strIP_Address3 = _edit_ip3->GetText();
+	CDuiString strIP_Address1 = _edit_ip1->GetText() + Apoint;
+	CDuiString strIP_Address2 = _edit_ip2->GetText() + Apoint;
+	CDuiString strIP_Address3 = _edit_ip3->GetText() + Apoint;
 	CDuiString strIP_Address4 = _edit_ip4->GetText();
-	strIP_Address.Format("%s.%s.%s.%s", strIP_Address1, strIP_Address2, strIP_Address3, strIP_Address4);
+	strIP_Address = strIP_Address1 + strIP_Address2 + strIP_Address3 + strIP_Address4;
+
 
 	CDuiString strSubNet;
-	CDuiString strSubNet1 = _edit_subnet1->GetText();
-	CDuiString strSubNet2 = _edit_subnet2->GetText();
-	CDuiString strSubNet3 = _edit_subnet3->GetText();
+	CDuiString strSubNet1 = _edit_subnet1->GetText() + Apoint;
+	CDuiString strSubNet2 = _edit_subnet2->GetText() + Apoint;
+	CDuiString strSubNet3 = _edit_subnet3->GetText() + Apoint;
 	CDuiString strSubNet4 = _edit_subnet4->GetText();
-	strSubNet.Format("%s.%s.%s.%s", strSubNet1, strSubNet2, strSubNet3, strSubNet4);
+	strSubNet = strSubNet1 + strSubNet2 + strSubNet3 + strSubNet4;
 
 	CDuiString strBDaress;
-	CDuiString strBDaress1 = _edit_broadcast1->GetText();
-	CDuiString strBDaress2 = _edit_broadcast2->GetText();
-	CDuiString strBDaress3 = _edit_broadcast3->GetText();
+	CDuiString strBDaress1 = _edit_broadcast1->GetText() + Apoint;
+	CDuiString strBDaress2 = _edit_broadcast2->GetText() + Apoint;
+	CDuiString strBDaress3 = _edit_broadcast3->GetText() + Apoint;
 	CDuiString strBDaress4 = _edit_broadcast4->GetText();
-	strBDaress.Format("%s.%s.%s.%s", strBDaress1, strBDaress2, strBDaress3, strBDaress4);
+	strBDaress = strBDaress1 + strBDaress2 + strBDaress3 + strBDaress4;
 
 	InsertList(strIP_Address, strSubNet, strBDaress);
 }
@@ -139,4 +180,12 @@ void CSetIpWnd::RemoveSubList()
 {
 	int CurSel = _pList->GetCurSel();
 	_pList->RemoveAt(CurSel, true);
+}
+
+void CSetIpWnd::InitShowCurIPAddress()
+{
+	IPADDRESSINFO ip_info = setip.GetCurIPAddress();
+	_lab_setIPaddress->SetText(ip_info.strIP.c_str());
+	_lab_setSubNetAddress->SetText(ip_info.strSubNet.c_str());
+	_lab_setBroadcastAddress->SetText(ip_info.strBroadcast.c_str());
 }
