@@ -86,13 +86,13 @@ void CMainWnd::ShowVersion()
 
 void CMainWnd::OnClose(TNotifyUI& msg)
 {
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	::PostQuitMessage(0L);
 }
 
 void CMainWnd::OnMin(TNotifyUI& msg)
 {
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	m_IsMinWnd = TRUE;
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
 }
