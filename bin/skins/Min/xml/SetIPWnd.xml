@@ -12,11 +12,11 @@
 		<HorizontalLayout width="850" height="100" padding="80,40,0,0" bordersize="2" bordercolor="0x88888888">
 			<Label text="当前IP地址：" font="1" width="120" padding="10,10,0,0" valign="top"/>
 			<Label text="IP地址:" width="80" font="1" align="left"/>
-			<Label text="192.168.0.11" name="IP_Address" font="6" width="120" align="left"/>
-			<Label text="子网掩码:" font="1" width="90" padding="30,0,0,0" align="left"/>
-			<Label text="255.255.255.0" name="Sub_net" font="6" width="120" align="left"/>
-			<Label text="默认网关:" font="1" width="100" padding="30,0,0,0" align="left"/>
-			<Label text="192.168.1.23" name="Mr_netAddress" font="6" width="120" align="left"/>
+			<Label text="" name="IP_Address" font="6" textcolor="#FFFF0000" width="140" align="left"/>
+			<Label text="子网掩码:" font="1" width="90" padding="10,0,0,0" align="left"/>
+			<Label text="" name="Sub_net" font="6" textcolor="#FFFF0000" width="140" align="left"/>
+			<Label text="默认网关:" font="1" width="90" padding="10,0,0,0" align="left"/>
+			<Label text="" name="Mr_netAddress" font="6" textcolor="#FFFF0000" width="140" align="left"/>
 		</HorizontalLayout>
 		<VerticalLayout width="850" height="180" padding="80,10,0,0" bordersize="2" bordercolor="0x88888888">
 			<Label text="IP地址增加：" font="1" width="120" height="30" padding="10,10,0,0" valign="top"/>

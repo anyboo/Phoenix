@@ -3,16 +3,18 @@
 #include "stdafx.h"
 #include "MainWnd.h"
 #include "resource.h"
-#include "NICStatus.h"
+#include "AppInitialize.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skins\\Min"));
-	
+
+
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
+	CAppInitialize appInit;
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
@@ -20,6 +22,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
+	
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();

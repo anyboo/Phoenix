@@ -8,6 +8,7 @@
 #include "OVPlayerUI.h"
 #include "MenuWnd.h"
 
+
 #define BT_CLOSE			(_T("closebtn"))
 #define	BT_MINWIND			(_T("minbtn"))
 #define BT_DOWNLOAD			(_T("download"))
@@ -86,13 +87,13 @@ void CMainWnd::ShowVersion()
 
 void CMainWnd::OnClose(TNotifyUI& msg)
 {
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	::PostQuitMessage(0L);
 }
 
 void CMainWnd::OnMin(TNotifyUI& msg)
 {
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	m_IsMinWnd = TRUE;
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
 }
@@ -184,7 +185,7 @@ LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	if (m_IsMinWnd)
 	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 	}
 	m_IsMinWnd = false;
 
@@ -198,12 +199,12 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	return WindowImplBase::NotifyPump(msg);
 }
 
-void CMainWnd::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+
+void CMainWnd::OnStatusChanged(NETWORK_STATUS st)
 {
-	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-	if (eNotify == Notification_Type_Network_status_Connect)
-		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
-	else if (eNotify == Notification_Type_Network_status_Disconnect)
-		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+	if (st == ON_LINE)
+		_Network->SetBkImage(_T("skin/network_online.png"));
+	else if (st == OFF_LINE)
+		_Network->SetBkImage(_T("skin/network_offline.png"));
 }
 
