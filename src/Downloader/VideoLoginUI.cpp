@@ -66,7 +66,7 @@ void VideoLoginUI::BuildControlDDX()
 	_vendorList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("VendorList")));
 }
 
-#include "D:/workstation/code/GitHub/Phoenix/src/Wrapper/DVRClientSession.h"
+#include "DVRClientSession.h"
 void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 {
 	std::string brand = _brand_edit->GetText().GetData();
