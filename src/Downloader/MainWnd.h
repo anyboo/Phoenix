@@ -1,9 +1,11 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include "NICStatus.h"
 
 
 class CMainWnd :
-	public WindowImplBase
+	public WindowImplBase,
+	public NICStatusChanged
 {
 public:
 	CMainWnd();
@@ -30,14 +32,16 @@ protected:
 	void OnLogWnd(TNotifyUI& msg);
 	void OnOtherToolsWnd(TNotifyUI& msg);
 	void OnVideoPlayWnd(TNotifyUI& msg);
-	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
 
 	void ShowVersion();
 	void BuildControlDDX();
 
+	virtual void OnStatusChanged(NETWORK_STATUS st);
+
 private:
 	bool	m_IsMinWnd;
 	bool	bMaxResolution;
+//	StatusNotification	_sn;
 
 	CControlUI*	_Network;
 	CControlUI*	_un_use;
@@ -45,6 +49,5 @@ private:
 	CControlUI*	_VideoUI;
 	CControlUI*	_LogUI;
 	CControlUI*	_ToolUI;
-
 	CLabelUI* _Version;
 };

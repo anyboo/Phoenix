@@ -5,6 +5,8 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 
+
+
 DownLoadWnd::DownLoadWnd()
 {
 	ReadJsonFile();
@@ -161,7 +163,7 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	
+
 	/* start to search file on specify device.
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
 	assert(pSearchDlg.get());
@@ -201,7 +203,7 @@ void DownLoadWnd::SetLabelText(const CDuiString& ctr_name, const CDuiString& tex
 }
 
 void DownLoadWnd::SetButtonImage(const CDuiString& ctr_name, const CDuiString& data)
-{	
+{
 	CDuiString value;
 	value.Format(_T("file='skin/Data/%d.png' dest='15,8,39,39'"), std::stoi(data.GetData()));
 	CButtonUI* c = GetControl<CButtonUI>(ctr_name);

@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\log.h" />
+    <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="CalendarUI.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
@@ -145,7 +146,9 @@
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MessagePump.h" />
+    <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatus.h" />
+    <ClInclude Include="NICStatusNotification.h" />
     <ClInclude Include="OtherTools.h" />
     <ClInclude Include="OVPlayerUI.h" />
     <ClInclude Include="PlayVideoWnd.h" />
@@ -155,6 +158,7 @@
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
+    <ClInclude Include="SetIPAddress.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TimeUI.h" />
@@ -195,6 +199,7 @@
     <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp" />
     <ClCompile Include="..\BusinessLayer\TestWindows.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
     <ClCompile Include="DownloadPackage.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
@@ -202,6 +207,7 @@
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MessagePump.cpp" />
+    <ClCompile Include="NetworkStatus.cpp" />
     <ClCompile Include="NICStatus.cpp" />
     <ClCompile Include="OtherTools.cpp" />
     <ClCompile Include="OVPlayerUI.cpp" />
@@ -210,6 +216,7 @@
     <ClCompile Include="ProgressManager.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
+    <ClCompile Include="SetIPAddress.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
