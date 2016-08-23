@@ -66,13 +66,18 @@ void VideoLoginUI::BuildControlDDX()
 	_vendorList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("VendorList")));
 }
 
+#include "D:/workstation/code/GitHub/Phoenix/src/Wrapper/DVRClientSession.h"
 void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 {
-	DUI__Trace(_ip_edit->GetText());
-	DUI__Trace(_port_edit->GetText());
-	DUI__Trace(_brand_edit->GetText());
-	//user & password
-	//show process of Login
+	std::string brand = _brand_edit->GetText().GetData();
+	std::string ip = _ip_edit->GetText().GetData();
+	unsigned short port = std::stoul(_port_edit->GetText().GetData());
+
+	std::string user, passwd;
+
+	DVRClientSession session(ip, port, brand);
+	session.login(user,passwd);
+
 	Close();
 }
 
