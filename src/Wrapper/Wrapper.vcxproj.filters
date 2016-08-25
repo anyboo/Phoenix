@@ -27,13 +27,16 @@
     <ClInclude Include="Wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRClientSession.h">
+    <ClInclude Include="DVRSessionImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRStreamSocket.h">
+    <ClInclude Include="DVRSession.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRStreamSocketFactory.h">
+    <ClInclude Include="DVRSessionFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DVRConnector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,19 +44,19 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Wrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DVRClientSession.cpp">
+    <ClCompile Include="DVRSessionImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DVRStreamSocket.cpp">
+    <ClCompile Include="DVRSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DVRStreamSocketFactory.cpp">
+    <ClCompile Include="DVRSessionFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRConnector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

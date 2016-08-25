@@ -66,16 +66,16 @@ void VideoLoginUI::BuildControlDDX()
 	_vendorList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("VendorList")));
 }
 
-#include "DVRClientSession.h"
+#include "DVRSession.h"
 void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 {
 	std::string brand = _brand_edit->GetText().GetData();
 	std::string ip = _ip_edit->GetText().GetData();
-	unsigned short port = std::stoul(_port_edit->GetText().GetData());
+	std::string port = _port_edit->GetText().GetData();
 
 	std::string user, passwd;
-
-	DVRClientSession session(ip, port, brand);
+	std::string connectString("192.168.1.20:35");
+	DVR::DVRSession session(brand, connectString);
 	session.login(user,passwd);
 
 	Close();
