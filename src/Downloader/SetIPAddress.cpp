@@ -2,7 +2,7 @@
 #include "SetIPAddress.h"
 #include <Poco/Exception.h>
 #include <Poco/Net/IPAddress.h>
-
+#include <Poco/ActiveMethod.h>
 using Poco::Exception;
 using Poco::Net::IPAddress;
 using Poco::Net::NetworkInterface;
@@ -31,14 +31,6 @@ void CSetIPAddress::InitNetIF()
 	}
 }
 
-void CSetIPAddress::SetIPAddress(std::string& strIP, std::string& strSubNet, std::string& strBroadcast)
-{
-	IPAddress NewIP(strIP);
-	IPAddress NewSubNet(strSubNet);
-	IPAddress NewBroadcast(strBroadcast);
-	_inft.addAddress(NewIP, NewSubNet, NewBroadcast);
-}
-
 IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 {
 	IPADDRESS_INFO ipaddress_Info;
@@ -53,4 +45,40 @@ IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 	return ipaddress_Info;
 }
 
+
+bool CSetIPAddress::setNetConfig(const string& sIP, const string& sMask, const string& sGate)
+{
+	string mask(" mask=");
+	mask.append(sMask);
+	string sNetName = _inft.name();
+	string name(" name = \"");
+	name += sNetName;
+	name.append("\"");
+	string addr(" addr=");
+	addr += sIP;
+	string argList;
+
+	if (!sGate.empty())
+	{
+		argList = "interface ip set address";
+		argList += name;
+		argList.append(" source = static ");
+		argList = argList + addr + mask;
+		string gateway(" gateway=");
+		gateway += sGate;
+		argList += gateway;
+
+	}
+	else
+	{
+		argList = "interface ip add address";
+		argList += name;
+		argList = argList + addr + mask;
+	}
+	int nRun = (int)::ShellExecuteA(NULL, (LPCSTR)"open", (LPCSTR)"netsh.exe", (LPCSTR)argList.c_str(), NULL, SW_HIDE);
+	if (nRun <= 32)
+		return false;
+
+	return true;
+}
 

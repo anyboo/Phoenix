@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -137,11 +137,13 @@
     <ClInclude Include="..\..\common\log.h" />
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="CalendarUI.h" />
+    <ClInclude Include="DhcpPacket.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
     <ClInclude Include="FileLogInfoUI.h" />
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
+    <ClInclude Include="InitNetConfig.h" />
     <ClInclude Include="MessagePump.h" />
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatus.h" />
@@ -156,6 +158,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="SetIPAddress.h" />
+    <ClInclude Include="SetIpByArp.h" />
+    <ClInclude Include="SetIpByDhcp.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TimeUI.h" />
@@ -198,11 +202,13 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
+    <ClCompile Include="DhcpPacket.cpp" />
     <ClCompile Include="DownloadPackage.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
+    <ClCompile Include="InitNetConfig.cpp" />
     <ClCompile Include="MessagePump.cpp" />
     <ClCompile Include="NetworkStatus.cpp" />
     <ClCompile Include="NICStatus.cpp" />
@@ -214,6 +220,8 @@
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIPAddress.cpp" />
+    <ClCompile Include="SetIpByArp.cpp" />
+    <ClCompile Include="SetIpByDhcp.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

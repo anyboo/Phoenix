@@ -31,7 +31,6 @@ public:
 	void InsertList(CDuiString& strIP, CDuiString& strSubNet, CDuiString& strGateWay);
 	void RemoveSubList();
 
-
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
