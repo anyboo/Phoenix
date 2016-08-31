@@ -6,6 +6,7 @@ typedef struct IPADDRESSINFO
 	std::string strIP;
 	std::string strSubNet;
 	std::string strBroadcast;
+
 }IPADDRESS_INFO;
 
 class CSetIPAddress
@@ -15,7 +16,7 @@ public:
 	~CSetIPAddress();
 
 	IPADDRESS_INFO GetCurIPAddress();
-	bool setNetConfig(const string& sIP, const string& sMask, const string& sGate);
+	bool setNetConfig(const std::string& sIP, const std::string& sMask, const std::string& sGate);
 
 protected:
 	void InitNetIF();

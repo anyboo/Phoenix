@@ -1,11 +1,9 @@
-#include "stdafx.h"
 #include "SetIpByArp.h"
 
 #include <windows.h>
 #include <Winsock2.h>
 #include <iphlpapi.h>
 #include <tlhelp32.h>
-#include "log.h"
 
 SetIpByArp::SetIpByArp()
 {

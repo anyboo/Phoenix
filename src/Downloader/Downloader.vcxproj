@@ -159,7 +159,7 @@
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="SetIPAddress.h" />
     <ClInclude Include="SetIpByArp.h" />
-    <ClInclude Include="SetIpByDhcp.h" />
+    <ClInclude Include="DHCPClient.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TimeUI.h" />
@@ -221,7 +221,7 @@
     <ClCompile Include="SearchFileUI.cpp" />
     <ClCompile Include="SetIPAddress.cpp" />
     <ClCompile Include="SetIpByArp.cpp" />
-    <ClCompile Include="SetIpByDhcp.cpp" />
+    <ClCompile Include="DHCPClient.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

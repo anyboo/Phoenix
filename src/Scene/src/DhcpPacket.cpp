@@ -1,13 +1,12 @@
-#include "stdafx.h"
-#include "DhcpPacket.h"
+#include "Scene/DhcpPacket.h"
 #include "Poco/ByteOrder.h"
+
 using Poco::Net::NetworkInterface;
 
 CDhcpPacket::CDhcpPacket() :
 _opcode(1), _htype(1), _hlen(6), _hops(0), _xid(0x3903F326), _secs(0), _flags(0x0080),
 _ciaddr(0), _yiaddr(0), _siaddr(0), _giaddr(0), _magic_cookie(0x63538263)
 {
-	GetMacAddress();
 	SetDiscoverData();
 }
 
@@ -16,20 +15,10 @@ CDhcpPacket::~CDhcpPacket()
 {
 }
 
-void CDhcpPacket::GetMacAddress()
+void CDhcpPacket::SetMacAddress(std::string& NetworkCardName)
 {
-	NetworkInterface _inft;
-	NetworkInterface::Map map = NetworkInterface::map(false, false);
-	for (NetworkInterface::Map::iterator it = map.begin();
-		it != map.end(); ++it)
-	{
-		NetworkInterface& netInter = it->second;
-		if (netInter.type() == netInter.NI_TYPE_ETHERNET_CSMACD && netInter.isUp())
-		{
-			_inft = netInter;
-			_mac = _inft.macAddress();
-		}
-	}
+	NetworkInterface _inft = NetworkInterface::forName(NetworkCardName);
+	_mac = _inft.macAddress();
 }
 
 void CDhcpPacket::setPacket(Poco::UInt8 *packet)

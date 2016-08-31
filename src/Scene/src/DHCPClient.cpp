@@ -1,11 +1,12 @@
-#include "stdafx.h"
-#include "SetIpByDhcp.h"
+#include "Scene/DHCPClient.h"
+#include "Scene/SetIPAddress.h"
 
 #include "Poco/Net/DatagramSocket.h"
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/Net/NTPEventArgs.h"
 #include "Poco/Net/NTPClient.h"
 #include "Poco/ByteOrder.h"
+#include "Poco/Net/ICMPClient.h"
 
 
 using Poco::Exception;
@@ -16,17 +17,25 @@ using Poco::Net::SocketAddress;
 using Poco::Net::DatagramSocket;
 using Poco::Net::NTPEventArgs;
 
-SetIpByDhcp::SetIpByDhcp()
+DHCPClient::DHCPClient()
 :_family(IPAddress::IPv4), _timeout(6000000), _tmpSize(0)
 {
 }
 
 
-SetIpByDhcp::~SetIpByDhcp()
+DHCPClient::~DHCPClient()
 {
 }
 
-void SetIpByDhcp::GetUseableNetConfig(std::string& ip, std::string& sMsk, std::string& sGate)
+bool DHCPClient::Request(std::string& NetworkCardName)
+{
+	_packet.SetMacAddress(NetworkCardName);
+	return SetNetConfig();
+}
+
+#include <iomanip>
+#include <fstream>
+bool DHCPClient::SetNetConfig()
 {
 	SocketAddress SerVerAddr(IPAddress::broadcast(), 67);
 	SocketAddress ClientAddr(IPAddress::wildcard(), 68);
@@ -68,11 +77,20 @@ void SetIpByDhcp::GetUseableNetConfig(std::string& ip, std::string& sMsk, std::s
 	Dhcp_packet* ack_packet = (Dhcp_packet*)p;
 	memcpy(ack_Info, ack_packet->bp_options, 256);
 
-	ip = GetIPAddress(ack_packet->yiaddr);
+	std::string ip = GetIPAddress(ack_packet->yiaddr);
+	std::string sMsk, sGate;
 	GetMaskAndGate(ack_Info, sMsk, sGate);
+
+	CSetIPAddress setip;
+	Poco::Net::ICMPClient test(_family);
+
+	setip.setNetConfig(ip, sMsk, sGate);
+	if(test.ping(ip, 1))
+		return true;
+	return false;
 }
 
-void SetIpByDhcp::MakeRequestPacket(Poco::UInt8* packet)
+void DHCPClient::MakeRequestPacket(Poco::UInt8* packet)
 {
 	Dhcp_packet* dp = (Dhcp_packet*)packet;
 	Poco::UInt8 option[256] = { 0 };
@@ -89,7 +107,7 @@ void SetIpByDhcp::MakeRequestPacket(Poco::UInt8* packet)
 	_packet.SetRequestData(option);
 }
 
-void SetIpByDhcp::ConnectUint8(Poco::UInt8* Des, Poco::UInt8* Src, int size)
+void DHCPClient::ConnectUint8(Poco::UInt8* Des, Poco::UInt8* Src, int size)
 {
 	Poco::UInt8 tmp[64] = { 0 };
 	memcpy(tmp, Src, size);
@@ -102,7 +120,7 @@ void SetIpByDhcp::ConnectUint8(Poco::UInt8* Des, Poco::UInt8* Src, int size)
 	_tmpSize += size;
 }
 
-void SetIpByDhcp::GetMaskAndGate(Poco::UInt8* option, std::string& sMask, std::string& sGate)
+void DHCPClient::GetMaskAndGate(Poco::UInt8* option, std::string& sMask, std::string& sGate)
 {
 	int nextLen = 256;
 	char subnetmask[16] = { 0 };
@@ -148,7 +166,7 @@ void SetIpByDhcp::GetMaskAndGate(Poco::UInt8* option, std::string& sMask, std::s
 	}
 }
 
-std::string SetIpByDhcp::GetIPAddress(Poco::UInt32 ipAddr)
+std::string DHCPClient::GetIPAddress(Poco::UInt32 ipAddr)
 {
 	Poco::UInt32 ClientIP = ByteOrder::toNetwork(ipAddr);
 

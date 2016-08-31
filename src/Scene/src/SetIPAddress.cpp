@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "SetIPAddress.h"
+#include "Scene/SetIPAddress.h"
 #include <Poco/Exception.h>
 #include <Poco/Net/IPAddress.h>
 #include <Poco/ActiveMethod.h>
@@ -45,18 +44,18 @@ IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 	return ipaddress_Info;
 }
 
-
-bool CSetIPAddress::setNetConfig(const string& sIP, const string& sMask, const string& sGate)
+#include <shellapi.h>
+bool CSetIPAddress::setNetConfig(const std::string& sIP, const std::string& sMask, const std::string& sGate)
 {
-	string mask(" mask=");
+	std::string mask(" mask=");
 	mask.append(sMask);
-	string sNetName = _inft.name();
-	string name(" name = \"");
+	std::string sNetName = _inft.name();
+	std::string name(" name = \"");
 	name += sNetName;
 	name.append("\"");
-	string addr(" addr=");
+	std::string addr(" addr=");
 	addr += sIP;
-	string argList;
+	std::string argList;
 
 	if (!sGate.empty())
 	{
@@ -64,7 +63,7 @@ bool CSetIPAddress::setNetConfig(const string& sIP, const string& sMask, const s
 		argList += name;
 		argList.append(" source = static ");
 		argList = argList + addr + mask;
-		string gateway(" gateway=");
+		std::string gateway(" gateway=");
 		gateway += sGate;
 		argList += gateway;
 

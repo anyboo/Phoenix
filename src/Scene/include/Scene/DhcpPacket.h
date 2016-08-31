@@ -1,10 +1,9 @@
 #pragma once
-#include "Poco/Foundation.h"
-#include "Poco/Net/Net.h"
+#include "Scene.h"
+#include <Poco/Foundation.h>
+#include <Poco/Net/Net.h>
 #include <vector>
 #include <Poco/Net/NetworkInterface.h>
-
-
 
 
 typedef struct DhcpPacket
@@ -30,11 +29,12 @@ typedef struct DhcpPacket
 class CDhcpPacket
 {
 public:
+
 	CDhcpPacket();
 	~CDhcpPacket();
 
 	void setPacket(Poco::UInt8 *packet);
-	void GetMacAddress();
+	void SetMacAddress(std::string& NetworkCardName);
 
 	void SetDiscoverData();
 	void SetRequestData(Poco::UInt8* Src);

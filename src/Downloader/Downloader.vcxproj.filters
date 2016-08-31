@@ -164,7 +164,7 @@
     <ClCompile Include="SetIpByArp.cpp" />
     <ClCompile Include="DhcpPacket.cpp" />
     <ClCompile Include="InitNetConfig.cpp" />
-    <ClCompile Include="SetIpByDhcp.cpp" />
+    <ClCompile Include="DHCPClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -236,7 +236,7 @@
     <ClInclude Include="SetIpByArp.h" />
     <ClInclude Include="DhcpPacket.h" />
     <ClInclude Include="InitNetConfig.h" />
-    <ClInclude Include="SetIpByDhcp.h" />
+    <ClInclude Include="DHCPClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

@@ -107,17 +107,11 @@ void CSetIpWnd::OnInputNum(TNotifyUI& msg)
 		{
 			NextInput(SendName);
 		}
-		else
-		{
-//			input_edit->SetText(strInput);
-
-//		return;
-		}
 	}
 	else
 	{
-		strInput.SetAt(n, '\0');
-//		input_edit->SetText(strInput);
+//		strInput.SetAt(n, '\0');
+		input_edit->SetText("");
 	}
 }
 
