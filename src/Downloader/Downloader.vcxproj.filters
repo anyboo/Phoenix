@@ -160,11 +160,7 @@
     <ClCompile Include="NetworkStatus.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SetIPAddress.cpp" />
-    <ClCompile Include="SetIpByArp.cpp" />
-    <ClCompile Include="DhcpPacket.cpp" />
     <ClCompile Include="InitNetConfig.cpp" />
-    <ClCompile Include="DHCPClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -232,11 +228,7 @@
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatusNotification.h" />
-    <ClInclude Include="SetIPAddress.h" />
-    <ClInclude Include="SetIpByArp.h" />
-    <ClInclude Include="DhcpPacket.h" />
     <ClInclude Include="InitNetConfig.h" />
-    <ClInclude Include="DHCPClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

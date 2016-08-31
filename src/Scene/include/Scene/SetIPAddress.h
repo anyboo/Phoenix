@@ -1,4 +1,5 @@
 #pragma once
+#include "Scene.h"
 #include <Poco/Net/NetworkInterface.h>
 
 typedef struct IPADDRESSINFO
@@ -9,7 +10,7 @@ typedef struct IPADDRESSINFO
 
 }IPADDRESS_INFO;
 
-class CSetIPAddress
+class SCENE_API CSetIPAddress
 {
 public:
 	CSetIPAddress();

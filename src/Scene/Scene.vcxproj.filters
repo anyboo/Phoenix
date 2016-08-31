@@ -20,20 +20,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DHCPClient.h">
-      <Filter>DHCPClient\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DhcpPacket.h">
-      <Filter>DHCPClient\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Scene.h">
-      <Filter>DHCPClient\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SetIPAddress.h">
-      <Filter>DHCPClient\Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\DHCPClient.cpp">
       <Filter>DHCPClient\Source Files</Filter>
     </ClCompile>
@@ -43,5 +29,19 @@
     <ClCompile Include="src\SetIPAddress.cpp">
       <Filter>DHCPClient\Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Scene\DhcpPacket.h">
+      <Filter>DHCPClient\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene\Scene.h">
+      <Filter>DHCPClient\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene\SetIPAddress.h">
+      <Filter>DHCPClient\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene\DHCPClient.h">
+      <Filter>DHCPClient\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

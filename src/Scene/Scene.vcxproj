@@ -86,15 +86,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DHCPClient.h" />
-    <ClInclude Include="include\DhcpPacket.h" />
-    <ClInclude Include="include\Scene.h" />
-    <ClInclude Include="include\SetIPAddress.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\DHCPClient.cpp" />
     <ClCompile Include="src\DhcpPacket.cpp" />
     <ClCompile Include="src\SetIPAddress.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Scene\DHCPClient.h" />
+    <ClInclude Include="include\Scene\DhcpPacket.h" />
+    <ClInclude Include="include\Scene\Scene.h" />
+    <ClInclude Include="include\Scene\SetIPAddress.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
