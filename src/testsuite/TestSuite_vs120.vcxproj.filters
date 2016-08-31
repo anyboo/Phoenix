@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DHCP">
+      <UniqueIdentifier>{ede2d7cf-c54f-4732-bc17-6b43a758b05f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DHCP\Header Files">
+      <UniqueIdentifier>{d97ad0a2-d7a6-43eb-ac05-cdbf6517e63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DHCP\Source Files">
+      <UniqueIdentifier>{a7e28c8f-ff3e-4440-80f9-51aa53eb4892}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DHCPClientTest.cpp">
+      <Filter>DHCP\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DHCPClientTestSuite.cpp">
+      <Filter>DHCP\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DHCPClientTest.h">
+      <Filter>DHCP\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DHCPClientTestSuite.h">
+      <Filter>DHCP\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

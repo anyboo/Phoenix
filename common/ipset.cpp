@@ -11,6 +11,7 @@
 #include "log.h"
 
 using namespace std;
+using Poco::Logger;
 
 
 void IPSet::ipsetting()
@@ -40,6 +41,12 @@ void IPSet::ipsetting()
 	poco_information_f2(logger_handle, "Dhcp set ip : %s, netgate: %s", *pIP, *pNetGate);
 	//listen arp packet
 	*bResult = WindowUtils::getDirectDevice(Ips, findIps);
+	set<string>::iterator it;
+	for (it = Ips.begin(); it != Ips.end(); it++)
+	{
+		std::string findip = *it;
+		poco_information_f1(logger_handle, "%s", findip);
+	}
 	if (*bResult)
 	{
 		//direct connection 

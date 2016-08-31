@@ -4,6 +4,8 @@
 #include "MainWnd.h"
 #include "resource.h"
 #include "AppInitialize.h"
+#include "ipset.h"
+#include "InitNetConfig.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -13,6 +15,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
+
+	CInitNetConfig Init;
 
 	CAppInitialize appInit;
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);

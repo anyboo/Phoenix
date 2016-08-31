@@ -39,15 +39,14 @@ void CVideoVendorUI::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK)
 	{
-		CDuiString SendName = msg.pSender->GetName();
-		DUI__Trace(SendName);
-		/*if (!SendName.compare(0, 11, _T("VendorName_")))
+		STDSTRING SendName = msg.pSender->GetName();
+		if (!SendName.compare(0, 11, _T("VendorName_")))
 		{
 			CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName.c_str()));
 			m_VendorName = button->GetText();
 			m_IsGetVendorName = GetDeviceName;
 			Close();
-		}*/
+		}
 	}
 	WindowImplBase::Notify(msg);
 }
@@ -58,7 +57,7 @@ void CVideoVendorUI::OnCloseWnd(TNotifyUI& msg)
 	Close();
 }
 
-CDuiString CVideoVendorUI::GetVendorName()
+STDSTRING CVideoVendorUI::GetVendorName()
 {
 	if (m_IsGetVendorName == GetNothing)
 		return _T("");

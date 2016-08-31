@@ -160,7 +160,7 @@
     <ClCompile Include="NetworkStatus.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SetIPAddress.cpp" />
+    <ClCompile Include="InitNetConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -228,7 +228,7 @@
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatusNotification.h" />
-    <ClInclude Include="SetIPAddress.h" />
+    <ClInclude Include="InitNetConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

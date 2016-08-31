@@ -92,7 +92,7 @@ void CSetIpWnd::OnUseSelectIP(TNotifyUI& msg)
 	_lab_setIPaddress->SetText(ipAddress.c_str());
 	_lab_setSubNetAddress->SetText(subnetAddress.c_str());
 	_lab_setBroadcastAddress->SetText(BroadcastAddress.c_str());
-	setip.SetIPAddress(ipAddress, subnetAddress, BroadcastAddress);
+	setip.setNetConfig(ipAddress, subnetAddress, BroadcastAddress);
 }
 
 void CSetIpWnd::OnInputNum(TNotifyUI& msg)
@@ -107,15 +107,11 @@ void CSetIpWnd::OnInputNum(TNotifyUI& msg)
 		{
 			NextInput(SendName);
 		}
-		else
-		{
-			return;
-		}
 	}
 	else
 	{
-		strInput.SetAt(n, '\0');
-		input_edit->SetText(strInput);
+//		strInput.SetAt(n, '\0');
+		input_edit->SetText("");
 	}
 }
 

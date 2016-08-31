@@ -24,7 +24,7 @@ namespace Loggering
 		std::string strpath = Poco::Path::current();
 		std::wstring dump_path = L"log\\";
 		::CreateDirectoryW(dump_path.c_str(), NULL);
-		strpath.append("log\\Downloader.log");
+		strpath.append("log\\Downloader123.log");
 		file_channel->setProperty("path", strpath);		
 		Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter(new Poco::PatternFormatter("%Y-%m-%d %L%H:%M:%S [%p] %U(%u): %t"));
 		Poco::AutoPtr<Poco::FormattingChannel> formatter_channle(new Poco::FormattingChannel(pattern_formatter, file_channel));
