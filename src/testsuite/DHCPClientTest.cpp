@@ -18,7 +18,7 @@ DHCPClientTest::~DHCPClientTest()
 
 void DHCPClientTest::testTimeSync()
 {
-	assert(_ntpClient.Request(std::string("local")) > 0);
+	assert(_dhcpClient.Request(std::string("local")));
 }
 
 

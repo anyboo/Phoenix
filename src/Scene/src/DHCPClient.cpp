@@ -33,8 +33,6 @@ bool DHCPClient::Request(std::string& NetworkCardName)
 	return SetNetConfig();
 }
 
-#include <iomanip>
-#include <fstream>
 bool DHCPClient::SetNetConfig()
 {
 	SocketAddress SerVerAddr(IPAddress::broadcast(), 67);
@@ -82,11 +80,12 @@ bool DHCPClient::SetNetConfig()
 	GetMaskAndGate(ack_Info, sMsk, sGate);
 
 	CSetIPAddress setip;
-	Poco::Net::ICMPClient test(_family);
+	Poco::Net::ICMPClient ic(_family);
 
 	setip.setNetConfig(ip, sMsk, sGate);
-	if(test.ping(ip, 1))
-		return true;
+	int a = ic.ping(ip, 10);
+	if (a != 0)
+		return true;	
 	return false;
 }
 

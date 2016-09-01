@@ -10,21 +10,33 @@
     <Filter Include="DHCP\Source Files">
       <UniqueIdentifier>{a7e28c8f-ff3e-4440-80f9-51aa53eb4892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ARP">
+      <UniqueIdentifier>{68cd13cb-9502-40ee-91e3-df933a94f4de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ARP\Header Files">
+      <UniqueIdentifier>{dfcd8012-c2b4-464f-a7d8-60e14b6429a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ARP\Source Files">
+      <UniqueIdentifier>{6ebc6974-ca79-43f7-8246-1c9deb53967d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHCPClientTest.cpp">
       <Filter>DHCP\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DHCPClientTestSuite.cpp">
-      <Filter>DHCP\Source Files</Filter>
+    <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="SceneTestSuite.cpp" />
+    <ClCompile Include="ARPClientTest.cpp">
+      <Filter>ARP\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h">
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DHCPClientTestSuite.h">
-      <Filter>DHCP\Header Files</Filter>
+    <ClInclude Include="SceneTestSuite.h" />
+    <ClInclude Include="ARPClientTest.h">
+      <Filter>ARP\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

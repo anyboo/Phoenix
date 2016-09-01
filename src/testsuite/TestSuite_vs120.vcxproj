@@ -27,10 +27,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ARPClientTest.h" />
     <ClInclude Include="DHCPClientTest.h" />
     <ClInclude Include="SceneTestSuite.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ARPClientTest.cpp" />
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
