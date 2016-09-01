@@ -1,6 +1,6 @@
 #pragma once
 #include "Poco/Logger.h"
-//using  Poco::Logger;                    // for global decorator 
+using  Poco::Logger;                    // for global decorator 
 
 namespace Loggering {
 #define logger_handle (Poco::Logger::get("logger"))

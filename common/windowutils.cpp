@@ -43,12 +43,17 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 	std::string sNetName;
 	PIP_ADAPTER_INFO pfirstIpAdapterInfo;
 
-	if (ERROR_BUFFER_OVERFLOW != nRel)
+	if (ERROR_BUFFER_OVERFLOW == nRel)
 	{
 		delete pIpAdapterInfo;
 		pIpAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[stSize];
 		pfirstIpAdapterInfo = pIpAdapterInfo;
 		nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
+	}
+	else
+	{
+		pfirstIpAdapterInfo = pIpAdapterInfo;
+	}
 		if (ERROR_SUCCESS == nRel)
 		{
 			while (pIpAdapterInfo)
@@ -100,7 +105,7 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 			}
 		}		
 		delete[] pfirstIpAdapterInfo;		
-	}	
+		
 }
 
 

@@ -18,7 +18,7 @@ class CVideoVendorUI :
 public:
 	CVideoVendorUI();
 	~CVideoVendorUI();
-	CDuiString GetVendorName();
+	STDSTRING GetVendorName();
 
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -27,7 +27,7 @@ public:
 	void OnCloseWnd(TNotifyUI& msg);
 
 private:
-	CDuiString m_VendorName;
+	STDSTRING m_VendorName;
 	Select		m_IsGetVendorName;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

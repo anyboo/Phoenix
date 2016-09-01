@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;..\Wrapper\include;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;$(SolutionDir)\src\Scene\include\Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -81,18 +81,15 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(TargetPath)</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;DVRLited.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>
       </DelayLoadDLLs>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -145,6 +142,7 @@
     <ClInclude Include="FileLogInfoUI.h" />
     <ClInclude Include="LogUI.h" />
     <ClInclude Include="MainWnd.h" />
+    <ClInclude Include="InitNetConfig.h" />
     <ClInclude Include="MessagePump.h" />
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatus.h" />
@@ -158,7 +156,6 @@
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchFileUI.h" />
-    <ClInclude Include="SetIPAddress.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TimeUI.h" />
@@ -192,6 +189,8 @@
     <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
+    <ClCompile Include="InitNetConfig.cpp" />
+    <ClCompile Include="MessagePump.cpp" />
     <ClCompile Include="NetworkStatus.cpp" />
     <ClCompile Include="NICStatus.cpp" />
     <ClCompile Include="OtherTools.cpp" />
@@ -201,7 +200,6 @@
     <ClCompile Include="ProgressManager.cpp" />
     <ClCompile Include="ProgtessUI.cpp" />
     <ClCompile Include="SearchFileUI.cpp" />
-    <ClCompile Include="SetIPAddress.cpp" />
     <ClCompile Include="SetIpWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
