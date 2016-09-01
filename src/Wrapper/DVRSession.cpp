@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "DVRSession.h"
-#include "DVRSessionFactory.h"
+#include "DVR/DVRSession.h"
+#include "DVR/DVRSessionFactory.h"
 
 namespace DVR {
 

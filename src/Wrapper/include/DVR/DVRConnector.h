@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
-#include "Wrapper.h"
+#include "DVR/DVR.h"
 #include <Poco/AutoPtr.h>
-#include "DVRSessionImpl.h"
+#include "DVR/DVRSessionImpl.h"
 
 namespace DVR {
 	class DVR_API DVRConnector

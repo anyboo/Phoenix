@@ -1,7 +1,8 @@
 #pragma once
-#include "Wrapper.h"
-#include "DVRSessionImpl.h"
+#include "DVR/DVR.h"
+#include "DVR/DVRSessionImpl.h"
 #include <Poco/AutoPtr.h>
+#include <Poco/Any.h>
 #include <string>
 
 namespace DVR {
@@ -40,6 +41,11 @@ namespace DVR {
 		void beginDownload(const std::string& path);
 		void play(const std::string& filename);
 		void abort();
+
+		void setFeature(const std::string& name, bool state);
+		bool getFeature(const std::string& name);
+		void setProperty(const std::string& name, const Poco::Any& value);
+		Poco::Any getProperty(const std::string& name)const;
 
 		DVRSessionImpl* impl();
 
@@ -98,6 +104,26 @@ namespace DVR {
 	inline void DVRSession::abort()
 	{
 		_pImpl->abort();
+	}
+
+	inline void DVRSession::setFeature(const std::string& name, bool state)
+	{
+		_pImpl->setFeature(name, state);
+	}
+
+	inline bool DVRSession::getFeature(const std::string& name)
+	{
+		return const_cast<DVRSessionImpl*>(_pImpl.get())->getFeature(name);
+	}
+
+	inline void DVRSession::setProperty(const std::string& name, const Poco::Any& value)
+	{
+		_pImpl->setProperty(name, value);
+	}
+
+	inline Poco::Any DVRSession::getProperty(const std::string& name)const
+	{
+		return const_cast<DVRSessionImpl*>(_pImpl.get())->getProperty(name);
 	}
 
 	inline DVRSessionImpl* DVRSession::impl()

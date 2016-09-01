@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wrapper", "src\Wrapper\Wrap
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "src\Scene\Scene.vcxproj", "{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DZPlite", "src\Wrapper\DZP\DZPlite.vcxproj", "{B568816F-A06D-4F3B-8648-F0735E178544}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -44,6 +46,14 @@ Global
 		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeDebug|Win32.Build.0 = Debug|Win32
 		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{1F922DBB-0A8B-4E25-BCD3-D28FE4D39B52}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.Debug|Win32.Build.0 = Debug|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.Release|Win32.ActiveCfg = Release|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.Release|Win32.Build.0 = Release|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{B568816F-A06D-4F3B-8648-F0735E178544}.UnicodeRelease|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

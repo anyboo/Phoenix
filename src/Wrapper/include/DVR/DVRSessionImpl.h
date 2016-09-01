@@ -1,6 +1,7 @@
 #pragma once
 #include <Poco/RefCountedObject.h>
-#include "Wrapper.h"
+#include "DVR/DVR.h"
+#include <Poco/Any.h>
 
 namespace DVR {
 	class DVR_API DVRSessionImpl
@@ -20,14 +21,19 @@ namespace DVR {
 		virtual void logout() = 0;
 		virtual bool isLoggedIn()const = 0;
 
-		void setLoginTimeout(std::size_t timeout);
-		std::size_t getLoginTimeout() const;
+		virtual void setLoginTimeout(std::size_t timeout) = 0;
+		virtual std::size_t getLoginTimeout() const = 0;
 		void reconnect();
 
 		virtual void beginList(const std::string& path = "", bool extended = false) = 0;
 		virtual void beginDownload(const std::string& path) = 0;
 		virtual void play(const std::string& filename) = 0;
 		virtual void abort() = 0;
+
+		virtual void setFeature(const std::string& name, bool state) = 0;
+		virtual bool getFeature(const std::string& name) = 0;
+		virtual void setProperty(const std::string& name, const Poco::Any& value) = 0;
+		virtual Poco::Any getProperty(const std::string& name) = 0;
 	private:
 		DVRSessionImpl();
 		DVRSessionImpl(const DVRSessionImpl&);

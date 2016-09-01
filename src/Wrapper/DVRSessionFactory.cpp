@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "DVRSessionFactory.h"
+#include "DVR/DVRSessionFactory.h"
 #include <cassert>
 
 namespace DVR {

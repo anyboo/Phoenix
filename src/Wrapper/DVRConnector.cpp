@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "DVRConnector.h"
+#include "DVR/DVRConnector.h"
 
 namespace DVR 
 {

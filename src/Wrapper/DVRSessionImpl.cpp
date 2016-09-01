@@ -1,9 +1,12 @@
-#include "stdafx.h"
-#include "DVRSessionImpl.h"
+#include "DVR/DVRSessionImpl.h"
 
 namespace DVR 
 {
-	DVRSessionImpl::DVRSessionImpl()
+	DVRSessionImpl::DVRSessionImpl(const std::string& connectionString,
+		std::size_t timeout):
+		_connectionString(connectionString),
+		_loginTimeout(timeout)
+
 	{
 	}
 
@@ -12,16 +15,6 @@ namespace DVR
 	{
 	}
 
-
-	void DVRSessionImpl::setLoginTimeout(std::size_t timeout)
-	{
-		_loginTimeout = timeout;
-	}
-
-	std::size_t DVRSessionImpl::getLoginTimeout() const
-	{
-		return _loginTimeout;
-	}
 	void DVRSessionImpl::reconnect()
 	{
 		logout();

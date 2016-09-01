@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;$(SolutionDir)\src\Wrapper;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\duilib\;$(SolutionDir)\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\src\Downloader;$(SolutionDir)\common\;$(SolutionDir)\common\wpcap;..\Wrapper\include;$(SolutionDir)\src\BusinessLayer;$(SolutionDir)\src\BusinessLayer\JXJVendor;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\breakpad\src\client\windows\crash_generation;$(SolutionDir)\breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
@@ -83,7 +83,7 @@
       <OutputFile>$(TargetPath)</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;Wrapper_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;DVRLited.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>
       </DelayLoadDLLs>
     </Link>
@@ -185,28 +185,13 @@
     <ClCompile Include="..\..\common\QMSqlite.cpp" />
     <ClCompile Include="..\..\common\utils.cpp" />
     <ClCompile Include="..\..\common\windowutils.cpp" />
-    <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp" />
-    <ClCompile Include="..\BusinessLayer\Device.cpp" />
-    <ClCompile Include="..\BusinessLayer\DeviceManager.cpp" />
-    <ClCompile Include="..\BusinessLayer\LoginDevice.cpp" />
-    <ClCompile Include="..\BusinessLayer\LoginException.cpp" />
-    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp" />
-    <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp" />
-    <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp" />
-    <ClCompile Include="..\BusinessLayer\SearchDevice.cpp" />
-    <ClCompile Include="..\BusinessLayer\SearchFileException.cpp" />
-    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp" />
-    <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp" />
-    <ClCompile Include="..\BusinessLayer\TestWindows.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
-    <ClCompile Include="DownloadPackage.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
-    <ClCompile Include="MessagePump.cpp" />
     <ClCompile Include="NetworkStatus.cpp" />
     <ClCompile Include="NICStatus.cpp" />
     <ClCompile Include="OtherTools.cpp" />

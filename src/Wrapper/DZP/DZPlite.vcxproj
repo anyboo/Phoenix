@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{66EBA924-9534-451C-BBAF-65B4F9760DE4}</ProjectGuid>
+    <ProjectGuid>{B568816F-A06D-4F3B-8648-F0735E178544}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Wrapper</RootNamespace>
-    <ProjectName>DVRLite</ProjectName>
+    <RootNamespace>DZPlite</RootNamespace>
+    <ProjectName>DZPLite</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -48,16 +48,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(SolutionDir)ipch\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DVRLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;.\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DZPLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../include/;./include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -65,10 +63,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -77,7 +73,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DZPLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,20 +86,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVRConnector.h" />
-    <ClInclude Include="include\DVR\DVRException.h" />
-    <ClInclude Include="include\DVR\DVRSession.h" />
-    <ClInclude Include="include\DVR\DVRSessionFactory.h" />
-    <ClInclude Include="include\DVR\DVRSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVR.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DVRException.cpp" />
-    <ClCompile Include="DVRSession.cpp" />
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />
-    <ClCompile Include="DVRSessionFactory.cpp" />
+    <ClCompile Include="Notifier.cpp" />
+    <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\DZP\DVRConnector.h" />
+    <ClInclude Include="include\DZP\DVRSessionImpl.h" />
+    <ClInclude Include="include\DZP\DZPLite.h" />
+    <ClInclude Include="include\DZP\Notifier.h" />
+    <ClInclude Include="include\DZP\Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
