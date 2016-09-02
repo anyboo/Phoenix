@@ -8,6 +8,6 @@ CppUnit::Test* SceneTestSuite::suite()
 
 	pSuite->addTest(DHCPClientTest::suite());
 	pSuite->addTest(ARPClientTest::suite());
-
+	
 	return pSuite;
 }

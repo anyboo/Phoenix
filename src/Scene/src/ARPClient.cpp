@@ -39,7 +39,7 @@ bool ARPClient::SetIpByArp(const std::string& NetworkCardName)
 		int number = stoi(strnum) + 1;
 		strIp = strIp.append(std::to_string(number));	
 		_setip.setNetConfig(strIp, strMsk, strGate);
-		if (ic.ping(strIp) != 0)
+		if (ic.ping(strIp, 10) != 0)
 			return true;
 	}
 	else
@@ -58,8 +58,10 @@ bool ARPClient::SetIpByArp(const std::string& NetworkCardName)
 			std::string sIP(*itor);
 			sIP.append(".144");
 			std::string strMsk("255.255.255.0");	
-			_setip.setNetConfig(sIP, strMsk, sNetGate);
-			if (ic.ping(sIP) != 0)
+			bool bRet = _setip.setNetConfig(sIP, strMsk, sNetGate);
+			if (!bRet)
+				continue;
+			if (ic.ping(sIP, 10) != 0)
 				return true;
 		}
 	}
