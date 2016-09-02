@@ -15,16 +15,13 @@
     <ClCompile Include="DHCPClientTest.cpp">
       <Filter>DHCP\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DHCPClientTestSuite.cpp">
-      <Filter>DHCP\Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="SceneTestSuite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h">
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DHCPClientTestSuite.h">
-      <Filter>DHCP\Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="SceneTestSuite.h" />
   </ItemGroup>
 </Project>
