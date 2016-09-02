@@ -3,7 +3,7 @@
 
 
 CVideoVendorUI::CVideoVendorUI()
-:m_VendorName(_T(""))
+:_vendor_name(_T(""))
 {
 }
 
@@ -17,7 +17,7 @@ DUI_END_MESSAGE_MAP()
 
 LPCTSTR CVideoVendorUI::GetWindowClassName() const
 {
-	return _T("CLogUI");
+	return _T("CVideoVendorUI");
 }
 
 CDuiString CVideoVendorUI::GetSkinFolder()
@@ -39,12 +39,12 @@ void CVideoVendorUI::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK)
 	{
-		std::string SendName = msg.pSender->GetName();
-		if (!SendName.compare(0, 11, _T("VendorName_")))
+		CDuiString sender_name = msg.pSender->GetName();
+		if (!sender_name.Left(11).Compare(_T("VendorName_")))
 		{
-			CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName.c_str()));
-			m_VendorName = button->GetText();
-			m_IsGetVendorName = GetDeviceName;
+			CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(sender_name));
+			_vendor_name = button->GetText();
+			_is_select = GetDeviceName;
 			Close();
 		}
 	}
@@ -53,14 +53,14 @@ void CVideoVendorUI::Notify(TNotifyUI& msg)
 
 void CVideoVendorUI::OnCloseWnd(TNotifyUI& msg)
 {
-	m_IsGetVendorName = GetNothing;
+	_is_select = GetNothing;
 	Close();
 }
 
 CDuiString CVideoVendorUI::GetVendorName()
 {
-	if (m_IsGetVendorName == GetNothing)
+	if (_is_select == GetNothing)
 		return _T("");
-	return m_VendorName;
+	return _vendor_name;
 }
 

@@ -69,7 +69,7 @@ private:
 	CTimeUI*	_TimeControl;
 	CButtonUI*  _SearchControl;
 	CListUI*	_VendorList;
-
+	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
 
 	const CDuiString ico_startdate = _T("DataTime1");

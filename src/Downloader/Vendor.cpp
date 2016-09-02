@@ -36,13 +36,16 @@ void CVendor::AddVendorList(std::string& VendorName, std::string& VendorIP)
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
+	assert(SubList);
 	pList->Add(SubList);
 
-	std::string SubListName = std::string(_T("VendorContList")) + to_string(m_ContListSel);
-	std::string bt_deleteName = std::string(_T("BT_delete")) + to_string(m_ContListSel);
+	CDuiString subList_name, button_name;
+	subList_name.Format("VendorContList%d", m_ContListSel);
+	button_name.Format("BT_delete", m_ContListSel);
+
 	CButtonUI* btn = dynamic_cast<CButtonUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
-	SubList->SetName(SubListName.c_str());
-	btn->SetName(bt_deleteName.c_str());
+	SubList->SetName(subList_name);
+	btn->SetName(button_name);
 	m_ContListSel = m_ContListSel + 1;
 
 	CLabelUI* Lab_Name = dynamic_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
@@ -75,15 +78,15 @@ CListContainerElementUI* CVendor::AddChannels(size_t Channel_Count)
 		if (i == 0)
 		{
 			subOption->SetAttributeList(_T("name=\"quanxuan\" width=\"22\" height=\"22\" padding=\"20,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
-			//subLab->SetAttributeList(_T("text=\"全选\" font=\"5\" textcolor=\"#FFFFFFFF\" valign=\"center\""));
+			subLab->SetAttributeList(_T("text=\"CheckAll\" font=\"5\" textcolor=\"#FFFFFFFF\" valign=\"center\""));
 		}
 		else{
-			/*subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
+			subOption->SetAttributeList(_T("width=\"22\" height=\"22\" padding=\"40,4,10,4\" normalimage=\"file='skin/quanxuan.png'\" selectedimage=\"file='skin/quanxuanzhuangtai.png'\""));
 			subLab->SetAttributeList(_T("font=\"5\" valign=\"center\" textcolor=\"#FFFFFFFF\""));
-			std::string strChannelName = std::string(_T("通道")) + std::to_string(i - 1);
+			std::string strChannelName = std::string(_T("Channel")) + std::to_string(i - 1);
 			std::string OptionName = std::string(_T("channel")) + std::to_string(i - 1);
 			subOption->SetName(OptionName.c_str());
-			subLab->SetText(strChannelName.c_str());*/
+			subLab->SetText(strChannelName.c_str());
 		}		
 	}
 	return ContList;
@@ -94,7 +97,7 @@ void CVendor::ShowOfflineVendor()
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	int CurSel = pList->GetCurSel();
 	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
-	std::string str = SubList->GetName();
+	
 	CControlUI* network = dynamic_cast<CControlUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_CONTROL, 0));
 	network->SetAttribute(_T("bkimage"), _T("file='skin/network_offline.png' dest='10,20,39,48'"));
 	SubList->SetBkImage(_T("skin/tdxzanniu.png"));

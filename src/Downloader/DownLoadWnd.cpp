@@ -4,7 +4,7 @@
 #include "VideoLoginUI.h"
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
-
+#include "DVR/DVRSession.h"
 
 
 DownLoadWnd::DownLoadWnd()
@@ -140,10 +140,7 @@ void DownLoadWnd::OnSelectDayTime(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 	//set datetime 's text
-	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime().c_str());
-
-	DUI__Trace(msg.pSender->GetName());
-	DUI__Trace(pDlg->GetTime().c_str());
+	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime());
 }
 
 void DownLoadWnd::OnLogin(TNotifyUI& msg)
@@ -239,6 +236,6 @@ void DownLoadWnd::ReadJsonFile()
 		std::string VendorDeviceName = a[1].GetString();
 
 		int type = stoi(TypeName);
-		//m_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
+		_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
 	}
 }

@@ -30,6 +30,14 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 
 void CPlayVideoWnd::InitWindow()
 {
+	BuildControlDDX();
+}
+
+void CPlayVideoWnd::BuildControlDDX()
+{
+	_btn_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
+	_slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
+
 }
 
 CDuiString CPlayVideoWnd::GetSkinFile()
@@ -56,24 +64,20 @@ void CPlayVideoWnd::OnStartStop(TNotifyUI& msg)
 {
 	if (m_IsPlay)
 	{
-		CButtonUI* btn_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
-		btn_play->SetText(_T("播放"));
-		CSliderUI* slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
-		int m_stopPos = slider->GetValue();
+		_btn_play->SetText(_T("play"));
+		int m_stopPos = _slider->GetValue();
 		m_IsPlay = false;
 	}
 	else if (!m_IsPlay)
 	{
-		CButtonUI* btn_stop = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
-		btn_stop->SetText(_T("暂停"));
+		_btn_play->SetText(_T("stop"));
 		m_IsPlay = true;
 	}
 }
 
 void CPlayVideoWnd::OnAdjustPlayPos(TNotifyUI& msg)
 {
-	CSliderUI* slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
-	m_stopPos = slider->GetValue();
+	m_stopPos = _slider->GetValue();
 }
 
 
@@ -87,6 +91,5 @@ HWND CPlayVideoWnd::GetPlayHwnd()
 	GetWindowRect(pHwnd, &rcWnd);
 	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_DRAWFRAME | SWP_SHOWWINDOW);
 
-	GetWindowRect(pHwnd, &rcWnd);
 	return pHwnd;
 }

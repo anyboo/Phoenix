@@ -19,15 +19,17 @@ public:
 
 	void ShowProgress();
 
-private:
-	int			m_CountFile;
-	int				m_Searchfile_count;
-	int			m_finish;
-	bool			m_InitNotify;
-
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+
+private:
+	int			_files_count;
+	int			_search_file_count;
+
+private:
+	CLabelUI*			_lab_progress;
+	CProgressUI*		_pro_search;
 };
 

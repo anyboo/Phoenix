@@ -17,6 +17,8 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 
+	void BuildControlDDX();
+
 	void OnCloseWnd(TNotifyUI& msg);
 
 	void OnStartStop(TNotifyUI& msg);
@@ -24,11 +26,15 @@ public:
 	void OnAdjustPlayPos(TNotifyUI& msg);
 
 	HWND GetPlayHwnd();
-private:
-	bool		m_IsPlay;
-	int			m_stopPos;
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+private:
+	bool		m_IsPlay;
+	int			m_stopPos;
+private:
+	CButtonUI*				_btn_play;
+	CSliderUI*				_slider;
 };

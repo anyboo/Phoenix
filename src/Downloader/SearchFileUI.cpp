@@ -4,7 +4,7 @@
 #include "FileLogInfoUI.h"
 
 SearchFileUI::SearchFileUI()
-:m_InitShowFileList(false), m_DownloadID(1)
+:m_DownloadID(1)
 {
 }
 
@@ -16,6 +16,7 @@ SearchFileUI::~SearchFileUI()
 DUI_BEGIN_MESSAGE_MAP(SearchFileUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_SEARCHWND, OnCloseWnd)
 DUI_ON_CLICK_CTRNAME(BT_BEGINDOWNLOAD, OnDownLoadFile)
+DUI_ON_CLICK_CTRNAME(BT_SELECT_ALL, OnCheckAll)
 DUI_END_MESSAGE_MAP()
 
 
@@ -39,6 +40,18 @@ void SearchFileUI::OnFinalMessage(HWND hWnd)
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
+void SearchFileUI::InitWindow()
+{
+	OnShowFileList();
+}
+
+void SearchFileUI::BuildControlDDX()
+{
+	_pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	_oCheckAll = dynamic_cast<COptionUI*>(m_PaintManager.FindControl(_T("All")));
+}
+
+
 void SearchFileUI::OnCloseWnd(TNotifyUI& msg)
 {
 	m_IsDownLoad = closeWnd;
@@ -60,50 +73,41 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 
 void SearchFileUI::Notify(TNotifyUI& msg)
 {	
-	if (!m_InitShowFileList)
-	{
-		OnShowFileList();
-		m_InitShowFileList = true;
-	}
 	if (msg.sType == DUI_MSGTYPE_CLICK){
-		std::string SendName = msg.pSender->GetName();
-		if (!SendName.compare(0, 6, _T("option")))
+		CDuiString sender_name = msg.pSender->GetName();
+		if (!sender_name.Left(6).Compare(_T("option")))
 		{
-			GetSelectOption(SendName);
+			GetSelectOption(sender_name);
 		}
-		if (SendName == _T("All"))
+		if (!sender_name.Left(7).Compare(_T("BT_Play")))
 		{
-			m_Select_file.clear();
-			CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-			COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, _T("All")));
-			int nCount = pList->GetCount();
-			for (int i = 1; i <= nCount; i++)
-			{
-				COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(pList, DUI_CTR_OPTION, i));
-				if (!option_All->IsSelected()){
-					option->Selected(true);
-					m_Select_file.push_back(i - 1);
-				}
-				else{
-					option->Selected(false);
-				}
-			}
-		}
-		if (!SendName.compare(0, 7, _T("BT_Play")))
-		{
-			std::string strTag = SendName.substr(7);
-			int CurSel = stoi(strTag);
+			CDuiString serial = sender_name.Right(sender_name.GetLength() - 7);
+			int CurSel = stoi(std::string(serial));
 			OnPlayVideo(CurSel);
 		}
 	}
-
 	WindowImplBase::Notify(msg);
 }
 
+void SearchFileUI::OnCheckAll(TNotifyUI& msg)
+{
+	_checked_files.clear();
+	int nCount = _pList->GetCount();
+	for (int i = 1; i <= nCount; i++)
+	{
+		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_pList, DUI_CTR_OPTION, i));
+		if (!_oCheckAll->IsSelected()){
+			option->Selected(true);
+			_checked_files.push_back(i - 1);
+		}
+		else{
+			option->Selected(false);
+		}
+	}
+}
 
 void SearchFileUI::OnShowFileList()
 {
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
 	std::string optionName, buttonName, SubListName;
 }
 
@@ -133,26 +137,24 @@ void SearchFileUI::OnPlayVideo(int CurSel)
 	pDlg->ShowModal();*/
 }
 
-void SearchFileUI::GetSelectOption(std::string& optionName)
+void SearchFileUI::GetSelectOption(CDuiString& optionName)
 {
-	std::string strTag = optionName.substr(6);
-	size_t tag = stoi(strTag);
-
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-	COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(pList, optionName.c_str()));
+	CDuiString serial = optionName.Right(optionName.GetLength() - 6);
+	size_t tag = stoi(std::string(serial));
+	COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(_pList, optionName));
 	if (option->IsSelected())
 	{
-		for (size_t j = 0; j < m_Select_file.size(); j++)
+		for (size_t j = 0; j < _checked_files.size(); j++)
 		{
-			if (m_Select_file[j] == tag)
+			if (_checked_files[j] == tag)
 			{
-				m_Select_file.erase(m_Select_file.begin() + j);
+				_checked_files.erase(_checked_files.begin() + j);
 			}
 		}
 	}
 	else
 	{
-		m_Select_file.push_back(tag);
+		_checked_files.push_back(tag);
 	}
 }
 
