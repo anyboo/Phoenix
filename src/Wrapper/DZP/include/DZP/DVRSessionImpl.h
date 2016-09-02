@@ -1,13 +1,8 @@
 #pragma once
 #include "DZPLite.h"
 #include "DVR/AbstractSessionImpl.h"
+#include "DZP/Utility.h"
 #include <Poco/Net/SocketAddress.h>
-
-extern "C"
-{
-	typedef struct _H264_DVR_DEVICEINFO dvrinfo;
-	typedef long dvrhandle;
-}
 
 namespace DVR {
 namespace DZPLite {
@@ -32,22 +27,15 @@ public:
 	virtual void login(const std::string& user = "", const std::string& password = "");
 	virtual void logout();
 	virtual bool isLoggedIn()const;
-
+	virtual void abort();
 	virtual void setLoginTimeout(std::size_t timeout);
 	virtual std::size_t getLoginTimeout() const;
 
-	virtual void beginList(const std::string& path = "", bool extended = false);
-	virtual void beginDownload(const std::string& path);
-	virtual void play(const std::string& filename);
-	virtual void abort();
-protected:
-	void pause();
-	void playControl(StatePlayType state);
+	virtual DVR::DVRStatementImpl* createStatementImpl();
 
-	void beginList(const std::string& BeginDatetime, const std::string& DatetimeEnd);
 private:
 	std::string _connector;
-	dvrhandle*	_pDvr;
+	Utility::HANDLE	_handle;
 	bool        _connected;
 	int         _timeout;
 

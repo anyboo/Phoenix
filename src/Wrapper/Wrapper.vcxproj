@@ -97,6 +97,9 @@
     <ClInclude Include="include\DVR\DVRSessionFactory.h" />
     <ClInclude Include="include\DVR\DVRSessionImpl.h" />
     <ClInclude Include="include\DVR\DVR.h" />
+    <ClInclude Include="include\DVR\DVRStatement.h" />
+    <ClInclude Include="include\DVR\DVRStatementCreator.h" />
+    <ClInclude Include="include\DVR\DVRStatementImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVRException.cpp" />
@@ -104,6 +107,9 @@
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />
     <ClCompile Include="DVRSessionFactory.cpp" />
+    <ClCompile Include="DVRStatement.cpp" />
+    <ClCompile Include="DVRStatementCreator.cpp" />
+    <ClCompile Include="DVRStatementImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -23,7 +23,6 @@ public:
 
 	void LogIn();
 
-	Device* GetLonInDevice();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -35,7 +34,7 @@ public:
 	void OnClose(TNotifyUI& msg);
 
 	void OnOpenVideoVendorWnd(TNotifyUI& msg);
-	void OnShowDeviceInfo(STDSTRING& SendName);
+	void OnShowDeviceInfo(CDuiString& SendName);
 	void OnShowDevice(int pages);
 
 	void GetNextPage();
@@ -50,19 +49,18 @@ public:
 	void InsertVendorToList();
 
 	void CreateSubvLyt();
+protected:
+	virtual LPCTSTR GetWindowClassName() const;
+	virtual CDuiString GetSkinFolder();
+	virtual CDuiString GetSkinFile();
+	void BuildControlDDX();
 
-	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
 private:
-	DEVICE_INFO_LIST		m_DeviceList;
 	ISLogIn			m_IsLogIn;
-	Device*					m_Device;
 	bool			m_Init;
 	size_t						m_page_Count;
 	size_t				m_pages;
 	std::vector<string> m_sRecord;
 	std::map<int, string>		m_CnameAndType;
-protected:
-	virtual LPCTSTR GetWindowClassName() const;
-	virtual CDuiString GetSkinFolder();
-	virtual CDuiString GetSkinFile();
+
 };

@@ -14,7 +14,7 @@ class SearchFileUI :
 	public WindowImplBase
 {
 public:
-	SearchFileUI(Device* device);
+	SearchFileUI();
 	~SearchFileUI();
 
 
@@ -27,18 +27,17 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnShowFileList();
 
-	STDSTRING TimeChange(__time64_t inputTime);
+	std::string TimeChange(__time64_t inputTime);
 
-	void GetSelectOption(STDSTRING& optionName);
+	void GetSelectOption(std::string& optionName);
 
-	void GetFileInfo(STDSTRING& SendName);
+	void GetFileInfo(std::string& SendName);
 	void OnPlayVideo(int CurSel);
 	
 private:
 	std::vector<size_t>		m_Select_file;
 	bool		m_InitShowFileList;
 	IsDownLoadFile		m_IsDownLoad;
-	Device*				m_device;
 	size_t					m_DownloadID;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

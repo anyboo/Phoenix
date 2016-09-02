@@ -116,6 +116,7 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="InitNetConfig.cpp" />
+    <ClCompile Include="MessagePump.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">

@@ -88,12 +88,14 @@
   <ItemGroup>
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />
+    <ClCompile Include="DVRStatementImpl.cpp" />
     <ClCompile Include="Notifier.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DZP\DVRConnector.h" />
     <ClInclude Include="include\DZP\DVRSessionImpl.h" />
+    <ClInclude Include="include\DZP\DVRStatementImpl.h" />
     <ClInclude Include="include\DZP\DZPLite.h" />
     <ClInclude Include="include\DZP\Notifier.h" />
     <ClInclude Include="include\DZP\Utility.h" />

@@ -10,20 +10,20 @@ class CNotificationNetworkStatus;
 
 typedef struct 
 {
-	STDSTRING	Time;
-	STDSTRING	Handle;
-	STDSTRING	Description;
+	std::string	Time;
+	std::string	Handle;
+	std::string	Description;
 }Log_Search;
 
 typedef struct 
 {
-	STDSTRING	Time;
-	STDSTRING	Address;
-	STDSTRING	Collect_people;
-	STDSTRING	CaseName;
-	STDSTRING	Case_description;
-	STDSTRING	EquipmentIP;
-	STDSTRING	Remark;
+	std::string	Time;
+	std::string	Address;
+	std::string	Collect_people;
+	std::string	CaseName;
+	std::string	Case_description;
+	std::string	EquipmentIP;
+	std::string	Remark;
 }Case_Search;
 
 class CLogUI :
@@ -52,10 +52,9 @@ public:
 	void exportLog();
 	void InitTime();
 
-	void SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day);
+	void SetBtDataImage(std::string& BT_Name, std::string& day);
 
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
-	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
 
 protected:
 	std::vector<Log_Search>		m_LogInfo;

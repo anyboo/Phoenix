@@ -4,6 +4,7 @@
 #include <Poco/Any.h>
 
 namespace DVR {
+	class DVRStatementImpl;
 	class DVR_API DVRSessionImpl
 		:public Poco::RefCountedObject
 	{
@@ -17,6 +18,7 @@ namespace DVR {
 			std::size_t timeout = LOGIN_TIMEOUT_DEFAULT);
 		virtual ~DVRSessionImpl();
 
+		virtual DVRStatementImpl* createStatementImpl() = 0;
 		virtual void login(const std::string& user = "", const std::string& password = "") = 0;
 		virtual void logout() = 0;
 		virtual bool isLoggedIn()const = 0;
@@ -24,11 +26,6 @@ namespace DVR {
 		virtual void setLoginTimeout(std::size_t timeout) = 0;
 		virtual std::size_t getLoginTimeout() const = 0;
 		void reconnect();
-
-		virtual void beginList(const std::string& path = "", bool extended = false) = 0;
-		virtual void beginDownload(const std::string& path) = 0;
-		virtual void play(const std::string& filename) = 0;
-		virtual void abort() = 0;
 
 		virtual void setFeature(const std::string& name, bool state) = 0;
 		virtual bool getFeature(const std::string& name) = 0;

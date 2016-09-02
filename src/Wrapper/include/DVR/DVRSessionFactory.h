@@ -2,8 +2,8 @@
 
 #include <map>
 #include <string>
-#include "DVR/DVRSession.h"
 #include "DVR/DVRConnector.h"
+#include "DVR/DVRSession.h"
 #include <Poco/SharedPtr.h>
 #include <Poco/Mutex.h>
 #include <Poco/String.h>

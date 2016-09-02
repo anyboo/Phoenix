@@ -1,6 +1,6 @@
 #pragma once
 #include <Poco/Net/NetworkInterface.h>
-#include "SetIpByArp.h"
+#include "Scene/SetIpByArp.h"
 
 
 

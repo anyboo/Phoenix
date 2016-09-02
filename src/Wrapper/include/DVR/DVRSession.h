@@ -1,12 +1,14 @@
 #pragma once
 #include "DVR/DVR.h"
-#include "DVR/DVRSessionImpl.h"
+//#include "DVR/DVRSessionImpl.h"
+//#include "DVR/DVRStatement.h"
+#include "DVR/DVRStatementCreator.h"
 #include <Poco/AutoPtr.h>
 #include <Poco/Any.h>
 #include <string>
 
 namespace DVR {
-
+	class DVRStatementImpl;
 	class DVR_API DVRSession
 	{
 	public:
@@ -25,6 +27,14 @@ namespace DVR {
 		DVRSession(const DVRSession&);
 		DVRSession& operator = (const DVRSession&);
 
+		template <typename T>
+		DVRStatement operator << (const T& t)
+		{
+			return _statementCreator << t;
+		}
+
+		DVRStatementImpl* createStatementImpl();
+
 		~DVRSession();
 
 		void swap(DVRSession& other);
@@ -36,11 +46,6 @@ namespace DVR {
 		void setLoginTimeout(std::size_t timeout);
 		std::size_t getLoginTimeout() const;
 		void reconnect();
-
-		void beginList(const std::string& path = "", bool extended = false);
-		void beginDownload(const std::string& path);
-		void play(const std::string& filename);
-		void abort();
 
 		void setFeature(const std::string& name, bool state);
 		bool getFeature(const std::string& name);
@@ -86,26 +91,6 @@ namespace DVR {
 		_pImpl->reconnect();
 	}
 
-	inline void DVRSession::beginList(const std::string& path, bool extended)
-	{
-		_pImpl->beginList(path, extended);
-	}
-
-	inline void DVRSession::beginDownload(const std::string& path)
-	{
-		_pImpl->beginDownload(path);
-	}
-
-	inline void DVRSession::play(const std::string& filename)
-	{
-		_pImpl->play(filename);
-	}
-
-	inline void DVRSession::abort()
-	{
-		_pImpl->abort();
-	}
-
 	inline void DVRSession::setFeature(const std::string& name, bool state)
 	{
 		_pImpl->setFeature(name, state);
@@ -134,6 +119,11 @@ namespace DVR {
 	inline void swap(DVRSession& s1, DVRSession& s2)
 	{
 		s1.swap(s2);
+	}
+
+	inline DVRStatementImpl* DVRSession::createStatementImpl()
+	{
+		return _pImpl->createStatementImpl();
 	}
 }
 

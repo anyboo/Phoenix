@@ -3,6 +3,7 @@
 #include "DZPLite.h"
 #include "DVR/DVRSession.h"
 #include <Poco/BasicEvent.h>
+#include "Utility.h"
 
 namespace DVR {
 namespace DZPLite {
@@ -14,18 +15,15 @@ public:
 
 	typedef Poco::BasicEvent<void> Event;
 
-	Event downloadPos;
+	Event pos;
 
-	static const EnabledEventType DVR_NOTIFY_DOWNLOADPOS = 1;
+	static const EnabledEventType DOWNLOAD = 1;
+	static const EnabledEventType PLAY = 2;
 
-	Notifier(const DVRSession& session,
-		EnabledEventType enabled = DVR_NOTIFY_DOWNLOADPOS);
-
+	Notifier(const DVRSession& session);
 	~Notifier();
 
-	bool enableDownlaodPos();
-	bool disableDownloadPos();
-	bool DownloadPosEnabled() const;
+	static void __stdcall ProcessCallbackFn(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 
 	bool operator == (const Notifier& other) const;
 	Poco::Int64 getPos() const;
@@ -40,5 +38,16 @@ private:
 	EnabledEventType   _enabledEvents;
 	Poco::Mutex        _mutex;
 };
+
+inline bool Notifier::operator == (const Notifier& other) const
+{
+	return _pos == other._pos &&
+		Utility::dvrHandle(_session) == Utility::dvrHandle(other._session);
+}
+
+inline Poco::Int64 Notifier::getPos() const
+{
+	return _pos;
+}
 
 }}

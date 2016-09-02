@@ -9,7 +9,7 @@ public:
 	CFileLogInfoUI();
 	~CFileLogInfoUI();
 
-	STDSTRING GetTime();
+	std::string GetTime();
 
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);

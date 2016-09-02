@@ -2,7 +2,7 @@
 #include "PlayVideoWnd.h"
 #include "PlayWndUI.h"
 
-CPlayVideoWnd::CPlayVideoWnd(Device* device, RecordFile& rf)
+CPlayVideoWnd::CPlayVideoWnd()
 :m_IsPlay(true), m_stopPos(0)
 {
 }

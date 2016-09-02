@@ -30,6 +30,9 @@
     <ClCompile Include="Notifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DVRStatementImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DZP\DVRConnector.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\DZP\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DZP\DVRStatementImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

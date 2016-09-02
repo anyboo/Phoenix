@@ -17,7 +17,7 @@ public:
 
 
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
-	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

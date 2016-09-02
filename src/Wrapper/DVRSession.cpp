@@ -39,5 +39,4 @@ namespace DVR {
 		using std::swap;
 		swap(_pImpl, other._pImpl);
 	}
-
 }

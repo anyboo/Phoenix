@@ -75,7 +75,7 @@ std::string GetFirstLetter(const char* strChs)
 
 std::string Utils::getChineseSpell(const std::string& src)
 {
-    //return string::fromStdString(GetFirstLetter(src.toLocal8Bit().data()));
+    //return string::fromstd::string(GetFirstLetter(src.toLocal8Bit().data()));
 
 	return src;
 }

@@ -39,6 +39,15 @@
     <ClInclude Include="include\DVR\AbstractSessionImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\DVR\DVRStatement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRStatementImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRStatementCreator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVRSessionImpl.cpp">
@@ -54,6 +63,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DVRException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRStatement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRStatementImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRStatementCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

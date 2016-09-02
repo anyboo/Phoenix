@@ -124,7 +124,7 @@ public:
 			if (it->second.setter)
 				(static_cast<C*>(this)->*it->second.setter)(name, state);
 			else
-				throw Poco:: Poco::NotImplementedException("set", name);
+				throw Poco::NotImplementedException("set", name);
 		}
 		else throw NotSupportedException(name);
 	}
@@ -223,7 +223,7 @@ public:
 		/// When this feature is true, empty strings are treated as NULL.
 	{
 		if (emptyStringIsNull && _forceEmptyString)
-			throw InvalidAccessException("Features mutually exclusive");
+			throw Poco::InvalidAccessException("Features mutually exclusive");
 
 		_emptyStringIsNull = emptyStringIsNull;
 	}
@@ -244,7 +244,7 @@ public:
 		/// are reported as empty strings.
 	{
 		if (forceEmptyString && _emptyStringIsNull)
-			throw InvalidAccessException("Features mutually exclusive");
+			throw Poco::InvalidAccessException("Features mutually exclusive");
 
 		_forceEmptyString = forceEmptyString;
 	}
