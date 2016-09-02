@@ -39,6 +39,9 @@ namespace DVR {
 
 	inline void DVRStatement::beginDownload(const std::string& filename)
 	{
+		/*
+		download one file use one session, so we must manage sessions for file list.
+		*/
 		_pImpl->beginDownload(filename);
 	}
 

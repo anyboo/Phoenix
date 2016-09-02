@@ -44,6 +44,16 @@ public:
 	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo);
 
 	static int FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout);
+
+	typedef void(*CallbackType)(void* pVal);
+
+	/*template <typename T, typename CBT>
+	static bool registerUpdateHandler(const Session& session, CBT callbackFn, T* pParam)
+		/// Registers the callback by calling registerUpdateHandler(sqlite3*, CBT, T*).
+	{
+		return registerUpdateHandler(dvrHandle(session), callbackFn, pParam);
+	}*/
+
 protected:
 	static void __stdcall CallbackFn(long handle, long totalSize, long curSize, long opCode);
 	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);

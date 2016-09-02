@@ -58,6 +58,7 @@ namespace DVR {
 		DVRSession();
 
 		Poco::AutoPtr<DVRSessionImpl> _pImpl;
+		DVRStatementCreator           _statementCreator;
 
 	};
 
