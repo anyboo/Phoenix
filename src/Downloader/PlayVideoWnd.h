@@ -9,7 +9,7 @@ class CPlayVideoWnd :
 	public WindowImplBase
 {
 public:
-	CPlayVideoWnd(Device* device, RecordFile& rf);
+	CPlayVideoWnd();
 	~CPlayVideoWnd();
 
 	virtual void InitWindow();

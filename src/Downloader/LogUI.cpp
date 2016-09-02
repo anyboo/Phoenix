@@ -68,15 +68,6 @@ void CLogUI::HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf)
 {
 }
 
-void CLogUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
-{
-	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-	if (eNotify == Notification_Type_Network_status_Connect)
-		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
-	else if (eNotify == Notification_Type_Network_status_Disconnect)
-		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
-}
-
 void CLogUI::OnBeginSearch(TNotifyUI& msg)
 {
 	COptionUI* Option1 = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("LogType1")));
@@ -186,11 +177,11 @@ void CLogUI::OnSelectStartTime(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	STDSTRING strData = pDlg->GetData();
+	std::string strData = pDlg->GetData();
 	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
 	Lab_time->SetText(strData.c_str());
-	STDSTRING day = strData.substr(strData.length() - 2);
-	SetBtDataImage(STDSTRING(_T("DataTime1")), day);
+	std::string day = strData.substr(strData.length() - 2);
+	SetBtDataImage(std::string(_T("DataTime1")), day);
 }
 
 void CLogUI::OnSelectStopTime(TNotifyUI& msg)
@@ -200,11 +191,11 @@ void CLogUI::OnSelectStopTime(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	STDSTRING strData = pDlg->GetData();
+	std::string strData = pDlg->GetData();
 	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
 	Lab_time->SetText(strData.c_str());
-	STDSTRING day = strData.substr(strData.length() - 2);
-	SetBtDataImage(STDSTRING(_T("DataTime2")), day);
+	std::string day = strData.substr(strData.length() - 2);
+	SetBtDataImage(std::string(_T("DataTime2")), day);
 }
 
 void CLogUI::InitTime()
@@ -212,11 +203,11 @@ void CLogUI::InitTime()
 	::GetLocalTime(&m_sysTime);
 	char strData[100] = { 0 };
 	sprintf_s(strData, "%d-%02d-%02d", m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
-	STDSTRING ShowData(strData);
-	STDSTRING day = to_string(m_sysTime.wDay);
+	std::string ShowData(strData);
+	std::string day = to_string(m_sysTime.wDay);
 
-	SetBtDataImage(STDSTRING(_T("DataTime1")), day);
-	SetBtDataImage(STDSTRING(_T("DataTime2")), day);
+	SetBtDataImage(std::string(_T("DataTime1")), day);
+	SetBtDataImage(std::string(_T("DataTime2")), day);
 
 	CLabelUI* Lab_time1 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
 	CLabelUI* Lab_time2 = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
@@ -224,13 +215,13 @@ void CLogUI::InitTime()
 	Lab_time2->SetText(ShowData.c_str());
 }
 
-void CLogUI::SetBtDataImage(STDSTRING& BT_Name, STDSTRING& day)
+void CLogUI::SetBtDataImage(std::string& BT_Name, std::string& day)
 {
 	if (day[0] == '0')
 		day = day.substr(1);
 	char strValue[200] = { 0 };
 	sprintf_s(strValue, _T("file='skin/Data/%s.png' dest='15,8,39,39'"), day.c_str());
-	STDSTRING pictureInfo(strValue);
+	std::string pictureInfo(strValue);
 	CButtonUI* btn_data = static_cast<CButtonUI*>(m_PaintManager.FindControl(BT_Name.c_str()));
 	btn_data->SetAttribute(_T("foreimage"), pictureInfo.c_str());
 }

@@ -23,10 +23,6 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-#include "Device.h"
-
-
-
 using namespace DuiLib;
 using namespace rapidjson;
 
@@ -45,14 +41,6 @@ using namespace rapidjson;
 #       pragma comment(lib, "DuiLib.lib")
 #   endif
 #endif
-
-
-#ifdef _UNICODE
-#	define STDSTRING std::wstring
-#else
-#	define STDSTRING std::string
-#endif
-
 
 
 //{{AFX_INSERT_LOCATION}}

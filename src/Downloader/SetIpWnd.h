@@ -1,6 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-#include "SetIPAddress.h"
+#include "Scene/SetIPAddress.h"
 
 #define BT_ADDSET			(_T("Add_Setting"))
 #define BT_DELSET			(_T("Delete"))

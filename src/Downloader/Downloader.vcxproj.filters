@@ -49,21 +49,6 @@
     <ClCompile Include="PlayVideoWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\BusinessLayer\CommonUtrl.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\Device.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\LoginDevice.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchDevice.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\TestWindows.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
     <ClCompile Include="FileLogInfoUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -88,42 +73,12 @@
     <ClCompile Include="..\..\common\windowutils.cpp">
       <Filter>源文件\BusinessLayer\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\BusinessLayer\DeviceManager.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchFileException.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchFileNotification.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\SearchFileWorker.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\ReciveUINotification.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\ReciveUIQunue.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
-    <ClCompile Include="MessagePump.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DownloadPackage.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
     <ClCompile Include="ProgressManager.cpp" />
-    <ClCompile Include="..\BusinessLayer\LoginException.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\ipset.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\log.cpp">
       <Filter>源文件\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BusinessLayer\PlayVideoWorker.cpp">
-      <Filter>源文件\BusinessLayer</Filter>
     </ClCompile>
     <ClCompile Include="PlayWndUI.cpp" />
     <ClCompile Include="..\..\common\cmdline_parse.cc">
@@ -161,6 +116,7 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="InitNetConfig.cpp" />
+    <ClCompile Include="MessagePump.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">

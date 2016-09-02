@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "VideoLoginUI.h"
 #include "VideoVendorUI.h"
+#include "DVR/DVRSession.h"
 
 VideoLoginUI::VideoLoginUI()
 :m_Init(false), m_pages(1)
 {
-	m_page_Count = m_DeviceList.size() / 5;
-	if (m_DeviceList.size() % 5 != 0)
-	{
-		m_page_Count += 1;
-	}
+	//m_page_Count = m_DeviceList.size() / 5;
+	//if (m_DeviceList.size() % 5 != 0)
+	//{
+	//	m_page_Count += 1;
+	//}
 }
 
 
@@ -47,37 +48,56 @@ void VideoLoginUI::OnFinalMessage(HWND hWnd)
 
 void VideoLoginUI::InitWindow()
 {
+	BuildControlDDX();
 }
 
-void VideoLoginUI::SetNetWorkState(NOTIFICATION_TYPE& eNotify)
+void VideoLoginUI::BuildControlDDX()
 {
-	CControlUI* NetWorkUI = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("Network")));
-	if (eNotify == Notification_Type_Network_status_Connect)
-		NetWorkUI->SetBkImage(_T("skin/network_online.png"));
-	else if (eNotify == Notification_Type_Network_status_Disconnect)
-		NetWorkUI->SetBkImage(_T("skin/network_offline.png"));
+	/*_ip_edit	= dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
+	_port_edit  = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Port_Edit")));
+	_brand_edit = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("brand_Edit")));
+
+	_device_list = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("Device_List")));
+
+	_pages = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("pages")));
+	_vendorCount = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("VendorCount")));
+
+	_login_info_lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("LogIn_Info_Lyt")));
+	_HLayout = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
+	_vendorList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("VendorList")));*/
 }
 
 void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 {
-	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
-	CEditUI* Edit_Port = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Port_Edit")));
-	STDSTRING strIP = Edit_IP->GetText();
-	STDSTRING strPort = Edit_Port->GetText();
-	if (strIP == strPort)
-		return;
-	m_IsLogIn = LogInDevice;
+	/*std::string brand = _brand_edit->GetText().GetData();
+	std::string ip = _ip_edit->GetText().GetData();
+	std::string port = _port_edit->GetText().GetData();*/
+
+	std::string brand("DZP");
+	std::string user, passwd;
+	std::string connectString("192.168.1.20:35");
+	DVR::DVRSession session(brand, connectString);
+	session.login(user,passwd);
+
 	Close();
 }
 
 void VideoLoginUI::OnPrevPage(TNotifyUI& msg)
 {
-	GetPrevPage();
+	if (m_pages > 1 && m_page_Count != 0)
+	{
+		m_pages -= 1;
+		OnShowDevice(m_pages);
+	}
 }
 
 void VideoLoginUI::OnNextPage(TNotifyUI& msg)
 {
-	GetNextPage();
+	if (m_pages < m_page_Count)
+	{
+		m_pages += 1;
+		OnShowDevice(m_pages);
+	}
 }
 
 void VideoLoginUI::OnClose(TNotifyUI& msg)
@@ -100,46 +120,44 @@ void VideoLoginUI::Notify(TNotifyUI& msg)
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK)
 	{
-		STDSTRING SendName = msg.pSender->GetName();
-		if (!SendName.compare(0, 6, _T("Device")))
+		CDuiString SendName = msg.pSender->GetName();
+		DUI__Trace(SendName);
+		/*if (!SendName.compare(0, 6, _T("Device")))
 		{
 			CButtonUI* subButton = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName.c_str()));
 			CEditUI* Edit_Device = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("brand_Edit")));
-			STDSTRING VendorName = subButton->GetText();
+			CDuiString VendorName = subButton->GetText();
 			Edit_Device->SetText(VendorName.c_str());
 			CreateSubvLyt();
-		}
+		}*/
 	}
 
 
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK)
 	{
-		STDSTRING SendName = msg.pSender->GetName();
-		if (!SendName.compare(0, 7, _T("SubList")))
+		CDuiString SendName = msg.pSender->GetName();
+		DUI__Trace(SendName);
+		/*if (!SendName.compare(0, 7, _T("SubList")))
 		{
 			OnShowDeviceInfo(SendName);
-		}
+		}*/
 	}
 	WindowImplBase::Notify(msg);
 }
 
 void VideoLoginUI::OnOpenVideoVendorWnd(TNotifyUI& msg)
 {
-	CVerticalLayoutUI* SubvLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("LogIn_Info_Lyt")));
-	if (SubvLyt == nullptr)
-		CreateSubvLyt();
 	std::auto_ptr<CVideoVendorUI> pDlg(new CVideoVendorUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	STDSTRING strDevice = pDlg->GetVendorName();
-	if (strDevice == _T(""))
+	CDuiString brandname = pDlg->GetVendorName();
+	if (brandname.IsEmpty())
 		return;
-	CEditUI* Edit_Device = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("brand_Edit")));
-	Edit_Device->SetText(strDevice.c_str());
 
+	//_brand_edit->SetText(brandname);
 }
 
 void VideoLoginUI::OnShowDevice(int pages)
@@ -155,14 +173,14 @@ void VideoLoginUI::OnShowDevice(int pages)
 		CLabelUI* Lab_DName = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
 		CLabelUI* Lab2 = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 2));
 		CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
-		int size = m_DeviceList.size();
+		/*int size = m_DeviceList.size();
 		if (i < size)
 		{
 			int DeviceSType = m_DeviceList[i]->nSDKType;
 			std::string DeviceName = m_CnameAndType[DeviceSType];
-			STDSTRING IP(m_DeviceList[i]->szIp);
+			CDuiString IP(m_DeviceList[i]->szIp);
 			Lab_DName->SetText(DeviceName.c_str());
-			Lab_IP->SetText(IP.c_str());
+			Lab_IP->SetText(IP);
 			Lab1->SetVisible(true);
 			Lab2->SetVisible(true);
 		}
@@ -172,171 +190,81 @@ void VideoLoginUI::OnShowDevice(int pages)
 			Lab_IP->SetText(_T(""));
 			Lab1->SetVisible(false);
 			Lab2->SetVisible(false);
-		}
+		}*/
 	}
 	ShowPagesLable(pages);
 }
 
-void VideoLoginUI::OnShowDeviceInfo(STDSTRING& SendName)
+void VideoLoginUI::OnShowDeviceInfo(CDuiString& SendName)
 {
-	CVerticalLayoutUI* SubvLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("LogIn_Info_Lyt")));
-	if (SubvLyt == nullptr)
+	//CVerticalLayoutUI* SubvLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("LogIn_Info_Lyt")));
+	/*if (_login_info_lyt == nullptr)
 		CreateSubvLyt();
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("Device_List")));
-	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SendName.c_str()));
+	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, SendName));
 	CLabelUI* Lab_DName = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 	CEditUI* Edit_Device = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("brand_Edit")));
 	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
 	CEditUI* Edit_Port = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Port_Edit")));
+	std::string name;
 	
-	STDSTRING strIP = Lab_IP->GetText();
-	STDSTRING strName = Lab_DName->GetText();
+	CDuiString strIP = Lab_IP->GetText();
+	CDuiString strName = Lab_DName->GetText();
 	if (strName == strIP)
 	{
-		Edit_Device->SetText(nullptr);
-		Edit_IP->SetText(nullptr);
-		Edit_Port->SetText(nullptr);
+		_brand_edit->SetText("");
+		_ip_edit->SetText("");
+		_port_edit->SetText("");
 		return;
 	}
 		
 	int port;
 	for (UINT i = 0; i < m_DeviceList.size(); i++)
 	{
-		STDSTRING IP(m_DeviceList[i]->szIp);
+		CDuiString IP(m_DeviceList[i]->szIp);
 		if (IP == strIP)
 		{			
 			port = m_DeviceList[i]->nPort;
 		}
 	}
-	Edit_Device->SetText(strName.c_str());
-	Edit_IP->SetText(strIP.c_str());
-	Edit_Port->SetText(to_string(port).c_str());
-}
-
-void VideoLoginUI::GetPrevPage()
-{
-	if (m_pages > 1 && m_page_Count != 0)
-	{
-		m_pages -= 1;
-		OnShowDevice(m_pages);
-	}
-}
-
-void VideoLoginUI::GetNextPage()
-{
-	if (m_pages < m_page_Count)
-	{
-		m_pages += 1;
-		OnShowDevice(m_pages);
-	}	
+	_brand_edit->SetText(strName);
+	_ip_edit->SetText(strIP);
+	_port_edit->SetText(to_string(port).c_str());
+	*/
 }
 
 void VideoLoginUI::ShowPagesLable(int page)
 {
-	CLabelUI* Lab_page = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("pages")));
-	STDSTRING strText = to_string(m_pages) + STDSTRING(_T("/")) + to_string(m_page_Count);
+	CDuiString text;
+	text.Format(_T("%d / %d"), m_pages, m_page_Count);
+	/*
 	if (m_page_Count == 0)
-		Lab_page->SetText(_T("0/0"));
+		_pages->SetText(_T("0/0"));
 	else
-		Lab_page->SetText(strText.c_str());
+		_pages->SetText(text);
+	*/
 }
 
 void VideoLoginUI::CountDevice()
 {
-	CLabelUI* Lable_Count = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("VendorCount")));
-	char str[200] = { 0 };
-	//sprintf_s(str, "*搜索到%d台设备", m_DeviceList.size());
-	STDSTRING ShowText(str);
-	Lable_Count->SetText(ShowText.c_str());
+	CDuiString text;
+	text.Format(_T("*Find %d device"),1000);
+	//_vendorCount->SetText(text);
 }
 
 void VideoLoginUI::LogIn()
 {
-	if (m_IsLogIn == NoLogDevice)
-		return;
-	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
-	CEditUI* Edit_Port = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Port_Edit")));
-	STDSTRING strIP = Edit_IP->GetText();
-	STDSTRING strPort = Edit_Port->GetText();
-	int DevicePort = stoi(strPort);
-	/*std::vector<Device*>& m_listDevice = CLoginDevice::getInstance().GetDeviceList();
-	for (size_t i = 0; i < m_listDevice.size(); i++)
-	{
-		if (m_listDevice[i]->getIP() == strIP)
-		{
-			return;
-		}
-	}
-	for (size_t i = 0; i < m_DeviceList.size(); i++)
-	{
-		if (string(m_DeviceList[i]->szIp) == strIP)
-		{
-			CLoginDevice::getInstance().Login(m_DeviceList[i]->pVendor, strIP, DevicePort);
-			m_Device = CLoginDevice::getInstance().GetDevice(strIP);
-		}
-	}	*/
-}
-
-Device* VideoLoginUI::GetLonInDevice()
-{
-	if (m_IsLogIn == NoLogDevice)
-		return nullptr;
-	CEditUI* Edit_IP = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Edit")));
-	STDSTRING strIP = Edit_IP->GetText();
-	//m_Device = CLoginDevice::getInstance().GetDevice(strIP);
-	return m_Device;
-}
-
-void VideoLoginUI::InsertVendorToDB()
-{
-	STDSTRING configFile;
-	TCHAR PATH[MAX_PATH] = { 0 };
-	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
-	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + STDSTRING(_T("Device.json"));
-
-	ifstream ifs(configFile);
-	locale utf8;
-	ifs.imbue(utf8);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-		return;
-
-	/*std::vector<SearchFactory> sfRecord;
-	SearchFactory sf;
-
-
-	typedef Value::ConstMemberIterator Iter;
-	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
-	{
-		STDSTRING TypeName = it->name.GetString();
-		const Value& a = d[TypeName.c_str()];
-		assert(a.IsArray());
-		if (!a.IsArray())
-			continue;
-		STDSTRING spell = a[0].GetString();
-		STDSTRING VendorDeviceName = a[1].GetString();
-
-		sf.set<0>(spell);
-		sf.set<1>(VendorDeviceName);
-		sfRecord.push_back(sf);
-		int type = stoi(TypeName);
-		m_CnameAndType.insert(pair<int, string>(type, VendorDeviceName));
-	}
-	m_pDb->writeDataByVector(INSERT_SEARCH_FACTORY, sfRecord);*/
+	
 }
 
 void VideoLoginUI::SearchVendorList()
 {
-	CEditUI* Edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("brand_Edit")));
-	CHorizontalLayoutUI* vLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
-	CVerticalLayoutUI* SubvLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindSubControlByName(vLyt, _T("LogIn_Info_Lyt")));
-	CVerticalLayoutUI* subList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindSubControlByName(vLyt, _T("VendorList")));
-
-	STDSTRING Input = Edit_name->GetText();
+	//CHorizontalLayoutUI* vLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
+	//CVerticalLayoutUI* SubvLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindSubControlByName(vLyt, _T("LogIn_Info_Lyt")));
+	//CVerticalLayoutUI* subList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindSubControlByName(vLyt, _T("VendorList")));
+	/*
+	std::string Input = _brand_edit->GetText();
 	for (int j = 0; j < Input.size(); j++)
 	{
 		if (Input[j] >= 97 && Input[j] <= 122)
@@ -345,42 +273,37 @@ void VideoLoginUI::SearchVendorList()
 		}
 	}
 	m_sRecord.clear();
-	STDSTRING tmp = Input;
-//	m_pDb->searchFactoryName(Input, m_sRecord);
 	std::vector<string>  text;
 	text = m_sRecord;
 	int Count = Input == _T("") ? 0 :m_sRecord.size();
 
-	if (Edit_name->GetText() != _T("") && Count != 0)
-	{
-		if (SubvLyt != nullptr)
-		{
-			CreateSubvLyt();
-		}
-		InsertVendorToList();
-	}
-	else if ((Count == 0 || Edit_name->GetText() == _T("")) && subList != nullptr)
+	if (_brand_edit->GetText() != _T("") && Count != 0)
 	{
 		CreateSubvLyt();
+		InsertVendorToList();
 	}
+	else if ((Count == 0 || _brand_edit->GetText() == _T("")))
+	{
+		CreateSubvLyt();
+	}*/
 }
 
 void VideoLoginUI::InsertVendorToList()
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("VendorList")));
 	int count = m_sRecord.size();
 	for (int i = 0; i < 8; i ++)
 	{
-		CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(vLyt, DUI_CTR_BUTTON, i));
+		/*CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindSubControlByClass(_HLayout, DUI_CTR_BUTTON, i));
 		if (i < count)
 			button->SetText(m_sRecord[i].c_str());
 		else
-			button->SetText(_T(""));
+			button->SetText(_T(""));*/
 	}
 }
 
 void VideoLoginUI::CreateSubvLyt()
 {
+	/*
 	CDialogBuilder builder;
 	CHorizontalLayoutUI* MvLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
 	CVerticalLayoutUI* subList = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindSubControlByName(MvLyt, _T("VendorList")));
@@ -388,13 +311,14 @@ void VideoLoginUI::CreateSubvLyt()
 	if (subList == nullptr)
 	{
 		CVerticalLayoutUI* Sub_List = (CVerticalLayoutUI*)(builder.Create(_T("xml//VendorListWnd.xml"), (UINT)0, NULL, &m_PaintManager));
-		MvLyt->Remove(SubvLyt);
+		MvLyt->Remove(_login_info_lyt);
 		MvLyt->Add(Sub_List);
 	}
-	else if (SubvLyt == nullptr)
+	else if (_login_info_lyt == nullptr)
 	{
 		CVerticalLayoutUI* sub_vlyt = (CVerticalLayoutUI*)(builder.Create(_T("xml//LogIn_Info_Lyt.xml"), (UINT)0, NULL, &m_PaintManager));
 		MvLyt->Remove(subList);
 		MvLyt->Add(sub_vlyt);
-	}	
+	}
+	*/	
 }

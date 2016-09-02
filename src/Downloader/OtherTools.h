@@ -14,11 +14,9 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 
-	void OnOpenExeFile(STDSTRING& filePath);
+	void OnOpenExeFile(std::string& filePath);
 
 	void HandleNotificationNetworkStatus(CNotificationNetworkStatus* pNf);
-	void SetNetWorkState(NOTIFICATION_TYPE& eNotify);
-
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

@@ -41,11 +41,11 @@ void CTimeUI::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK)
 	{
-		STDSTRING strSendName = msg.pSender->GetName();
+		std::string strSendName = msg.pSender->GetName();
 		if (strSendName == _T("bt_ok"))
 		{
 			CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("time_text")));
-			STDSTRING strTime = Lab_time->GetText();
+			std::string strTime = Lab_time->GetText();
 			m_Site = 0;
 		}
 		if (!strSendName.compare(0, 3, _T("num")))
@@ -68,11 +68,11 @@ void CTimeUI::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
-void CTimeUI::InputControl(STDSTRING& Input)
+void CTimeUI::InputControl(std::string& Input)
 {
-	STDSTRING num = Input.substr(3);
+	std::string num = Input.substr(3);
 	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("time_text")));
-	STDSTRING strTime = Lab_time->GetText();
+	std::string strTime = Lab_time->GetText();
 	if (m_Site == 0)
 	{
 		strTime[0] = num[0];
@@ -80,12 +80,12 @@ void CTimeUI::InputControl(STDSTRING& Input)
 		strTime[3] = '-';
 		strTime[4] = '-';
 		Lab_time->SetText(strTime.c_str());
-		if (num == STDSTRING(_T("2")))
+		if (num == std::string(_T("2")))
 		{
 			SetBtNumEnabled(0, 3, true);
 			SetBtNumEnabled(4, 9, false);
 		}
-		else if (num == STDSTRING(_T("0")) || num == STDSTRING(_T("1")))
+		else if (num == std::string(_T("0")) || num == std::string(_T("1")))
 		{
 			SetBtNumEnabled(0, 9, true);
 		}
@@ -119,19 +119,19 @@ void CTimeUI::InputControl(STDSTRING& Input)
 
 void CTimeUI::SetBtNumEnabled(int begin_num, int end_num, bool IsEnabled)
 {
-	STDSTRING strBtName;
+	std::string strBtName;
 	for (int i = begin_num; i <= end_num; i++)
 	{
-		strBtName = STDSTRING(_T("num")) + to_string(i);
+		strBtName = std::string(_T("num")) + to_string(i);
 		CButtonUI* btNum = static_cast<CButtonUI*>(m_PaintManager.FindControl(strBtName.c_str()));
 		btNum->SetEnabled(IsEnabled);
 	}
 }
 
-STDSTRING CTimeUI::GetTime()
+std::string CTimeUI::GetTime()
 {
 	CLabelUI* Lab_time = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("time_text")));
-	STDSTRING returnTime = Lab_time->GetText();
+	std::string returnTime = Lab_time->GetText();
 	for (UINT i = 0; i < returnTime.size(); i++)
 	{
 		if (returnTime[i] == '-'){

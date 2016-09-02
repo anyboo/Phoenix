@@ -3,10 +3,9 @@
 #include "PlayVideoWnd.h"
 #include "FileLogInfoUI.h"
 
-SearchFileUI::SearchFileUI(Device* device)
+SearchFileUI::SearchFileUI()
 :m_InitShowFileList(false), m_DownloadID(1)
 {
-	m_device = device;
 }
 
 
@@ -67,7 +66,7 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 		m_InitShowFileList = true;
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK){
-		STDSTRING SendName = msg.pSender->GetName();
+		std::string SendName = msg.pSender->GetName();
 		if (!SendName.compare(0, 6, _T("option")))
 		{
 			GetSelectOption(SendName);
@@ -105,23 +104,23 @@ void SearchFileUI::Notify(TNotifyUI& msg)
 void SearchFileUI::OnShowFileList()
 {
 	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
-	STDSTRING optionName, buttonName, SubListName;
+	std::string optionName, buttonName, SubListName;
 }
 
-STDSTRING SearchFileUI::TimeChange(__time64_t inputTime)
+std::string SearchFileUI::TimeChange(__time64_t inputTime)
 {
 	struct tm OutTime;
 	OutTime = { 0 };
 	
-	OutTime = *localtime(&inputTime);
+	//OutTime = *localtime(&inputTime);
 	OutTime.tm_year += 1900;
 	OutTime.tm_mon += 1;
 	char strTime[200] = { 0 };
 	sprintf_s(strTime, "%d-%02d-%02d  %02d:%02d", OutTime.tm_year, OutTime.tm_mon, OutTime.tm_mday, OutTime.tm_hour, OutTime.tm_min);
-	return STDSTRING(strTime);
+	return std::string(strTime);
 }
 
-void SearchFileUI::GetFileInfo(STDSTRING& SendName)
+void SearchFileUI::GetFileInfo(std::string& SendName)
 {
 }
 
@@ -134,7 +133,7 @@ void SearchFileUI::OnPlayVideo(int CurSel)
 	pDlg->ShowModal();*/
 }
 
-void SearchFileUI::GetSelectOption(STDSTRING& optionName)
+void SearchFileUI::GetSelectOption(std::string& optionName)
 {
 	std::string strTag = optionName.substr(6);
 	size_t tag = stoi(strTag);

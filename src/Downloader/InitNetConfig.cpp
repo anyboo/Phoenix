@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "InitNetConfig.h"
-#include "SetIPAddress.h"
-#include "DHCPClient.h"
-#include "ARPClient.h"
+
+#include "Scene/ARPClient.h"
+#include "Scene/DHCPClient.h"
+
 
 using Poco::Net::NetworkInterface;
 using Poco::Net::IPAddress;
