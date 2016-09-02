@@ -62,6 +62,10 @@ public:
 	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo);
 
 	static int FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout);
+
+	static int stopPlayback(long lPlayHandle);
+	static int setPlayback(__int64 playbackHandle, __int32 pos);
+	static int getPlayback(__int64 playbackHandle, __int32 *pos);
 protected:
 	static void __stdcall CallbackFn(long handle, long totalSize, long curSize, long opCode);
 	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);

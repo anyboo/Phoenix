@@ -19,13 +19,16 @@ extern "C"
 	typedef bool (CALL_METHOD *PH264_DVR_SetConnectTime)(long nWaitTime, long nTryTimes);
 
 	typedef long (CALL_METHOD *PH264_DVR_GetFileByTime)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, char *sSavedFileDIR, bool bMerge ,
-		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);
-
-	typedef long (CALL_METHOD *PH264_DVR_PlayBackByName)(long lLoginID, H264_DVR_FILE_DATA *sPlayBackFile, fDownLoadPosCallBack cbDownLoadPos, 
-		fRealDataCallBack fDownLoadDataCallBack, long dwDataUser);
+		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);	
 
 	typedef long (CALL_METHOD *PH264_DVR_FindFile)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, H264_DVR_FILE_DATA *lpFileData, int lMaxCount, 
 		int *findcount, int waittime);
+
+	typedef long (CALL_METHOD *PH264_DVR_PlayBackByName)(long lLoginID, H264_DVR_FILE_DATA *sPlayBackFile, fDownLoadPosCallBack cbDownLoadPos,
+		fRealDataCallBack fDownLoadDataCallBack, long dwDataUser);
+	typedef bool (CALL_METHOD *PH264_DVR_StopPlayBack)(long lPlayHandle);
+	typedef bool (CALL_METHOD *PH264_DVR_SetPlayPos)(long lPlayHandle, float fRelativPos);
+	typedef float (CALL_METHOD *PH264_DVR_GetPlayPos)(long lPlayHandle);
 }
 
 std::string path("sdk\\NetSdk.dll");
@@ -283,6 +286,31 @@ void Utility::CallbackFn(long handle, long totalSize, long curSize, long opCode)
 int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)
 {
 	return 0;
+}
+
+int Utility::stopPlayback(long lPlayHandle)
+{
+	poco_assert(sl.hasSymbol("H264_DVR_StopPlayBack"));
+	PH264_DVR_StopPlayBack H264_DVR_StopPlayBack = (PH264_DVR_StopPlayBack)sl.getSymbol("H264_DVR_StopPlayBack");
+	
+	return  H264_DVR_StopPlayBack(lPlayHandle);	
+}
+
+int Utility::setPlayback(__int64 playbackHandle, __int32 pos)
+{
+	poco_assert(sl.hasSymbol("H264_DVR_SetPlayPos"));
+	PH264_DVR_SetPlayPos H264_DVR_SetPlayPos = (PH264_DVR_SetPlayPos)sl.getSymbol("H264_DVR_SetPlayPos");
+
+	return H264_DVR_SetPlayPos(playbackHandle, pos / 100.0);
+}
+
+int Utility::getPlayback(__int64 playbackHandle, __int32 *pos)
+{
+	poco_assert(sl.hasSymbol("H264_DVR_GetPlayPos"));
+	PH264_DVR_GetPlayPos H264_DVR_GetPlayPos = (PH264_DVR_GetPlayPos)sl.getSymbol("H264_DVR_GetPlayPos");
+
+	*pos = H264_DVR_GetPlayPos(playbackHandle) * 100;
+	return true;
 }
 
 }}
