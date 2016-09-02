@@ -14,8 +14,26 @@ public:
 	~Utility();
 
 	typedef void* HANDLE;
-	typedef struct FILEINFO{} FILEINFO;
-	typedef struct TIMEINFO{} TIMEINFO;
+	typedef struct FILEINFO
+	{
+		int ch;						//通道号
+		int size;					//文件大小
+		char sFileName[108];		///< 文件名
+		__time64_t stBeginTime;	///< 文件开始时间
+		__time64_t stEndTime;		///< 文件结束时间
+		HWND hwnd;
+	} FILEINFO;
+
+	typedef struct TIMEINFO
+	{
+		int ch;						//通道号
+		int size;					//文件大小
+		char sFileName[108];		///< 文件名
+		__time64_t stBeginTime;	///< 文件开始时间
+		__time64_t stEndTime;		///< 文件结束时间
+		HWND hwnd;
+	} TIMEINFO;
+
 	typedef struct DVRINFO{} DVRINFO;
 	typedef struct CONDITION{} CONDITION;
 
