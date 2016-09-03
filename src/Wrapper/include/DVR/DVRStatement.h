@@ -18,6 +18,13 @@ namespace DVR {
 		DVRStatement& reset(DVRSession& session);
 		void swap(DVRStatement& other);
 
+		template <typename T>
+		DVRStatement& operator << (const T& t)
+		{
+			_pImpl->add(t);
+			return *this;
+		}
+
 		void beginList(const std::string& beginTime, const std::string& endTime);
 		void beginDownload(const std::string& filename);
 		void play(const std::string& filename);

@@ -3,6 +3,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/DateTime.h>
 #include "DVR/DVRSessionImpl.h"
+#include <sstream>
 
 namespace DVR {
 
@@ -18,6 +19,12 @@ namespace DVR {
 		void beginDownload(const std::string& filename);
 		void play(const std::string& filename);
 		void abort();
+
+		template <typename T>
+		void add(const T& t)
+		{
+			_ostr << t;
+		}
 
 	protected:
 		virtual void donwloadByName(const std::string& filename) = 0;
@@ -35,5 +42,6 @@ namespace DVR {
 
 	private:
 		DVRSessionImpl&	_rSession;
+		std::ostringstream  _ostr;
 	};
 }
