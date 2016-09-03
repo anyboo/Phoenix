@@ -41,6 +41,8 @@ namespace DVR {
 	{
 		/*
 		download one file use one session, so we must manage sessions for file list.
+		we can use SessionPool to download multiple files.
+		class SessionPool
 		*/
 		_pImpl->beginDownload(filename);
 	}

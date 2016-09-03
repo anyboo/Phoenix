@@ -62,6 +62,9 @@ void DVRStatementImpl::playByTime(const Poco::DateTime& time)
 		Utility::throwException(_handle);
 }
 
+/*
+list 需要异步操作
+*/
 void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTime& endTime)
 {
 	Utility::CONDITION condition;

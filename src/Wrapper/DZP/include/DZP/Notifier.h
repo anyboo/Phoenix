@@ -15,15 +15,13 @@ public:
 
 	typedef Poco::BasicEvent<void> Event;
 
-	Event pos;
+	Event position;
 
 	static const EnabledEventType DVRLITE_NOTIFY_DOWNLOAD = 1;
 	static const EnabledEventType DVRLITE_NOTIFY_PLAYBACK = 2;
 
 	Notifier(const DVRSession& session, EnabledEventType enabled);
 	~Notifier();
-
-	static void __stdcall ProcessCallbackFn(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 
 	bool operator == (const Notifier& other) const;
 	Poco::Int64 getPos() const;
