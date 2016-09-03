@@ -30,7 +30,6 @@ public:
 	virtual void abort();
 	virtual void setLoginTimeout(std::size_t timeout);
 	virtual std::size_t getLoginTimeout() const;
-
 	virtual DVR::DVRStatementImpl* createStatementImpl();
 
 private:

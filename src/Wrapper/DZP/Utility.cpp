@@ -99,6 +99,17 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 	handle = loginHandle;
 
 	std::cout << "login handle: " << handle << std::endl;
+
+	/////////////////test
+	//DVR::DZPLite::Utility::TIMEINFO time1 = { 0 };
+	//time1.ch = 1;
+
+	//time1.stEndTime = _time64(NULL);
+	//struct tm *ptm = _localtime64(&time1.stEndTime);
+	//ptm->tm_mday--;
+	//time1.stBeginTime = _mktime64(ptm);
+	//FindFile(handle, time1, 5000);
+	//////////////////////////////
 	
 	return handle;
 }
@@ -267,6 +278,7 @@ int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
 int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout)
 {
 	int count = 0;
+	std::cout << "find file" << std::endl;
 	//int rc = H264_DVR_FindFile(*_pDvr, &condition, &result.front(), maxCount, &count, timeout);
 	poco_assert(sl.hasSymbol("H264_DVR_FindFile"));
 	PH264_DVR_FindFile H264_DVR_FindFile = (PH264_DVR_FindFile)sl.getSymbol("H264_DVR_FindFile");
@@ -282,12 +294,17 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	TMToNetTime(Tm, info.endTime);
 
 	H264_DVR_FILE_DATA nriFileinfo[2000];
-	int fileCount;
-	if (H264_DVR_FindFile((long)handle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &fileCount, timeout) <= 0)
+	//int fileCount;
+	if (H264_DVR_FindFile((long)handle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &count, timeout) <= 0)
 	{
+		std::cout << "find failer" << std::endl;
 		return 0;
 	}
+	std::cout << "find file count: " << count << std::endl;
 
+	//////////////////////////test
+
+	//////////////////////////////
 	return count;
 }
 

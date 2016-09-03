@@ -5,7 +5,7 @@
 #include <Poco/SharedLibrary.h>
 #include <Poco/Path.h>
 
-std::string path = Poco::Path::current() + "\\sdk\\DZP\\NetSdk.dll";
+std::string path = Poco::Path::current() + "sdk\\DZP\\NetSdk.dll";
 Poco::SharedLibrary sl(path);
 
 const DZPLiteConnectorRegistrator DvrDZPLiteConnectorRegistrator;

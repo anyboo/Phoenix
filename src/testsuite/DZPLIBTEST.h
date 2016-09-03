@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Poco/CppUnit/TestCase.h"
+#include "DZP/Utility.h"
 #include "DZP/DVRSessionImpl.h"
 #include "DZP/DVRStatementImpl.h"
 #include "DZP/DVRConnector.h"
-#include "DZP/Utility.h"
+
+
+
 
 class DZPLIBTEST : public CppUnit::TestCase
 {
@@ -13,7 +16,7 @@ public:
 	~DZPLIBTEST();
 
 	void testlogin();
-	void testSession();
+	void testSession();	
 
 	static CppUnit::Test* suite();
 private:
