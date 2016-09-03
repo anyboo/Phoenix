@@ -22,16 +22,21 @@ public:
 
 	DVRSessionImpl(const std::string& deviceLocation, /*192.168.1.22:35*/
 		std::size_t timeout = LOGIN_TIMEOUT_DEFAULT);
-	virtual ~DVRSessionImpl();
+	~DVRSessionImpl();
 
-	virtual void login(const std::string& user = "", const std::string& password = "");
-	virtual void logout();
-	virtual bool isLoggedIn()const;
-	virtual void abort();
-	virtual void setLoginTimeout(std::size_t timeout);
-	virtual std::size_t getLoginTimeout() const;
+	void login(const std::string& user = "", const std::string& password = "");
+	void logout();
+	bool isLoggedIn()const;
 
-	virtual DVR::DVRStatementImpl* createStatementImpl();
+	void list();
+	void download();
+	void playback();
+	void abort();
+	const std::string& connectorName() const;
+	void setLoginTimeout(std::size_t timeout);
+	std::size_t getLoginTimeout() const;
+
+	DVR::DVRStatementImpl* createStatementImpl();
 
 private:
 	std::string _connector;
@@ -42,6 +47,12 @@ private:
 	Poco::Mutex _mutex;
 	Poco::Net::SocketAddress _addr;
 };
+
+inline const std::string& DVRSessionImpl::connectorName() const
+{
+	return _connector;
+}
+
 
 }}
 
