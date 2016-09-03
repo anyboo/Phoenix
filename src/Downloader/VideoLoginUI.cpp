@@ -77,11 +77,13 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString user = _user->GetText();
 	CDuiString passwd = _pswd->GetText();
 
+	if (ip.IsEmpty() || port.IsEmpty()) return;
+
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
 	connectString = connectString + port;
-//	DVR::DVRSession session(brand.GetData(), connectString.GetData());
-//	session.login(user.GetData(),passwd.GetData());
+	DVR::DVRSession session("DZP", connectString.GetData());
+	session.login(user.GetData(),passwd.GetData());
 
 	CTestData::getInstance()->SaveLoginInfo(brand.GetData(), ip.GetData());
 	Close();

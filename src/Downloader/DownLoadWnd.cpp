@@ -173,13 +173,13 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	/* start to search file on specify device.
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
+//	start to search file on specify device.
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
-	*/
+
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)

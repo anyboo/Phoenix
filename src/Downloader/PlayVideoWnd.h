@@ -19,6 +19,8 @@ public:
 
 	void BuildControlDDX();
 
+	void BeginPlay();
+
 	void OnCloseWnd(TNotifyUI& msg);
 
 	void OnStartStop(TNotifyUI& msg);

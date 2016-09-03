@@ -33,7 +33,9 @@ public:
 
 	void OnShowFileList();
 
-	std::string TimeChange(__time64_t inputTime);
+	void GetFileCountAndSize();
+
+	CDuiString TimeChange(__time64_t inputTime);
 
 	void GetSelectOption(CDuiString& optionName);
 
@@ -49,8 +51,9 @@ private:
 	std::vector<size_t>		_checked_files;
 	IsDownLoadFile		m_IsDownLoad;
 	size_t				m_DownloadID;
-
+	std::vector<SearchFileInfo> _file_info;
 private:
 	CListUI*			_pList;
 	COptionUI*			_oCheckAll;
+	CLabelUI*			_lab_CountText;
 };

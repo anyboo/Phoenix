@@ -19,7 +19,6 @@ public:
 	
 protected:
 	CListContainerElementUI* AddChannels(size_t Channel_Count);
-	void DeleteChannelList(int Cursel, int channels);
 
 private:
 	CPaintManagerUI* ppm;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayVideoWnd.h"
 #include "PlayWndUI.h"
+#include "DVR/DVRSession.h"
 
 CPlayVideoWnd::CPlayVideoWnd()
 :m_IsPlay(true), m_stopPos(0)
@@ -31,13 +32,20 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 void CPlayVideoWnd::InitWindow()
 {
 	BuildControlDDX();
+	BeginPlay();
+}
+
+void CPlayVideoWnd::BeginPlay()
+{
+	Serach_fileInfo file_info;
+	CTestData::getInstance()->GetPlayFileInfo(file_info);
+	DVR::DVRSession session();
 }
 
 void CPlayVideoWnd::BuildControlDDX()
 {
 	_btn_play = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Start_stop")));
 	_slider = dynamic_cast<CSliderUI*>(m_PaintManager.FindControl(_T("play_progress")));
-
 }
 
 CDuiString CPlayVideoWnd::GetSkinFile()

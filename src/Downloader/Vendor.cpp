@@ -172,8 +172,4 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	}
 }
 
-void CVendor::DeleteChannelList(int Cursel, int channels)
-{
-
-}
 
