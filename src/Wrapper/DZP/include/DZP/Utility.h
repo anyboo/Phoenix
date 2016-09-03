@@ -77,13 +77,13 @@ public:
 			for (CBMapIt it = retMapRange.first; it != retMapRange.second; ++it)
 			{
 				poco_assert(it->second.first != 0);
-				if ((callbackFn == 0) && (*pRet == *it->second.second))
+				if ((callbackFn == 0) && (*pParam == *it->second.second))
 				{
 					retMap.erase(it);
 					return true;
 				}
 
-				if ((callbackFn == it->second.first) && (*pRet == *it->second.second))
+				if ((callbackFn == it->second.first) && (*pParam == *it->second.second))
 				{
 					it->second.second = pParam;
 					return true;

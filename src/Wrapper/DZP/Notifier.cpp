@@ -27,8 +27,8 @@ bool Notifier::enableDownload()
 {
 	Poco::Mutex::ScopedLock l(_mutex);
 
-	//if (Utility::registerUpdateHandler(_session, &dvrDownloadCallbackFn, this))
-	//	_enabledEvents |= DVRLITE_NOTIFY_DOWNLOAD;
+	if (Utility::registerUpdateHandler(_session, &dvrDownloadCallbackFn, this))
+		_enabledEvents |= DVRLITE_NOTIFY_DOWNLOAD;
 
 	return downloadEnabled();
 }
@@ -37,8 +37,8 @@ bool Notifier::disableDownload()
 {
 	Poco::Mutex::ScopedLock l(_mutex);
 
-	/*if (Utility::registerUpdateHandler(_session, (Utility::CallbackType) 0, this))
-		_enabledEvents &= ~DVRLITE_NOTIFY_DOWNLOAD;*/
+	if (Utility::registerUpdateHandler(_session, (Utility::EventCallbackType) 0, this))
+		_enabledEvents &= ~DVRLITE_NOTIFY_DOWNLOAD;
 
 	return !downloadEnabled();
 }
@@ -52,10 +52,10 @@ bool Notifier::enablePlayback()
 {
 	
 	Poco::Mutex::ScopedLock l(_mutex);
-/*
+
 	if (Utility::registerUpdateHandler(_session, &dvrPlaybackCallbackFn, this))
 		_enabledEvents |= DVRLITE_NOTIFY_PLAYBACK;
-*/
+
 	return playbackEnabled();
 }
 
@@ -63,8 +63,8 @@ bool Notifier::disablePlayback()
 {
 	Poco::Mutex::ScopedLock l(_mutex);
 
-	//if (Utility::registerUpdateHandler(_session, (Utility::CallbackType) 0, this))
-	//	_enabledEvents &= ~DVRLITE_NOTIFY_PLAYBACK;
+	if (Utility::registerUpdateHandler(_session, (Utility::EventCallbackType) 0, this))
+		_enabledEvents &= ~DVRLITE_NOTIFY_PLAYBACK;
 
 	return !playbackEnabled();
 }
