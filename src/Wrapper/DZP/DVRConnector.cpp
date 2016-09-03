@@ -3,8 +3,9 @@
 #include "DZP/DVRSessionImpl.h"
 #include "DZP/Utility.h"
 #include <Poco/SharedLibrary.h>
+#include <Poco/Path.h>
 
-std::string path("F:\\project\\Phoenix\\src\\Wrapper\\DZP\\sdk\\NetSdk.dll");
+std::string path = Poco::Path::current() + "\\sdk\\DZP\\NetSdk.dll";
 Poco::SharedLibrary sl(path);
 
 const DZPLiteConnectorRegistrator DvrDZPLiteConnectorRegistrator;

@@ -92,9 +92,13 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 	int nError = 0;
 
 	poco_assert(sl.hasSymbol("H264_DVR_Login"));
-	PH264_DVR_Login pDZPLogin = (PH264_DVR_Login)sl.getSymbol("H264_DVR_Login");
-	long loginHandle = pDZPLogin((char *)_addr.toString().c_str(), _addr.port(), (char *)user.c_str(), (char *)password.c_str(), &OutDev, &nError, TCPSOCKET);
-	handle = &loginHandle;
+	PH264_DVR_Login H264_DVR_Login = (PH264_DVR_Login)sl.getSymbol("H264_DVR_Login");
+	sockaddr_in* pSin = (sockaddr_in*)_addr.addr();
+	std::cout << "IP:" << inet_ntoa(pSin->sin_addr) << "port:" << _addr.port() << std::endl;
+	long loginHandle = H264_DVR_Login(inet_ntoa(pSin->sin_addr), _addr.port(), (char *)user.c_str(), (char *)password.c_str(), &OutDev, &nError, TCPSOCKET);
+	handle = loginHandle;
+
+	std::cout << "login handle: " << handle << std::endl;
 	
 	return handle;
 }
@@ -103,10 +107,15 @@ int Utility::logout(Utility::HANDLE handle)
 {
 	//int rc = H264_DVR_Logout(*_pDvr);
 	poco_assert(sl.hasSymbol("H264_DVR_Logout"));
-	PH264_DVR_Logout pDZPLogout = (PH264_DVR_Logout)sl.getSymbol("H264_DVR_Logout");
-	pDZPLogout((long)handle);
+	PH264_DVR_Logout H264_DVR_Logout = (PH264_DVR_Logout)sl.getSymbol("H264_DVR_Logout");
 
-	return success;
+	if (H264_DVR_Logout(handle))
+	{
+		std::cout << "logout success" << std::endl;
+		return true;
+	}		
+	else
+		return false;
 }
 
 int Utility::setTimeOut(std::size_t timeout, std::size_t times)
@@ -121,6 +130,7 @@ int Utility::setTimeOut(std::size_t timeout, std::size_t times)
 
 int Utility::Init()
 {	
+	std::cout << "init " << std::endl;
 	poco_assert(sl.isLoaded());
 	poco_assert(sl.hasSymbol("H264_DVR_Init"));
 	PH264_DVR_Init H264_DVR_Init = (PH264_DVR_Init)sl.getSymbol("H264_DVR_Init");
@@ -130,6 +140,7 @@ int Utility::Init()
 int Utility::CleanUp()
 {
 	//bool rc = H264_DVR_Cleanup();
+	std::cout << "cleat up" << std::endl;
 	poco_assert(sl.isLoaded());
 	poco_assert(sl.hasSymbol("H264_DVR_Cleanup"));
 	PH264_DVR_Cleanup H264_DVR_Cleanup = (PH264_DVR_Cleanup)sl.getSymbol("H264_DVR_Cleanup");

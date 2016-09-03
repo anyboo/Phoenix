@@ -13,7 +13,7 @@ class DZPLite_API Utility
 public:
 	~Utility();
 
-	typedef void* HANDLE;
+	typedef long HANDLE;
 	typedef struct FILEINFO
 	{
 		int ch;						//Í¨µÀºÅ

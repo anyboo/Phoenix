@@ -12,23 +12,26 @@ DZPLIBTEST::~DZPLIBTEST()
 {
 }
 
-void DZPLIBTEST::testConnect()
+void DZPLIBTEST::testlogin()
 {
-	DVR::DZPLite::DVRConnector connect;
+	DVR::DZPLite::DVRSessionImpl session("192.168.0.32:34567", 5000);
+	session.login("admin", "");
+	session.logout();
 }
 
 void DZPLIBTEST::testSession()
 {
 	std::cout << "test Session" << std::endl;
 	int i = 0;
-	assert(i == 0);
+	assert(i > 0);
 }
 
 CppUnit::Test* DZPLIBTEST::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("DZPLIBTEST");
-
-	CppUnit_addTest(pSuite, DZPLIBTEST, testSession);
+	
+	CppUnit_addTest(pSuite, DZPLIBTEST, testlogin);
+	//CppUnit_addTest(pSuite, DZPLIBTEST, testSession);
 
 	return pSuite;
 }

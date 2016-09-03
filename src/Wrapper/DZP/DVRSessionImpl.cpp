@@ -70,8 +70,8 @@ void DVRSessionImpl::logout()
 }
 
 bool DVRSessionImpl::isLoggedIn()const
-{
-	poco_assert(_handle > 0);
+{	
+	poco_assert(_handle == 0);
 	return _connected;
 }
 
