@@ -83,7 +83,7 @@
       <OutputFile>$(TargetPath)</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;$(SolutionDir)\src\BusinessLayer\JXJVendor\sdk;$(SolutionDir)\src\BusinessLayer\DZPVendor\sdk;$(SolutionDir)\src\BusinessLayer\DHVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk;$(SolutionDir)\src\BusinessLayer\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;Ws2_32.lib;wpcap.lib;DVRLited.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>
       </DelayLoadDLLs>
     </Link>

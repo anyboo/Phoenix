@@ -9,6 +9,12 @@
 
 namespace DVR {
 	class DVRStatementImpl;
+	/*
+	DVRSession just a session, we need a device object represents device.
+	a device can be connnected by more than one session.
+	Then UI manages the devobject to operate.
+	DeviceCollation
+	*/
 	class DVR_API DVRSession
 	{
 	public:
@@ -58,6 +64,7 @@ namespace DVR {
 		DVRSession();
 
 		Poco::AutoPtr<DVRSessionImpl> _pImpl;
+		DVRStatementCreator           _statementCreator;
 
 	};
 

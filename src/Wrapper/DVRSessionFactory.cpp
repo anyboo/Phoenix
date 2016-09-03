@@ -1,10 +1,12 @@
 #include "DVR/DVRSessionFactory.h"
 #include <cassert>
+#include <Poco/SharedLibrary.h>
 
 namespace DVR {
 
 	DVRSessionFactory::DVRSessionFactory()
 	{
+		static Poco::SharedLibrary sl("DZPLited.dll");
 	}
 
 

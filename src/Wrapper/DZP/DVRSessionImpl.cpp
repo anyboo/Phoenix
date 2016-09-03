@@ -39,8 +39,6 @@ DVRSessionImpl::~DVRSessionImpl()
 
 void DVRSessionImpl::login(const std::string& user, const std::string& password)
 {
-	if (isLoggedIn()) return;
-	
 	std::string host = _addr.host().toString();
 	unsigned short port = _addr.port();
 	

@@ -9,9 +9,6 @@ extern "C"
 		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);
 }
 
-std::string path("");
-Poco::SharedLibrary sl(path);
-
 namespace DVR {
 namespace DZPLite {
 

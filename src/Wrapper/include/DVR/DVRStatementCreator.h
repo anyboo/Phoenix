@@ -33,7 +33,7 @@ public:
 	DVRStatement operator << (const T& t)
 		/// Creates a Statement.
 	{
-		if (!_ptrImpl->isConnected())
+		if (!_ptrImpl->isLoggedIn())
 			throw NotConnectedException(_ptrImpl->connectionString());
 
 		Statement stmt(_ptrImpl->createStatementImpl());
