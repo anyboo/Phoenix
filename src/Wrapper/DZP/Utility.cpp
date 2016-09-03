@@ -31,8 +31,8 @@ extern "C"
 	typedef float (CALL_METHOD *PH264_DVR_GetPlayPos)(long lPlayHandle);
 }
 
-std::string path("sdk\\NetSdk.dll");
-Poco::SharedLibrary sl(path);
+extern Poco::SharedLibrary sl;
+
 
 namespace DVR {
 namespace DZPLite {
@@ -41,6 +41,7 @@ namespace DZPLite {
 
 Utility::Utility()
 {	
+	
 }
 
 
@@ -119,19 +120,20 @@ int Utility::setTimeOut(std::size_t timeout, std::size_t times)
 }
 
 int Utility::Init()
-{
+{	
+	poco_assert(sl.isLoaded());
 	poco_assert(sl.hasSymbol("H264_DVR_Init"));
-	PH264_DVR_Init pDZPInit = (PH264_DVR_Init)sl.getSymbol("H264_DVR_Init");
-	pDZPInit(NULL, NULL);
-	return success;
+	PH264_DVR_Init H264_DVR_Init = (PH264_DVR_Init)sl.getSymbol("H264_DVR_Init");
+	return H264_DVR_Init(NULL, NULL);
 }
 
 int Utility::CleanUp()
 {
 	//bool rc = H264_DVR_Cleanup();
+	poco_assert(sl.isLoaded());
 	poco_assert(sl.hasSymbol("H264_DVR_Cleanup"));
-	PH264_DVR_Cleanup pDZPCleanUp = (PH264_DVR_Cleanup)sl.getSymbol("H264_DVR_Cleanup");
-	pDZPCleanUp();
+	PH264_DVR_Cleanup H264_DVR_Cleanup = (PH264_DVR_Cleanup)sl.getSymbol("H264_DVR_Cleanup");
+	H264_DVR_Cleanup();
 	return success;
 }
 
