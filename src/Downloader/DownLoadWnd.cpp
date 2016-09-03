@@ -5,7 +5,7 @@
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
 #include "DVR/DVRSession.h"
-
+#include "TestData.h"
 
 DownLoadWnd::DownLoadWnd() :_channels(0)
 {
@@ -155,11 +155,12 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	std::string channel, vName, ipAddr;
+	Vendor_Info vendor;
+	unsigned long id = CTestData::getInstance()->GetLoginID();
 
-	CTestData::getInstance()->GetLoginInfo(channel, vName, ipAddr);
-	_channels = std::stoi(channel);
-	_vendorManage.AddVendorList(vName, ipAddr);
+	CTestData::getInstance()->GetLoginInfo(vendor);
+	_channels = vendor.channels;
+	_vendorManage.AddVendorList(id, vendor.vendorName, vendor.ipAddr);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)

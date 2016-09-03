@@ -51,7 +51,7 @@ private:
 	std::vector<size_t>		_checked_files;
 	IsDownLoadFile		m_IsDownLoad;
 	size_t				m_DownloadID;
-	std::vector<SearchFileInfo> _file_info;
+	//std::vector<SearchFileInfo> _file_info;
 private:
 	CListUI*			_pList;
 	COptionUI*			_oCheckAll;

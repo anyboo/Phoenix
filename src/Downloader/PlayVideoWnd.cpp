@@ -2,6 +2,7 @@
 #include "PlayVideoWnd.h"
 #include "PlayWndUI.h"
 #include "DVR/DVRSession.h"
+#include "TestData.h"
 
 CPlayVideoWnd::CPlayVideoWnd()
 :m_IsPlay(true), m_stopPos(0)

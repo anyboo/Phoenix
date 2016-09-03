@@ -2,6 +2,7 @@
 #include "VideoLoginUI.h"
 #include "VideoVendorUI.h"
 #include "DVR/DVRSession.h"
+#include "TestData.h"
 
 VideoLoginUI::VideoLoginUI()
 :m_pages(1)
@@ -82,10 +83,14 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
 	connectString = connectString + port;
-	DVR::DVRSession session("DZP", connectString.GetData());
-	session.login(user.GetData(),passwd.GetData());
+	DVR::DVRSession* session = new DVR::DVRSession("DZP", connectString.GetData());
+	session->login(user.GetData(),passwd.GetData());
 
-	CTestData::getInstance()->SaveLoginInfo(brand.GetData(), ip.GetData());
+	Vendor_Info vendor;
+	vendor.session = session;
+	vendor.ipAddr = ip.GetData();
+	vendor.vendorName = brand.GetData();
+	CTestData::getInstance()->SaveLoginInfo(vendor);
 	Close();
 }
 

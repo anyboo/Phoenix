@@ -75,13 +75,15 @@ void CVendor::ChangeChannelsList(CDuiString& sName, size_t Channel_Count)
 }
 
 
-void CVendor::AddVendorList(std::string& VendorName, std::string& VendorIP)
+void CVendor::AddVendorList(const unsigned long id, const std::string& VendorName, const std::string& VendorIP)
 {
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
 	assert(SubList);
 	pList->Add(SubList);
+	std::string strID = std::to_string(id);
+	SubList->SetUserData(strID.c_str());
 
 	CDuiString subList_name, button_name;
 	subList_name.Format("VendorContList%d", m_ContListSel);

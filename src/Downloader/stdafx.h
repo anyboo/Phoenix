@@ -23,8 +23,6 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-#include "TestData.h"
-
 using namespace DuiLib;
 using namespace rapidjson;
 

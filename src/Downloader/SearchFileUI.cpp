@@ -3,6 +3,7 @@
 #include "PlayVideoWnd.h"
 #include "FileLogInfoUI.h"
 #include <time.h>
+#include "TestData.h"
 
 SearchFileUI::SearchFileUI()
 :m_DownloadID(1)
@@ -112,7 +113,7 @@ void SearchFileUI::OnCheckAll(TNotifyUI& msg)
 
 void SearchFileUI::OnShowFileList()
 {
-	
+	std::vector<SearchFileInfo> _file_info;
 	CTestData::getInstance()->GetSearchFiles(_file_info);
 
 	int filesize = _file_info.size();
@@ -209,16 +210,18 @@ void SearchFileUI::GetSelectOption(CDuiString& optionName)
 
 void SearchFileUI::GetFileCountAndSize()
 {
+	/*
 	size_t filesize = 0;
 	int fileCount = _checked_files.size();
 	for (size_t i = 0; i < _checked_files.size(); i++)
 	{
 		filesize += _file_info[_checked_files[i]].size;
 	}
-
+	
 	CDuiString CountText;
 	CountText.Format("files count is %d, size is %d", fileCount, filesize);
 	_lab_CountText->SetText(CountText);
+	*/
 }
 
 
