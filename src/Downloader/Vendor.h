@@ -10,14 +10,16 @@ public:
 
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
 
-	void ShowOfflineVendor();
+	void Off_line();
+	void DeleteVendor(CDuiString& sName);
 	void AddVendorList(std::string& VendorName, std::string& VendorIP);
-	void AddChannelsList(int CurSel, size_t Channel_Count);
-	CListContainerElementUI* AddChannels(size_t Channel_Count);
+	void ChangeChannelsList(CDuiString& sName, size_t Channel_Count);
 
 	DUI_DECLARE_MESSAGE_MAP();
 	
-	
+protected:
+	CListContainerElementUI* AddChannels(size_t Channel_Count);
+	void DeleteChannelList(int Cursel, int channels);
 
 private:
 	CPaintManagerUI* ppm;

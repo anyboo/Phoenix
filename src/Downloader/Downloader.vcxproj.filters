@@ -117,6 +117,7 @@
     </ClCompile>
     <ClCompile Include="InitNetConfig.cpp" />
     <ClCompile Include="MessagePump.cpp" />
+    <ClCompile Include="TestData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -185,6 +186,7 @@
     <ClInclude Include="NetworkStatus.h" />
     <ClInclude Include="NICStatusNotification.h" />
     <ClInclude Include="InitNetConfig.h" />
+    <ClInclude Include="TestData.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

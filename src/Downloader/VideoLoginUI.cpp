@@ -78,9 +78,12 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString passwd = _pswd->GetText();
 
 	CDuiString connectString;
-	connectString.Format("%s:%s", ip, port);
-	DVR::DVRSession session(brand.GetData(), connectString.GetData());
-	session.login(user.GetData(),passwd.GetData());
+	connectString.Format("%s:", ip);
+	connectString = connectString + port;
+//	DVR::DVRSession session(brand.GetData(), connectString.GetData());
+//	session.login(user.GetData(),passwd.GetData());
+
+	CTestData::getInstance()->SaveLoginInfo(brand.GetData(), ip.GetData());
 	Close();
 }
 
