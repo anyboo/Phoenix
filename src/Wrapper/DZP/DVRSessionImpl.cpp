@@ -9,6 +9,9 @@
 #include <Poco/DateTime.h>
 #include <Poco/DateTimeParser.h>
 
+
+
+
 namespace DVR {
 namespace DZPLite {
 
@@ -65,8 +68,8 @@ void DVRSessionImpl::logout()
 }
 
 bool DVRSessionImpl::isLoggedIn()const
-{
-	poco_assert(_handle > 0);
+{	
+	poco_assert(_handle == 0);
 	return _connected;
 }
 
@@ -82,11 +85,25 @@ std::size_t DVRSessionImpl::getLoginTimeout() const
 	return _timeout;
 }
 
-
 DVR::DVRStatementImpl* DVRSessionImpl::createStatementImpl()
 {
 	poco_check_ptr(_handle);
 	return new DVRStatementImpl(*this, _handle);
+}
+
+void DVRSessionImpl::list()
+{
+
+}
+
+void DVRSessionImpl::download()
+{
+
+}
+
+void DVRSessionImpl::playback()
+{
+
 }
 
 void DVRSessionImpl::abort()

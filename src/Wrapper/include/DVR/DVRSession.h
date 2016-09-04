@@ -49,14 +49,24 @@ namespace DVR {
 		void logout();
 		bool isLoggedIn() const;
 
+		void list();
+		void download();
+		void playback();
+		void abort();
+
 		void setLoginTimeout(std::size_t timeout);
 		std::size_t getLoginTimeout() const;
 		void reconnect();
+
+		const std::string& connectionString() const;
+		const std::string& connectorName() const;
 
 		void setFeature(const std::string& name, bool state);
 		bool getFeature(const std::string& name);
 		void setProperty(const std::string& name, const Poco::Any& value);
 		Poco::Any getProperty(const std::string& name)const;
+		static std::string uri(const std::string& connector, const std::string& connectionString);
+		std::string uri() const;
 
 		DVRSessionImpl* impl();
 
@@ -83,6 +93,25 @@ namespace DVR {
 		return _pImpl->isLoggedIn();
 	}
 
+	inline void DVRSession::list()
+	{
+		_pImpl->list();
+	}
+
+	inline void DVRSession::download()
+	{
+		_pImpl->download();
+	}
+	inline void DVRSession::playback()
+	{
+		_pImpl->playback();
+	}
+
+	inline void DVRSession::abort()
+	{
+		_pImpl->abort();
+	}
+
 	inline void DVRSession::setLoginTimeout(std::size_t timeout)
 	{
 		_pImpl->setLoginTimeout(timeout);
@@ -96,6 +125,22 @@ namespace DVR {
 	inline void DVRSession::reconnect()
 	{
 		_pImpl->reconnect();
+	}
+	
+	inline std::string DVRSession::uri(const std::string& connector,
+		const std::string& connectionString)
+	{
+		return DVRSessionImpl::uri(connector, connectionString);
+	}
+
+	inline const std::string& DVRSession::connectionString() const
+	{
+		return _pImpl->connectionString();
+	}
+
+	inline const std::string& DVRSession::connectorName() const
+	{
+		return _pImpl->connectorName();
 	}
 
 	inline void DVRSession::setFeature(const std::string& name, bool state)
@@ -116,6 +161,11 @@ namespace DVR {
 	inline Poco::Any DVRSession::getProperty(const std::string& name)const
 	{
 		return const_cast<DVRSessionImpl*>(_pImpl.get())->getProperty(name);
+	}
+
+	inline std::string DVRSession::uri() const
+	{
+		return _pImpl->uri();
 	}
 
 	inline DVRSessionImpl* DVRSession::impl()

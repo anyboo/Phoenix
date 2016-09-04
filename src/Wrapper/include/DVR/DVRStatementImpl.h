@@ -15,11 +15,6 @@ namespace DVR {
 		DVRStatementImpl(DVRSessionImpl& rSession);
 		virtual ~DVRStatementImpl();
 
-		void beginList(const std::string& beginTime, const std::string& endTime);
-		void beginDownload(const std::string& filename);
-		void play(const std::string& filename);
-		void abort();
-
 		template <typename T>
 		void add(const T& t)
 		{

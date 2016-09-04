@@ -26,17 +26,25 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
+
     <ClCompile Include="ARPClientTest.cpp">
       <Filter>ARP\Source Files</Filter>
     </ClCompile>
+
+    <ClCompile Include="DZPLIBTEST.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h">
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneTestSuite.h" />
+
     <ClInclude Include="ARPClientTest.h">
       <Filter>ARP\Header Files</Filter>
     </ClInclude>
+
+    <ClInclude Include="DZPLIBTEST.h" />
+
   </ItemGroup>
 </Project>

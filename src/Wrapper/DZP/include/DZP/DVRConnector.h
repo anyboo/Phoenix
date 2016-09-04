@@ -15,8 +15,8 @@ public:
 	DVRConnector();
 	~DVRConnector();
 
-	virtual const std::string& name() const;
-	virtual Poco::AutoPtr<DVR::DVRSessionImpl> createSession(const std::string& connectionString,
+	const std::string& name() const;
+	Poco::AutoPtr<DVR::DVRSessionImpl> createSession(const std::string& connectionString,
 		std::size_t timeout = DVR::DVRSessionImpl::LOGIN_TIMEOUT_DEFAULT);
 
 	static void registerConnector();
