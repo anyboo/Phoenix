@@ -28,11 +28,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h" />
+    <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="DZPLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -135,7 +137,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../Scene/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../Scene/include;../Wrapper/;../Wrapper/include;$(SolutionDir)\src\Wrapper\DZP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -151,9 +153,9 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>PocoCppUnitd.lib;ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PocoCppUnitd.lib;ws2_32.lib;iphlpapi.lib;DZPLited.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)TestSuited.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories);$(SolutionDir)bin\</AdditionalLibraryDirectories>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>bin\TestSuited.pdb</ProgramDatabaseFile>

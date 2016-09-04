@@ -24,6 +24,7 @@ public:
 		std::size_t timeout = LOGIN_TIMEOUT_DEFAULT);
 	~DVRSessionImpl();
 
+
 	void login(const std::string& user = "", const std::string& password = "");
 	void logout();
 	bool isLoggedIn()const;
@@ -37,6 +38,7 @@ public:
 	std::size_t getLoginTimeout() const;
 
 	DVR::DVRStatementImpl* createStatementImpl();
+
 
 private:
 	std::string _connector;

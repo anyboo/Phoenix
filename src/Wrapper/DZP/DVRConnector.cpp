@@ -2,8 +2,16 @@
 #include "DZP/DVRConnector.h"
 #include "DZP/DVRSessionImpl.h"
 #include "DZP/Utility.h"
+#include <Poco/SharedLibrary.h>
+#include <Poco/Path.h>
+
+std::string path = Poco::Path::current() + "sdk\\DZP\\NetSdk.dll";
+Poco::SharedLibrary sl(path);
 
 const DZPLiteConnectorRegistrator DvrDZPLiteConnectorRegistrator;
+
+
+
 
 namespace DVR {
 namespace DZPLite {
@@ -11,7 +19,7 @@ namespace DZPLite {
 const std::string DVRConnector::KEY(DVR_CONNECTOR_NAME);
 
 DVRConnector::DVRConnector()
-{
+{	
 	int rc = Utility::Init();
 	
 	if (Utility::success != rc) Utility::throwException(rc);
