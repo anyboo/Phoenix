@@ -1,5 +1,5 @@
 #include "DZP/Utility.h"
-#include "sdk/netsdk.h"
+#include "netsdk.h"
 #include <Poco/DateTime.h>
 #include <Poco/SharedLibrary.h>
 
