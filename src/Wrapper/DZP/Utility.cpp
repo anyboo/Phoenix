@@ -20,6 +20,8 @@ extern "C"
 
 	typedef long (CALL_METHOD *PH264_DVR_GetFileByTime)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, char *sSavedFileDIR, bool bMerge ,
 		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);	
+	typedef int (CALL_METHOD *PH264_DVR_GetDownloadPos)(long lFileHandle);
+	typedef bool (CALL_METHOD *PH264_DVR_StopGetFile)(long lFileHandle);
 
 	typedef long (CALL_METHOD *PH264_DVR_FindFile)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, H264_DVR_FILE_DATA *lpFileData, int lMaxCount, 
 		int *findcount, int waittime);
@@ -100,7 +102,7 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 
 	std::cout << "login handle: " << handle << std::endl;
 
-	/////////////////test
+	///////////////test
 	//DVR::DZPLite::Utility::TIMEINFO time1 = { 0 };
 	//time1.ch = 1;
 
@@ -109,7 +111,7 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 	//ptm->tm_mday--;
 	//time1.stBeginTime = _mktime64(ptm);
 	//FindFile(handle, time1, 5000);
-	//////////////////////////////
+	////////////////////////////
 	
 	return handle;
 }
@@ -207,7 +209,7 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, 
 	TMToSDKTime(Tm, info.stEndTime);
 
 	long ret = H264_DVR_GetFileByName((long)handle, &info, (char *)path.c_str(), nullptr, 0, 0);
-
+	std::cout << "download ret: " << ret << std::endl;
 	if (ret <= 0)
 		return false;
 
@@ -302,9 +304,25 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	}
 	std::cout << "find file count: " << count << std::endl;
 
-	//////////////////////////test
+	////////////////////////////test
+	//Utility::FILEINFO fileinfo = { 0 };
+	//fileinfo.ch = nriFileinfo[0].ch;
+	//strncpy(fileinfo.sFileName, nriFileinfo[0].sFileName, strlen(nriFileinfo[0].sFileName));
+	//fileinfo.size = nriFileinfo[0].size;
+	//struct tm Tm1;
+	//NetTimeToTM(nriFileinfo[0].stBeginTime, Tm1);
+	//fileinfo.stBeginTime = _mktime64(&Tm1);
+	//NetTimeToTM(nriFileinfo[0].stEndTime, Tm1);
+	//fileinfo.stEndTime = _mktime64(&Tm1);
 
-	//////////////////////////////
+	//std::cout << "download file size: " << fileinfo.size << std::endl;
+
+	//std::string strfilpath = "D:\\DownLoadVideo\\1.h264";
+	// 
+
+	//GetFile(handle, fileinfo, strfilpath);
+	//
+	////////////////////////////////
 	return count;
 }
 
@@ -341,6 +359,14 @@ int Utility::getPlayback(__int64 playbackHandle, __int32 *pos)
 
 	*pos = H264_DVR_GetPlayPos(playbackHandle) * 100;
 	return true;
+}
+
+int Utility::getDownloadPos(__int64 downloadHandle)
+{
+	poco_assert(sl.hasSymbol("H264_DVR_GetDownloadPos"));
+	PH264_DVR_GetDownloadPos  H264_DVR_GetDownloadPos = (PH264_DVR_GetDownloadPos)sl.getSymbol("H264_DVR_GetDownloadPos");
+
+	return H264_DVR_GetDownloadPos(downloadHandle);
 }
 
 }}
