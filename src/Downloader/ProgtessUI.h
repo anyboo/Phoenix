@@ -10,6 +10,7 @@ public:
 	CProgtessUI();
 	~CProgtessUI();
 
+	bool IsCancelSearch();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
@@ -19,15 +20,20 @@ public:
 
 	void ShowProgress();
 
-private:
-	int			m_CountFile;
-	int				m_Searchfile_count;
-	int			m_finish;
-	bool			m_InitNotify;
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+
+private:
+	int			_files_count;
+	int			_search_file_count;
+	bool		_bCancel;
+private:
+	CLabelUI*			_lab_progress;
+	CProgressUI*		_pro_search;
 };
 

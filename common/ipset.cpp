@@ -107,7 +107,7 @@ void IPSet::ipsetting()
 			}
 		}
 		Sleep(1000*2);		
-		WindowUtils::getMacByArpTable(scanips, findIps);			
+		WindowUtils::getMacByArpTable(scanips, findIps);		
 		poco_information_f1(logger_handle, "get arp table size: %d", (int)findIps.size());
 		for (itor = findIps.begin(); itor != findIps.end(); itor++)
 		{						

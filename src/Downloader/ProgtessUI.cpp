@@ -2,7 +2,7 @@
 #include "ProgtessUI.h"
 
 CProgtessUI::CProgtessUI()
-:m_Searchfile_count(0), m_CountFile(0), m_InitNotify(true)
+:_files_count(5), _search_file_count(0), _bCancel(false)
 {
 	
 }
@@ -10,7 +10,7 @@ CProgtessUI::CProgtessUI()
 
 CProgtessUI::~CProgtessUI()
 {
-
+	KillTimer(GetHWND(), 1);
 }
 
 DUI_BEGIN_MESSAGE_MAP(CProgtessUI, WindowImplBase)
@@ -19,7 +19,7 @@ DUI_END_MESSAGE_MAP()
 
 LPCTSTR CProgtessUI::GetWindowClassName() const
 {
-	return _T("CLogUI");
+	return _T("CProgtessUI");
 }
 
 CDuiString CProgtessUI::GetSkinFolder()
@@ -34,6 +34,9 @@ CDuiString CProgtessUI::GetSkinFile()
 
 void CProgtessUI::InitWindow()
 {
+	SetTimer(GetHWND(), 1, 1000, nullptr);
+	_lab_progress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("text2")));
+	_pro_search = dynamic_cast<CProgressUI*>(m_PaintManager.FindControl(_T("electric")));
 }
 
 void CProgtessUI::OnFinalMessage(HWND hWnd)
@@ -43,26 +46,51 @@ void CProgtessUI::OnFinalMessage(HWND hWnd)
 
 void CProgtessUI::Notify(TNotifyUI& msg)
 {	
-	DUITRACE(msg.sType);
 	WindowImplBase::Notify(msg);
 }
 
 void CProgtessUI::ShowProgress()
 {
-	DUITRACE("ShowProgress");
-	std::string progress;
-	progress = to_string(m_Searchfile_count) + std::string("/") + to_string(m_CountFile);
-	CLabelUI* Lab_pro = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("text2")));
-	CProgressUI* Search_Pro = dynamic_cast<CProgressUI*>(m_PaintManager.FindControl(_T("electric")));
-	Lab_pro->SetText(progress.c_str());
-	int pro_value = m_CountFile == 0 ? 0 : (100 * m_Searchfile_count) / m_CountFile;
-	Search_Pro->SetValue(pro_value);
+	CDuiString progress;
+	progress.Format("%d/%d", _search_file_count, _files_count);
+	_lab_progress->SetText(progress);
+	int value = _files_count == 0 ? 0 : (100 * _search_file_count) / _files_count;
+	_pro_search->SetValue(value);
+	if (value == 100)
+	{
+		Close();
+	}
 }
 
+bool CProgtessUI::IsCancelSearch()
+{
+	return _bCancel;
+}
 
 void CProgtessUI::OnCancelSearch(TNotifyUI& msg)
 {
-	bool b = true;
+	_bCancel = true;
 	Close();
+}
+
+LRESULT CProgtessUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT lRes = 0;
+	switch (uMsg)
+	{
+	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	}
+	bHandled = FALSE;
+	return 0;
+}
+
+LRESULT CProgtessUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (wParam == 1)
+	{
+		_search_file_count += 1;
+		ShowProgress();
+	}
+	return 0;
 }
 

@@ -32,6 +32,6 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 private:
-	CDuiString m_VendorName;
-	Select		m_IsGetVendorName;
+	CDuiString		_vendor_name;
+	Select			_is_select;
 };

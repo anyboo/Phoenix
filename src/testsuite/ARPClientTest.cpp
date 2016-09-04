@@ -1,22 +1,22 @@
-#include "DHCPClientTest.h"
+#include "ARPClientTest.h"
 #include <Poco/CppUnit/TestCaller.h>
 #include <Poco/CppUnit/TestSuite.h>
 #include <Poco/Net/NetWorkInterface.h>
 
 using Poco::Net::NetworkInterface;
 
-DHCPClientTest::DHCPClientTest(const std::string& rName) :
+ARPClientTest::ARPClientTest(const std::string& rName) :
 CppUnit::TestCase(rName)
 {
 }
 
 
-DHCPClientTest::~DHCPClientTest()
+ARPClientTest::~ARPClientTest()
 {
 }
 
 
-void DHCPClientTest::testTimeSync()
+void ARPClientTest::testTimeSync()
 {
 	NetworkInterface::Map map = NetworkInterface::map(false, false);
 	for (NetworkInterface::Map::iterator it = map.begin();
@@ -28,17 +28,17 @@ void DHCPClientTest::testTimeSync()
 		if (networkType == intf.NI_TYPE_ETHERNET_CSMACD && intf.isUp())
 		{
 			std::string strName = intf.name();
-			assert(_dhcpClient.Request(strName));
+			assert(_arpClient.Request(strName));
 		}
 	}
 }
 
 
-CppUnit::Test* DHCPClientTest::suite()
+CppUnit::Test* ARPClientTest::suite()
 {
-	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("DHCPClientTest");
+	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("ARPClientTest");
 
-	CppUnit_addTest(pSuite, DHCPClientTest, testTimeSync);
+	CppUnit_addTest(pSuite, ARPClientTest, testTimeSync);
 
 	return pSuite;
 }
