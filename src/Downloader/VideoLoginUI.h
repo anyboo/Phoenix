@@ -23,7 +23,7 @@ public:
 	~VideoLoginUI();
 
 	void LogIn();
-
+	bool GetLoginState();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);

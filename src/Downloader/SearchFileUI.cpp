@@ -62,6 +62,14 @@ void SearchFileUI::OnCloseWnd(TNotifyUI& msg)
 	Close();
 }
 
+bool SearchFileUI::IsBeginDownload()
+{
+	if (m_IsDownLoad == beginDownload)
+		return true;
+	else
+		return false;
+}
+
 void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 {
 	m_IsDownLoad = beginDownload;
@@ -71,6 +79,10 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	if (_checked_files.size() == 0)return;
+	
+	CTestData::getInstance()->SetDownloadfiles(_checked_files);
 
 	Close();
 }
@@ -210,18 +222,19 @@ void SearchFileUI::GetSelectOption(CDuiString& optionName)
 
 void SearchFileUI::GetFileCountAndSize()
 {
-	/*
+	std::vector<SearchFileInfo> _file_info;
+	CTestData::getInstance()->GetSearchFiles(_file_info);
 	size_t filesize = 0;
 	int fileCount = _checked_files.size();
 	for (size_t i = 0; i < _checked_files.size(); i++)
 	{
 		filesize += _file_info[_checked_files[i]].size;
 	}
-	
+
 	CDuiString CountText;
 	CountText.Format("files count is %d, size is %d", fileCount, filesize);
 	_lab_CountText->SetText(CountText);
-	*/
+
 }
 
 

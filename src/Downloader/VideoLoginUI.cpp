@@ -79,6 +79,7 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString passwd = _pswd->GetText();
 
 	if (ip.IsEmpty() || port.IsEmpty()) return;
+	if (CTestData::getInstance()->IsLogIn(ip.GetData()))return;
 
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
@@ -86,6 +87,7 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	DVR::DVRSession* session = new DVR::DVRSession("DZP", connectString.GetData());
 	session->login(user.GetData(),passwd.GetData());
 
+	m_IsLogIn = LogInDevice;
 	Vendor_Info vendor;
 	vendor.session = session;
 	vendor.ipAddr = ip.GetData();
@@ -116,6 +118,14 @@ void VideoLoginUI::OnClose(TNotifyUI& msg)
 {
 	m_IsLogIn = NoLogDevice;
 	Close();
+}
+
+bool VideoLoginUI::GetLoginState()
+{
+	if (m_IsLogIn == LogInDevice)
+		return true;
+	else
+		return false;
 }
 
 void VideoLoginUI::Notify(TNotifyUI& msg)

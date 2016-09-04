@@ -59,6 +59,13 @@ void CTimeUI::Notify(TNotifyUI& msg)
 void CTimeUI::OnVerify(TNotifyUI& msg)
 {
 	_setTime = _lab_time->GetText();
+	for (int i = 0; i < _setTime.GetLength(); i++)
+	{
+		if (_setTime[i] == '-')
+		{
+			_setTime.SetAt(i, '0');
+		}
+	}
 	_site = 0;
 	Close();
 }

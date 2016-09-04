@@ -11,13 +11,16 @@ DownLoadWnd::DownLoadWnd() :_channels(0)
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
+	_downloadManage.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &_vendorManage);
+	AddVirtualWnd(_T("DownloadList"), &_downloadManage);
 }
 
 
 DownLoadWnd::~DownLoadWnd()
 {
 	RemoveVirtualWnd(_T("Vendor"));
+	RemoveVirtualWnd(_T("DownloadList"));
 }
 
 #define	BT_Calendar1			(_T("DataTime1"))
@@ -155,9 +158,9 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
+	if (!pDlg->GetLoginState())return;
 	Vendor_Info vendor;
 	unsigned long id = CTestData::getInstance()->GetLoginID();
-
 	CTestData::getInstance()->GetLoginInfo(vendor);
 	_channels = vendor.channels;
 	_vendorManage.AddVendorList(id, vendor.vendorName, vendor.ipAddr);
@@ -165,14 +168,14 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	__time64_t stime, etime;
-	GetDataAndTime(stime, etime);
-	
+	SearchBegin();
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	if (pDlg->IsCancelSearch())return;
 
 //	start to search file on specify device.
 	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
@@ -180,7 +183,22 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
+	if (!pSearchDlg->IsBeginDownload())return;
 
+	_downloadManage.AddDownloadTask();
+	SetTimer(GetHWND(), 1, 2000, nullptr);
+}
+
+void DownLoadWnd::SearchBegin()
+{
+	__time64_t stime, etime;
+	GetDataAndTime(stime, etime);
+	int cursel = _vList->GetCurSel();
+	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
+	std::string strID = select->GetUserData();
+	unsigned long id = std::stoul(strID);
+	DVR::DVRSession* session = CTestData::getInstance()->GetSessionByID(id);
+//	DVR::DVRStatement state(session);
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
@@ -197,6 +215,14 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(7).Compare(_T("channel")))
 	{
 		CheckOption(sender_name);
+	}
+	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !sender_name.Left(8).Compare(_T("taskList")))
+	{
+		_downloadManage.Show_Off_SubList(sender_name);
+	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(10).Compare(_T("btn_Cancel")))
+	{
+		_downloadManage.RemoveSubList(sender_name);
 	}
 	WindowImplBase::Notify(msg);
 }
@@ -358,4 +384,24 @@ void DownLoadWnd::ReadJsonFile()
 		int type = stoi(TypeName);
 		_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
 	}
+}
+
+LRESULT DownLoadWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT lRes = 0;
+	switch (uMsg)
+	{
+	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	}
+	bHandled = FALSE;
+	return 0;
+}
+
+LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (wParam == 1)
+	{
+		_downloadManage.RenewList();
+	}
+	return 0;
 }

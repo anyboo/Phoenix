@@ -40,7 +40,7 @@ void CPlayVideoWnd::BeginPlay()
 {
 	Serach_fileInfo file_info;
 	CTestData::getInstance()->GetPlayFileInfo(file_info);
-	DVR::DVRSession session();
+//	DVR::DVRSession session();
 }
 
 void CPlayVideoWnd::BuildControlDDX()

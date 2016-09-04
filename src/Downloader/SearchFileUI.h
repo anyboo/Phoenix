@@ -18,6 +18,7 @@ public:
 	SearchFileUI();
 	~SearchFileUI();
 
+	bool IsBeginDownload();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
@@ -48,7 +49,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 private:
-	std::vector<size_t>		_checked_files;
+	std::vector<int>		_checked_files;
 	IsDownLoadFile		m_IsDownLoad;
 	size_t				m_DownloadID;
 	//std::vector<SearchFileInfo> _file_info;

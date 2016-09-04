@@ -2,6 +2,7 @@
 #include <DuiLib/UIlib.h>
 #include <vector>
 #include "Vendor.h"
+#include "DownLoadList.h"
 #include "TimeUI.h"
 #include <map>
 
@@ -27,6 +28,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
+	void SearchBegin();
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 
@@ -46,6 +48,9 @@ protected:
 	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
 	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);
 	CDuiString AppenText(const CDuiString& str);
+
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	template<class T>
 	void AddControl(CDuiString ctr_name)
@@ -71,6 +76,7 @@ protected:
 private:
 	std::vector<int>		_all_channels;
 	CVendor		_vendorManage;
+	CDownLoadList	_downloadManage;
 	int			_channels;
 	CButtonUI*			_btn_search;
 	SYSTEMTIME		 m_sysTime;

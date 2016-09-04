@@ -118,6 +118,9 @@
     <ClCompile Include="InitNetConfig.cpp" />
     <ClCompile Include="MessagePump.cpp" />
     <ClCompile Include="TestData.cpp" />
+    <ClCompile Include="DownLoadList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -187,6 +190,9 @@
     <ClInclude Include="NICStatusNotification.h" />
     <ClInclude Include="InitNetConfig.h" />
     <ClInclude Include="TestData.h" />
+    <ClInclude Include="DownLoadList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />
