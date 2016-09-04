@@ -18,10 +18,12 @@ namespace DVR {
 		DVRStatement& reset(DVRSession& session);
 		void swap(DVRStatement& other);
 
-		void beginList(const std::string& beginTime, const std::string& endTime);
-		void beginDownload(const std::string& filename);
-		void play(const std::string& filename);
-		void abort();
+		template <typename T>
+		DVRStatement& operator << (const T& t)
+		{
+			_pImpl->add(t);
+			return *this;
+		}
 
 	protected:
 		typedef DVRStatementImpl::Ptr ImplPtr;
@@ -31,25 +33,5 @@ namespace DVR {
 	private:
 		DVRStatementImpl::Ptr _pImpl;
 	};
-
-	inline void DVRStatement::beginList(const std::string& beginTime, const std::string& endTime)
-	{
-		_pImpl->beginList(beginTime, endTime);
-	}
-
-	inline void DVRStatement::beginDownload(const std::string& filename)
-	{
-		_pImpl->beginDownload(filename);
-	}
-
-	inline void DVRStatement::play(const std::string& filename)
-	{
-		_pImpl->play(filename);
-	}
-
-	inline void DVRStatement::abort()
-	{
-		_pImpl->abort();
-	}
 
 }

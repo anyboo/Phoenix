@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="SessionPooling">
+      <UniqueIdentifier>{15339790-7a73-4384-bfaf-3cf6ae3d2759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SessionPooling\Header Files">
+      <UniqueIdentifier>{2d7baf3d-9287-4fbb-9185-35974f8b2005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SessionPooling\Source Files">
+      <UniqueIdentifier>{43521f56-0578-4a4b-be49-af359cd0c9af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,6 +57,18 @@
     <ClInclude Include="include\DVR\DVRStatementCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\DVR\PooledSessionHolder.h">
+      <Filter>SessionPooling\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\PooledSessionImpl.h">
+      <Filter>SessionPooling\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\SessionPool.h">
+      <Filter>SessionPooling\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\SessionPoolContainer.h">
+      <Filter>SessionPooling\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVRSessionImpl.cpp">
@@ -73,6 +94,18 @@
     </ClCompile>
     <ClCompile Include="DVRStatementCreator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PooledSessionHolder.cpp">
+      <Filter>SessionPooling\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PooledSessionImpl.cpp">
+      <Filter>SessionPooling\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionPool.cpp">
+      <Filter>SessionPooling\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionPoolContainer.cpp">
+      <Filter>SessionPooling\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

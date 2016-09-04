@@ -65,6 +65,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\</AdditionalLibraryDirectories>
@@ -100,6 +101,10 @@
     <ClInclude Include="include\DVR\DVRStatement.h" />
     <ClInclude Include="include\DVR\DVRStatementCreator.h" />
     <ClInclude Include="include\DVR\DVRStatementImpl.h" />
+    <ClInclude Include="include\DVR\PooledSessionHolder.h" />
+    <ClInclude Include="include\DVR\PooledSessionImpl.h" />
+    <ClInclude Include="include\DVR\SessionPool.h" />
+    <ClInclude Include="include\DVR\SessionPoolContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVRException.cpp" />
@@ -110,6 +115,10 @@
     <ClCompile Include="DVRStatement.cpp" />
     <ClCompile Include="DVRStatementCreator.cpp" />
     <ClCompile Include="DVRStatementImpl.cpp" />
+    <ClCompile Include="PooledSessionHolder.cpp" />
+    <ClCompile Include="PooledSessionImpl.cpp" />
+    <ClCompile Include="SessionPool.cpp" />
+    <ClCompile Include="SessionPoolContainer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

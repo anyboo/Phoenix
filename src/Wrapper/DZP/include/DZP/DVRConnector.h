@@ -15,8 +15,8 @@ public:
 	DVRConnector();
 	~DVRConnector();
 
-	virtual const std::string& name() const;
-	virtual Poco::AutoPtr<DVR::DVRSessionImpl> createSession(const std::string& connectionString,
+	const std::string& name() const;
+	Poco::AutoPtr<DVR::DVRSessionImpl> createSession(const std::string& connectionString,
 		std::size_t timeout = DVR::DVRSessionImpl::LOGIN_TIMEOUT_DEFAULT);
 
 	static void registerConnector();
@@ -50,3 +50,25 @@ struct DZPLite_API DZPLiteConnectorRegistrator
 		}
 	}
 };
+
+#if !defined(POCO_NO_AUTOMATIC_LIB_INIT)
+	#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(__GNUC__)
+		extern "C" const struct DZPLite_API DZPLiteConnectorRegistrator DvrDZPLiteConnectorRegistrator;
+		#if defined(DZPLITE_EXPORTS)
+			#if defined(_WIN64) || defined(_WIN32_WCE)
+				#define DVR_DZPLITE_FORCE_SYMBOL(s) __pragma(comment (linker, "/export:"#s))
+			#elif defined(_WIN32)
+				#define DVR_DZPLITE_FORCE_SYMBOL(s) __pragma(comment (linker, "/export:_"#s))
+			#endif
+		#else  // !DZPLITE_EXPORTS
+			#if defined(_WIN64) || defined(_WIN32_WCE)
+				#define DVR_DZPLITE_FORCE_SYMBOL(s) __pragma(comment (linker, "/include:"#s))
+			#elif defined(_WIN32)
+				#define DVR_DZPLITE_FORCE_SYMBOL(s) __pragma(comment (linker, "/include:_"#s))
+			#endif
+		#endif // DZPLITE_EXPORTS
+	#else // !POCO_OS_FAMILY_WINDOWS
+		#define DVR_DZPLITE_FORCE_SYMBOL(s) extern "C" const struct DZPLiteConnectorRegistrator s;
+	#endif // POCO_OS_FAMILY_WINDOWS
+	DVR_DZPLITE_FORCE_SYMBOL(DvrDZPLiteConnectorRegistrator)
+#endif // POCO_NO_AUTOMATIC_LIB_INIT

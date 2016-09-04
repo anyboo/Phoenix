@@ -153,7 +153,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>PocoCppUnitd.lib;ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PocoCppUnitd.lib;ws2_32.lib;iphlpapi.lib;DZPLited.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)TestSuited.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories);$(SolutionDir)bin\</AdditionalLibraryDirectories>
       <SuppressStartupBanner>true</SuppressStartupBanner>
