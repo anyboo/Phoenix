@@ -10,6 +10,9 @@
     <Filter Include="DHCP\Source Files">
       <UniqueIdentifier>{a7e28c8f-ff3e-4440-80f9-51aa53eb4892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DZPLite">
+      <UniqueIdentifier>{e903f471-4f9f-443a-ba99-15a9a842bc77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHCPClientTest.cpp">
@@ -17,13 +20,17 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
-    <ClCompile Include="DZPLIBTEST.cpp" />
+    <ClCompile Include="DZPLIBTEST.cpp">
+      <Filter>DZPLite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h">
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneTestSuite.h" />
-    <ClInclude Include="DZPLIBTEST.h" />
+    <ClInclude Include="DZPLIBTEST.h">
+      <Filter>DZPLite</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
