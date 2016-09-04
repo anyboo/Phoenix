@@ -25,6 +25,6 @@
 //
 #if defined(_MSC_VER)
 	#if !defined(POCO_NO_AUTOMATIC_LIBS) && !defined(DZPLITE_EXPORTS)
-		#pragma comment(lib, "DVRDZPLite" POCO_LIB_SUFFIX)
+		#pragma comment(lib, "DZPLite" POCO_LIB_SUFFIX)
 	#endif
 #endif

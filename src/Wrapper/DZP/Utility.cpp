@@ -22,6 +22,7 @@ extern "C"
 		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);	
 	typedef int (CALL_METHOD *PH264_DVR_GetDownloadPos)(long lFileHandle);
 	typedef bool (CALL_METHOD *PH264_DVR_StopGetFile)(long lFileHandle);
+	typedef void(CALL_METHOD *PfDownLoadPosCallBack) (long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 
 	typedef long (CALL_METHOD *PH264_DVR_FindFile)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, H264_DVR_FILE_DATA *lpFileData, int lMaxCount, 
 		int *findcount, int waittime);
@@ -210,12 +211,12 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, 
 	_localtime64_s(&Tm, (const time_t*)&fileinfo.stEndTime);
 	TMToSDKTime(Tm, info.stEndTime);
 
-	long ret = H264_DVR_GetFileByName(*((long *)handle), &info, (char *)path.c_str(), nullptr, 0, 0);
+	long ret = H264_DVR_GetFileByName(*((long *)handle), &info, (char *)path.c_str(), CallbackFn, 0, 0);
 	std::cout << "download ret: " << ret << std::endl;
 	if (ret <= 0)
 		return false;
 
-	typedef void(CALL_METHOD *fDownLoadPosCallBack) (long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
+	
 	//opCode = OPERATION_DOWNLOAD;
 	//int rc = H264_DVR_GetFileByName(*_pDvr, &result, const_cast<char*>(path.c_str()), Utility::CallbackFn, opCode, Utility::DataCallbackFn);
 	return success;
@@ -239,7 +240,7 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, 
 	_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
 	TMToNetTime(Tm, info.endTime);
 
-	long ret = H264_DVR_GetFileByTime(*((long *)handle), &info, (char *)path.c_str(), false, nullptr, 0, 0);
+	long ret = H264_DVR_GetFileByTime(*((long *)handle), &info, (char *)path.c_str(), false, CallbackFn, 0, 0);
 
 	if (ret <= 0)
 		return false;
@@ -323,14 +324,16 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	// 
 
 	//GetFile(handle, fileinfo, strfilpath);
+
+	//Sleep(90000);
 	//
-	////////////////////////////////
+	//////////////////////////////
 	return count;
 }
 
 void Utility::CallbackFn(long handle, long totalSize, long curSize, long opCode)
 {
-
+	std::cout << "download pos handle: " << handle << "  size: " << totalSize << " current size: " << curSize << " opcode: " << opCode << std::endl;
 }
 
 int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)
