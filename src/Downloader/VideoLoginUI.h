@@ -6,7 +6,8 @@
 #define BT_LOGIN				(_T("LogIn"))
 #define BT_PREVPAGE				(_T("Prev_page"))
 #define BT_NEXTPAGE				(_T("Next_page"))
-#define BT_CLOSELOGWND				(_T("closebtn"))
+#define BT_CLOSELOGWND			(_T("closebtn"))
+#define Edit_SearchVendor		(_T("brand_Edit"))
 
 enum ISLogIn
 {
@@ -22,7 +23,7 @@ public:
 	~VideoLoginUI();
 
 	void LogIn();
-
+	bool GetLoginState();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -35,6 +36,9 @@ public:
 
 	void OnOpenVideoVendorWnd(TNotifyUI& msg);
 	void OnShowDeviceInfo(CDuiString& SendName);
+
+	void OnSearchVendorList(TNotifyUI& msg);
+
 	void OnShowDevice(int pages);
 
 	void GetNextPage();
@@ -57,10 +61,21 @@ protected:
 
 private:
 	ISLogIn			m_IsLogIn;
-	bool			m_Init;
 	size_t						m_page_Count;
 	size_t				m_pages;
 	std::vector<string> m_sRecord;
 	std::map<int, string>		m_CnameAndType;
 
+private:
+	CEditUI*		_brand_edit;
+	CEditUI*		_ip_edit;
+	CEditUI*		_port_edit;
+	CEditUI*		_user;
+	CEditUI*		_pswd;
+	CLabelUI*		_vendorCount;
+	CVerticalLayoutUI*	_login_info_lyt;
+	CVerticalLayoutUI*	_vendorList;
+	CHorizontalLayoutUI*	_HLayout;
+	CListUI*			_device_list;
+	CLabelUI*			_pages;
 };

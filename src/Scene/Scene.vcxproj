@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SCENE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\include;$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\common\wpcap;.\include;$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -64,6 +64,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>wpcap.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,11 +87,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ARPClient.cpp" />
+    <ClCompile Include="src\ARPFindSegment.cpp" />
     <ClCompile Include="src\DHCPClient.cpp" />
     <ClCompile Include="src\DhcpPacket.cpp" />
     <ClCompile Include="src\SetIPAddress.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Scene\ARPClient.h" />
+    <ClInclude Include="include\Scene\ARPFindSegment.h" />
     <ClInclude Include="include\Scene\DHCPClient.h" />
     <ClInclude Include="include\Scene\DhcpPacket.h" />
     <ClInclude Include="include\Scene\Scene.h" />

@@ -27,11 +27,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ARPClientTest.h" />
     <ClInclude Include="DHCPClientTest.h" />
     <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ARPClientTest.cpp" />
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="DZPLIBTEST.cpp" />
@@ -155,7 +157,11 @@
     <Link>
       <AdditionalDependencies>PocoCppUnitd.lib;ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)TestSuited.exe</OutputFile>
+
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories);$(SolutionDir)bin\</AdditionalLibraryDirectories>
+
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>bin\TestSuited.pdb</ProgramDatabaseFile>

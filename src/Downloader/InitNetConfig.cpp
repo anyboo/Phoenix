@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "InitNetConfig.h"
-#include "Scene/SetIPAddress.h"
+
+#include "Scene/ARPClient.h"
 #include "Scene/DHCPClient.h"
+
 
 using Poco::Net::NetworkInterface;
 using Poco::Net::IPAddress;
@@ -20,6 +22,7 @@ CInitNetConfig::~CInitNetConfig()
 void CInitNetConfig::SetIp()
 {
 	DHCPClient dhcp;
+	ARPClient arp;
 
 	NetworkInterface::Map map = NetworkInterface::map(false, false);
 	for (NetworkInterface::Map::iterator it = map.begin();
@@ -29,7 +32,11 @@ void CInitNetConfig::SetIp()
 		if (netInter.type() == netInter.NI_TYPE_ETHERNET_CSMACD && netInter.isUp())
 		{
 			std::string strName = netInter.name();
-			bool bRet = dhcp.Request(strName);
+			bool bRet1 = dhcp.Request(strName);
+			if (!bRet1)
+			{
+				bool bRet2 = arp.Request(strName);
+			}
 		}
 	}
 }

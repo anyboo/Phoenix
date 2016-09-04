@@ -26,8 +26,6 @@
 using namespace DuiLib;
 using namespace rapidjson;
 
-
-
 #ifdef _DEBUG
 #   ifdef _UNICODE
 #       pragma comment(lib, "DuiLib_ud.lib")

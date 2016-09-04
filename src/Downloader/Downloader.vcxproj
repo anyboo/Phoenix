@@ -137,6 +137,7 @@
     <ClInclude Include="..\..\common\log.h" />
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="CalendarUI.h" />
+    <ClInclude Include="DownLoadList.h" />
     <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
     <ClInclude Include="FileLogInfoUI.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TestData.h" />
     <ClInclude Include="TimeUI.h" />
     <ClInclude Include="Vendor.h" />
     <ClInclude Include="VideoLoginUI.h" />
@@ -185,6 +187,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="CalendarUI.cpp" />
+    <ClCompile Include="DownLoadList.cpp" />
     <ClCompile Include="DownLoadWnd.cpp" />
     <ClCompile Include="FileLogInfoUI.cpp" />
     <ClCompile Include="LogUI.cpp" />
@@ -205,6 +208,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestData.cpp" />
     <ClCompile Include="TimeUI.cpp" />
     <ClCompile Include="Vendor.cpp" />
     <ClCompile Include="VideoLoginUI.cpp" />

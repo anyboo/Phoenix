@@ -2,8 +2,10 @@
 #include <DuiLib/UIlib.h>
 #include <vector>
 #include "Vendor.h"
+#include "DownLoadList.h"
 #include "TimeUI.h"
 #include <map>
+
 
 
 
@@ -26,6 +28,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
+	void SearchBegin();
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 
@@ -36,10 +39,18 @@ protected:
 	void InitTime();
 	void BuildControlDDX();
 
+	void CheckOption(CDuiString& sName);
+	void GetSelectChannel();
+	void OnCheckAllchannels(TNotifyUI& msg);
+
+	void GetDataAndTime(__time64_t& start, __time64_t& stop);
 
 	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
 	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);
 	CDuiString AppenText(const CDuiString& str);
+
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	template<class T>
 	void AddControl(CDuiString ctr_name)
@@ -63,13 +74,19 @@ protected:
 	}
 
 private:
-	CVendor		m_Vendor;
+	std::vector<int>		_all_channels;
+	CVendor		_vendorManage;
+	CDownLoadList	_downloadManage;
+	int			_channels;
+	CButtonUI*			_btn_search;
 	SYSTEMTIME		 m_sysTime;
-
 	CTimeUI*	_TimeControl;
+	CListUI*	_vList;
 	CButtonUI*  _SearchControl;
 	CListUI*	_VendorList;
 
+
+	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
 
 	const CDuiString ico_startdate = _T("DataTime1");

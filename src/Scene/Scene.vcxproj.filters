@@ -15,6 +15,15 @@
     <Filter Include="DHCPClient\Source Files">
       <UniqueIdentifier>{7bda1c22-e207-4a59-8eb0-3e67d3fff6ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ARPClient">
+      <UniqueIdentifier>{be07888b-00e5-4e7f-9fe8-9a20cd3684bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ARPClient\Header Files">
+      <UniqueIdentifier>{d9635759-044d-45c4-b16d-cf38d9105d17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ARPClient\Source Files">
+      <UniqueIdentifier>{e71fb120-a424-40e3-a081-482721ac8048}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -29,6 +38,12 @@
     <ClCompile Include="src\SetIPAddress.cpp">
       <Filter>DHCPClient\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ARPClient.cpp">
+      <Filter>ARPClient\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ARPFindSegment.cpp">
+      <Filter>ARPClient\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Scene\DhcpPacket.h">
@@ -42,6 +57,12 @@
     </ClInclude>
     <ClInclude Include="include\Scene\DHCPClient.h">
       <Filter>DHCPClient\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene\ARPClient.h">
+      <Filter>ARPClient\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene\ARPFindSegment.h">
+      <Filter>ARPClient\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

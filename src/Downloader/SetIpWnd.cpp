@@ -103,14 +103,18 @@ void CSetIpWnd::OnInputNum(TNotifyUI& msg)
 	int n = strInput.GetLength() - 1;
 	if (n < 0 || (strInput[n] <= '9' && strInput[n] >= '0'))
 	{
-		if (n == 2)
+		if (n == 2 || strInput[n] == '.')
 		{
 			NextInput(SendName);
 		}
 	}
+	else if (strInput[n] == '.')
+	{
+		input_edit->SetText(strInput.Left(n));
+		NextInput(SendName);
+	}
 	else
 	{
-//		strInput.SetAt(n, '\0');
 		input_edit->SetText("");
 	}
 }

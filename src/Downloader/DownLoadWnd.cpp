@@ -4,20 +4,23 @@
 #include "VideoLoginUI.h"
 #include "SearchFileUI.h"
 #include "ProgtessUI.h"
+#include "DVR/DVRSession.h"
+#include "TestData.h"
 
-
-
-DownLoadWnd::DownLoadWnd()
+DownLoadWnd::DownLoadWnd() :_channels(0)
 {
 	ReadJsonFile();
-	m_Vendor.SetPaintMagager(&m_PaintManager);
-	AddVirtualWnd(_T("Vendor"), &m_Vendor);
+	_vendorManage.SetPaintMagager(&m_PaintManager);
+	_downloadManage.SetPaintMagager(&m_PaintManager);
+	AddVirtualWnd(_T("Vendor"), &_vendorManage);
+	AddVirtualWnd(_T("DownloadList"), &_downloadManage);
 }
 
 
 DownLoadWnd::~DownLoadWnd()
 {
 	RemoveVirtualWnd(_T("Vendor"));
+	RemoveVirtualWnd(_T("DownloadList"));
 }
 
 #define	BT_Calendar1			(_T("DataTime1"))
@@ -28,6 +31,7 @@ DownLoadWnd::~DownLoadWnd()
 #define BT_SEARCHFILE			(_T("Search"))
 #define BT_CLOSE_D				(_T("CloseWnd"))
 #define CTR_SELECT_TIME			(_T("Select_time"))
+#define BT_CHECKALL				(_T("checkall"))
 
 DUI_BEGIN_MESSAGE_MAP(DownLoadWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_OnVideoLoginUI, OnLogin)
@@ -37,6 +41,7 @@ DUI_ON_CLICK_CTRNAME(BT_Calendar1, OnSelectCalendar)
 DUI_ON_CLICK_CTRNAME(BT_Calendar2, OnSelectCalendar)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND1, OnSelectDayTime)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND2, OnSelectDayTime)
+DUI_ON_CLICK_CTRNAME(BT_CHECKALL, OnCheckAllchannels)
 DUI_ON_MSGTYPE_CTRNAME(DUI_MSGTYPE_VALUECHANGED, CTR_SELECT_TIME, FixedSliderPosition)
 DUI_END_MESSAGE_MAP()
 
@@ -76,6 +81,8 @@ void DownLoadWnd::BuildControlDDX()
 	AddControl<CButtonUI>(ico_stopdate);
 
 	AddControl<CSliderUI>(timetype);
+	_btn_search = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Search")));
+	_vList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
 }
 
 void DownLoadWnd::InitWindow()
@@ -140,10 +147,7 @@ void DownLoadWnd::OnSelectDayTime(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 	//set datetime 's text
-	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime().c_str());
-
-	DUI__Trace(msg.pSender->GetName());
-	DUI__Trace(pDlg->GetTime().c_str());
+	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime());
 }
 
 void DownLoadWnd::OnLogin(TNotifyUI& msg)
@@ -153,29 +157,139 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	if (!pDlg->GetLoginState())return;
+	Vendor_Info vendor;
+	unsigned long id = CTestData::getInstance()->GetLoginID();
+	CTestData::getInstance()->GetLoginInfo(vendor);
+	_channels = vendor.channels;
+	_vendorManage.AddVendorList(id, vendor.vendorName, vendor.ipAddr);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	SearchBegin();
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	/* start to search file on specify device.
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(m_Device));
+	if (pDlg->IsCancelSearch())return;
+
+//	start to search file on specify device.
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
-	*/
+	if (!pSearchDlg->IsBeginDownload())return;
+
+	_downloadManage.AddDownloadTask();
+	SetTimer(GetHWND(), 1, 2000, nullptr);
+}
+
+void DownLoadWnd::SearchBegin()
+{
+	__time64_t stime, etime;
+	GetDataAndTime(stime, etime);
+	int cursel = _vList->GetCurSel();
+	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
+	std::string strID = select->GetUserData();
+	unsigned long id = std::stoul(strID);
+	DVR::DVRSession* session = CTestData::getInstance()->GetSessionByID(id);
+//	DVR::DVRStatement state(session);
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
 {
+	CDuiString sender_name = msg.pSender->GetName();
+	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !sender_name.Left(14).Compare(_T("VendorContList")))
+	{
+		_vendorManage.ChangeChannelsList(sender_name, _channels);
+	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(9).Compare(_T("BT_delete")))
+	{
+		_vendorManage.DeleteVendor(sender_name);
+	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(7).Compare(_T("channel")))
+	{
+		CheckOption(sender_name);
+	}
+	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !sender_name.Left(8).Compare(_T("taskList")))
+	{
+		_downloadManage.Show_Off_SubList(sender_name);
+	}
+	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(10).Compare(_T("btn_Cancel")))
+	{
+		_downloadManage.RemoveSubList(sender_name);
+	}
 	WindowImplBase::Notify(msg);
+}
+
+void DownLoadWnd::OnCheckAllchannels(TNotifyUI& msg)
+{
+	COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindControl("checkall"));
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	for (int i = 1; i < option_size; i++)
+	{
+		COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_OPTION, i));
+		if (!option_All->IsSelected()){
+			option->Selected(true);
+			_btn_search->SetEnabled(true);
+		}
+		else{
+			option->Selected(false);
+			_btn_search->SetEnabled(false);
+		}
+	}
+}
+
+void DownLoadWnd::CheckOption(CDuiString& sName)
+{
+	COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(_vList, sName));
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	if (!option->IsSelected())
+	{
+		_btn_search->SetEnabled(true);
+	}
+	else
+	{
+		int count = 0;
+		for (int i = 0; i < option_size; i++)
+		{
+			COptionUI* suboption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_OPTION, i));
+			if (suboption->IsSelected())
+			{
+				count++;
+			}
+		}
+		if (count <= 1)
+		{
+			_btn_search->SetEnabled(false);
+		}
+		else
+		{
+			_btn_search->SetEnabled(true);
+		}
+	}
+}
+
+void DownLoadWnd::GetSelectChannel()
+{
+	_all_channels.clear();
+	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
+	int option_size = array->GetSize();
+	for (int i = 0; i < option_size; i++)
+	{
+		COptionUI* suboption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_OPTION, i));
+		if (suboption->IsSelected())
+		{
+			_all_channels.push_back(i);
+		}
+	}
 }
 
 void DownLoadWnd::InitTime()
@@ -210,6 +324,35 @@ void DownLoadWnd::SetButtonImage(const CDuiString& ctr_name, const CDuiString& d
 	if (c) c->SetAttribute(_T("foreimage"), value);
 }
 
+void DownLoadWnd::GetDataAndTime(__time64_t& start, __time64_t& stop)
+{
+	CLabelUI* Lab_StartData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
+	CLabelUI* Lab_StopData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
+	CLabelUI* Lab_StartTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText1")));
+	CLabelUI* Lab_StopTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText2")));
+	CDuiString sData = Lab_StartData->GetText();
+	CDuiString sTime = Lab_StartTime->GetText();
+	CDuiString eData = Lab_StopData->GetText();
+	CDuiString eTime = Lab_StopTime->GetText();
+
+	struct tm startTime, stopTime;
+	startTime = { 0 };
+	stopTime = { 0 };
+
+	sscanf(sData, "%d-%d-%d", &startTime.tm_year, &startTime.tm_mon, &startTime.tm_mday);
+	sscanf(sTime, "%d:%d", &startTime.tm_hour, &startTime.tm_min);
+
+	sscanf(eData, "%d-%d-%d", &stopTime.tm_year, &stopTime.tm_mon, &stopTime.tm_mday);
+	sscanf(eTime, "%d:%d", &stopTime.tm_hour, &stopTime.tm_min);
+
+	startTime.tm_year -= 1900;
+	startTime.tm_mon -= 1;
+	stopTime.tm_year -= 1900;
+	stopTime.tm_mon -= 1;
+	start = mktime(&startTime);
+	stop = mktime(&stopTime);
+}
+
 void DownLoadWnd::ReadJsonFile()
 {
 	std::string configFile;
@@ -239,6 +382,26 @@ void DownLoadWnd::ReadJsonFile()
 		std::string VendorDeviceName = a[1].GetString();
 
 		int type = stoi(TypeName);
-		//m_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
+		_VnameAndType.insert(pair<int, string>(type, VendorDeviceName));
 	}
+}
+
+LRESULT DownLoadWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT lRes = 0;
+	switch (uMsg)
+	{
+	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	}
+	bHandled = FALSE;
+	return 0;
+}
+
+LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (wParam == 1)
+	{
+		_downloadManage.RenewList();
+	}
+	return 0;
 }

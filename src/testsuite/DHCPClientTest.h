@@ -14,5 +14,5 @@ public:
 
 	static CppUnit::Test* suite();
 private:
-	DHCPClient _ntpClient;
+	DHCPClient _dhcpClient;
 };
