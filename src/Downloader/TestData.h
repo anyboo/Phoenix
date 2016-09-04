@@ -55,6 +55,8 @@ public:
 	unsigned long GetCurrentDid();
 	void GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Info>& downlaod_packet);
 
+	void DeleteTaskByFileName(const std::string fName, unsigned long packet_id);
+
 private:
 	std::map<unsigned long, Vendor_Info>			_Login_Info;
 	std::vector<SearchFileInfo>			_Files_Info;

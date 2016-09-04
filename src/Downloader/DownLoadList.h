@@ -19,6 +19,9 @@ public:
 	void RemoveSubList(CDuiString& strSendName);
 
 	void RenewList();
+
+
+	void AddSubListAttr(CListContainerElementUI* SubList);
 private:
 	CPaintManagerUI* _ppm;
 	int				_taskCount;

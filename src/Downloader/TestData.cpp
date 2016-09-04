@@ -128,3 +128,14 @@ void CTestData::GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Inf
 	ndex++;
 }
 
+void CTestData::DeleteTaskByFileName(const std::string fName, unsigned long packet_id)
+{
+	for (int i = 0; i < _downloadpacket[packet_id].size(); i++)
+	{
+		if (_downloadpacket[packet_id][i].filename == fName)
+		{
+			_downloadpacket[packet_id].erase(_downloadpacket[packet_id].begin() + i);
+			break;
+		}
+	}
+}
