@@ -32,6 +32,8 @@ public:
 	void testPlaybackstop();
 	void testPlaybackgetpos();
 	void testPlaybacksetpos();
+
+	HWND createHwnd();
 	
 	static CppUnit::Test* suite();
 private:
@@ -40,6 +42,7 @@ private:
 	long _channel;	
 	long _downloadhandle;
 	long _playhandle;	
+	HWND _hwnd;
 
 };
 
