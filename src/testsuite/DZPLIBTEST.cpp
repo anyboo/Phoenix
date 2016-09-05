@@ -44,7 +44,7 @@ CppUnit::Test* DZPLIBTEST::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("DZPLIBTEST");
 	
-	CppUnit_addTest(pSuite, DZPLIBTEST, testlogin);
+	//CppUnit_addTest(pSuite, DZPLIBTEST, testlogin);
 	//CppUnit_addTest(pSuite, DZPLIBTEST, testSession);
 
 	return pSuite;

@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SCENE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\common\wpcap;.\include;$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\common\wpcap;.\include;$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>

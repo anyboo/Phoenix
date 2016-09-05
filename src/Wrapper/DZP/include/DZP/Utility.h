@@ -17,21 +17,21 @@ public:
 	typedef void* HANDLE;
 	typedef struct FILEINFO
 	{
-		int ch;						//Í¨µÀºÅ
-		int size;					//ÎÄ¼þ´óÐ¡
-		char sFileName[108];		///< ÎÄ¼þÃû
-		__time64_t stBeginTime;	///< ÎÄ¼þ¿ªÊ¼Ê±¼ä
-		__time64_t stEndTime;		///< ÎÄ¼þ½áÊøÊ±¼ä
+		int ch;						//é€šé“å·
+		int size;					//æ–‡ä»¶å¤§å°
+		char sFileName[108];		///< æ–‡ä»¶å
+		__time64_t stBeginTime;	///< æ–‡ä»¶å¼€å§‹æ—¶é—´
+		__time64_t stEndTime;		///< æ–‡ä»¶ç»“æŸæ—¶é—´
 		HWND hwnd;
 	} FILEINFO;
 
 	typedef struct TIMEINFO
 	{
-		int ch;						//Í¨µÀºÅ
-		int size;					//ÎÄ¼þ´óÐ¡
-		char sFileName[108];		///< ÎÄ¼þÃû
-		__time64_t stBeginTime;	///< ÎÄ¼þ¿ªÊ¼Ê±¼ä
-		__time64_t stEndTime;		///< ÎÄ¼þ½áÊøÊ±¼ä
+		int ch;						//é€šé“å·
+		int size;					//æ–‡ä»¶å¤§å°
+		char sFileName[108];		///< æ–‡ä»¶å
+		__time64_t stBeginTime;	///< æ–‡ä»¶å¼€å§‹æ—¶é—´
+		__time64_t stEndTime;		///< æ–‡ä»¶ç»“æŸæ—¶é—´
 		HWND hwnd;
 	} TIMEINFO;
 
