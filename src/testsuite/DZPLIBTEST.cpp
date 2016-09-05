@@ -44,9 +44,25 @@ void DZPLIBTEST::testLogin()
 void DZPLIBTEST::testLogout()
 {
 	testLogin();
-	cout << "_handle: " << _handle << endl;
+	cout << "testlogout _handle: " << _handle << endl;
 	assert(_handle > 0);	
 	assert(Utility::logout(_handle) > 0);
+}
+
+void DZPLIBTEST::testFindfile()
+{
+	testLogin();
+	cout << "testFindfile _handle: " << _handle << endl;
+
+	Utility::TIMEINFO time1 = { 0 };
+	time1.ch = 1;
+
+	time1.stEndTime = _time64(NULL);
+	struct tm *ptm = _localtime64(&time1.stEndTime);
+	ptm->tm_mday--;
+	time1.stBeginTime = _mktime64(ptm);
+	int count = Utility::FindFile(_handle, time1, 5000);
+	assert(count > 0);
 }
 
 CppUnit::Test* DZPLIBTEST::suite()
@@ -56,6 +72,7 @@ CppUnit::Test* DZPLIBTEST::suite()
 	CppUnit_addTest(pSuite, DZPLIBTEST, testInit);
 	CppUnit_addTest(pSuite, DZPLIBTEST, testLogin);	
 	CppUnit_addTest(pSuite, DZPLIBTEST, testLogout);
+	CppUnit_addTest(pSuite, DZPLIBTEST, testFindfile);
 	CppUnit_addTest(pSuite, DZPLIBTEST, testClean);
 
 	return pSuite;
