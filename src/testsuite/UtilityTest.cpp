@@ -19,11 +19,12 @@ UtilityTest::~UtilityTest()
 
 void UtilityTest::testloginout()
 {
+	Utility::HANDLE handle = 0;
 	Poco::Net::SocketAddress addr(_connectString);
 	Utility::DVRINFO info;
-	_handle = Utility::login(addr, "admin", "", info);
-	assert(_handle > 0);
-	int rc = Utility::logout(_handle);
+	handle  = Utility::login(addr, "admin", "", info);
+	assert(handle > 0);
+	int rc = Utility::logout(handle);
 	assert(Utility::success == rc);
 }
 

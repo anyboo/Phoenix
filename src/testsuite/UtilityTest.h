@@ -27,8 +27,5 @@ public:
 private:
 	std::string _connectString;
 	std::string _connectorName;
-	std::list<DVR::DZPLite::Utility::FILEINFO> _fileinfo;
-	std::list<DVR::DZPLite::Utility::TIMEINFO> _timeinfo;
-	DVR::DZPLite::Utility::HANDLE _handle;
 };
 
