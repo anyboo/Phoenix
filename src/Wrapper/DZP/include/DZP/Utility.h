@@ -14,7 +14,7 @@ class DZPLite_API Utility
 public:
 	~Utility();
 
-	typedef void* HANDLE;
+	typedef long HANDLE;
 	typedef struct FILEINFO
 	{
 		int ch;						//通道号
@@ -35,7 +35,10 @@ public:
 		HWND hwnd;
 	} TIMEINFO;
 
-	typedef struct DVRINFO{} DVRINFO;
+	typedef struct DVRINFO
+	{
+		long nTotalChannel;
+	} DVRINFO;
 	typedef struct CONDITION{} CONDITION;
 
 	static const int success = 1;
@@ -73,7 +76,7 @@ public:
 	typedef void(*EventCallbackType)(void* pVal);
 
 	template <typename T, typename CBT>
-	static bool registerUpdateHandler(void* Handle, CBT callbackFn, T* pParam)
+	static bool registerUpdateHandler(Utility::HANDLE Handle, CBT callbackFn, T* pParam)
 		/// Registers the callback for (1)(insert, delete, update), (2)(commit) or 
 		/// or (3)(rollback) events. Only one function per group can be registered
 		/// at a time. Registration is not thread-safe. Storage pointed to by pParam
@@ -84,7 +87,7 @@ public:
 		/// http://www.sqlite.org/c3ref/commit_hook.html for details.
 	{
 		typedef std::pair<CBT, T*> CBPair;
-		typedef std::multimap<void*, CBPair> CBMap;
+		typedef std::multimap<Utility::HANDLE, CBPair> CBMap;
 		typedef typename CBMap::iterator CBMapIt;
 		typedef std::pair<CBMapIt, CBMapIt> CBMapItPair;
 
