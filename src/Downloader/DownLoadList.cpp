@@ -19,14 +19,14 @@ void CDownLoadList::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 	_ppm = pPaintMgr;
 }
 
-void CDownLoadList::AddDownloadTask()
+void CDownLoadList::AddDownloadTask(const unsigned long packet_id)
 {
 	CListUI* pList = dynamic_cast<CListUI*>(_ppm->FindControl(_T("DownloadList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, _ppm));
 	pList->Add(SubList);
-	unsigned long id = CTestData::getInstance()->GetCurrentDid();
-	SubList->SetTag(id);
+	
+	SubList->SetTag(packet_id);
 	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 
 	CDuiString taskListName, buttonName;
@@ -37,12 +37,13 @@ void CDownLoadList::AddDownloadTask()
 	SubList->SetName(taskListName);
 	BT_CanCel->SetName(buttonName);
 
-	AddDataToSubList(SubList, id, 0);
+	AddDataToSubList(SubList, packet_id, 0);
 	_taskCount = _taskCount + 1;
 }
 
 void CDownLoadList::AddDataToSubList(CListContainerElementUI* TaskList, const unsigned long download_ID, const int id)
 {
+	if (TaskList == nullptr)return;
 	CLabelUI* lab_filename = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 0));
 	CLabelUI* lab_filesize = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 1));
 	CLabelUI* lab_speed = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 2));
@@ -52,6 +53,7 @@ void CDownLoadList::AddDataToSubList(CListContainerElementUI* TaskList, const un
 
 	std::vector<DownLoad_Info> downloadfiles;
 	CTestData::getInstance()->GetDownloadInfo(download_ID, downloadfiles);
+	TaskList->SetTag(download_ID);
 
 	lab_filename->SetText(downloadfiles[id].filename.c_str());
 	lab_filesize->SetText(std::to_string(downloadfiles[id].filesize).c_str());
@@ -68,6 +70,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 
 	std::string strUserData;
 	CListContainerElementUI* ContList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByName(m_List, strSendName));
+	if (ContList->GetUserData() == _T("Sub"))return;
 	unsigned long downland_id = ContList->GetTag();
 	int filesize = CTestData::getInstance()->GetDownloadSize(downland_id);
 	int CurSel = GetSubListCurSel(ContList, m_List);
@@ -82,9 +85,10 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList = Add_FileInfoList();
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
+				AddSubListAttr(SubList);
 				AddDataToSubList(SubList, downland_id, i - CurSel - 1);
-				CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
-				BT_CanCel->SetVisible(false);
+		/*		CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+				BT_CanCel->SetVisible(false);*/
 			}
 			strUserData = to_string(filesize);
 			ContList->SetUserData(strUserData.c_str());
@@ -99,9 +103,10 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList = Add_FileInfoList();
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
+				AddSubListAttr(SubList);
 				AddDataToSubList(SubList, downland_id, i - CurSel - 1);
-				CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
-				BT_CanCel->SetVisible(false);
+			/*	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+				BT_CanCel->SetVisible(false);*/
 			}
 			strUserData = to_string(filesize);
 			ContList->SetUserData(strUserData.c_str());
@@ -142,6 +147,7 @@ CListContainerElementUI* CDownLoadList::Add_FileInfoList()
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, _ppm));
 	SubList->SetAttribute(_T("inset"), _T("30,0,0,0"));
+
 	return SubList;
 }
 
@@ -155,11 +161,22 @@ void CDownLoadList::RemoveSubList(CDuiString& strSendName)
 	CListContainerElementUI* ContList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByName(pList, SubListName.c_str()));
 	int ContListserial = GetSubListCurSel(ContList, pList);
 	std::string SubListCount = ContList->GetUserData();
-	int Count = stoi(SubListCount);
-
-	for (int i = 0; i <= Count; i++)
+	if (ContList->GetUserData() == _T("Sub"))
 	{
-		pList->RemoveAt(ContListserial, true);
+		pList->Remove(ContList, true);
+		CLabelUI* lab_name = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(ContList, DUI_CTR_LABEL, 0));
+		std::string filename = lab_name->GetText();
+		unsigned long packet_id = ContList->GetTag();
+		CTestData::getInstance()->DeleteTaskByFileName(filename, packet_id);
+	}
+	else
+	{
+		int Count = stoi(SubListCount);
+
+		for (int i = 0; i <= Count; i++)
+		{
+			pList->RemoveAt(ContListserial, true);
+		}
 	}
 }
 
@@ -176,10 +193,12 @@ void CDownLoadList::RenewList()
 		unsigned long packet_id = taskList->GetTag();
 		std::vector<DownLoad_Info> files;
 		CTestData::getInstance()->GetDownloadInfo(packet_id, files);
+		int filesize = files.size();
 		AddDataToSubList(taskList, packet_id, 0);
-		for (int i = 0; i < sublistCount; i++)
+		for (int i = 0; i < filesize; i++)
 		{
 			CListContainerElementUI* sublist = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, index + i + 1));
+			if (sublist == nullptr)break;
 			AddDataToSubList(sublist, packet_id, i);
 			tmp++;
 		}
@@ -187,4 +206,17 @@ void CDownLoadList::RenewList()
 		count = count - index;
 	}
 	
+}
+
+void CDownLoadList::AddSubListAttr(CListContainerElementUI* SubList)
+{
+	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
+	BT_CanCel->SetAttribute(_T("padding"), _T("5,5,35,5"));
+	CDuiString taskListName, buttonName;
+	taskListName.Format("taskList%d", _taskCount);
+	buttonName.Format("btn_Cancel%d", _taskCount);
+
+	SubList->SetName(taskListName);
+	BT_CanCel->SetName(buttonName);
+	_taskCount = _taskCount + 1;
 }

@@ -25,7 +25,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
-	
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();
