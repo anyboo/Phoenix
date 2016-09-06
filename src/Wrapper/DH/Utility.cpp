@@ -20,6 +20,7 @@ extern "C"
 
 	typedef LLONG (CALL_METHOD *PCLIENT_DownloadByRecordFile)(LLONG lLoginID, LPNET_RECORDFILE_INFO lpRecordFile, char *sSavedFileName, fDownLoadPosCallBack cbDownLoadPos, LDWORD dwUserData);
 	typedef LLONG (CALL_METHOD *PCLIENT_DownloadByTime)(LLONG lLoginID, int nChannelId, int nRecordFileType, LPNET_TIME tmStart, LPNET_TIME tmEnd, char *sSavedFileName, fTimeDownLoadPosCallBack cbTimeDownLoadPos, LDWORD dwUserData);
+	typedef BOOL (CALL_METHOD *PCLIENT_GetDownloadPos)(LLONG lFileHandle, int *nTotalSize, int *nDownLoadSize);
 
 	typedef LLONG (CALL_METHOD *PCLIENT_PlayBackByRecordFile)(LLONG lLoginID, LPNET_RECORDFILE_INFO lpRecordFile, HWND hWnd, fDownLoadPosCallBack cbDownLoadPos, LDWORD dwUserData);
 	typedef BOOL (CALL_METHOD *PCLIENT_StopPlayBack)(LLONG lPlayHandle);
@@ -313,11 +314,16 @@ namespace DVR {
 
 		int Utility::getDownloadPos(__int64 downloadHandle)
 		{
-			/*poco_assert(sl.hasSymbol("H264_DVR_GetDownloadPos"));
-			PH264_DVR_GetDownloadPos  H264_DVR_GetDownloadPos = (PH264_DVR_GetDownloadPos)sl.getSymbol("H264_DVR_GetDownloadPos");
+			poco_assert(sl.hasSymbol("CLIENT_GetDownloadPos"));
+			PCLIENT_GetDownloadPos  CLIENT_GetDownloadPos = (PCLIENT_GetDownloadPos)sl.getSymbol("CLIENT_GetDownloadPos");
 
-			return H264_DVR_GetDownloadPos(downloadHandle);*/
-			return 1;
+			int total = 0, cur = 0;	
+			int pos = 0;
+			if (CLIENT_GetDownloadPos(downloadHandle, &total, &cur))
+			{
+				pos = cur / total *100;
+			}
+			return pos;
 		}
 
 		int Utility::pausePlayback(long lPlayHandle, BOOL bPause)
