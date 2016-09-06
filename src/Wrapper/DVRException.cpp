@@ -36,6 +36,6 @@ POCO_IMPLEMENT_EXCEPTION(NoDataException, DVRException, "No data found")
 POCO_IMPLEMENT_EXCEPTION(LengthExceededException, DVRException, "Data too long")
 POCO_IMPLEMENT_EXCEPTION(ConnectionFailedException, DVRException, "Connection attempt failed")
 POCO_IMPLEMENT_EXCEPTION(NotConnectedException, DVRException, "Not connected to data source")
-
+POCO_IMPLEMENT_EXCEPTION(DevicePoolExistsException, DVRException, "Session already exists in the pool")
 
 } // namespace DVR

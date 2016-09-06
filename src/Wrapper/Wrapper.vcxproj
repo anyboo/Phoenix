@@ -93,6 +93,8 @@
   <ItemGroup>
     <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
     <ClInclude Include="include\DVR\DVRConnector.h" />
+    <ClInclude Include="include\DVR\DVRDevice.h" />
+    <ClInclude Include="include\DVR\DVRDeviceContainer.h" />
     <ClInclude Include="include\DVR\DVRException.h" />
     <ClInclude Include="include\DVR\DVRSession.h" />
     <ClInclude Include="include\DVR\DVRSessionFactory.h" />
@@ -107,6 +109,8 @@
     <ClInclude Include="include\DVR\SessionPoolContainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DVRDevice.cpp" />
+    <ClCompile Include="DVRDeviceContainer.cpp" />
     <ClCompile Include="DVRException.cpp" />
     <ClCompile Include="DVRSession.cpp" />
     <ClCompile Include="DVRConnector.cpp" />
