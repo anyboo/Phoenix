@@ -3,7 +3,7 @@
 
 #include "CodeClasses.iss"
 #define MyAppName "PhoenixUI"
-#define MyAppVersion "2.0.0.0001"
+#define MyAppVersion "2.0.0.0002"
 #define MyAppPublisher "Sisec, Inc."
 #define MyAppURL "http://www.sisec.com.cn"
 #define MyAppExeName "Downloader_d.exe"
