@@ -39,8 +39,9 @@ public:
 	
 	static CTestData* getInstance();
 	void SaveLoginInfo(Vendor_Info& vendor);
-	void GetLoginInfo(Vendor_Info& vendor);
+	void GetLoginInfoByID(unsigned long vendor_id, Vendor_Info& vendor);
 	unsigned long GetLoginID();
+	void GetAllLoginDIs(std::vector<unsigned long>& LoginIDs);
 	bool IsLogIn(const std::string ip);
 
 	DVR::DVRSession* GetSessionByID(unsigned long id);
@@ -53,6 +54,7 @@ public:
 
 	int GetDownloadSize(const unsigned long download_id);
 	unsigned long GetCurrentDid();
+	void GetDownloadAllpacketID(std::vector<unsigned long>& IDs);
 	void GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Info>& downlaod_packet);
 
 	void DeleteTaskByFileName(const std::string fName, unsigned long packet_id);

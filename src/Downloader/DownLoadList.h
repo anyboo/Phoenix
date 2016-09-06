@@ -8,7 +8,7 @@ public:
 
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
 
-	void AddDownloadTask();
+	void AddDownloadTask(const unsigned long packet_id);
 	void AddDataToSubList(CListContainerElementUI* TaskList, const unsigned long download_ID, const int id);
 	CDuiString TimeChange(__time64_t inputTime);
 

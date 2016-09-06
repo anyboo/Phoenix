@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "FileLogInfoUI.h"
-#include "CommDlg.h"
+#include <Objbase.h>
+#include <Shobjidl.h>
+#include <locale>
+#include <codecvt>
 
 CFileLogInfoUI::CFileLogInfoUI()
 {
@@ -48,20 +51,50 @@ void CFileLogInfoUI::OnSaveDownloadPath(TNotifyUI& msg)
 	Close();
 }
 
+void CFileLogInfoUI::InitWindow()
+{
+	_edit_path = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("path")));
+	TCHAR open_path[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, open_path);
+	_edit_path->SetText(open_path);
+}
+
 void CFileLogInfoUI::OnSelectPath(TNotifyUI& msg)
 {
-	TCHAR szBuffer[MAX_PATH] = { 0 };
+	IFileOpenDialog* pfd;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_PPV_ARGS(&pfd));
 
-	OPENFILENAME  ofn = { 0 };
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");//file subfix   
-	ofn.lpstrInitialDir = _T("D:\\");//Default Path
-	ofn.lpstrFile = szBuffer;//File Buffer  
-	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
-	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT;//add OFN_ALLOWMULTISELECT if need multiple selection
-	BOOL bSel = GetOpenFileName(&ofn);
+	if (FAILED(hr)) return;
+	DWORD dwOptions;
+	hr = pfd->GetOptions(&dwOptions);
+	if (FAILED(hr)) return;
+	hr = pfd->SetOptions(dwOptions | FOS_PICKFOLDERS | FOS_PATHMUSTEXIST);
+	if (FAILED(hr)) return;
+	hr = pfd->Show(NULL);
+	if (FAILED(hr)) return;
+	IShellItemArray *psiaResults;
+	hr = pfd->GetResults(&psiaResults);
+	DWORD conut = 0;
+	hr = psiaResults->GetCount(&conut);
 
-	CDuiString FileSavePath = ofn.lpstrInitialDir;
+	LPWSTR NAME;
+	IShellItem *item;
+	psiaResults->GetItemAt(0, &item);
+	hr = item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &NAME);
+	psiaResults->Release();
+	pfd->Release();
+
+	//fixed later, convert UUID to humanreadable name
+
+	std::wstring path(NAME);
+	std::string text;
+	if (sizeof(TCHAR) == 1){
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+		text = conv.to_bytes(path);
+	}
+
+	_edit_path->SetText(text.c_str());
 }

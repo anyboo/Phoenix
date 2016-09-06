@@ -89,6 +89,22 @@ void DownLoadWnd::InitWindow()
 {
 	BuildControlDDX();
 	InitTime();
+
+	SetTimer(GetHWND(), 1, 2000, nullptr);
+
+	std::vector<unsigned long> Login_IDs;
+	CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
+	for (size_t i = 0; i < Login_IDs.size(); i++)
+	{
+		_vendorManage.AddVendorList(Login_IDs[i]);
+	}
+
+	std::vector<unsigned long> download_IDs;
+	CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
+	for (size_t j = 0; j < download_IDs.size(); j++)
+	{
+		_downloadManage.AddDownloadTask(download_IDs[j]);
+	}
 }
 
 void DownLoadWnd::FixedSliderPosition(TNotifyUI& msg)
@@ -159,11 +175,8 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->ShowModal();
 
 	if (!pDlg->GetLoginState())return;
-	Vendor_Info vendor;
 	unsigned long id = CTestData::getInstance()->GetLoginID();
-	CTestData::getInstance()->GetLoginInfo(vendor);
-	_channels = vendor.channels;
-	_vendorManage.AddVendorList(id, vendor.vendorName, vendor.ipAddr);
+	_vendorManage.AddVendorList(id);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
@@ -185,8 +198,8 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pSearchDlg->ShowModal();
 	if (!pSearchDlg->IsBeginDownload())return;
 
-	_downloadManage.AddDownloadTask();
-	SetTimer(GetHWND(), 1, 2000, nullptr);
+	unsigned long id = CTestData::getInstance()->GetCurrentDid();
+	_downloadManage.AddDownloadTask(id);
 }
 
 void DownLoadWnd::SearchBegin()
@@ -206,7 +219,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	CDuiString sender_name = msg.pSender->GetName();
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK && !sender_name.Left(14).Compare(_T("VendorContList")))
 	{
-		_vendorManage.ChangeChannelsList(sender_name, _channels);
+		_vendorManage.ChangeChannelsList(sender_name);
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(9).Compare(_T("BT_delete")))
 	{
