@@ -33,8 +33,6 @@ public:
 	void testPlaybackgetpos();
 	void testPlaybacksetpos();
 
-	HWND createHwnd();
-	
 	static CppUnit::Test* suite();
 private:
 	string _connectString;

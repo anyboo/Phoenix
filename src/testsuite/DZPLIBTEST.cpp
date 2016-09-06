@@ -67,75 +67,6 @@ void DZPLIBTEST::testFindfile()
 	assert(count > 0);
 }
 
-//message proc  
-LRESULT CALLBACK WindowProc(
-	_In_  HWND hwnd,
-	_In_  UINT uMsg,
-	_In_  WPARAM wParam,
-	_In_  LPARAM lParam
-	)
-{
-	switch (uMsg)
-	{
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
-	}
-	return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
-
-HWND DZPLIBTEST::createHwnd()
-{
-	HINSTANCE hInstance;
-	hInstance = GetModuleHandle(NULL);
-	WNDCLASS Draw;
-	Draw.cbClsExtra = 0;
-	Draw.cbWndExtra = 0;
-	Draw.hCursor = LoadCursor(hInstance, IDC_ARROW);;
-	Draw.hIcon = LoadIcon(hInstance, IDI_APPLICATION);;
-	Draw.lpszMenuName = NULL;
-	Draw.style = CS_HREDRAW | CS_VREDRAW;
-	Draw.hbrBackground = (HBRUSH)COLOR_WINDOW;
-	Draw.lpfnWndProc = WindowProc;
-	Draw.lpszClassName = ("DDraw");
-	Draw.hInstance = hInstance;
-
-
-	RegisterClass(&Draw);
-
-	HWND hwnd = CreateWindow(
-		("DDraw"),           //class name    
-		"PLAY",				 //window title  
-		WS_OVERLAPPEDWINDOW, //window style    
-		150,				 //X points    
-		50,                  //Y points    
-		640,                 //window width    
-		480,                 //window height   
-		NULL,                //no parent window is NULL    
-		NULL,                //no menu is NULL    
-		hInstance,           // process  handle 
-		NULL);               //    
-
-	
-	//show window 
-	ShowWindow(hwnd, SW_SHOW);
-
-	//update window    
-	UpdateWindow(hwnd);
-
-	// message loop    
-	MSG msg;
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	return hwnd;
-}
-
 
 void DZPLIBTEST::testDownloadfilebyname()
 {
@@ -158,7 +89,7 @@ void DZPLIBTEST::testDownloadstop()
 
 void DZPLIBTEST::testPlaybackbyname()
 {
-	_hwnd = createHwnd();
+	
 }
 
 void DZPLIBTEST::testPlaybackbytime()
@@ -186,7 +117,7 @@ CppUnit::Test* DZPLIBTEST::suite()
 	CppUnit_addTest(pSuite, DZPLIBTEST, testLogout);
 	CppUnit_addTest(pSuite, DZPLIBTEST, testFindfile);
 	CppUnit_addTest(pSuite, DZPLIBTEST, testClean);
-	CppUnit_addTest(pSuite, DZPLIBTEST, testPlaybackbyname);
+	//CppUnit_addTest(pSuite, DZPLIBTEST, testPlaybackbyname);
 
 	return pSuite;
 }
