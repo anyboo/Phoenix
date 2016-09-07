@@ -364,8 +364,8 @@ namespace DVR {
 			timeStdToDH(&Tm, &stime);
 			_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
 			timeStdToDH(&Tm, &etime);
-
-			long ret = CLIENT_DownloadByTime(handle, timeinfo.ch - 1, 0, &stime, &etime, (char *)path.c_str(), DownLoadTimePos, 0);
+			
+			long ret = CLIENT_DownloadByTime(handle, timeinfo.ch , 0, &stime, &etime, (char *)path.c_str(), DownLoadTimePos, 0);
 
 			if (ret <= 0)
 				return false;
@@ -421,7 +421,8 @@ namespace DVR {
 			}
 			std::cout << "find file count: " << count << std::endl;
 
-			//////////////////////////////test download
+			////////////////////////////test download
+			////////////download by file
 			//Utility::FILEINFO info = { 0 };
 			//info.ch = fileinfo[0].ch;
 			//strncpy(info.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
@@ -440,9 +441,25 @@ namespace DVR {
 			//std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";
 			// 
 
-			//GetFile(handle, info, strfilpath);
+			//GetFile(handle, info, strfilpath);			
 			//Sleep(90000);		
-			////////////////////////////////
+			//////////////////download by time 
+			//Utility::TIMEINFO info1 = { 0 };
+			//info1.ch = fileinfo[0].ch;
+			//strncpy(info1.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
+			//info1.size = fileinfo[0].size;
+			//tm STime1;
+			//tm ETime1;
+			//timeDHToStd(&fileinfo[0].starttime, &STime1);
+			//info1.stBeginTime = _mktime64(&STime1);
+			//timeDHToStd(&fileinfo[0].endtime, &ETime1);
+			//info1.stEndTime = _mktime64(&ETime1);			
+
+			//std::cout << "download file size: " << info1.size << std::endl;
+			//std::string strfilpath = "D:\\DownLoadVideo\\2.mp4";
+			//GetFile(handle, info1, strfilpath, false);
+			//Sleep(90000);
+			//////////////////////////////////
 			return count;			
 		}
 
@@ -453,7 +470,7 @@ namespace DVR {
 
 		void CALLBACK Utility::DownLoadTimePos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 		{
-			
+			std::cout << "time download  pos handle: " << lPlayHandle << "  size: " << dwTotalSize << " current size: " << dwDownLoadSize << " index: " << index << std::endl;
 		}
 
 		int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)

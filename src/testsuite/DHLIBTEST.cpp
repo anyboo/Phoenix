@@ -5,7 +5,7 @@
 
 DHLIBTEST::DHLIBTEST(const std::string& name)
 	: CppUnit::TestCase(name),
-	_connectString("192.168.0.55:37777"),
+	_connectString("10.168.0.96:37777"),
 	_handle(0),
 	_channel(0)
 {
@@ -32,7 +32,7 @@ void DHLIBTEST::testLogin()
 {
 	Utility::DVRINFO info = { 0 };
 	Poco::Net::SocketAddress addr(_connectString);
-	_handle = Utility::login(addr, "admin", "112233", info);
+	_handle = Utility::login(addr, "admin", "", info);
 
 	cout << "testLogin _handle: " << _handle << endl;
 	_channel = info.nTotalChannel;
