@@ -84,17 +84,6 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 							   DVRINFO& info)
 {
 	Utility::HANDLE handle = 0;
-	
-
-	//deviceLocation = "192.168.1.25:32";
-
-	/*std::string usr(user);
-	std::string pwd(password);
-	if (usr.empty()) usr = "admin";
-	if (pwd.empty()) pwd = "";*/
-	//*_pDvr = H264_DVR_Login(const_cast<char*>(host.c_str()), port,
-	//	const_cast<char*>(usr.c_str()), const_cast<char*>(pwd.c_str()),
-	//	&info, &error, SocketStyle::UDPSOCKET); //how do I know the type of socket,OMG FAITH
 
 	H264_DVR_DEVICEINFO OutDev;
 	memset(&OutDev, 0, sizeof(H264_DVR_DEVICEINFO));
@@ -110,23 +99,11 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr,
 		info.nTotalChannel = OutDev.iDigChannel + OutDev.byChanNum;
 	std::cout << "login handle: " << handle << " channel: " << info.nTotalChannel << std::endl;
 
-	///////////////test
-	//DVR::DZPLite::Utility::TIMEINFO time1 = { 0 };
-	//time1.ch = 1;
-
-	//time1.stEndTime = _time64(NULL);
-	//struct tm *ptm = _localtime64(&time1.stEndTime);
-	//ptm->tm_mday--;
-	//time1.stBeginTime = _mktime64(ptm);
-	//FindFile(handle, time1, 5000);
-	////////////////////////////
-	
 	return handle;
 }
 
 int Utility::logout(Utility::HANDLE handle)
 {
-	//int rc = H264_DVR_Logout(*_pDvr);
 	poco_assert(sl.hasSymbol("H264_DVR_Logout"));
 	PH264_DVR_Logout H264_DVR_Logout = (PH264_DVR_Logout)sl.getSymbol("H264_DVR_Logout");
 	std::cout << "logout handle: " << handle << std::endl;
@@ -135,7 +112,6 @@ int Utility::logout(Utility::HANDLE handle)
 
 int Utility::setTimeOut(std::size_t timeout, std::size_t times)
 {
-	//int rc = H264_DVR_SetConnectTime(timeout, TRY_TIMES);
 	poco_assert(sl.hasSymbol("H264_DVR_SetConnectTime"));
 	PH264_DVR_SetConnectTime pDZPSetConnectTime = (PH264_DVR_SetConnectTime)sl.getSymbol("H264_DVR_SetConnectTime");
 	return pDZPSetConnectTime(timeout, times);
@@ -152,7 +128,6 @@ int Utility::Init()
 
 int Utility::CleanUp()
 {
-	//bool rc = H264_DVR_Cleanup();
 	std::cout << "CleanUp" << std::endl;
 	poco_assert(sl.isLoaded());
 	poco_assert(sl.hasSymbol("H264_DVR_Cleanup"));
@@ -212,16 +187,11 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, 
 	if (ret <= 0)
 		return false;
 
-	
-	//opCode = OPERATION_DOWNLOAD;
-	//int rc = H264_DVR_GetFileByName(*_pDvr, &result, const_cast<char*>(path.c_str()), Utility::CallbackFn, opCode, Utility::DataCallbackFn);
 	return success;
 }
 
 int Utility::GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge)
 {
-	/*int rc = H264_DVR_GetFileByTime(*_pDvr, &cond, "", false,
-	Utility::CallbackFn, (unsigned long)this, 0);*/
 	poco_assert(sl.hasSymbol("H264_DVR_GetFileByTime"));
 	PH264_DVR_GetFileByTime H264_DVR_GetFileByTime = (PH264_DVR_GetFileByTime)sl.getSymbol("H264_DVR_GetFileByTime");
 
@@ -245,8 +215,6 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, 
 
 int Utility::Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo)
 {
-	/*int rc = H264_DVR_PlayBackByName_V2(*_pDvr, &result,
-	Utility::CallbackFn, 0, (unsigned long)this);*/
 	poco_assert(sl.hasSymbol("H264_DVR_PlayBackByName"));
 	PH264_DVR_PlayBackByName H264_DVR_PlayBackByName = (PH264_DVR_PlayBackByName)sl.getSymbol("H264_DVR_PlayBackByName");
 
@@ -271,8 +239,6 @@ int Utility::Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo)
 
 int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
 {
-	/*int rc = H264_DVR_PlayBackByTimeEx(*_pDvr, &cond,
-	0, (unsigned long)this, Utility::CallbackFn, 0);*/
 	return success;
 }
 
@@ -280,7 +246,6 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 {
 	int count = 0;
 	std::cout << "find file" << std::endl;
-	//int rc = H264_DVR_FindFile(*_pDvr, &condition, &result.front(), maxCount, &count, timeout);
 	poco_assert(sl.hasSymbol("H264_DVR_FindFile"));
 	PH264_DVR_FindFile H264_DVR_FindFile = (PH264_DVR_FindFile)sl.getSymbol("H264_DVR_FindFile");
 
@@ -295,7 +260,7 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	TMToNetTime(Tm, info.endTime);
 
 	H264_DVR_FILE_DATA nriFileinfo[2000];
-	//int fileCount;
+
 	if (H264_DVR_FindFile(handle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &count, timeout) <= 0)
 	{
 		std::cout << "find failer" << std::endl;
@@ -303,27 +268,6 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	}
 	std::cout << "find file count: " << count << std::endl;
 
-	////////////////////////////test
-	//Utility::FILEINFO fileinfo = { 0 };
-	//fileinfo.ch = nriFileinfo[0].ch;
-	//strncpy(fileinfo.sFileName, nriFileinfo[0].sFileName, strlen(nriFileinfo[0].sFileName));
-	//fileinfo.size = nriFileinfo[0].size;
-	//struct tm Tm1;
-	//NetTimeToTM(nriFileinfo[0].stBeginTime, Tm1);
-	//fileinfo.stBeginTime = _mktime64(&Tm1);
-	//NetTimeToTM(nriFileinfo[0].stEndTime, Tm1);
-	//fileinfo.stEndTime = _mktime64(&Tm1);
-
-	//std::cout << "download file size: " << fileinfo.size << std::endl;
-
-	//std::string strfilpath = "D:\\DownLoadVideo\\1.h264";
-	// 
-
-	//GetFile(handle, fileinfo, strfilpath);
-
-	//Sleep(90000);
-	//
-	//////////////////////////////
 	return count;
 }
 

@@ -20,6 +20,7 @@ namespace DVR{
 		size_t channelCount();
 		void selectChannel(int index);
 		void unselectChannel(int index);
+		void selectAllChannel();
 		bool isLoggedIn()const;
 
 		DVRSession& session();

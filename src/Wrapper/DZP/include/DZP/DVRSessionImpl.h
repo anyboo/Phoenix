@@ -29,10 +29,6 @@ public:
 	void logout();
 	bool isLoggedIn()const;
 
-	void list();
-	void download();
-	void playback();
-	void abort();
 	const std::string& connectorName() const;
 	void setLoginTimeout(std::size_t timeout);
 	std::size_t getLoginTimeout() const;

@@ -91,26 +91,6 @@ DVR::DVRStatementImpl* DVRSessionImpl::createStatementImpl()
 	return new DVRStatementImpl(*this, _handle);
 }
 
-void DVRSessionImpl::list()
-{
-
-}
-
-void DVRSessionImpl::download()
-{
-
-}
-
-void DVRSessionImpl::playback()
-{
-
-}
-
-void DVRSessionImpl::abort()
-{
-
-}
-
 // NOTE: Utility::dvrHandle() has been moved here from Utility.cpp
 // as a workaround for a failing AnyCast with Clang.
 // for a discussion.

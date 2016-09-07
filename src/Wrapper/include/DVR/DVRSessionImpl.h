@@ -23,11 +23,6 @@ namespace DVR {
 		virtual void login(const std::string& user = "", const std::string& password = "") = 0;
 		virtual void logout() = 0;
 		virtual bool isLoggedIn()const = 0;
-		
-		virtual void list() = 0;
-		virtual void download() = 0;
-		virtual void playback() = 0;
-		virtual void abort() = 0;
 
 		virtual void setLoginTimeout(std::size_t timeout) = 0;
 		virtual std::size_t getLoginTimeout() const = 0;

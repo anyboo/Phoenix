@@ -23,6 +23,14 @@ namespace DVR{
 		}
 	}
 
+	void DVRDevice::selectAllChannel()
+	{
+		for (auto var : _channels)
+		{
+			var = true;
+		}
+	}
+
 	const std::string DVRDevice::name() const
 	{
 		poco_bugcheck_msg("generate the unique string");
