@@ -235,6 +235,8 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK && !sender_name.Left(10).Compare(_T("btn_Cancel")))
 	{
+		if (MessageBox(GetHWND(), "是否删除下载任务！", "警告", MB_OKCANCEL) == IDCANCEL)
+			return;
 		_downloadManage.RemoveSubList(sender_name);
 	}
 	WindowImplBase::Notify(msg);
@@ -242,6 +244,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 
 void DownLoadWnd::OnCheckAllchannels(TNotifyUI& msg)
 {
+	_all_channels.clear();
 	COptionUI* option_All = dynamic_cast<COptionUI*>(m_PaintManager.FindControl("checkall"));
 	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
 	int option_size = array->GetSize();
@@ -251,6 +254,7 @@ void DownLoadWnd::OnCheckAllchannels(TNotifyUI& msg)
 		if (!option_All->IsSelected()){
 			option->Selected(true);
 			_btn_search->SetEnabled(true);
+			_all_channels.push_back(i - 1);
 		}
 		else{
 			option->Selected(false);
@@ -262,46 +266,17 @@ void DownLoadWnd::OnCheckAllchannels(TNotifyUI& msg)
 void DownLoadWnd::CheckOption(CDuiString& sName)
 {
 	COptionUI* option = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByName(_vList, sName));
-	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
-	int option_size = array->GetSize();
+	std::string serial = sName.Right(sName.GetLength() - 7);
+	int channel = std::stoi(serial);
 	if (!option->IsSelected())
 	{
 		_btn_search->SetEnabled(true);
+		_all_channels.push_back(channel);
 	}
 	else
 	{
-		int count = 0;
-		for (int i = 0; i < option_size; i++)
-		{
-			COptionUI* suboption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_OPTION, i));
-			if (suboption->IsSelected())
-			{
-				count++;
-			}
-		}
-		if (count <= 1)
-		{
-			_btn_search->SetEnabled(false);
-		}
-		else
-		{
-			_btn_search->SetEnabled(true);
-		}
-	}
-}
-
-void DownLoadWnd::GetSelectChannel()
-{
-	_all_channels.clear();
-	CDuiPtrArray* array = m_PaintManager.FindSubControlsByClass(_vList, DUI_CTR_OPTION);
-	int option_size = array->GetSize();
-	for (int i = 0; i < option_size; i++)
-	{
-		COptionUI* suboption = dynamic_cast<COptionUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_OPTION, i));
-		if (suboption->IsSelected())
-		{
-			_all_channels.push_back(i);
-		}
+		_btn_search->SetEnabled(false);
+		_all_channels.erase(_all_channels.begin() + channel);
 	}
 }
 

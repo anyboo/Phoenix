@@ -91,6 +91,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DVRDownloadTask.h" />
+    <ClInclude Include="DVRDownloadTaskContainer.h" />
+    <ClInclude Include="DVRSearchFiles.h" />
     <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
     <ClInclude Include="include\DVR\DVRConnector.h" />
     <ClInclude Include="include\DVR\DVRDevice.h" />
@@ -111,7 +114,10 @@
   <ItemGroup>
     <ClCompile Include="DVRDevice.cpp" />
     <ClCompile Include="DVRDeviceContainer.cpp" />
+    <ClCompile Include="DVRDownloadTask.cpp" />
+    <ClCompile Include="DVRDownloadTaskContainer.cpp" />
     <ClCompile Include="DVRException.cpp" />
+    <ClCompile Include="DVRSearchFiles.cpp" />
     <ClCompile Include="DVRSession.cpp" />
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />

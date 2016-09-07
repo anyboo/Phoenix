@@ -166,6 +166,10 @@ void CVendor::Off_line()
 
 void CVendor::DeleteVendor(CDuiString& sName)
 {
+	
+
+	CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
+	btn_search->SetEnabled(false);
 	std::string tmp = sName.Right(sName.GetLength() - 9).GetData();
 	int Cursel = std::stoi(tmp);
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
