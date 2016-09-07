@@ -316,6 +316,16 @@ namespace DVR {
 			pTimeDH->dwSecond = pTimeStd->tm_sec;
 		}
 
+		static void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd)
+		{
+			pTimeStd->tm_year = pTimeDH->dwYear - 1900;
+			pTimeStd->tm_mon = pTimeDH->dwMonth - 1;
+			pTimeStd->tm_mday = pTimeDH->dwDay;
+			pTimeStd->tm_hour = pTimeDH->dwHour;
+			pTimeStd->tm_min = pTimeDH->dwMinute;
+			pTimeStd->tm_sec = pTimeDH->dwSecond;
+		}
+
 		int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path)
 		{
 			poco_assert(sl.hasSymbol("CLIENT_DownloadByRecordFile"));
@@ -331,6 +341,8 @@ namespace DVR {
 			timeStdToDH(&Tm, &info.starttime);
 			_localtime64_s(&Tm, (const time_t*)&fileinfo.stEndTime);
 			timeStdToDH(&Tm, &info.endtime);
+			info.driveno = fileinfo.driveno;
+			info.startcluster = fileinfo.startcluster;
 
 			long ret = CLIENT_DownloadByRecordFile(handle, &info, (char *)path.c_str(), CallbackFn, NULL);
 			std::cout << "download ret: " << ret << std::endl;
@@ -352,8 +364,8 @@ namespace DVR {
 			timeStdToDH(&Tm, &stime);
 			_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
 			timeStdToDH(&Tm, &etime);
-
-			long ret = CLIENT_DownloadByTime(handle, timeinfo.ch - 1, 0, &stime, &etime, (char *)path.c_str(), DownLoadTimePos, 0);
+			
+			long ret = CLIENT_DownloadByTime(handle, timeinfo.ch , 0, &stime, &etime, (char *)path.c_str(), DownLoadTimePos, 0);
 
 			if (ret <= 0)
 				return false;
@@ -409,36 +421,56 @@ namespace DVR {
 			}
 			std::cout << "find file count: " << count << std::endl;
 
-			////////////////////////////test
-			//Utility::FILEINFO fileinfo = { 0 };
-			//fileinfo.ch = nriFileinfo[0].ch;
-			//strncpy(fileinfo.sFileName, nriFileinfo[0].sFileName, strlen(nriFileinfo[0].sFileName));
-			//fileinfo.size = nriFileinfo[0].size;
-			//struct tm Tm1;
-			//NetTimeToTM(nriFileinfo[0].stBeginTime, Tm1);
-			//fileinfo.stBeginTime = _mktime64(&Tm1);
-			//NetTimeToTM(nriFileinfo[0].stEndTime, Tm1);
-			//fileinfo.stEndTime = _mktime64(&Tm1);
+			////////////////////////////test download
+			////////////download by file
+			//Utility::FILEINFO info = { 0 };
+			//info.ch = fileinfo[0].ch;
+			//strncpy(info.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
+			//info.size = fileinfo[0].size;
+			//tm STime1;
+			//tm ETime1;
+			//timeDHToStd(&fileinfo[0].starttime, &STime1);
+			//info.stBeginTime = _mktime64(&STime1);
+			//timeDHToStd(&fileinfo[0].endtime, &ETime1);
+			//info.stEndTime = _mktime64(&ETime1);
+			//info.driveno = fileinfo[0].driveno;
+			//info.startcluster = fileinfo[0].startcluster;
 
-			//std::cout << "download file size: " << fileinfo.size << std::endl;
+			//std::cout << "download file size: " << info.size << std::endl;
 
-			//std::string strfilpath = "D:\\DownLoadVideo\\1.h264";
+			//std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";
 			// 
 
-			//GetFile(handle, fileinfo, strfilpath);
+			//GetFile(handle, info, strfilpath);			
 			//Sleep(90000);		
-			//////////////////////////////
+			//////////////////download by time 
+			//Utility::TIMEINFO info1 = { 0 };
+			//info1.ch = fileinfo[0].ch;
+			//strncpy(info1.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
+			//info1.size = fileinfo[0].size;
+			//tm STime1;
+			//tm ETime1;
+			//timeDHToStd(&fileinfo[0].starttime, &STime1);
+			//info1.stBeginTime = _mktime64(&STime1);
+			//timeDHToStd(&fileinfo[0].endtime, &ETime1);
+			//info1.stEndTime = _mktime64(&ETime1);			
+
+			//std::cout << "download file size: " << info1.size << std::endl;
+			//std::string strfilpath = "D:\\DownLoadVideo\\2.mp4";
+			//GetFile(handle, info1, strfilpath, false);
+			//Sleep(90000);
+			//////////////////////////////////
 			return count;			
 		}
 
 		void Utility::CallbackFn(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 		{
-			//std::cout << "download pos handle: " << handle << "  size: " << totalSize << " current size: " << curSize << " opcode: " << opCode << std::endl;
+			std::cout << "download pos handle: " << lPlayHandle << "  size: " << dwTotalSize << " current size: " << dwDownLoadSize  << std::endl;
 		}
 
 		void CALLBACK Utility::DownLoadTimePos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 		{
-			
+			std::cout << "time download  pos handle: " << lPlayHandle << "  size: " << dwTotalSize << " current size: " << dwDownLoadSize << " index: " << index << std::endl;
 		}
 
 		int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)
