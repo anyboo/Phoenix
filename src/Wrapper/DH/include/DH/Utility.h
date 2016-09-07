@@ -1,15 +1,16 @@
 #pragma once
-#include "DZPLite.h"
+#include "DHLite.h"
 #include <Poco/DateTime.h>
 #include <string>
 #include "DVR/DVRSession.h"
 #include <Poco/Net/SocketAddress.h>
 #include <map>
+#include "dhnetsdk.h"
 
 namespace DVR {
-namespace DZPLite {
+namespace DHLite {
 
-class DZPLite_API Utility
+class DHLite_API Utility
 {
 public:
 	~Utility();
@@ -69,8 +70,9 @@ public:
 
 
 	static int stopPlayback(long lPlayHandle);
-	static int setPlaybackPos(__int64 playbackHandle, __int32 pos);
-	static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
+	static int setPlaybackPos(__int64 playbackHandle, __int64 filesize, __int32 pos);
+	//static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
+	static int pausePlayback(long lPlayHandle, BOOL bPause);
 	static int getDownloadPos(__int64 downloadHandle);
 
 	typedef void(*EventCallbackType)(void* pVal);
@@ -130,8 +132,9 @@ public:
 
 
 protected:
-	static void __stdcall CallbackFn(long handle, long totalSize, long curSize, long opCode);
+	static void __stdcall CallbackFn(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);
+	static void __stdcall DownLoadTimePos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
 
 	//static void* eventHookRegister(void* Handle, EventCallbackType callbackFn, void* pParam);
 private:
