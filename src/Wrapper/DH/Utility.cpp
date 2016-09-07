@@ -55,8 +55,117 @@ namespace DVR {
 		{
 			poco_assert(sl.hasSymbol("CLIENT_GetLastError"));
 			PCLIENT_GetLastError CLIENT_GetLastError = (PCLIENT_GetLastError)sl.getSymbol("CLIENT_GetLastError");
-			CLIENT_GetLastError();
-			return "error";			
+
+			std::string strError;
+			DWORD dwError = CLIENT_GetLastError();
+			switch (dwError)
+			{	
+			case NET_NOERROR:							strError = "No error";
+				break;
+			case NET_ERROR:								strError = "Unknown error";
+				break;
+			case NET_SYSTEM_ERROR:						strError = "Windows system error";
+				break;
+			case NET_NETWORK_ERROR:						strError = "Network error, probably because of network-time-out";
+				break;
+			case NET_DEV_VER_NOMATCH:					strError = "No match protocol";
+				break;
+			case NET_INVALID_HANDLE:					strError = "Invalid handle";
+				break;
+			case NET_OPEN_CHANNEL_ERROR:				strError = "Failed to open channel";
+				break;
+			case NET_CLOSE_CHANNEL_ERROR:				strError = "Failed to close channel";
+				break;
+			case NET_ILLEGAL_PARAM:						strError = "Illegal parameter";
+				break;
+			case NET_SDK_INIT_ERROR:					strError = "Failed to initialize SDK";
+				break;
+			case NET_SDK_UNINIT_ERROR:					strError = "Failed to uninitialize SDK";
+				break;
+			case NET_RENDER_OPEN_ERROR:					strError = "Unknown error";
+				break;
+			case NET_DEC_OPEN_ERROR:					strError = "Unknown error";
+				break;
+			case NET_DEC_CLOSE_ERROR:					strError = "Unknown error";
+				break;
+			case NET_MULTIPLAY_NOCHANNEL:				strError = "Unknown error";
+				break;
+			case NET_TALK_INIT_ERROR:					strError = "Unknown error";
+				break;
+			case NET_TALK_NOT_INIT:						strError = "Unknown error";
+				break;
+			case NET_TALK_SENDDATA_ERROR:				strError = "Unknown error";
+				break;
+			case NET_NO_TALK_CHANNEL:					strError = "Unknown error";
+				break;
+			case NET_NO_AUDIO:							strError = "Unknown error";
+				break;
+			case NET_REAL_ALREADY_SAVING:				strError = "Unknown error";
+				break;
+			case NET_NOT_SAVING:						strError = "Unknown error";
+				break;
+			case NET_OPEN_FILE_ERROR:					strError = "Unknown error";
+				break;
+			case NET_PTZ_SET_TIMER_ERROR:				strError = "Unknown error";
+				break;
+			case NET_RETURN_DATA_ERROR:					strError = "Unknown error";
+				break;
+			case NET_INSUFFICIENT_BUFFER:				strError = "Unknown error";
+				break;
+			case NET_NOT_SUPPORTED:						strError = "Unknown error";
+				break;
+			case NET_NO_RECORD_FOUND:					strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_PASSWORD:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_USER:					strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_TIMEOUT:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_RELOGGIN:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_LOCKED:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_BLACKLIST:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_BUSY:					strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_CONNECT:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_NETWORK:				strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_MAXCONNECT:			strError = "Unknown error";
+				break;
+			case NET_LOGIN_ERROR_PROTOCOL3_ONLY:		strError = "Unknown error";
+				break;
+			case NET_RENDER_SOUND_ON_ERROR:				strError = "Unknown error";
+				break;
+			case NET_RENDER_SOUND_OFF_ERROR:			strError = "Unknown error";
+				break;
+			case NET_RENDER_SET_VOLUME_ERROR:			strError = "Unknown error";
+				break;
+			case NET_RENDER_ADJUST_ERROR:				strError = "Unknown error";
+				break;
+			case NET_RENDER_PAUSE_ERROR:				strError = "Unknown error";
+				break;
+			case NET_RENDER_SNAP_ERROR:					strError = "Unknown error";
+				break;
+			case NET_RENDER_STEP_ERROR:					strError = "Unknown error";
+				break;
+			case NET_RENDER_FRAMERATE_ERROR:			strError = "Unknown error";
+				break;
+			case NET_CONFIG_DEVBUSY:					strError = "Unknown error";
+				break;
+			case NET_CONFIG_DATAILLEGAL:				strError = "Unknown error";
+				break;
+			case NET_NO_INIT:							strError = "Unknown error";
+				break;
+			case NET_DOWNLOAD_END:						strError = "Unknown error";
+				break;
+			default:									strError = "Unknown error";
+			
+			}
+			return strError;			
 		}
 
 		std::string Utility::lastError(const DVRSession& session)
@@ -107,7 +216,55 @@ namespace DVR {
 				{
 					info.nTotalChannel = DevInfo.byChanNum;
 				}
-			}			
+			}
+			else
+			{
+				switch (nError)
+				{
+				case 1:
+					std::cout << "Incorrect Password" << std::endl;
+					break;
+				case 2:
+					std::cout << "User not Exist" << std::endl;
+					break;
+				case 3:
+					std::cout << "Login Timeout" << std::endl;
+					break;
+				case 4:
+					std::cout << "Curent User Has Logined" << std::endl;
+					break;
+				case 5:
+					std::cout << "Curent User Locked" << std::endl;
+					break;
+				case 6:
+					std::cout << "Curent User Invalid" << std::endl;
+					break;
+				case 7:
+					std::cout << "System Busy" << std::endl;
+					break;
+				case 8:
+					std::cout << "Cant find host" << std::endl;
+					break;
+				case 9:
+					std::cout << "Cant find host" << std::endl;
+					break;
+				case 10:
+					std::cout << "Max Conncet" << std::endl;
+					break;
+				case 11:
+					std::cout << "Protocol 3 Only" << std::endl;
+					break;
+				case 12:
+					std::cout << "Protocol 3 Only" << std::endl;
+					break;
+				case 13:
+					std::cout << "UKey Lost" << std::endl;
+					break;
+				default:
+					std::cout << "Network Error" << std::endl;
+					break;
+				}
+			}
 
 			std::cout << "login handle: " << handle << " channel: " << info.nTotalChannel << std::endl;			
 
@@ -223,8 +380,6 @@ namespace DVR {
 
 		int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
 		{
-			/*int rc = H264_DVR_PlayBackByTimeEx(*_pDvr, &cond,
-			0, (unsigned long)this, Utility::CallbackFn, 0);*/
 			return success;
 		}
 

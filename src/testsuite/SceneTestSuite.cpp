@@ -2,7 +2,8 @@
 #include "DHCPClientTest.h"
 #include "ARPClientTest.h"
 #include "DZPLIBTEST.h"
-#include "UtilityTest.h"
+#include "DHLIBTEST.h"
+//#include "UtilityTest.h"
 
 CppUnit::Test* SceneTestSuite::suite()
 {
@@ -13,6 +14,7 @@ CppUnit::Test* SceneTestSuite::suite()
 	pSuite->addTest(ARPClientTest::suite());
 	
 	pSuite->addTest(DZPLIBTEST::suite());
+	pSuite->addTest(DHLIBTEST::suite());
 
 	pSuite->addTest(UtilityTest::suite());
 
