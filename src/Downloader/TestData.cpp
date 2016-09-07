@@ -28,14 +28,23 @@ void CTestData::SaveLoginInfo(Vendor_Info& vendor)
 	_Login_Info.insert(pair<unsigned long, Vendor_Info>(_SessionID, vendor));
 }
 
-void CTestData::GetLoginInfo(Vendor_Info& vendor)
+void CTestData::GetLoginInfoByID(unsigned long vendor_id, Vendor_Info& vendor)
 {
-	vendor = _Login_Info[_SessionID];
+	vendor = _Login_Info[vendor_id];
 }
 
 unsigned long CTestData::GetLoginID()
 {
 	return _SessionID;
+}
+
+void CTestData::GetAllLoginDIs(std::vector<unsigned long>& LoginIDs)
+{
+	std::map<unsigned long, Vendor_Info>::iterator it;
+	for (it = _Login_Info.begin(); it != _Login_Info.end(); it++)
+	{
+		LoginIDs.push_back(it->first);
+	}
 }
 
 bool CTestData::IsLogIn(const std::string ip)
@@ -113,6 +122,15 @@ unsigned long CTestData::GetCurrentDid()
 	return _downloadpacket_id;
 }
 
+void CTestData::GetDownloadAllpacketID(std::vector<unsigned long>& IDs)
+{
+	std::map<unsigned long, std::vector<DownLoad_Info>>::iterator itor;
+	for (itor = _downloadpacket.begin(); itor != _downloadpacket.end(); itor++)
+	{
+		IDs.push_back(itor->first);
+	}
+}
+
 void CTestData::GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Info>& downlaod_packet)
 {
 	if (ndex > 100)
@@ -128,3 +146,14 @@ void CTestData::GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Inf
 	ndex++;
 }
 
+void CTestData::DeleteTaskByFileName(const std::string fName, unsigned long packet_id)
+{
+	for (int i = 0; i < _downloadpacket[packet_id].size(); i++)
+	{
+		if (_downloadpacket[packet_id][i].filename == fName)
+		{
+			_downloadpacket[packet_id].erase(_downloadpacket[packet_id].begin() + i);
+			break;
+		}
+	}
+}

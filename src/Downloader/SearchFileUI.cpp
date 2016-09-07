@@ -72,6 +72,7 @@ bool SearchFileUI::IsBeginDownload()
 
 void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 {
+	if (_checked_files.size() == 0)return;
 	m_IsDownLoad = beginDownload;
 
 	std::auto_ptr<CFileLogInfoUI> pDlg(new CFileLogInfoUI);
@@ -80,8 +81,6 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	if (_checked_files.size() == 0)return;
-	
 	CTestData::getInstance()->SetDownloadfiles(_checked_files);
 
 	Close();

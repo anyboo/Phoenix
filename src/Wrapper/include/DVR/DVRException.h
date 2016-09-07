@@ -40,6 +40,7 @@ POCO_DECLARE_EXCEPTION(DVR_API, NoDataException, DVRException)
 POCO_DECLARE_EXCEPTION(DVR_API, LengthExceededException, DVRException)
 POCO_DECLARE_EXCEPTION(DVR_API, ConnectionFailedException, DVRException)
 POCO_DECLARE_EXCEPTION(DVR_API, NotConnectedException, DVRException)
+POCO_DECLARE_EXCEPTION(DVR_API, DevicePoolExistsException, DVRException)
 
 
 }  // namespace DVR

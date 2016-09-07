@@ -16,7 +16,7 @@ CppUnit::Test* SceneTestSuite::suite()
 	pSuite->addTest(DZPLIBTEST::suite());
 	pSuite->addTest(DHLIBTEST::suite());
 
-	pSuite->addTest(UtilityTest::suite());
+	//pSuite->addTest(UtilityTest::suite());
 
 	return pSuite;
 }

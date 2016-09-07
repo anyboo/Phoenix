@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Vendor.h"
-
+#include "TestData.h"
 
 CVendor::CVendor()
 :ppm(nullptr), m_ContListSel(0)
@@ -21,12 +21,13 @@ void CVendor::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 	ppm = pPaintMgr;
 }
 
-void CVendor::ChangeChannelsList(CDuiString& sName, size_t Channel_Count)
+void CVendor::ChangeChannelsList(CDuiString& sName)
 {
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CListContainerElementUI* SubContList = new CListContainerElementUI;
 	CListContainerElementUI* CurSelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByName(pList, sName));
 	int CurSel = pList->GetItemIndex(CurSelList);
+	unsigned long Channel_Count = CurSelList->GetTag();
 
 	CListContainerElementUI* nextList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
 	CListContainerElementUI* channel_List = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByName(pList, _T("Channel_List")));
@@ -75,15 +76,21 @@ void CVendor::ChangeChannelsList(CDuiString& sName, size_t Channel_Count)
 }
 
 
-void CVendor::AddVendorList(const unsigned long id, const std::string& VendorName, const std::string& VendorIP)
+void CVendor::AddVendorList(const unsigned long vendor_id)
 {
+	Vendor_Info vendor;
+	CTestData::getInstance()->GetLoginInfoByID(vendor_id, vendor);
+	std::string VendorName = vendor.vendorName;
+	int _channels = vendor.channels;
+	std::string VendorIP = vendor.ipAddr;
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
 	assert(SubList);
 	pList->Add(SubList);
-	std::string strID = std::to_string(id);
+	std::string strID = std::to_string(vendor_id);
 	SubList->SetUserData(strID.c_str());
+	SubList->SetTag(_channels);
 
 	CDuiString subList_name, button_name;
 	subList_name.Format("VendorContList%d", m_ContListSel);
