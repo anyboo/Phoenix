@@ -211,10 +211,7 @@ int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, 
 	std::cout << "download ret: " << ret << std::endl;
 	if (ret <= 0)
 		return false;
-
 	
-	//opCode = OPERATION_DOWNLOAD;
-	//int rc = H264_DVR_GetFileByName(*_pDvr, &result, const_cast<char*>(path.c_str()), Utility::CallbackFn, opCode, Utility::DataCallbackFn);
 	return success;
 }
 
@@ -262,11 +259,12 @@ int Utility::Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo)
 	_localtime64_s(&Tm, (const time_t*)&fileinfo.stEndTime);
 	TMToSDKTime(Tm, fileData.stEndTime);
 
-	if (H264_DVR_PlayBackByName(handle, &fileData, nullptr, NULL, 0) == 0)
+	/*if (H264_DVR_PlayBackByName(handle, &fileData, nullptr, NULL, 0) == 0)
 	{
 		return false;
 	}
-	return success;
+	return success;*/
+	return H264_DVR_PlayBackByName(handle, &fileData, nullptr, NULL, 0);
 }
 
 int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
@@ -275,6 +273,7 @@ int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
 	0, (unsigned long)this, Utility::CallbackFn, 0);*/
 	return success;
 }
+
 
 int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout)
 {
@@ -320,9 +319,7 @@ int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, 
 	// 
 
 	//GetFile(handle, fileinfo, strfilpath);
-
-	//Sleep(90000);
-	//
+	//Sleep(90000);		
 	//////////////////////////////
 	return count;
 }
@@ -345,7 +342,7 @@ int Utility::stopPlayback(long lPlayHandle)
 	return  H264_DVR_StopPlayBack(lPlayHandle);	
 }
 
-int Utility::setPlayback(__int64 playbackHandle, __int32 pos)
+int Utility::setPlaybackPos(__int64 playbackHandle, __int32 pos)
 {
 	poco_assert(sl.hasSymbol("H264_DVR_SetPlayPos"));
 	PH264_DVR_SetPlayPos H264_DVR_SetPlayPos = (PH264_DVR_SetPlayPos)sl.getSymbol("H264_DVR_SetPlayPos");
@@ -353,7 +350,7 @@ int Utility::setPlayback(__int64 playbackHandle, __int32 pos)
 	return H264_DVR_SetPlayPos(playbackHandle, pos / 100.0);
 }
 
-int Utility::getPlayback(__int64 playbackHandle, __int32 *pos)
+int Utility::getPlaybackPos(__int64 playbackHandle, __int32 *pos)
 {
 	poco_assert(sl.hasSymbol("H264_DVR_GetPlayPos"));
 	PH264_DVR_GetPlayPos H264_DVR_GetPlayPos = (PH264_DVR_GetPlayPos)sl.getSymbol("H264_DVR_GetPlayPos");

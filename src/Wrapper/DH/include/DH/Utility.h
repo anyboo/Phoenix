@@ -1,15 +1,16 @@
 #pragma once
-#include "DZPLite.h"
+#include "DHLite.h"
 #include <Poco/DateTime.h>
 #include <string>
 #include "DVR/DVRSession.h"
 #include <Poco/Net/SocketAddress.h>
 #include <map>
+#include "dhnetsdk.h"
 
 namespace DVR {
-namespace DZPLite {
+namespace DHLite {
 
-class DZPLite_API Utility
+class DHLite_API Utility
 {
 public:
 	~Utility();
@@ -22,6 +23,8 @@ public:
 		char sFileName[108];		///< 文件名
 		__time64_t stBeginTime;	///< 文件开始时间
 		__time64_t stEndTime;		///< 文件结束时间
+		unsigned int        driveno;                    // 磁盘号(区分网络录像和本地录像的类型，0－127表示本地录像,其中64表示光盘1，128表示网络录像)
+		unsigned int        startcluster;               // 起始簇号
 		HWND hwnd;
 	} FILEINFO;
 
@@ -69,8 +72,9 @@ public:
 
 
 	static int stopPlayback(long lPlayHandle);
-	static int setPlaybackPos(__int64 playbackHandle, __int32 pos);
-	static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
+	static int setPlaybackPos(__int64 playbackHandle, __int64 filesize, __int32 pos);
+	//static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
+	static int pausePlayback(long lPlayHandle, BOOL bPause);
 	static int getDownloadPos(__int64 downloadHandle);
 
 	typedef void(*EventCallbackType)(void* pVal);
@@ -130,8 +134,9 @@ public:
 
 
 protected:
-	static void __stdcall CallbackFn(long handle, long totalSize, long curSize, long opCode);
+	static void __stdcall CallbackFn(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);
+	static void __stdcall DownLoadTimePos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
 
 	//static void* eventHookRegister(void* Handle, EventCallbackType callbackFn, void* pParam);
 private:
