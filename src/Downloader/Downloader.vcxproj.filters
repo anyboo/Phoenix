@@ -121,6 +121,7 @@
     <ClCompile Include="DownLoadList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalendarUI.h">
@@ -193,6 +194,7 @@
     <ClInclude Include="DownLoadList.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc" />

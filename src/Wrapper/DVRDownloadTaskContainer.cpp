@@ -1,8 +1,9 @@
-#include "DVRDownloadTaskContainer.h"
+#include "DVR/DVRDownloadTaskContainer.h"
+#include "time.h"
 
 namespace DVR{
 	DVRDownloadTaskContainer::DVRDownloadTaskContainer()
-		:_current_packet_id(0)
+		:_New_packetName("")
 	{
 	}
 
@@ -13,30 +14,32 @@ namespace DVR{
 
 	void DVRDownloadTaskContainer::AddTaskPacket(DVRDownloadTask* Task)
 	{
-		_current_packet_id = _Downloadpacket_Container.size() + 1;
-		_Downloadpacket_Container.insert(std::pair<size_t, DVRDownloadTask*>(_current_packet_id, Task));
+		std::string KeyName = std::string("packet") + std::to_string(rand());
+		_New_packetName = KeyName;
+		_Downloadpacket_Container.insert(std::pair<std::string, DVRDownloadTask*>(KeyName, Task));
 	}
 
-	size_t DVRDownloadTaskContainer::GetNewAddTaskID()
+	std::string DVRDownloadTaskContainer::GetNewAddTaskID()
 	{
-		return _current_packet_id;
+		return _New_packetName;
 	}
 
-	DVRDownloadTask* DVRDownloadTaskContainer::GetTaskPacketByID(const size_t packet_id)
+	DVRDownloadTask* DVRDownloadTaskContainer::GetTaskPacketByName(const std::string KeyName)
 	{
-		return _Downloadpacket_Container[packet_id];
+		return _Downloadpacket_Container[KeyName];
 	}
 
-	void DVRDownloadTaskContainer::DeleteTaskPacket(const size_t packet_id)
+	bool DVRDownloadTaskContainer::DeleteTaskPacket(const std::string KeyName)
 	{
-		DVRDownloadTask* task = _Downloadpacket_Container[packet_id];
-		task->DeleteWholeTask();
-		_Downloadpacket_Container.erase(packet_id);
+		DVRDownloadTask* task = _Downloadpacket_Container[KeyName];
+		bool bRet = task->DeleteWholeTask();
+		_Downloadpacket_Container.erase(KeyName);
+		return bRet;
 	}
 
-	void DVRDownloadTaskContainer::DeleteSubTask(const size_t packet_id, const std::string fname)
+	bool DVRDownloadTaskContainer::DeleteSubTask(const std::string KeyName, const std::string fname)
 	{
-		_Downloadpacket_Container[packet_id]->DeleteTaskByName(fname);
+		return _Downloadpacket_Container[KeyName]->DeleteTaskByName(fname);
 	}
 }
 

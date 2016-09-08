@@ -1,5 +1,5 @@
-#include "DVRDownloadTask.h"
-#include "DVRSearchFiles.h"
+#include "DVR/DVRDownloadTask.h"
+//#include "DVRSearchFiles.h"
 
 namespace DVR{
 	DVRDownloadTask::DVRDownloadTask()
@@ -13,14 +13,14 @@ namespace DVR{
 
 	void DVRDownloadTask::InitDownloadPacketInfo()
 	{
-		DVRSearchFiles Search;
-		Download_packet	taskinfo;
-		std::vector<Search_fileInfo>	files;
-		Search.GetSeachFilesInfo(files);
-		for (size_t i = 0; i < files.size(); i++)
+	//	DVRSearchFiles Search;
+		Download_packet taskinfo;
+	//	std::vector<Search_fileInfo>	files;
+	//	Search.GetSeachFilesInfo(files);
+		for (size_t i = 0; i < 4; i++)
 		{
-			taskinfo.fname = files[i].fname;
-			taskinfo.fsize = files[i].fsize;
+			taskinfo.fname = std::string("task") + std::to_string(i);
+			taskinfo.fsize = 123123;
 			taskinfo.lastTime = 0;
 			taskinfo.proValue = 0;
 			taskinfo.speed = 0;
@@ -30,24 +30,28 @@ namespace DVR{
 
 	void DVRDownloadTask::GetDownloadPacketInfo(std::vector<Download_packet>& TaskPacket)
 	{
-
+		TaskPacket = _TaskPacket_Info;
 	}
 
-	void DVRDownloadTask::DeleteWholeTask()
+	bool DVRDownloadTask::DeleteWholeTask()
 	{
 		_TaskPacket_Info.clear();
+		if (_TaskPacket_Info.empty())
+			return true;
+		return false;
 	}
 
-	void DVRDownloadTask::DeleteTaskByName(const std::string fName)
+	bool DVRDownloadTask::DeleteTaskByName(const std::string fName)
 	{
 		for (size_t i = 0; i < _TaskPacket_Info.size(); i++)
 		{
 			if (_TaskPacket_Info[i].fname == fName)
 			{
 				_TaskPacket_Info.erase(_TaskPacket_Info.begin() + i);
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 }
 

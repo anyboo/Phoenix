@@ -166,7 +166,6 @@ void CVendor::Off_line()
 
 void CVendor::DeleteVendor(CDuiString& sName)
 {
-	
 
 	CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
 	btn_search->SetEnabled(false);
@@ -179,6 +178,9 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	int serial = pList->GetItemIndex(SubList);
 	CListContainerElementUI* ChannelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, serial + 1));
 	pList->Remove(SubList, true);
+	std::string vendor_id = SubList->GetText();
+	unsigned long pID = std::stoi(vendor_id);
+	CTestData::getInstance()->DeleteVendorByID(pID);
 	if (ChannelList != NULL && ChannelList->GetName() == _T("Channel_List"))
 	{
 		pList->Remove(ChannelList, true);

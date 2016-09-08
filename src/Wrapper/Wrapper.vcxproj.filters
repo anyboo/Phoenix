@@ -75,13 +75,13 @@
     <ClInclude Include="include\DVR\DVRDeviceContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRDownloadTask.h">
+    <ClInclude Include="include\DVR\DVRDownloadTask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRDownloadTaskContainer.h">
+    <ClInclude Include="include\DVR\DVRDownloadTaskContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DVRSearchFiles.h">
+    <ClInclude Include="include\DVR\DVRSearchFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -159,6 +159,7 @@
     <ClInclude Include="SearchFileUI.h" />
     <ClInclude Include="SetIpWnd.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="test.h" />
     <ClInclude Include="TestData.h" />
     <ClInclude Include="TimeUI.h" />
     <ClInclude Include="Vendor.h" />
@@ -208,6 +209,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="TestData.cpp" />
     <ClCompile Include="TimeUI.cpp" />
     <ClCompile Include="Vendor.cpp" />

@@ -91,14 +91,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DVRDownloadTask.h" />
-    <ClInclude Include="DVRDownloadTaskContainer.h" />
-    <ClInclude Include="DVRSearchFiles.h" />
     <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
     <ClInclude Include="include\DVR\DVRConnector.h" />
     <ClInclude Include="include\DVR\DVRDevice.h" />
     <ClInclude Include="include\DVR\DVRDeviceContainer.h" />
+    <ClInclude Include="include\DVR\DVRDownloadTask.h" />
+    <ClInclude Include="include\DVR\DVRDownloadTaskContainer.h" />
     <ClInclude Include="include\DVR\DVRException.h" />
+    <ClInclude Include="include\DVR\DVRSearchFiles.h" />
     <ClInclude Include="include\DVR\DVRSession.h" />
     <ClInclude Include="include\DVR\DVRSessionFactory.h" />
     <ClInclude Include="include\DVR\DVRSessionImpl.h" />

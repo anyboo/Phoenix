@@ -3,6 +3,7 @@
 
 #define BT_SAVE_PATH		(_T("ok_btn"))
 #define BT_SELECT_PATH		(_T("select_path"))
+#define CMB_SELECT_CASE		(_T("Case_Numb"))
 
 class CFileLogInfoUI :
 	public WindowImplBase
@@ -18,8 +19,9 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 
+	void InitDownloadConfig();
 	void OnSaveDownloadPath(TNotifyUI& msg);
-
+	void OnSelectCaseToSave(TNotifyUI& msg);
 	void OnSelectPath(TNotifyUI& msg);
 
 protected:
@@ -29,4 +31,6 @@ protected:
 
 private:
 	CEditUI*		_edit_path;
+	CComboUI*		_comb_case;
+	CEditUI*		_edit_time;
 };

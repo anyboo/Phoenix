@@ -11,10 +11,10 @@ namespace DVR{
 		~DVRDownloadTaskContainer();
 
 		void AddTaskPacket(DVRDownloadTask* Task);
-		std::string& GetNewAddTaskID();
+		std::string GetNewAddTaskID();
 		DVRDownloadTask* GetTaskPacketByName(const std::string KeyName);
-		void DeleteTaskPacket(const std::string KeyName);
-		void DeleteSubTask(const std::string KeyName, const std::string fname);
+		bool DeleteTaskPacket(const std::string KeyName);
+		bool DeleteSubTask(const std::string KeyName, const std::string fname);
 
 	private:
 		std::string				_New_packetName;

@@ -7,11 +7,11 @@
 		</VerticalLayout>
 		<HorizontalLayout height="50">
 			<Combo name="Case_Numb" width="90" height="30" hotimage="file='skin/hsbj.png'" padding="10,20,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,200" bordercolor="0x12345678" bordersize="1" bkimage="file='skin/hsbj.png'" itembkimage="skin/bsbj.png" itemhotimage="file='skin/hsbj.png'">
-				<ListLabelElement name="Item1" userdata="1" text="案件一" selected="true"/>
-				<ListLabelElement name="Item2" userdata="2" text="案件二" />
-				<ListLabelElement name="Item3" userdata="3" text="案件三" />
-				<ListLabelElement name="Item4" userdata="4" text="案件四" />
-				<ListLabelElement name="Item5" userdata="5" text="案件五" />
+				<ListLabelElement name="Item1" userdata="case1" text="案件一" selected="true"/>
+				<ListLabelElement name="Item2" userdata="case2" text="案件二" />
+				<ListLabelElement name="Item3" userdata="case3" text="案件三" />
+				<ListLabelElement name="Item4" userdata="case4" text="案件四" />
+				<ListLabelElement name="Item5" userdata="case5" text="案件五" />
 			</Combo>
 			<Button name="select_path" width="100" height="30" text="选择路径" font="1" bordersize="1" padding="10,20,0,0" bordercolor="0x12345678" bkimage="file='skin/hsbj.png'"/>
 			<Edit name="path" width="350" height="30" font="1" bordersize="1" padding="0,20,0,0" bordercolor="0x88888888"/>

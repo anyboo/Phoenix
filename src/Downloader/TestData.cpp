@@ -60,6 +60,11 @@ bool CTestData::IsLogIn(const std::string ip)
 	return false;
 }
 
+void CTestData::DeleteVendorByID(const unsigned long vendor_id)
+{
+	_Login_Info.erase(vendor_id);
+}
+
 DVR::DVRSession* CTestData::GetSessionByID(unsigned long id)
 {
 	return _Login_Info[id].session;
@@ -156,4 +161,9 @@ void CTestData::DeleteTaskByFileName(const std::string fName, unsigned long pack
 			break;
 		}
 	}
+}
+
+void CTestData::DeleteWholeTaskByID(const unsigned long packet_id)
+{
+	_downloadpacket.erase(packet_id);
 }

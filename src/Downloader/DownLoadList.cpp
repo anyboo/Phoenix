@@ -176,6 +176,8 @@ void CDownLoadList::RemoveSubList(CDuiString& strSendName)
 		{
 			pList->RemoveAt(ContListserial, true);
 		}
+		unsigned long packet_id = ContList->GetTag();
+		CTestData::getInstance()->DeleteWholeTaskByID(packet_id);
 	}
 }
 
