@@ -6,7 +6,6 @@
 #include "AppInitialize.h"
 #include "ipset.h"
 #include "InitNetConfig.h"
-#include "test.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -17,9 +16,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	if (FAILED(Hr)) return 0;
 
 //	CInitNetConfig Init;
-	TTest tt;
-	tt.ADD();
-	tt.Get();
 
 	CAppInitialize appInit;
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
