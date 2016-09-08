@@ -72,7 +72,11 @@ bool SearchFileUI::IsBeginDownload()
 
 void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 {
-	if (_checked_files.size() == 0)return;
+	if (_checked_files.size() == 0)
+	{
+		MessageBox(GetHWND(), "请选择下载文件！", "警告", MB_OK);
+		return;
+	}
 	m_IsDownLoad = beginDownload;
 
 	std::auto_ptr<CFileLogInfoUI> pDlg(new CFileLogInfoUI);

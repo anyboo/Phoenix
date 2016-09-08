@@ -34,13 +34,22 @@ IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 {
 	IPADDRESS_INFO ipaddress_Info;
 	NetworkInterface::AddressList ipList = _inft.addressList();
-	size_t n = ipList.size() - 1;
-	IPAddress ipAddress = ipList[n].get<0>();
-	IPAddress subnetAddress = ipList[n].get<1>();
-	IPAddress broadcastAddress = ipList[n].get<2>();
-	ipaddress_Info.strIP = ipAddress.toString();
-	ipaddress_Info.strSubNet = subnetAddress.toString();
-	ipaddress_Info.strBroadcast = broadcastAddress.toString();
+	size_t n = ipList.size();
+	if (n == 0)
+	{
+		ipaddress_Info.strIP.clear();
+		ipaddress_Info.strSubNet.clear();
+		ipaddress_Info.strBroadcast.clear();
+	}
+	else
+	{
+		IPAddress ipAddress = ipList[n].get<0>();
+		IPAddress subnetAddress = ipList[n].get<1>();
+		IPAddress broadcastAddress = ipList[n].get<2>();
+		ipaddress_Info.strIP = ipAddress.toString();
+		ipaddress_Info.strSubNet = subnetAddress.toString();
+		ipaddress_Info.strBroadcast = broadcastAddress.toString();
+	}
 	return ipaddress_Info;
 }
 
