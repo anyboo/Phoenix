@@ -30,7 +30,6 @@
     <ClInclude Include="ARPClientTest.h" />
     <ClInclude Include="DeviceContainerTest.h" />
     <ClInclude Include="DHCPClientTest.h" />
-    <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
     <ClInclude Include="UtilityTest.h" />
   </ItemGroup>
@@ -39,7 +38,6 @@
     <ClCompile Include="DeviceContainerTest.cpp" />
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="Driver.cpp" />
-    <ClCompile Include="DZPLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
   </ItemGroup>

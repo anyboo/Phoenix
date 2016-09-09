@@ -12,7 +12,7 @@ CppUnit::Test* SceneTestSuite::suite()
 
 	pSuite->addTest(ARPClientTest::suite());
 	
-	pSuite->addTest(DZPLIBTEST::suite());
+	//pSuite->addTest(DZPLIBTEST::suite());
 
 	pSuite->addTest(UtilityTest::suite());
 

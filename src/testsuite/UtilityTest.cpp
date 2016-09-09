@@ -2,9 +2,12 @@
 #include <Poco/CppUnit/TestSuite.h>
 #include <Poco/CppUnit/TestCaller.h>
 #include <Poco/Net/SocketAddress.h>
+#include <DZP/Utility.h>
+#include "DZP/netsdk.h"
 
 using namespace DVR::DZPLite;
-
+Utility::HANDLE UtilityTest::_handle = 0;;
+bool UtilityTest::_logined = false;
 UtilityTest::UtilityTest(const std::string& name):
 	CppUnit::TestCase(name),
 	_connectString("192.168.0.32:34567"),
@@ -15,45 +18,43 @@ UtilityTest::UtilityTest(const std::string& name):
 
 UtilityTest::~UtilityTest()
 {
+	testlogout();
 }
 
-void UtilityTest::testloginout()
+void UtilityTest::testlogin()
 {
-	Utility::HANDLE handle = 0;
 	Poco::Net::SocketAddress addr(_connectString);
-	Utility::DVRINFO info;
-	handle  = Utility::login(addr, "admin", "", info);
-	assert(handle > 0);
-	int rc = Utility::logout(handle);
-	assert(Utility::success == rc);
+	_handle = Utility::login(addr, "admin", "");
+	assert(_handle > 0);
+	if (_handle > 0) _logined = true;
+}
+
+void UtilityTest::testlogout()
+{
+	if (!_logined) return;
+	bool rc = Utility::logout(_handle);
+	assert(rc);
 }
 
 void UtilityTest::testInit()
 {
-	int rc = Utility::Init();
-	assert(Utility::success == rc);
+	Utility::Init();
 }
 
 void UtilityTest::testCleanUp()
 {
-	int rc = Utility::CleanUp();
-	assert(Utility::success == rc);
+	Utility::Cleanup();
 }
 
 void UtilityTest::testsetTimeOut()
 {
-	int rc = Utility::setTimeOut(2000, 1);
-	assert(Utility::success == rc);
+	//Utility::setTimeOut(3000, 3);
 }
 
 void UtilityTest::testGetFile()
 {
-	/*Utility::FILEINFO fileinfo;
-	fileinfo.ch = 2;
-	
-	const std::string& path("c:\\windows\\temp\\");
-	int rc = Utility::GetFile(_handle, fileinfo, path);
-	assert(Utility::success == rc);*/
+	/*Record data;
+	bool rc = readStream(_handle, data, "D:\\test\\kkk22.avi");*/
 }
 
 void UtilityTest::testPlayback()
@@ -63,7 +64,35 @@ void UtilityTest::testPlayback()
 
 void UtilityTest::testFindFile()
 {
+	Record record[100];
 
+	H264_DVR_TIME startTime, endTime;
+	startTime.dwYear = 2016;
+	startTime.dwMonth = 9;
+	startTime.dwDay = 1;
+	startTime.dwHour = 0;
+	startTime.dwMinute = 0;
+	startTime.dwSecond = 0;
+	
+	endTime.dwYear = 2016;
+	endTime.dwMonth = 9;
+	endTime.dwDay = 9;
+	endTime.dwHour = 12;
+	endTime.dwMinute = 10;
+	endTime.dwSecond = 23;
+
+	Condition cond;
+	cond.nChannelN0 = 0;
+	cond.nFileType = SDK_File_Type::SDK_RECORD_ALL;
+	cond.startTime = startTime;
+	cond.endTime = endTime;
+	cond.hWnd = 0;
+	memset(cond.szFileName, 0, 32);
+
+	int count = 0;
+
+	size_t findcount = Utility::findStream(_handle, cond, record[0], 100);
+	assert(findcount >= 0);
 }
 
 void UtilityTest::setUp()
@@ -82,7 +111,11 @@ CppUnit::Test* UtilityTest::suite()
 
 	CppUnit_addTest(pSuite, UtilityTest, testInit);
 	CppUnit_addTest(pSuite, UtilityTest, testsetTimeOut);
-	CppUnit_addTest(pSuite, UtilityTest, testloginout);
+	CppUnit_addTest(pSuite, UtilityTest, testlogin);
+	CppUnit_addTest(pSuite, UtilityTest, testFindFile);
+	CppUnit_addTest(pSuite, UtilityTest, testGetFile);
+	CppUnit_addTest(pSuite, UtilityTest, testPlayback);
+	CppUnit_addTest(pSuite, UtilityTest, testlogout);
 	CppUnit_addTest(pSuite, UtilityTest, testCleanUp);
 
 	return pSuite;

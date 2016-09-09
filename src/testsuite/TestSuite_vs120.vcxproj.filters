@@ -35,9 +35,6 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
-    <ClCompile Include="DZPLIBTEST.cpp">
-      <Filter>DZPLite</Filter>
-    </ClCompile>
     <ClCompile Include="ARPClientTest.cpp">
       <Filter>ARP\Source Files</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneTestSuite.h" />
-    <ClInclude Include="DZPLIBTEST.h">
-      <Filter>DZPLite</Filter>
-    </ClInclude>
     <ClInclude Include="ARPClientTest.h">
       <Filter>ARP\Header Files</Filter>
     </ClInclude>

@@ -11,7 +11,8 @@ public:
 	UtilityTest(const std::string& name);
 	~UtilityTest();
 
-	void testloginout();
+	void testlogin();
+	void testlogout();
 	void testInit();
 	void testCleanUp();
 	void testsetTimeOut();
@@ -27,5 +28,8 @@ public:
 private:
 	std::string _connectString;
 	std::string _connectorName;
+
+	static DVR::DZPLite::Utility::HANDLE _handle;
+	static bool _logined;
 };
 

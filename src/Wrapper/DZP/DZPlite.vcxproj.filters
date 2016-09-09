@@ -24,13 +24,13 @@
     <ClCompile Include="DVRSessionImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Notifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DVRStatementImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,10 +47,10 @@
     <ClInclude Include="include\DZP\Notifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DZP\Utility.h">
+    <ClInclude Include="include\DZP\DVRStatementImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DZP\DVRStatementImpl.h">
+    <ClInclude Include="include\DZP\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
