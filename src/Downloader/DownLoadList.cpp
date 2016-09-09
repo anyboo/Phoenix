@@ -113,9 +113,8 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 		}
 		if (ContList->GetUserData() != _T("0") && SubContList->GetUserData() == _T("Sub"))
 		{
-			strUserData = ContList->GetUserData();
-			int Count = stoi(strUserData);
-
+			unsigned long id = ContList->GetTag();	
+			int Count = CTestData::getInstance()->GetDownloadSize(id);
 			for (int j = CurSel + 1; j <= CurSel + Count; j++)
 			{
 				m_List->RemoveAt(CurSel + 1, false);
@@ -177,6 +176,8 @@ void CDownLoadList::RemoveSubList(CDuiString& strSendName)
 		{
 			pList->RemoveAt(ContListserial, true);
 		}
+		unsigned long packet_id = ContList->GetTag();
+		CTestData::getInstance()->DeleteWholeTaskByID(packet_id);
 	}
 }
 
@@ -186,7 +187,7 @@ void CDownLoadList::RenewList()
 	int tmp = 0;
 	CListUI* pList = dynamic_cast<CListUI*>(_ppm->FindControl(_T("DownloadList")));
 	int count = pList->GetCount();
-	while (count > 0)
+	while (count != index)
 	{
 		CListContainerElementUI* taskList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, index));
 		int sublistCount = atoi(taskList->GetUserData());
@@ -194,16 +195,17 @@ void CDownLoadList::RenewList()
 		std::vector<DownLoad_Info> files;
 		CTestData::getInstance()->GetDownloadInfo(packet_id, files);
 		int filesize = files.size();
+		int Max = sublistCount == 0 ? sublistCount : filesize;
 		AddDataToSubList(taskList, packet_id, 0);
-		for (int i = 0; i < filesize; i++)
+		for (int i = 0; i < Max; i++)
 		{
 			CListContainerElementUI* sublist = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, index + i + 1));
 			if (sublist == nullptr)break;
 			AddDataToSubList(sublist, packet_id, i);
 			tmp++;
 		}
-		index = tmp + 1;
-		count = count - index;
+		index = index + tmp + 1;
+		tmp = 0;
 	}
 	
 }

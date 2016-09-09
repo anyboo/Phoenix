@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{66EBA924-9534-451C-BBAF-65B4F9760DE4}</ProjectGuid>
+    <ProjectGuid>{C1D9270C-8523-473D-ADD0-A78C1ACDF082}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Wrapper</RootNamespace>
-    <ProjectName>DVRLite</ProjectName>
+    <RootNamespace>DHLite</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,43 +41,42 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)d</TargetName>
     <OutDir>$(SolutionDir)bin\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
     <IntDir>$(SolutionDir)ipch\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(SolutionDir)ipch\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DVRLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;.\include</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile />
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DHLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../include/;./include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DHLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,47 +86,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVRConnector.h" />
-    <ClInclude Include="include\DVR\DVRDevice.h" />
-    <ClInclude Include="include\DVR\DVRDeviceContainer.h" />
-    <ClInclude Include="include\DVR\DVRDownloadTask.h" />
-    <ClInclude Include="include\DVR\DVRDownloadTaskContainer.h" />
-    <ClInclude Include="include\DVR\DVRException.h" />
-    <ClInclude Include="include\DVR\DVRSearchFiles.h" />
-    <ClInclude Include="include\DVR\DVRSession.h" />
-    <ClInclude Include="include\DVR\DVRSessionFactory.h" />
-    <ClInclude Include="include\DVR\DVRSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVR.h" />
-    <ClInclude Include="include\DVR\DVRStatement.h" />
-    <ClInclude Include="include\DVR\DVRStatementCreator.h" />
-    <ClInclude Include="include\DVR\DVRStatementImpl.h" />
-    <ClInclude Include="include\DVR\PooledSessionHolder.h" />
-    <ClInclude Include="include\DVR\PooledSessionImpl.h" />
-    <ClInclude Include="include\DVR\SessionPool.h" />
-    <ClInclude Include="include\DVR\SessionPoolContainer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DVRDevice.cpp" />
-    <ClCompile Include="DVRDeviceContainer.cpp" />
-    <ClCompile Include="DVRDownloadTask.cpp" />
-    <ClCompile Include="DVRDownloadTaskContainer.cpp" />
-    <ClCompile Include="DVRException.cpp" />
-    <ClCompile Include="DVRSearchFiles.cpp" />
-    <ClCompile Include="DVRSession.cpp" />
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />
-    <ClCompile Include="DVRSessionFactory.cpp" />
-    <ClCompile Include="DVRStatement.cpp" />
-    <ClCompile Include="DVRStatementCreator.cpp" />
     <ClCompile Include="DVRStatementImpl.cpp" />
-    <ClCompile Include="PooledSessionHolder.cpp" />
-    <ClCompile Include="PooledSessionImpl.cpp" />
-    <ClCompile Include="SessionPool.cpp" />
-    <ClCompile Include="SessionPoolContainer.cpp" />
+    <ClCompile Include="Notifier.cpp" />
+    <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\DH\DHLite.h" />
+    <ClInclude Include="include\DH\DVRConnector.h" />
+    <ClInclude Include="include\DH\DVRSessionImpl.h" />
+    <ClInclude Include="include\DH\DVRStatementImpl.h" />
+    <ClInclude Include="include\DH\Notifier.h" />
+    <ClInclude Include="include\DH\Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 #include "VideoVendorUI.h"
 #include "DVR/DVRSession.h"
 #include "TestData.h"
+#include "DZP/DVRConnector.h"
 
 VideoLoginUI::VideoLoginUI()
 :m_pages(1)
