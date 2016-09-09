@@ -26,6 +26,7 @@ extern "C"
 	typedef LONG (__stdcall *PNET_DVR_PlayBackByName)(LONG lUserID, char *sPlayBackFileName, HWND hWnd);
 	typedef LONG (__stdcall *PNET_DVR_PlayBackByTime_V40)(LONG lUserID, NET_DVR_VOD_PARA const* pVodPara);
 	typedef BOOL (__stdcall *PNET_DVR_StopPlayBack)(LONG lPlayHandle);
+	typedef int (__stdcall *PNET_DVR_GetDownloadPos)(LONG lFileHandle);
 
 	typedef char* (__stdcall *PNET_DVR_GetErrorMsg)(LONG *pErrorNo);
 	
@@ -116,7 +117,7 @@ namespace DVR {
 			handle = NET_DVR_Login_V30(inet_ntoa(pSin->sin_addr), _addr.port(), (char *)user.c_str(), (char *)password.c_str(), &DevInfo);
 			if (handle == -1)
 			{
-				lastError(handle);
+				std::cout << "login error:" << lastError(handle) << std::endl;
 				return 0;
 			}
 		
@@ -193,13 +194,13 @@ namespace DVR {
 
 			long downloadHandle = NET_DVR_GetFileByName(handle, (char *)fileinfo.sFileName, (char *)path.c_str());
 			std::cout << "download ret: " << downloadHandle << std::endl;
-			if (downloadHandle <= 0)
+			if (downloadHandle < 0)
 			{
 				lastError(handle);
 				return false;
 			}		
 			
-			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0))
+			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0, 0))
 			{
 				lastError(handle);
 				return false;
@@ -223,13 +224,13 @@ namespace DVR {
 			
 			long downloadHandle = NET_DVR_GetFileByTime_V40(handle, (char *)path.c_str(), &struDownloadCond);
 
-			if (downloadHandle <= 0)
+			if (downloadHandle < 0)
 			{
 				lastError(handle);
 				return false;
 			}
 
-			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0))
+			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0, 0))
 			{
 				lastError(handle);
 				return false;
@@ -249,7 +250,7 @@ namespace DVR {
 				lastError(handle);
 				return false;
 			}
-			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0))
+			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0, 0))
 			{
 				lastError(handle);
 				return false;
@@ -281,7 +282,7 @@ namespace DVR {
 				lastError(handle);				
 				return false;
 			}
-			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0))
+			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0, 0))
 			{
 				lastError(handle);
 				return false;
@@ -347,27 +348,17 @@ namespace DVR {
 			std::cout << "find file count: " << count << std::endl;
 
 			////////////////////////////test download
-			////////////download by file
-			//Utility::FILEINFO info = { 0 };
-			//info.ch = fileinfo[0].ch;
-			//strncpy(info.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
-			//info.size = fileinfo[0].size;
-			//tm STime1;
-			//tm ETime1;
-			//timeDHToStd(&fileinfo[0].starttime, &STime1);
-			//info.stBeginTime = _mktime64(&STime1);
-			//timeDHToStd(&fileinfo[0].endtime, &ETime1);
-			//info.stEndTime = _mktime64(&ETime1);
-			//info.driveno = fileinfo[0].driveno;
-			//info.startcluster = fileinfo[0].startcluster;
+			//////////download by file
+			Utility::FILEINFO fileinfo = { 0 };			
+			strncpy(fileinfo.sFileName, nriFileinfo->sFileName, strlen(nriFileinfo->sFileName));
+			fileinfo.size = nriFileinfo->dwFileSize;
 
-			//std::cout << "download file size: " << info.size << std::endl;
+			std::cout << "download file size: " << fileinfo.size << std::endl;
 
-			//std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";
-			// 
+			std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";		 
 
-			//GetFile(handle, info, strfilpath);			
-			//Sleep(90000);		
+			GetFile(handle, fileinfo, strfilpath);
+			Sleep(90000);		
 			//////////////////download by time 
 			//Utility::TIMEINFO info1 = { 0 };
 			//info1.ch = fileinfo[0].ch;
@@ -409,43 +400,34 @@ namespace DVR {
 
 		int Utility::setPlaybackPos(__int64 playbackHandle, __int64 filesize, __int32 pos)
 		{
-			return setPlayBackControl(playbackHandle, NET_DVR_PLAYSETPOS, pos);			
+			return setPlayBackControl(playbackHandle, NET_DVR_PLAYSETPOS, pos, 0);			
 		}
 
 		int Utility::getPlaybackPos(__int64 playbackHandle, __int32 *pos)
 		{			
-			return 1;
+			return setPlayBackControl(playbackHandle, NET_DVR_PLAYGETPOS, 0, pos);
 		}
 
 		int Utility::getDownloadPos(__int64 downloadHandle)
 		{
-			/*poco_assert(sl.hasSymbol("CLIENT_GetDownloadPos"));
-			PCLIENT_GetDownloadPos  CLIENT_GetDownloadPos = (PCLIENT_GetDownloadPos)sl.getSymbol("CLIENT_GetDownloadPos");
-
-			int total = 0, cur = 0;	
-			int pos = 0;
-			if (CLIENT_GetDownloadPos(downloadHandle, &total, &cur))
-			{
-				pos = cur / total *100;
-			}*/
-			return success;
+			poco_assert(sl.hasSymbol("NET_DVR_GetDownloadPos"));
+			PNET_DVR_GetDownloadPos  NET_DVR_GetDownloadPos = (PNET_DVR_GetDownloadPos)sl.getSymbol("NET_DVR_GetDownloadPos");
+			
+			return NET_DVR_GetDownloadPos(downloadHandle);
 		}
 
 		int Utility::pausePlayback(long lPlayHandle, BOOL bPause)
 		{
-			/*poco_assert(sl.hasSymbol("CLIENT_PausePlayBack"));
-			PCLIENT_PausePlayBack CLIENT_PausePlayBack = (PCLIENT_PausePlayBack)sl.getSymbol("CLIENT_PausePlayBack");
-
-			return  CLIENT_PausePlayBack(lPlayHandle, bPause);*/
+			setPlayBackControl(lPlayHandle, NET_DVR_PLAYPAUSE, 0, 0);
 			return success;
 		}
 
-		int Utility::setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 pos)
+		int Utility::setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 in, __int32* out)
 		{
 			poco_assert(sl.hasSymbol("NET_DVR_PlayBackControl_V40"));
 			PNET_DVR_PlayBackControl_V40 NET_DVR_PlayBackControl_V40 = (PNET_DVR_PlayBackControl_V40)sl.getSymbol("NET_DVR_PlayBackControl_V40");
 
-			return NET_DVR_PlayBackControl_V40(handle, Opcode, &pos, 0, NULL, NULL);
+			return NET_DVR_PlayBackControl_V40(handle, Opcode, &in, 0, out, NULL);
 		}
 
 	}

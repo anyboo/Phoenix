@@ -26,9 +26,7 @@ public:
 		int size;					//文件大小
 		char sFileName[108];		///< 文件名
 		__time64_t stBeginTime;	///< 文件开始时间
-		__time64_t stEndTime;		///< 文件结束时间
-		unsigned int        driveno;                    // 磁盘号(区分网络录像和本地录像的类型，0－127表示本地录像,其中64表示光盘1，128表示网络录像)
-		unsigned int        startcluster;               // 起始簇号
+		__time64_t stEndTime;		///< 文件结束时间		
 		HWND hwnd;
 	} FILEINFO;
 
@@ -69,7 +67,7 @@ public:
 
 	static int GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path);
 	static int GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge);
-	static int setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 pos);
+	static int setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 in, __int32* out);
 
 	static int Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo);
 	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo);
