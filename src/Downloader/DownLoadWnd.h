@@ -40,7 +40,7 @@ protected:
 	void BuildControlDDX();
 
 	void CheckOption(CDuiString& sName);
-	void GetSelectChannel();
+
 	void OnCheckAllchannels(TNotifyUI& msg);
 
 	void GetDataAndTime(__time64_t& start, __time64_t& stop);

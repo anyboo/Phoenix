@@ -30,19 +30,25 @@
     <ClInclude Include="ARPClientTest.h" />
     <ClInclude Include="DHCPClientTest.h" />
     <ClInclude Include="DHLIBTEST.h" />
+    <ClInclude Include="DownloadContainerTest.h" />
+    <ClInclude Include="DownloadTest.h" />
     <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="HKLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
+    <ClInclude Include="SearchFileTest.h" />
     <ClInclude Include="UtilityTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ARPClientTest.cpp" />
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="DHLIBTEST.cpp" />
+    <ClCompile Include="DownloadContainerTest.cpp" />
+    <ClCompile Include="DownloadTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="DZPLIBTEST.cpp" />
     <ClCompile Include="HKLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
+    <ClCompile Include="SearchFileTest.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

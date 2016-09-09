@@ -40,6 +40,7 @@ public:
 	static CTestData* getInstance();
 	void SaveLoginInfo(Vendor_Info& vendor);
 	void GetLoginInfoByID(unsigned long vendor_id, Vendor_Info& vendor);
+	void DeleteVendorByID(const unsigned long vendor_id);
 	unsigned long GetLoginID();
 	void GetAllLoginDIs(std::vector<unsigned long>& LoginIDs);
 	bool IsLogIn(const std::string ip);
@@ -58,6 +59,7 @@ public:
 	void GetDownloadInfo(const unsigned long id, std::vector<DownLoad_Info>& downlaod_packet);
 
 	void DeleteTaskByFileName(const std::string fName, unsigned long packet_id);
+	void DeleteWholeTaskByID(const unsigned long packet_id);
 
 private:
 	std::map<unsigned long, Vendor_Info>			_Login_Info;

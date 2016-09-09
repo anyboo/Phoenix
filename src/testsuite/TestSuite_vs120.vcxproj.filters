@@ -31,6 +31,12 @@
     <Filter Include="HKLite">
       <UniqueIdentifier>{d17e23d2-c5b3-4e1b-b42d-f36f065d2c28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DownloadTask">
+      <UniqueIdentifier>{abd645f0-4a3e-4b84-aefe-8bafe440f598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchFile">
+      <UniqueIdentifier>{2c1f27fb-bc8c-4645-935d-a0b2ced7276a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHCPClientTest.cpp">
@@ -53,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="HKLIBTEST.cpp">
       <Filter>HKLite</Filter>
+    </ClCompile>  
+    <ClCompile Include="DownloadTest.cpp">
+      <Filter>DownloadTask</Filter>
+    </ClCompile>
+    <ClCompile Include="DownloadContainerTest.cpp">
+      <Filter>DownloadTask</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileTest.cpp">
+      <Filter>SearchFile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +90,15 @@
     </ClInclude>
     <ClInclude Include="HKLIBTEST.h">
       <Filter>HKLite</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadTest.h">
+      <Filter>DownloadTask</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadContainerTest.h">
+      <Filter>DownloadTask</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchFileTest.h">
+      <Filter>SearchFile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
