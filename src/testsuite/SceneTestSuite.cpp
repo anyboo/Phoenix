@@ -3,9 +3,11 @@
 #include "ARPClientTest.h"
 #include "DZPLIBTEST.h"
 #include "DHLIBTEST.h"
+#include "HKLIBTEST.h"
 #include "DownloadTest.h"
 #include "DownloadContainerTest.h"
 #include "SearchFileTest.h"
+
 //#include "UtilityTest.h"
 
 CppUnit::Test* SceneTestSuite::suite()
@@ -19,6 +21,7 @@ CppUnit::Test* SceneTestSuite::suite()
 	pSuite->addTest(ARPClientTest::suite());
 	pSuite->addTest(DZPLIBTEST::suite());
 	pSuite->addTest(DHLIBTEST::suite());
+	pSuite->addTest(HKLIBTEST::suite());
 
 	//pSuite->addTest(UtilityTest::suite());
 
