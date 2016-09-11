@@ -43,9 +43,9 @@ IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 	}
 	else
 	{
-		IPAddress ipAddress = ipList[n].get<0>();
-		IPAddress subnetAddress = ipList[n].get<1>();
-		IPAddress broadcastAddress = ipList[n].get<2>();
+		IPAddress ipAddress = ipList[n - 1].get<0>();
+		IPAddress subnetAddress = ipList[n - 1].get<1>();
+		IPAddress broadcastAddress = ipList[n - 1].get<2>();
 		ipaddress_Info.strIP = ipAddress.toString();
 		ipaddress_Info.strSubNet = subnetAddress.toString();
 		ipaddress_Info.strBroadcast = broadcastAddress.toString();

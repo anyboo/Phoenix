@@ -10,9 +10,7 @@
 		<HorizontalLayout height="60" bkimage="file='skin/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="500,1,1,1" />
-			<Button name="test" width="40" height="40" padding="180,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
-			<Button name="test2" width="40" height="40" padding="10,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
-			<Control name="Network" width="30" height="30" padding="275,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Control name="Network" width="30" height="30" padding="525,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
 			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" value="100" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
 			<Label text="100%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>
 		</HorizontalLayout>

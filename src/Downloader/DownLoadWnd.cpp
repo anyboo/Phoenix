@@ -181,7 +181,7 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	SearchBegin();
+	if(!SearchBegin())return;
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
@@ -202,16 +202,22 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	_downloadManage.AddDownloadTask(id);
 }
 
-void DownLoadWnd::SearchBegin()
+bool DownLoadWnd::SearchBegin()
 {
 	__time64_t stime, etime;
 	GetDataAndTime(stime, etime);
+	if (stime > etime)
+	{
+		MessageBox(GetHWND(), "查询时间段不正确！", "警告", MB_OK);
+		return false;
+	}
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
 	std::string strID = select->GetUserData();
 	unsigned long id = std::stoul(strID);
 	DVR::DVRSession* session = CTestData::getInstance()->GetSessionByID(id);
 //	DVR::DVRStatement state(session);
+	return true;
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
@@ -276,7 +282,13 @@ void DownLoadWnd::CheckOption(CDuiString& sName)
 	else
 	{
 		_btn_search->SetEnabled(false);
-		_all_channels.erase(_all_channels.begin() + channel);
+		for (size_t i = 0; i < _all_channels.size(); i++)
+		{
+			if (_all_channels[i] == channel)
+			{
+				_all_channels.erase(_all_channels.begin() + i);
+			}
+		}
 	}
 }
 

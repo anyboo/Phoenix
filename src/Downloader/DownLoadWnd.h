@@ -28,7 +28,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
-	void SearchBegin();
+	bool SearchBegin();
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 

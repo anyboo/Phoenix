@@ -38,6 +38,8 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 			if (nextList->GetName() == _T("Channel_List"))
 			{
 				pList->Remove(channel_List, true);
+				CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
+				btn_search->SetEnabled(false);
 				return;
 			}
 			int index = pList->GetItemIndex(channel_List);
@@ -166,7 +168,6 @@ void CVendor::Off_line()
 
 void CVendor::DeleteVendor(CDuiString& sName)
 {
-
 	CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
 	btn_search->SetEnabled(false);
 	std::string tmp = sName.Right(sName.GetLength() - 9).GetData();
@@ -177,10 +178,11 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByName(pList, vName));
 	int serial = pList->GetItemIndex(SubList);
 	CListContainerElementUI* ChannelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, serial + 1));
-	pList->Remove(SubList, true);
-	std::string vendor_id = SubList->GetText();
+	
+	std::string vendor_id = SubList->GetUserData();
 	unsigned long pID = std::stoi(vendor_id);
 	CTestData::getInstance()->DeleteVendorByID(pID);
+	pList->Remove(SubList, true);
 	if (ChannelList != NULL && ChannelList->GetName() == _T("Channel_List"))
 	{
 		pList->Remove(ChannelList, true);
