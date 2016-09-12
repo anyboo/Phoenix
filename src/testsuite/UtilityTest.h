@@ -31,5 +31,6 @@ private:
 
 	static DVR::DZPLite::Utility::HANDLE _handle;
 	static bool _logined;
+	static Record* _pRecord;
 };
 

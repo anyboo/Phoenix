@@ -4,10 +4,13 @@
 #include <Poco/Net/SocketAddress.h>
 #include <DZP/Utility.h>
 #include "DZP/netsdk.h"
+#include <Poco/Thread.h>
+#include <Poco/Event.h>
 
 using namespace DVR::DZPLite;
 Utility::HANDLE UtilityTest::_handle = 0;;
 bool UtilityTest::_logined = false;
+Record* UtilityTest::_pRecord = nullptr;
 UtilityTest::UtilityTest(const std::string& name):
 	CppUnit::TestCase(name),
 	_connectString("192.168.0.32:34567"),
@@ -34,6 +37,7 @@ void UtilityTest::testlogout()
 	if (!_logined) return;
 	bool rc = Utility::logout(_handle);
 	assert(rc);
+	_logined = false;
 }
 
 void UtilityTest::testInit()
@@ -48,27 +52,71 @@ void UtilityTest::testCleanUp()
 
 void UtilityTest::testsetTimeOut()
 {
-	//Utility::setTimeOut(3000, 3);
+	Utility::setTimeOut(5000, 3);
 }
 
 void UtilityTest::testGetFile()
 {
-	/*Record data;
-	bool rc = readStream(_handle, data, "D:\\test\\kkk22.avi");*/
+	assertNotNullPtr(_pRecord);
+	std::cout << "start download file..." << std::endl;
+	Utility::FileHandle file = Utility::readStream(_handle, _pRecord[1], "D:\\test\\kkk32.avi");
+	if (file > 0)
+	{
+		int pos = 0;
+		do
+		{
+			pos = Utility::readStreamPos(file);
+			std::cout << "downloading process : " << pos << std::endl;
+			Poco::Thread::sleep(1 * 1000);
+		} while (pos >= 0 && pos < 100);
+	}
+	bool rc = Utility::closeStream(file);
+	std::cout << "download file finished!" << "close Stream status : " << rc << std::endl;
 }
 
 void UtilityTest::testPlayback()
 {
-
+	_pRecord[0].hWnd = ::GetDesktopWindow();
+	Utility::PlayHandle play = Utility::playStream(_handle, _pRecord[0]);
+	if (play > 0)
+	{
+		std::cout << "start playback file ..." << play << std::endl;
+		float pos = 0;
+		do
+		{
+			pos = Utility::playPos(play);
+			Poco::Thread::sleep(1 * 1000);
+			std::cout << "play pos : " << pos << std::endl;
+			bool doneA = false;
+			if (pos > 10 && !doneA)
+			{
+				bool rc = Utility::seek(play, 30);
+				doneA = rc;
+				std::cout << "seek 50% status : " << rc << std::endl;
+			}
+			bool doneB = false;
+			if (pos > 50 && !doneB)
+			{
+				bool rc = Utility::pause(play);
+				std::cout << "pause status : " << rc << std::endl;
+				Poco::Thread::sleep(10 * 1000);
+				rc = Utility::play(play);
+				std::cout << "play status : " << rc << std::endl;
+				doneB = rc;
+			}
+		} while (pos >= 0 && pos < 100);
+	}
+	bool rc = Utility::stopStream(play);
+	std::cout << "stop play status : " << rc << std::endl;
 }
 
 void UtilityTest::testFindFile()
 {
-	Record record[100];
+	_pRecord = new Record[100];
 
 	H264_DVR_TIME startTime, endTime;
 	startTime.dwYear = 2016;
-	startTime.dwMonth = 9;
+	startTime.dwMonth = 8;
 	startTime.dwDay = 1;
 	startTime.dwHour = 0;
 	startTime.dwMinute = 0;
@@ -76,7 +124,7 @@ void UtilityTest::testFindFile()
 	
 	endTime.dwYear = 2016;
 	endTime.dwMonth = 9;
-	endTime.dwDay = 9;
+	endTime.dwDay = 12;
 	endTime.dwHour = 12;
 	endTime.dwMinute = 10;
 	endTime.dwSecond = 23;
@@ -90,9 +138,16 @@ void UtilityTest::testFindFile()
 	memset(cond.szFileName, 0, 32);
 
 	int count = 0;
-
-	size_t findcount = Utility::findStream(_handle, cond, record[0], 100);
+	assertNotNullPtr(_pRecord);
+	size_t findcount = Utility::findStream(_handle, cond, *_pRecord, 100);
 	assert(findcount >= 0);
+	std::cout << "findstream by name" << std::endl;
+	for (int i = 0; i < findcount; i++)
+	{
+		std::cout << _pRecord[i].ch << _pRecord[i].sFileName
+			<< _pRecord[i].size << std::endl;
+	}
+	std::cout << "find file finished!" << std::endl;
 }
 
 void UtilityTest::setUp()

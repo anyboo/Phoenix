@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <sstream>
+#include "netsdk.h"
 
 namespace DVR {
 namespace DZPLite {
@@ -18,31 +19,46 @@ DVRStatementImpl::~DVRStatementImpl()
 {
 }
 
+void DVRStatementImpl::download()
+{
+	Record fileinfo;
+	std::string newname;
+	if (!Utility::readStream(_handle, fileinfo, newname))
+	{
+		Condition t;
+		std::string filename;
+		if (Utility::readStream(_handle, t, filename))
+		{
+			int err = Utility::lastError();
+			Utility::throwException(err, "download is failed!");
+		}
+	}
+}
+
+void DVRStatementImpl::play()
+{
+
+}
+
 void DVRStatementImpl::donwloadByName(const std::string& filename)
 {
-	/*
-	Utility::FILEINFO fileinfo;
-	std::string path;
-	int rc = Utility::GetFile(_handle, fileinfo, path);
-	
-	if (Utility::success != rc)
-		Utility::throwException(_handle);
-	*/
+	Record fileinfo;
+	if (Utility::readStream(_handle, fileinfo, filename))
+	{
+		int err = Utility::lastError();
+		Utility::throwException(err, "download is failed!");
+	}
 }
 
 void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 {
-	/*
-	Utility::CONDITION cond;
-	Utility::TIMEINFO timeinfo;
-
-	std::string path;
-	int rc = Utility::GetFile(_handle, timeinfo, path, false);
-	
-	if (Utility::success != rc)
-		Utility::throwException(_handle);
-	*/
-
+	Condition t;
+	std::string filename;
+	if (Utility::readStream(_handle, t, filename))
+	{
+		int err = Utility::lastError();
+		Utility::throwException(err, "download is failed!");
+	}
 }
 
 void DVRStatementImpl::playByName(const std::string& filename)

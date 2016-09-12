@@ -6,7 +6,7 @@
 #include "DownloadTest.h"
 #include "DownloadContainerTest.h"
 #include "SearchFileTest.h"
-//#include "UtilityTest.h"
+#include "UtilityTest.h"
 
 CppUnit::Test* SceneTestSuite::suite()
 {
@@ -20,7 +20,7 @@ CppUnit::Test* SceneTestSuite::suite()
 	//pSuite->addTest(DZPLIBTEST::suite());
 	pSuite->addTest(DHLIBTEST::suite());
 
-	//pSuite->addTest(UtilityTest::suite());
+	pSuite->addTest(UtilityTest::suite());
 
 	return pSuite;
 }

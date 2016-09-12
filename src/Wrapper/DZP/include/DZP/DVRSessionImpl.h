@@ -28,19 +28,21 @@ public:
 	void login(const std::string& user = "", const std::string& password = "");
 	void logout();
 	bool isLoggedIn()const;
+	int getChannels()const;
 
 	const std::string& connectorName() const;
 	void setLoginTimeout(std::size_t timeout);
 	std::size_t getLoginTimeout() const;
 
 	DVR::DVRStatementImpl* createStatementImpl();
-
-
+protected:
+	void setChannels();
 private:
 	std::string _connector;
 	Utility::HANDLE	_handle;
 	bool        _connected;
 	int         _timeout;
+	int			_channels;
 
 	Poco::Mutex _mutex;
 	Poco::Net::SocketAddress _addr;
@@ -49,6 +51,11 @@ private:
 inline const std::string& DVRSessionImpl::connectorName() const
 {
 	return _connector;
+}
+
+inline int DVRSessionImpl::getChannels() const
+{
+	return _channels;
 }
 
 

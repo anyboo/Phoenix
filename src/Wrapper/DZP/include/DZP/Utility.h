@@ -28,6 +28,8 @@ public:
 	~Utility();
 	
 	typedef long HANDLE;
+	typedef long FileHandle;
+	typedef long PlayHandle;
 	static const int success;
 
 	static Utility::HANDLE dvrHandle(const DVRSession& session);
@@ -43,20 +45,22 @@ public:
 	static Utility::HANDLE login(const Poco::Net::SocketAddress& _addr, const std::string& user, const std::string& password);
 	static bool logout(Utility::HANDLE handle);
 	
-	static bool readDeviceInfo(DeviceInfo& info);
+	static void readDeviceInfo(DeviceInfo& info);
 	static void setTimeOut(std::size_t timeout, std::size_t times);
 
-	static bool readStream(Utility::HANDLE handle, Record& data, const std::string& newname);
-	static bool readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge);
+	static Utility::FileHandle readStream(Utility::HANDLE handle, Record& data, const std::string& newname);
+	static Utility::FileHandle readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge = false);
+	static int Utility::readStreamPos(Utility::FileHandle handle);
 	static bool closeStream(Utility::HANDLE handle);
 
-	static bool playStream(Utility::HANDLE handle, const Record& record);
-	static bool playStream(Utility::HANDLE handle, const Condition& time);
-	static bool stopStream(Utility::HANDLE handle);
+	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Record& record);
+	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Condition& time);
+	static float Utility::playPos(Utility::PlayHandle handle);
+	static bool stopStream(Utility::PlayHandle handle);
 
-	static bool seek(Utility::HANDLE handle, int pos);
-	static bool play(Utility::HANDLE handle);
-	static bool pause(Utility::HANDLE handle);
+	static bool seek(Utility::PlayHandle handle, int pos);
+	static bool play(Utility::PlayHandle handle);
+	static bool pause(Utility::PlayHandle handle);
 
 	static size_t findStream(Utility::HANDLE handle, const Condition& cond, Record& record, int recordCount);
 	static size_t findStream(Utility::HANDLE handle, const Time& time, Result& result);
@@ -126,6 +130,9 @@ private:
 	static Poco::Mutex _mutex;
 	static Poco::SharedLibrary _library;
 	static Poco::SharedLibrary _dependency;
+	static Poco::SharedLibrary _dependencyA;
+	//static Poco::SharedLibrary _dependencyC;
+	static DeviceInfo* _pDevice_info;
 };
 
 inline std::string Utility::lastError(Utility::HANDLE handle)
