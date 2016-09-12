@@ -82,19 +82,21 @@ void UtilityTest::testPlayback()
 	{
 		std::cout << "start playback file ..." << play << std::endl;
 		float pos = 0;
+		bool doneA = false;
+		bool doneB = false;
 		do
 		{
 			pos = Utility::playPos(play);
 			Poco::Thread::sleep(1 * 1000);
 			std::cout << "play pos : " << pos << std::endl;
-			bool doneA = false;
+			
 			if (pos > 10 && !doneA)
 			{
 				bool rc = Utility::seek(play, 30);
 				doneA = rc;
 				std::cout << "seek 50% status : " << rc << std::endl;
 			}
-			bool doneB = false;
+			
 			if (pos > 50 && !doneB)
 			{
 				bool rc = Utility::pause(play);

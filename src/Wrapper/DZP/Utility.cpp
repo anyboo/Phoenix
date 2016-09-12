@@ -4,29 +4,6 @@
 #include <Poco/Path.h>
 #include "netsdk.h"
 
-extern "C"
-{
-	typedef long (CALL_METHOD *FnType)();
-	typedef long (CALL_METHOD *FnParamType)(long);
-	typedef float (CALL_METHOD *FnParamTypeA)(long);
-
-	typedef long (CALL_METHOD *Fn2ParamTypeA)(long, long);
-	typedef long (CALL_METHOD *Fn2ParamTypeB)(long, float);
-	typedef long (CALL_METHOD *Fn2ParamTypeC)(void*, unsigned long);
-
-	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
-
-	typedef long (CALL_METHOD *Fn4ParamType)(long, void*, void*, long);
-	typedef long (CALL_METHOD *Fn5ParamTypeA)(long, long, unsigned char*, long, long);
-	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
-
-	typedef long (CALL_METHOD *Fn6ParamTypeA)(long, void*, char*, void*, long, void*);
-	typedef long (CALL_METHOD *Fn6ParamTypeB)(long, void*, void*, int, int*, int);
-
-	typedef long (CALL_METHOD *Fn7ParamTypeA)(char*,unsigned short, char*, char*,void*, int*, int);
-	typedef long (CALL_METHOD *Fn7ParamTypeB)(long,void*, char*, bool, void*, long, void*);
-}
-
 #define check_symbol(fn) if (!Utility::_library.hasSymbol(fn)) \
 							throw Poco::NotFoundException(fn)
 namespace DVR {
@@ -51,6 +28,11 @@ Utility::Utility()
 
 Utility::~Utility()
 {	
+	if (_pDevice_info)
+	{
+		delete _pDevice_info;
+		_pDevice_info = 0;
+	}
 }
 
 void Utility::Init()
@@ -60,6 +42,7 @@ void Utility::Init()
 		static Utility u;
 	}
 
+	typedef long (CALL_METHOD *Fn2ParamTypeC)(void*, unsigned long);
 	std::string fn("H264_DVR_Init");
 	check_symbol(fn);
 	Fn2ParamTypeC pFn = (Fn2ParamTypeC)Utility::_library.getSymbol(fn);
@@ -69,6 +52,7 @@ void Utility::Init()
 
 void Utility::Cleanup()
 {
+	typedef long (CALL_METHOD *FnType)();
 	std::string fn("H264_DVR_Cleanup");
 	check_symbol(fn);
 	FnType pFn = (FnType)Utility::_library.getSymbol(fn);
@@ -78,6 +62,8 @@ void Utility::Cleanup()
 
 Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& address, const std::string& user, const std::string& password)
 {
+	typedef long (CALL_METHOD *Fn7ParamTypeA)(char*, unsigned short, char*, char*, void*, int*, int);
+
 	std::string fn("H264_DVR_Login");
 	check_symbol(fn);
 	
@@ -91,6 +77,8 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& address, const st
 
 bool Utility::logout(Utility::HANDLE handle)
 {
+	typedef long (CALL_METHOD *FnParamType)(long);
+
 	std::string fn("H264_DVR_Logout");
 	check_symbol(fn);
 	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
@@ -105,6 +93,8 @@ void Utility::readDeviceInfo(DeviceInfo& info)
 
 void Utility::setTimeOut(std::size_t timeout, std::size_t times)
 {
+	typedef long (CALL_METHOD *Fn2ParamTypeA)(long, long);
+
 	std::string fn("H264_DVR_SetConnectTime");
 	check_symbol(fn);
 	Fn2ParamTypeA pFn = (Fn2ParamTypeA)Utility::_library.getSymbol(fn);
@@ -113,6 +103,8 @@ void Utility::setTimeOut(std::size_t timeout, std::size_t times)
 
 Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Record& data, const std::string& newname)
 {
+	typedef long (CALL_METHOD *Fn6ParamTypeA)(long, void*, char*, void*, long, void*);
+
 	std::string fn("H264_DVR_GetFileByName");
 	check_symbol(fn);
 	
@@ -125,7 +117,7 @@ Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Record& data, co
 
 Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge)
 {
-
+	typedef long (CALL_METHOD *Fn7ParamTypeB)(long, void*, char*, bool, void*, long, void*);
 	std::string fn("H264_DVR_GetFileByTime");
 	check_symbol(fn);
 
@@ -138,6 +130,7 @@ Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Condition& time,
 
 int Utility::readStreamPos(Utility::FileHandle handle)
 {
+	typedef long (CALL_METHOD *FnParamType)(long);
 	std::string fn("H264_DVR_GetDownloadPos");
 	check_symbol(fn);
 	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
@@ -147,6 +140,7 @@ int Utility::readStreamPos(Utility::FileHandle handle)
 
 bool Utility::closeStream(Utility::FileHandle handle)
 {
+	typedef long (CALL_METHOD *FnParamType)(long);
 	std::string fn("H264_DVR_StopGetFile");
 	check_symbol(fn);
 	
@@ -156,6 +150,7 @@ bool Utility::closeStream(Utility::FileHandle handle)
 
 Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Record& record)
 {
+	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
 	std::string fn("H264_DVR_PlayBackByName_V2");
 	check_symbol(fn);
 
@@ -168,6 +163,7 @@ Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Record& re
 
 Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Condition& time)
 {
+	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
 	std::string fn("H264_DVR_PlayBackByTime");
 	check_symbol(fn);
 	
@@ -180,6 +176,7 @@ Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Condition&
 
 float Utility::playPos(Utility::PlayHandle handle)
 {
+	typedef float (CALL_METHOD *FnParamTypeA)(long);
 	std::string fn("H264_DVR_GetPlayPos");
 	check_symbol(fn);
 	FnParamTypeA pFn = (FnParamTypeA)Utility::_library.getSymbol(fn);
@@ -188,6 +185,7 @@ float Utility::playPos(Utility::PlayHandle handle)
 
 bool Utility::stopStream(Utility::PlayHandle handle)
 {
+	typedef long (CALL_METHOD *FnParamType)(long);
 	std::string fn("H264_DVR_StopPlayBack");
 	check_symbol(fn);
 
@@ -197,6 +195,7 @@ bool Utility::stopStream(Utility::PlayHandle handle)
 
 bool Utility::seek(Utility::PlayHandle handle, int pos)
 {
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
 	
@@ -206,6 +205,7 @@ bool Utility::seek(Utility::PlayHandle handle, int pos)
 
 bool Utility::play(Utility::PlayHandle handle)
 {
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
 	
@@ -215,6 +215,7 @@ bool Utility::play(Utility::PlayHandle handle)
 
 bool Utility::pause(Utility::PlayHandle handle)
 {
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
 	
@@ -224,6 +225,7 @@ bool Utility::pause(Utility::PlayHandle handle)
 
 size_t Utility::findStream(Utility::HANDLE handle, const Condition& cond, Record& record, int recordCount)
 {
+	typedef long (CALL_METHOD *Fn6ParamTypeB)(long, void*, void*, int, int*, int);
 	std::string fn("H264_DVR_FindFile");
 	check_symbol(fn);
 
@@ -239,6 +241,7 @@ size_t Utility::findStream(Utility::HANDLE handle, const Time& time, Result& res
 {
 	throw Poco::NotImplementedException("findStream by time!");
 	/*
+	typedef long (CALL_METHOD *Fn4ParamType)(long, void*, void*, long);
 	std::string fn("H264_DVR_FindFileByTime");
 	check_symbol(fn);
 	
@@ -249,10 +252,12 @@ size_t Utility::findStream(Utility::HANDLE handle, const Time& time, Result& res
 
 	return result.nInfoNum;
 	*/
+	
 }
 
 long Utility::lastError()
 {
+	typedef long (CALL_METHOD *FnType)();
 	std::string fn("H264_DVR_GetLastError");
 	check_symbol(fn);
 	
