@@ -204,7 +204,7 @@ namespace DVR {
 			handle = CLIENT_Login(inet_ntoa(pSin->sin_addr), _addr.port(), (char *)user.c_str(), (char *)password.c_str(), &DevInfo, &nError);
 			if (handle > 0)
 			{
-				NET_DEV_CHN_COUNT_INFO stuChn = { sizeof(NET_DEV_CHN_COUNT_INFO) };
+				NET_DEV_CHN_COUNT_INFO stuChn = { 0 };
 				stuChn.stuVideoIn.dwSize = sizeof(stuChn.stuVideoIn);
 				stuChn.stuVideoOut.dwSize = sizeof(stuChn.stuVideoOut);
 				int nRetLen = 0;
