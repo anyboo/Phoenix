@@ -32,6 +32,8 @@ DownLoadWnd::~DownLoadWnd()
 #define BT_CLOSE_D				(_T("CloseWnd"))
 #define CTR_SELECT_TIME			(_T("Select_time"))
 #define BT_CHECKALL				(_T("checkall"))
+#define BT_offset1				(_T("offset1"))
+#define BT_offset2				(_T("offset2"))
 
 DUI_BEGIN_MESSAGE_MAP(DownLoadWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_OnVideoLoginUI, OnLogin)
@@ -42,6 +44,8 @@ DUI_ON_CLICK_CTRNAME(BT_Calendar2, OnSelectCalendar)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND1, OnSelectDayTime)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND2, OnSelectDayTime)
 DUI_ON_CLICK_CTRNAME(BT_CHECKALL, OnCheckAllchannels)
+DUI_ON_CLICK_CTRNAME(BT_offset1, OnAdjustOffsetTime)
+DUI_ON_CLICK_CTRNAME(BT_offset2, OnAdjustOffsetTime)
 DUI_ON_MSGTYPE_CTRNAME(DUI_MSGTYPE_VALUECHANGED, CTR_SELECT_TIME, FixedSliderPosition)
 DUI_END_MESSAGE_MAP()
 
@@ -166,6 +170,20 @@ void DownLoadWnd::OnSelectDayTime(TNotifyUI& msg)
 	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime());
 }
 
+void DownLoadWnd::OnAdjustOffsetTime(TNotifyUI& msg)
+{
+	std::auto_ptr<CTimeUI> pDlg(new CTimeUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+	//set datetime 's text
+	CDuiString SendName = msg.pSender->GetName();
+	CDuiString setTime = pDlg->GetTime();
+	CButtonUI* btn_offset = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName));
+	btn_offset->SetText(setTime);
+}
+
 void DownLoadWnd::OnLogin(TNotifyUI& msg)
 {
 	std::auto_ptr<VideoLoginUI> pDlg(new VideoLoginUI);
@@ -208,7 +226,7 @@ bool DownLoadWnd::SearchBegin()
 	GetDataAndTime(stime, etime);
 	if (stime > etime)
 	{
-		MessageBox(GetHWND(), "查询时间段不正确！", "警告", MB_OK);
+		MessageBox(GetHWND(), "开始时间不能大于结束时间！", "警告", MB_OK);
 		return false;
 	}
 	int cursel = _vList->GetCurSel();
@@ -281,7 +299,6 @@ void DownLoadWnd::CheckOption(CDuiString& sName)
 	}
 	else
 	{
-		_btn_search->SetEnabled(false);
 		for (size_t i = 0; i < _all_channels.size(); i++)
 		{
 			if (_all_channels[i] == channel)
@@ -289,6 +306,8 @@ void DownLoadWnd::CheckOption(CDuiString& sName)
 				_all_channels.erase(_all_channels.begin() + i);
 			}
 		}
+		if (_all_channels.size() == 0)
+			_btn_search->SetEnabled(false);
 	}
 }
 

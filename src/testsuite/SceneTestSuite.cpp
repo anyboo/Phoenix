@@ -14,14 +14,16 @@ CppUnit::Test* SceneTestSuite::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("SceneTestSuite");
 
-	pSuite->addTest(DownloadTest::suite());
+	pSuite->addTest(DZPLIBTEST::suite());
+
+	/*pSuite->addTest(DownloadTest::suite());
 	pSuite->addTest(DownloadContainerTest::suite());
 	pSuite->addTest(SearchFileTest::suite());
 	pSuite->addTest(DHCPClientTest::suite());
 	pSuite->addTest(ARPClientTest::suite());
 	pSuite->addTest(DZPLIBTEST::suite());
 	pSuite->addTest(DHLIBTEST::suite());
-	pSuite->addTest(HKLIBTEST::suite());
+	pSuite->addTest(HKLIBTEST::suite());*/
 
 	//pSuite->addTest(UtilityTest::suite());
 

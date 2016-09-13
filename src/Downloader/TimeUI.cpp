@@ -131,3 +131,4 @@ CDuiString CTimeUI::GetTime()
 {
 	return _setTime;
 }
+

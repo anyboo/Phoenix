@@ -12,7 +12,7 @@ public:
 	DVRStatementImpl(DVR::DVRSessionImpl& rSession, Utility::HANDLE pDvr);
 	~DVRStatementImpl();
 
-protected:
+public:
 	void donwloadByName(const std::string& filename);
 	void downloadByTime(const Poco::DateTime& time);
 

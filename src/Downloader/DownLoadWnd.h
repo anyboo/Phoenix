@@ -34,6 +34,7 @@ protected:
 
 	void OnSelectCalendar(TNotifyUI& msg);
 	void OnSelectDayTime(TNotifyUI& msg);
+	void OnAdjustOffsetTime(TNotifyUI& msg);
 	void FixedSliderPosition(TNotifyUI& msg);
 
 	void InitTime();
