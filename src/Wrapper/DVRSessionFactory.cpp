@@ -6,7 +6,6 @@ namespace DVR {
 
 	DVRSessionFactory::DVRSessionFactory()
 	{
-		static Poco::SharedLibrary sl("DZPLited.dll");
 	}
 
 

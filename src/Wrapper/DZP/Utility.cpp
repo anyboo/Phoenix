@@ -1,370 +1,315 @@
 #include "DZP/Utility.h"
-#include "netsdk.h"
 #include <Poco/DateTime.h>
-#include <Poco/SharedLibrary.h>
+#include <Poco/Exception.h>
+#include <Poco/Path.h>
+#include "netsdk.h"
 
-
-extern "C"
-{
-	typedef long (CALL_METHOD *LibrayFnType)(long lLoginID, H264_DVR_FILE_DATA *sPlayBackFile, char *sSavedFileName,
-		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);
-
-	typedef long (CALL_METHOD *PH264_DVR_Init)(fDisConnect cbDisConnect, unsigned long dwUser);
-	typedef bool (CALL_METHOD *PH264_DVR_Cleanup)();
-
-	typedef long (CALL_METHOD *PH264_DVR_GetLastError)();
-
-	typedef long (CALL_METHOD *PH264_DVR_Login)(char *sDVRIP, unsigned short wDVRPort, char *sUserName, char *sPassword,
-		LPH264_DVR_DEVICEINFO lpDeviceInfo, int *error, int socketType);
-	typedef long (CALL_METHOD *PH264_DVR_Logout)(long lLoginID);
-
-	typedef bool (CALL_METHOD *PH264_DVR_SetConnectTime)(long nWaitTime, long nTryTimes);
-
-	typedef long (CALL_METHOD *PH264_DVR_GetFileByTime)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, char *sSavedFileDIR, bool bMerge ,
-		fDownLoadPosCallBack cbDownLoadPos, long dwDataUser, fRealDataCallBack fDownLoadDataCallBack);	
-	typedef int (CALL_METHOD *PH264_DVR_GetDownloadPos)(long lFileHandle);
-	typedef bool (CALL_METHOD *PH264_DVR_StopGetFile)(long lFileHandle);
-	typedef void(CALL_METHOD *PfDownLoadPosCallBack) (long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
-
-	typedef long (CALL_METHOD *PH264_DVR_FindFile)(long lLoginID, H264_DVR_FINDINFO* lpFindInfo, H264_DVR_FILE_DATA *lpFileData, int lMaxCount, 
-		int *findcount, int waittime);
-
-	typedef long (CALL_METHOD *PH264_DVR_PlayBackByName)(long lLoginID, H264_DVR_FILE_DATA *sPlayBackFile, fDownLoadPosCallBack cbDownLoadPos,
-		fRealDataCallBack fDownLoadDataCallBack, long dwDataUser);
-	typedef bool (CALL_METHOD *PH264_DVR_StopPlayBack)(long lPlayHandle);
-	typedef bool (CALL_METHOD *PH264_DVR_SetPlayPos)(long lPlayHandle, float fRelativPos);
-	typedef float (CALL_METHOD *PH264_DVR_GetPlayPos)(long lPlayHandle);
-}
-
-
-extern Poco::SharedLibrary sl;
-
-
-
+#define check_symbol(fn) if (!Utility::_library.hasSymbol(fn)) \
+							throw Poco::NotFoundException(fn)
 namespace DVR {
 namespace DZPLite {
 
-	
-
+const int Utility::success = SDK_RET_CODE::H264_DVR_SUCCESS;
+DeviceInfo* Utility::_pDevice_info = nullptr;
+Poco::SharedLibrary Utility::_dependency("sdk\\DZP\\StreamReader.dll");
+Poco::SharedLibrary Utility::_dependencyA("sdk\\DZP\\DllDeinterlace.dll");
+//Poco::SharedLibrary Utility::_dependencyB("sdk\\DZP\\H264Play.dll");
+Poco::SharedLibrary Utility::_library("sdk\\DZP\\NetSDK.dll");
+Poco::Mutex Utility::_mutex;
 Utility::Utility()
 {	
-	
+	if (!_pDevice_info)
+	{
+		_pDevice_info = new DeviceInfo();
+		memset(_pDevice_info, 0, sizeof(DeviceInfo));
+	}
 }
 
 
 Utility::~Utility()
 {	
+	if (_pDevice_info)
+	{
+		delete _pDevice_info;
+		_pDevice_info = 0;
+	}
 }
 
-std::string Utility::lastError(Utility::HANDLE handle)
+void Utility::Init()
 {
-	PH264_DVR_GetLastError pFn = (PH264_DVR_GetLastError)sl.getSymbol("H264_DVR_GetLastError");
-	(*pFn)();
-	return "error";
+	{
+		Poco::Mutex::ScopedLock lock(_mutex);
+		static Utility u;
+	}
+
+	typedef long (CALL_METHOD *Fn2ParamTypeC)(void*, unsigned long);
+	std::string fn("H264_DVR_Init");
+	check_symbol(fn);
+	Fn2ParamTypeC pFn = (Fn2ParamTypeC)Utility::_library.getSymbol(fn);
+	int rc = pFn(0, 0);
+	if (Utility::success != rc) poco_unexpected();
 }
 
-std::string Utility::lastError(const DVRSession& session)
+void Utility::Cleanup()
 {
-	return "error";
+	typedef long (CALL_METHOD *FnType)();
+	std::string fn("H264_DVR_Cleanup");
+	check_symbol(fn);
+	FnType pFn = (FnType)Utility::_library.getSymbol(fn);
+	int rc = pFn();
+	if (Utility::success != rc) poco_unexpected();
 }
 
-void Utility::throwException(Utility::HANDLE handle)
+Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& address, const std::string& user, const std::string& password)
 {
+	typedef long (CALL_METHOD *Fn7ParamTypeA)(char*, unsigned short, char*, char*, void*, int*, int);
 
-}
-
-void Utility::throwException(int rc, const std::string& addErrMsg)
-{
-
-}
-
-Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& _addr, 
-							   const std::string& user, 
-							   const std::string& password,
-							   DVRINFO& info)
-{
-	Utility::HANDLE handle = 0;
+	std::string fn("H264_DVR_Login");
+	check_symbol(fn);
 	
-
-	//deviceLocation = "192.168.1.25:32";
-
-	/*std::string usr(user);
-	std::string pwd(password);
-	if (usr.empty()) usr = "admin";
-	if (pwd.empty()) pwd = "";*/
-	//*_pDvr = H264_DVR_Login(const_cast<char*>(host.c_str()), port,
-	//	const_cast<char*>(usr.c_str()), const_cast<char*>(pwd.c_str()),
-	//	&info, &error, SocketStyle::UDPSOCKET); //how do I know the type of socket,OMG FAITH
-
-	H264_DVR_DEVICEINFO OutDev;
-	memset(&OutDev, 0, sizeof(H264_DVR_DEVICEINFO));
+	memset(_pDevice_info, 0, sizeof(DeviceInfo));
+	Fn7ParamTypeA pFn = (Fn7ParamTypeA)Utility::_library.getSymbol(fn);
+	std::string ip = address.host().toString();
+	unsigned short port = address.port();
 	int nError = 0;
+	return pFn((char*)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), _pDevice_info, &nError, TCPSOCKET);
+}
 
-	poco_assert(sl.hasSymbol("H264_DVR_Login"));
-	PH264_DVR_Login H264_DVR_Login = (PH264_DVR_Login)sl.getSymbol("H264_DVR_Login");
-	sockaddr_in* pSin = (sockaddr_in*)_addr.addr();
-	std::cout << "IP:" << inet_ntoa(pSin->sin_addr) << "port:" << _addr.port() << std::endl;
-	handle = H264_DVR_Login(inet_ntoa(pSin->sin_addr), _addr.port(), (char *)user.c_str(), (char *)password.c_str(), &OutDev, &nError, TCPSOCKET);
+bool Utility::logout(Utility::HANDLE handle)
+{
+	typedef long (CALL_METHOD *FnParamType)(long);
 
-	if (handle > 0)
-		info.nTotalChannel = OutDev.iDigChannel + OutDev.byChanNum;
-	std::cout << "login handle: " << handle << " channel: " << info.nTotalChannel << std::endl;
+	std::string fn("H264_DVR_Logout");
+	check_symbol(fn);
+	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle));
+}
 
-	///////////////test
-	//DVR::DZPLite::Utility::TIMEINFO time1 = { 0 };
-	//time1.ch = 1;
+void Utility::readDeviceInfo(DeviceInfo& info)
+{
+	poco_check_ptr(_pDevice_info);
+	memcpy(&info, _pDevice_info, sizeof(DeviceInfo));
+}
 
-	//time1.stEndTime = _time64(NULL);
-	//struct tm *ptm = _localtime64(&time1.stEndTime);
-	//ptm->tm_mday--;
-	//time1.stBeginTime = _mktime64(ptm);
-	//FindFile(handle, time1, 5000);
-	////////////////////////////
+void Utility::setTimeOut(std::size_t timeout, std::size_t times)
+{
+	typedef long (CALL_METHOD *Fn2ParamTypeA)(long, long);
+
+	std::string fn("H264_DVR_SetConnectTime");
+	check_symbol(fn);
+	Fn2ParamTypeA pFn = (Fn2ParamTypeA)Utility::_library.getSymbol(fn);
+	pFn(timeout, times);
+}
+
+Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Record& data, const std::string& newname)
+{
+	typedef long (CALL_METHOD *Fn6ParamTypeA)(long, void*, char*, void*, long, void*);
+
+	std::string fn("H264_DVR_GetFileByName");
+	check_symbol(fn);
 	
-	return handle;
-}
+	Fn6ParamTypeA pFn = (Fn6ParamTypeA)Utility::_library.getSymbol(fn);
+	FileHandle file = pFn(handle, &data, (char*)newname.c_str(), nullptr, 0, nullptr);
+	if (file > 0) return file;
 
-int Utility::logout(Utility::HANDLE handle)
-{
-	//int rc = H264_DVR_Logout(*_pDvr);
-	poco_assert(sl.hasSymbol("H264_DVR_Logout"));
-	PH264_DVR_Logout H264_DVR_Logout = (PH264_DVR_Logout)sl.getSymbol("H264_DVR_Logout");
-	std::cout << "logout handle: " << handle << std::endl;
-	return H264_DVR_Logout(handle);
-}
-
-int Utility::setTimeOut(std::size_t timeout, std::size_t times)
-{
-	//int rc = H264_DVR_SetConnectTime(timeout, TRY_TIMES);
-	poco_assert(sl.hasSymbol("H264_DVR_SetConnectTime"));
-	PH264_DVR_SetConnectTime pDZPSetConnectTime = (PH264_DVR_SetConnectTime)sl.getSymbol("H264_DVR_SetConnectTime");
-	return pDZPSetConnectTime(timeout, times);
-}
-
-int Utility::Init()
-{	
-	std::cout << "init " << std::endl;
-	poco_assert(sl.isLoaded());
-	poco_assert(sl.hasSymbol("H264_DVR_Init"));
-	PH264_DVR_Init H264_DVR_Init = (PH264_DVR_Init)sl.getSymbol("H264_DVR_Init");
-	return H264_DVR_Init(NULL, NULL);
-}
-
-int Utility::CleanUp()
-{
-	//bool rc = H264_DVR_Cleanup();
-	std::cout << "CleanUp" << std::endl;
-	poco_assert(sl.isLoaded());
-	poco_assert(sl.hasSymbol("H264_DVR_Cleanup"));
-	PH264_DVR_Cleanup H264_DVR_Cleanup = (PH264_DVR_Cleanup)sl.getSymbol("H264_DVR_Cleanup");
-	return H264_DVR_Cleanup();
-}
-
-void NetTimeToTM(const SDK_SYSTEM_TIME& nt, tm& t)
-{
-	t.tm_year = nt.year - 1900;
-	t.tm_mon = nt.month - 1;
-	t.tm_mday = nt.day;
-	t.tm_hour = nt.hour;
-	t.tm_min = nt.minute;
-	t.tm_sec = nt.second;
-}
-
-void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
-{
-	nt.dwYear = t.tm_year + 1900;
-	nt.dwMonth = t.tm_mon + 1;
-	nt.dwDay = t.tm_mday;
-	nt.dwHour = t.tm_hour;
-	nt.dwMinute = t.tm_min;
-	nt.dwSecond = t.tm_sec;
-}
-
-void TMToSDKTime(tm& t, SDK_SYSTEM_TIME& nt)
-{
-	nt.year = t.tm_year + 1900;
-	nt.month = t.tm_mon + 1;
-	nt.day = t.tm_mday;
-	nt.hour = t.tm_hour;
-	nt.minute = t.tm_min;
-	nt.second = t.tm_sec;
-}
-
-int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path)
-{
-	poco_assert(sl.hasSymbol("H264_DVR_GetFileByName"));
-	LibrayFnType H264_DVR_GetFileByName = (LibrayFnType)sl.getSymbol("H264_DVR_GetFileByName");
-
-	
-	H264_DVR_FILE_DATA info;
-	memset(&info, 0, sizeof(info));
-	info.ch = fileinfo.ch;
-	strncpy(info.sFileName, (const char *)fileinfo.sFileName, strlen(fileinfo.sFileName));
-	info.size = fileinfo.size;
-	struct tm Tm;
-	_localtime64_s(&Tm, (const time_t*)&fileinfo.stBeginTime);
-	TMToSDKTime(Tm, info.stBeginTime);
-	_localtime64_s(&Tm, (const time_t*)&fileinfo.stEndTime);
-	TMToSDKTime(Tm, info.stEndTime);
-
-	long ret = H264_DVR_GetFileByName(handle, &info, (char *)path.c_str(), CallbackFn, 0, 0);
-	std::cout << "download ret: " << ret << std::endl;
-	if (ret <= 0)
-		return false;
-	
-	return success;
-}
-
-int Utility::GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge)
-{
-	/*int rc = H264_DVR_GetFileByTime(*_pDvr, &cond, "", false,
-	Utility::CallbackFn, (unsigned long)this, 0);*/
-	poco_assert(sl.hasSymbol("H264_DVR_GetFileByTime"));
-	PH264_DVR_GetFileByTime H264_DVR_GetFileByTime = (PH264_DVR_GetFileByTime)sl.getSymbol("H264_DVR_GetFileByTime");
-
-
-	H264_DVR_FINDINFO info;
-	memset(&info, 0, sizeof(info));
-	info.nChannelN0 = timeinfo.ch;
-	info.nFileType = SDK_RECORD_ALL;
-	struct tm Tm;
-	_localtime64_s(&Tm, (const time_t*)&timeinfo.stBeginTime);
-	TMToNetTime(Tm, info.startTime);
-	_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
-	TMToNetTime(Tm, info.endTime);
-
-	long ret = H264_DVR_GetFileByTime(handle, &info, (char *)path.c_str(), false, CallbackFn, 0, 0);
-
-	if (ret <= 0)
-		return false;
-	return success;
-}
-
-int Utility::Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo)
-{
-	/*int rc = H264_DVR_PlayBackByName_V2(*_pDvr, &result,
-	Utility::CallbackFn, 0, (unsigned long)this);*/
-	poco_assert(sl.hasSymbol("H264_DVR_PlayBackByName"));
-	PH264_DVR_PlayBackByName H264_DVR_PlayBackByName = (PH264_DVR_PlayBackByName)sl.getSymbol("H264_DVR_PlayBackByName");
-
-	H264_DVR_FILE_DATA fileData;
-	memset(&fileData, 0, sizeof(fileData));
-	fileData.ch = fileinfo.ch;
-	fileData.hWnd = fileinfo.hwnd;
-	fileData.size = fileinfo.size;
-	strncpy(fileData.sFileName, fileinfo.sFileName, strlen(fileinfo.sFileName));
-	struct tm Tm;
-	_localtime64_s(&Tm, (const time_t*)&fileinfo.stBeginTime);
-	TMToSDKTime(Tm, fileData.stBeginTime);
-	_localtime64_s(&Tm, (const time_t*)&fileinfo.stEndTime);
-	TMToSDKTime(Tm, fileData.stEndTime);
-
-	/*if (H264_DVR_PlayBackByName(handle, &fileData, nullptr, NULL, 0) == 0)
-	{
-		return false;
-	}
-	return success;*/
-	return H264_DVR_PlayBackByName(handle, &fileData, nullptr, NULL, 0);
-}
-
-int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
-{
-	/*int rc = H264_DVR_PlayBackByTimeEx(*_pDvr, &cond,
-	0, (unsigned long)this, Utility::CallbackFn, 0);*/
-	return success;
-}
-
-
-int Utility::FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout)
-{
-	int count = 0;
-	std::cout << "find file" << std::endl;
-	//int rc = H264_DVR_FindFile(*_pDvr, &condition, &result.front(), maxCount, &count, timeout);
-	poco_assert(sl.hasSymbol("H264_DVR_FindFile"));
-	PH264_DVR_FindFile H264_DVR_FindFile = (PH264_DVR_FindFile)sl.getSymbol("H264_DVR_FindFile");
-
-	H264_DVR_FINDINFO info;
-	memset(&info, 0, sizeof(info));
-	info.nChannelN0 = timeinfo.ch;
-	info.nFileType = SDK_RECORD_ALL;
-	struct tm Tm;
-	_localtime64_s(&Tm, (const time_t*)&timeinfo.stBeginTime);
-	TMToNetTime(Tm, info.startTime);
-	_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
-	TMToNetTime(Tm, info.endTime);
-
-	H264_DVR_FILE_DATA nriFileinfo[2000];
-	//int fileCount;
-	if (H264_DVR_FindFile(handle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &count, timeout) <= 0)
-	{
-		std::cout << "find failer" << std::endl;
-		return 0;
-	}
-	std::cout << "find file count: " << count << std::endl;
-
-	////////////////////////////test
-	//Utility::FILEINFO fileinfo = { 0 };
-	//fileinfo.ch = nriFileinfo[0].ch;
-	//strncpy(fileinfo.sFileName, nriFileinfo[0].sFileName, strlen(nriFileinfo[0].sFileName));
-	//fileinfo.size = nriFileinfo[0].size;
-	//struct tm Tm1;
-	//NetTimeToTM(nriFileinfo[0].stBeginTime, Tm1);
-	//fileinfo.stBeginTime = _mktime64(&Tm1);
-	//NetTimeToTM(nriFileinfo[0].stEndTime, Tm1);
-	//fileinfo.stEndTime = _mktime64(&Tm1);
-
-	//std::cout << "download file size: " << fileinfo.size << std::endl;
-
-	//std::string strfilpath = "D:\\DownLoadVideo\\1.h264";
-	// 
-
-	//GetFile(handle, fileinfo, strfilpath);
-	//Sleep(90000);		
-	//////////////////////////////
-	return count;
-}
-
-void Utility::CallbackFn(long handle, long totalSize, long curSize, long opCode)
-{
-	std::cout << "download pos handle: " << handle << "  size: " << totalSize << " current size: " << curSize << " opcode: " << opCode << std::endl;
-}
-
-int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)
-{
 	return 0;
 }
 
-int Utility::stopPlayback(long lPlayHandle)
+Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge)
 {
-	poco_assert(sl.hasSymbol("H264_DVR_StopPlayBack"));
-	PH264_DVR_StopPlayBack H264_DVR_StopPlayBack = (PH264_DVR_StopPlayBack)sl.getSymbol("H264_DVR_StopPlayBack");
+	typedef long (CALL_METHOD *Fn7ParamTypeB)(long, void*, char*, bool, void*, long, void*);
+	std::string fn("H264_DVR_GetFileByTime");
+	check_symbol(fn);
+
+	Fn7ParamTypeB pFn = (Fn7ParamTypeB)Utility::_library.getSymbol(fn);
+	FileHandle file = pFn(handle, &time, (char*)newname.c_str(), false, nullptr, 0, nullptr);
+	if (file > 0) return file;
+
+	return 0;
+}
+
+int Utility::readStreamPos(Utility::FileHandle handle)
+{
+	typedef long (CALL_METHOD *FnParamType)(long);
+	std::string fn("H264_DVR_GetDownloadPos");
+	check_symbol(fn);
+	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
+	return pFn(handle);
+}
+
+
+bool Utility::closeStream(Utility::FileHandle handle)
+{
+	typedef long (CALL_METHOD *FnParamType)(long);
+	std::string fn("H264_DVR_StopGetFile");
+	check_symbol(fn);
 	
-	return  H264_DVR_StopPlayBack(lPlayHandle);	
+	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle));
 }
 
-int Utility::setPlaybackPos(__int64 playbackHandle, __int32 pos)
+Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Record& record)
 {
-	poco_assert(sl.hasSymbol("H264_DVR_SetPlayPos"));
-	PH264_DVR_SetPlayPos H264_DVR_SetPlayPos = (PH264_DVR_SetPlayPos)sl.getSymbol("H264_DVR_SetPlayPos");
+	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
+	std::string fn("H264_DVR_PlayBackByName_V2");
+	check_symbol(fn);
 
-	return H264_DVR_SetPlayPos(playbackHandle, pos / 100.0);
+	Fn5ParamTypeB pFn = (Fn5ParamTypeB)Utility::_library.getSymbol(fn);
+	Utility::PlayHandle play = pFn(handle, (void*)(&record), nullptr, nullptr, 0);
+	if (play > 0) return play;
+
+	return 0;
 }
 
-int Utility::getPlaybackPos(__int64 playbackHandle, __int32 *pos)
+Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Condition& time)
 {
-	poco_assert(sl.hasSymbol("H264_DVR_GetPlayPos"));
-	PH264_DVR_GetPlayPos H264_DVR_GetPlayPos = (PH264_DVR_GetPlayPos)sl.getSymbol("H264_DVR_GetPlayPos");
+	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
+	std::string fn("H264_DVR_PlayBackByTime");
+	check_symbol(fn);
+	
+	Fn5ParamTypeB pFn = (Fn5ParamTypeB)Utility::_library.getSymbol(fn);
+	Utility::PlayHandle play = pFn(handle, (void*)(&time), nullptr, nullptr, 0);
+	if (play > 0) return play;
 
-	*pos = H264_DVR_GetPlayPos(playbackHandle) * 100;
-	return true;
+	return 0;
 }
 
-int Utility::getDownloadPos(__int64 downloadHandle)
+float Utility::playPos(Utility::PlayHandle handle)
 {
-	poco_assert(sl.hasSymbol("H264_DVR_GetDownloadPos"));
-	PH264_DVR_GetDownloadPos  H264_DVR_GetDownloadPos = (PH264_DVR_GetDownloadPos)sl.getSymbol("H264_DVR_GetDownloadPos");
+	typedef float (CALL_METHOD *FnParamTypeA)(long);
+	std::string fn("H264_DVR_GetPlayPos");
+	check_symbol(fn);
+	FnParamTypeA pFn = (FnParamTypeA)Utility::_library.getSymbol(fn);
+	return pFn(handle) * 1000;
+}
 
-	return H264_DVR_GetDownloadPos(downloadHandle);
+bool Utility::stopStream(Utility::PlayHandle handle)
+{
+	typedef long (CALL_METHOD *FnParamType)(long);
+	std::string fn("H264_DVR_StopPlayBack");
+	check_symbol(fn);
+
+	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle));
+}
+
+bool Utility::seek(Utility::PlayHandle handle, int pos)
+{
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
+	std::string fn("H264_DVR_PlayBackControl");
+	check_symbol(fn);
+	
+	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_SEEK, pos));
+}
+
+bool Utility::play(Utility::PlayHandle handle)
+{
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
+	std::string fn("H264_DVR_PlayBackControl");
+	check_symbol(fn);
+	
+	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_CONTINUE, 0));
+}
+
+bool Utility::pause(Utility::PlayHandle handle)
+{
+	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
+	std::string fn("H264_DVR_PlayBackControl");
+	check_symbol(fn);
+	
+	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
+	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_PAUSE, 0));
+}
+
+size_t Utility::findStream(Utility::HANDLE handle, const Condition& cond, Record& record, int recordCount)
+{
+	typedef long (CALL_METHOD *Fn6ParamTypeB)(long, void*, void*, int, int*, int);
+	std::string fn("H264_DVR_FindFile");
+	check_symbol(fn);
+
+	Fn6ParamTypeB pFn = (Fn6ParamTypeB)Utility::_library.getSymbol(fn);
+	int count = 0;
+	int timeout = 5000;
+	if (Utility::success != pFn(handle, (void*)&cond, (void*)&record, recordCount, &count, timeout))
+		throwException(lastError(), "findStream failed!");
+	return count;
+}
+
+size_t Utility::findStream(Utility::HANDLE handle, const Time& time, Result& result)
+{
+	throw Poco::NotImplementedException("findStream by time!");
+	/*
+	typedef long (CALL_METHOD *Fn4ParamType)(long, void*, void*, long);
+	std::string fn("H264_DVR_FindFileByTime");
+	check_symbol(fn);
+	
+	Fn4ParamType pFn = (Fn4ParamType)Utility::_library.getSymbol(fn);
+	int timeout = 10000;
+	if (Utility::success != pFn(handle, (void*)&time, (void*)&result, timeout))
+		throwException(lastError(), "H264_DVR_FindFileByTime failed!");
+
+	return result.nInfoNum;
+	*/
+	
+}
+
+long Utility::lastError()
+{
+	typedef long (CALL_METHOD *FnType)();
+	std::string fn("H264_DVR_GetLastError");
+	check_symbol(fn);
+	
+	FnType pFn = (FnType)Utility::_library.getSymbol(fn);
+	return pFn();
+}
+
+void Utility::throwException(long rc, const std::string& addErrMsg)
+{
+	switch(rc){
+		case H264_DVR_NOPOWER:
+		case H264_DVR_PASSWORD_NOT_VALID:
+		case H264_DVR_LOGIN_USER_NOEXIST:
+		case H264_DVR_USER_LOCKED:
+		case H264_DVR_USER_IN_BLACKLIST:
+		case H264_DVR_USER_HAS_USED:
+		case H264_DVR_USER_NOT_LOGIN:
+		case H264_DVR_CONNECT_DEVICE_ERROR:
+		case H264_DVR_ACCOUNT_INPUT_NOT_VALID:
+		case H264_DVR_ACCOUNT_OVERLAP:
+		case H264_DVR_ACCOUNT_OBJECT_NONE:
+		case H264_DVR_ACCOUNT_OBJECT_NOT_VALID:
+		case H264_DVR_ACCOUNT_OBJECT_IN_USE:
+		case H264_DVR_ACCOUNT_SUBSET_OVERLAP:
+		case H264_DVR_ACCOUNT_PWD_NOT_VALID:
+		case H264_DVR_ACCOUNT_PWD_NOT_MATCH:
+		case H264_DVR_ACCOUNT_RESERVED:
+		case H264_DVR_CTRL_PAUSE_ERROR:
+		case H264_DVR_SDK_NOTFOUND:
+		case H264_DVR_CFG_NOT_ENABLE:
+		case H264_DVR_DECORD_FAIL:
+		case H264_DVR_SDK_NOTVALID:
+		case H264_DVR_NO_INIT:
+		case H264_DVR_ILLEGAL_PARAM:
+		case H264_DVR_INVALID_HANDLE:
+		case H264_DVR_SDK_UNINIT_ERROR:
+		case H264_DVR_SDK_TIMEOUT:
+		case H264_DVR_SDK_MEMORY_ERROR:
+		case H264_DVR_SDK_NET_ERROR:
+		case H264_DVR_SDK_OPEN_FILE_ERROR:
+		case H264_DVR_SDK_UNKNOWNERROR:
+		case H264_DVR_DEV_VER_NOMATCH:
+		case H264_DVR_SDK_NOTSUPPORT:
+		case H264_DVR_OPEN_CHANNEL_ERROR:
+		case H264_DVR_CLOSE_CHANNEL_ERROR:
+		case H264_DVR_SUB_CONNECT_ERROR:
+		case H264_DVR_SUB_CONNECT_SEND_ERROR:
+		case H264_DVR_NATCONNET_REACHED_MAX:
+			throw Poco::IOException(addErrMsg);
+		default:
+			throw Poco::IOException("default exception!");
+	}
 }
 
 }}

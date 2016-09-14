@@ -22,6 +22,9 @@
     <Filter Include="DZPLite">
       <UniqueIdentifier>{e903f471-4f9f-443a-ba99-15a9a842bc77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DeviceContainer">
+      <UniqueIdentifier>{00756190-e0ee-479d-8427-103f97a499a7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{f7a197af-9e5d-4fd3-8ab0-bfdb67fdffcd}</UniqueIdentifier>
     </Filter>
@@ -56,6 +59,9 @@
     <ClCompile Include="HKLIBTEST.cpp">
       <Filter>HKLite</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceContainerTest.cpp">
+      <Filter>DeviceContainer</Filter>
+    </ClCompile>
     <ClCompile Include="DHLIBTEST.cpp">
       <Filter>DHLite</Filter>
     </ClCompile>
@@ -64,9 +70,6 @@
     </ClCompile>
     <ClCompile Include="DownloadTest.cpp">
       <Filter>DownloadTask</Filter>
-    </ClCompile>
-    <ClCompile Include="DZPLIBTEST.cpp">
-      <Filter>DZPLite</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileTest.cpp">
       <Filter>SearchFile</Filter>
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="HKLIBTEST.h">
       <Filter>HKLite</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceContainerTest.h">
+      <Filter>DeviceContainer</Filter>
     </ClInclude>
     <ClInclude Include="DHLIBTEST.h">
       <Filter>DHLite</Filter>

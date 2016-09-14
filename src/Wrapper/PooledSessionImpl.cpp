@@ -48,28 +48,6 @@ DVRStatementImpl* PooledSessionImpl::createStatementImpl()
 	return access()->createStatementImpl();
 }
 
-
-void PooledSessionImpl::list()
-{
-	return access()->list();
-}
-
-
-void PooledSessionImpl::download()
-{
-	return access()->download();
-}
-
-void PooledSessionImpl::playback()
-{
-	return access()->playback();
-}
-
-void PooledSessionImpl::abort()
-{
-	return access()->abort();
-}
-
 bool PooledSessionImpl::isLoggedIn() const
 {
 	return access()->isLoggedIn();

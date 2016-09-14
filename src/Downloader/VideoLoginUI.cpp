@@ -7,11 +7,6 @@
 VideoLoginUI::VideoLoginUI()
 :m_pages(1)
 {
-	//m_page_Count = m_DeviceList.size() / 5;
-	//if (m_DeviceList.size() % 5 != 0)
-	//{
-	//	m_page_Count += 1;
-	//}
 }
 
 

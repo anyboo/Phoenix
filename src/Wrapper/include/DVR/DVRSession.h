@@ -49,11 +49,6 @@ namespace DVR {
 		void logout();
 		bool isLoggedIn() const;
 
-		void list();
-		void download();
-		void playback();
-		void abort();
-
 		void setLoginTimeout(std::size_t timeout);
 		std::size_t getLoginTimeout() const;
 		void reconnect();
@@ -91,25 +86,6 @@ namespace DVR {
 	inline bool DVRSession::isLoggedIn() const
 	{
 		return _pImpl->isLoggedIn();
-	}
-
-	inline void DVRSession::list()
-	{
-		_pImpl->list();
-	}
-
-	inline void DVRSession::download()
-	{
-		_pImpl->download();
-	}
-	inline void DVRSession::playback()
-	{
-		_pImpl->playback();
-	}
-
-	inline void DVRSession::abort()
-	{
-		_pImpl->abort();
 	}
 
 	inline void DVRSession::setLoginTimeout(std::size_t timeout)
