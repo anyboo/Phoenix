@@ -5,8 +5,15 @@
 #include <Poco/SharedLibrary.h>
 #include <Poco/Path.h>
 
-Poco::SharedLibrary sl("sdk\\JXJ\\JNetSDK.dll");
+
+Poco::SharedLibrary avutil("sdk\\JXJ\\avutil-50.dll");
+Poco::SharedLibrary avcore("sdk\\JXJ\\avcore-0.dll");
+Poco::SharedLibrary avcodec52("sdk\\JXJ\\avcodec-52.dll");
+Poco::SharedLibrary swscale("sdk\\JXJ\\swscale-0.dll");
+Poco::SharedLibrary jxjcodec("sdk\\JXJ\\jxjcodec.dll");
 Poco::SharedLibrary avplayer("sdk\\JXJ\\AVPlayer.dll");
+
+Poco::SharedLibrary sl("sdk\\JXJ\\JNetSDK.dll");
 
 const JXJLiteConnectorRegistrator DvrJXJLiteConnectorRegistrator;
 
@@ -18,23 +25,20 @@ const std::string DVRConnector::KEY(DVR_CONNECTOR_NAME);
 
 DVRConnector::DVRConnector()
 {	
-	int rc = Utility::Init();
 	
-	if (Utility::success != rc) Utility::throwException(rc);
+	
 }
 
 
 DVRConnector::~DVRConnector()
 {
-	int rc = Utility::CleanUp();
 	
-	if (Utility::success != rc)  Utility::throwException(rc);
 }
 
 Poco::AutoPtr<DVR::DVRSessionImpl> DVRConnector::createSession(const std::string& connectionString,
 	std::size_t timeout)
 {
-	return Poco::AutoPtr<DVR::DVRSessionImpl>(new DVRSessionImpl(connectionString, timeout));
+	return Poco::AutoPtr<DVR::DVRSessionImpl>(new DVRSessionImpl(connectionString, timeout));	
 }
 
 void DVRConnector::registerConnector()

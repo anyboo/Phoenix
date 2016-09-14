@@ -6,10 +6,6 @@
 #include <Poco/Path.h>
 
 Poco::SharedLibrary StreamReader("sdk\\DZP\\StreamReader.dll");
-
-//Poco::SharedLibrary DllDeinterlace("sdk\\DZP\\DllDeinterlace.dll");
-//Poco::SharedLibrary H264Play("sdk\\DZP\\H264Play.dll");
-//Poco::SharedLibrary sl("sdk\\DZP\\NetSdk.dll");
 Poco::SharedLibrary sl("sdk\\DZP\\NetSdk.dll");
 const DZPLiteConnectorRegistrator DvrDZPLiteConnectorRegistrator;
 
@@ -25,7 +21,7 @@ DVRConnector::DVRConnector()
 {	
 	//int rc = Utility::Init();
 	//
-	//if (Utility::success != rc) Utility::throwException(rc);
+	//if (Utility::success != rc) Utility::throwException(rc);	
 }
 
 

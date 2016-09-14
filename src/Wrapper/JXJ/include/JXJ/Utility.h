@@ -6,7 +6,8 @@
 #include "DVR/DVRSession.h"
 #include <Poco/Net/SocketAddress.h>
 #include <map>
-#include "JNetSDK.h"
+
+
 
 
 namespace DVR {
@@ -40,6 +41,19 @@ public:
 		HWND hwnd;
 	} TIMEINFO;
 
+	struct DownloadInfo
+	{
+		DownloadInfo(){
+			mDownloadHandle = -1;
+			mDownloadSize = 0;
+			mDownloadBeginTime = -1;
+		}
+		long mDownloadHandle;
+		__int64 mDownloadSize;
+		__int64 mDownloadBeginTime;
+		//RecordFile mDownloadFile;
+	};
+
 	typedef struct DVRINFO
 	{
 		long nTotalChannel;
@@ -67,19 +81,19 @@ public:
 
 	static int GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path);
 	static int GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge);
-	static int setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 in, __int32* out);
-
+	
 	static int Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo);
-	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo);
+	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, int& Channel);
 
 	static int FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout);
 
 
-	static int stopPlayback(long lPlayHandle);
-	static int setPlaybackPos(__int64 playbackHandle, __int64 filesize, __int32 pos);
+	static int stopPlayback(long lPlayHandle, int Channel);
+	static int setPlaybackPos(__int64 playbackHandle, int Channel, __int32 pos);
 	static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
 	static int pausePlayback(long lPlayHandle, BOOL bPause);
 	static int getDownloadPos(__int64 downloaJXJandle);
+	static int stopDownload(long lPlayHandle, int Channel);
 
 	typedef void(*EventCallbackType)(void* pVal);
 
@@ -133,20 +147,22 @@ public:
 	static bool registerUpdateHandler(const DVRSession& session, CBT callbackFn, T* pParam)
 		/// Registers the callback by calling registerUpdateHandler(sqlite3*, CBT, T*).
 	{
-		return registerUpdateHandler(dvrHandle(session), callbackFn, pParam);
+		//return registerUpdateHandler(dvrHandle(session), callbackFn, pParam);
+		return NULL;
 	}
 
 
-protected:
-	static void __stdcall CallbackFn(long lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, long dwUser);
-	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);
-	
+protected:	
+	static int __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
+	static int __stdcall JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
 
 	//static void* eventHookRegister(void* Handle, EventCallbackType callbackFn, void* pParam);
 private:
 	Utility();
 	Utility(const Utility&);
 	Utility& operator = (const Utility&);
+private:
+	
 };
 
 }}

@@ -37,6 +37,9 @@
     <Filter Include="SearchFile">
       <UniqueIdentifier>{2c1f27fb-bc8c-4645-935d-a0b2ced7276a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JXJLite">
+      <UniqueIdentifier>{00f18781-938f-42ad-9a11-0117cee4edb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHCPClientTest.cpp">
@@ -44,27 +47,26 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
-    <ClCompile Include="DZPLIBTEST.cpp">
-      <Filter>DZPLite</Filter>
-    </ClCompile>
     <ClCompile Include="ARPClientTest.cpp">
       <Filter>ARP\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DZPLIBTEST.cpp" />
-    <ClCompile Include="UtilityTest.cpp">
-      <Filter>Utility</Filter>
+    <ClCompile Include="JXJLIBTEST.cpp">
+      <Filter>JXJLite</Filter>
+    </ClCompile>
+    <ClCompile Include="HKLIBTEST.cpp">
+      <Filter>HKLite</Filter>
     </ClCompile>
     <ClCompile Include="DHLIBTEST.cpp">
       <Filter>DHLite</Filter>
     </ClCompile>
-    <ClCompile Include="HKLIBTEST.cpp">
-      <Filter>HKLite</Filter>
-    </ClCompile>  
+    <ClCompile Include="DownloadContainerTest.cpp">
+      <Filter>DownloadTask</Filter>
+    </ClCompile>
     <ClCompile Include="DownloadTest.cpp">
       <Filter>DownloadTask</Filter>
     </ClCompile>
-    <ClCompile Include="DownloadContainerTest.cpp">
-      <Filter>DownloadTask</Filter>
+    <ClCompile Include="DZPLIBTEST.cpp">
+      <Filter>DZPLite</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileTest.cpp">
       <Filter>SearchFile</Filter>
@@ -75,27 +77,26 @@
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneTestSuite.h" />
-    <ClInclude Include="DZPLIBTEST.h">
-      <Filter>DZPLite</Filter>
-    </ClInclude>
     <ClInclude Include="ARPClientTest.h">
       <Filter>ARP\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DZPLIBTEST.h" />
-    <ClInclude Include="UtilityTest.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="DHLIBTEST.h">
-      <Filter>DHLite</Filter>
+    <ClInclude Include="JXJLIBTEST.h">
+      <Filter>JXJLite</Filter>
     </ClInclude>
     <ClInclude Include="HKLIBTEST.h">
       <Filter>HKLite</Filter>
     </ClInclude>
-    <ClInclude Include="DownloadTest.h">
-      <Filter>DownloadTask</Filter>
+    <ClInclude Include="DHLIBTEST.h">
+      <Filter>DHLite</Filter>
     </ClInclude>
     <ClInclude Include="DownloadContainerTest.h">
       <Filter>DownloadTask</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadTest.h">
+      <Filter>DownloadTask</Filter>
+    </ClInclude>
+    <ClInclude Include="DZPLIBTEST.h">
+      <Filter>DZPLite</Filter>
     </ClInclude>
     <ClInclude Include="SearchFileTest.h">
       <Filter>SearchFile</Filter>

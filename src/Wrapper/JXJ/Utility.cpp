@@ -2,12 +2,15 @@
 #include <Poco/DateTime.h>
 #include <Poco/SharedLibrary.h>
 #include <memory>
+#include "JNetSDK.h"
 #include "j_sdk.h"
+#include "AVPlayer.h"
+#include "Jtype.h"
 
 
 extern "C"
 {
-	
+
 	typedef int (*PJNetInit)(LPCTSTR lpszLogName);
 	typedef int (*PJNetCleanup)();
 
@@ -21,10 +24,32 @@ extern "C"
 		LPCTSTR lpszDevIP, int iChn, int iStreamID, LPCTSTR lpszBeginTime, LPCTSTR lpszEndTime, int iRecType,
 		int iIsPlay, fcbJStream* pfcbStream, void* pUserData, long& lRec);
 	typedef long (*PJNetRecCtrl)(long lRec, eJNetPBCtrl eCtrlCmd, void* lpCtrlValue);
+	typedef long (*PJNetRecClose)(long lRec);
+	
+
+	typedef int (*PAVP_Init)();
+	typedef int (*PAVP_Cleanup)();
+	typedef int (*PAVP_CreateRecFile)(LPCTSTR lpszPath, DWORD dwProtocol, DWORD dwEncoder);
+	typedef int (*PAVP_WriteRecFile)(int iFile, void* lpFrame, int iFrameLen, void* lpBuf2, int iBufLen2);
+	typedef int (*PAVP_PutFrame)(int iPort, void* pFrame);
+	typedef int (*PAVP_SetPlayPriority)(int iPort, int iPriorityType);
+	typedef int (*PAVP_SetDataProtocol)(int iPort, DWORD dwProtocol);
+	typedef int (*PAVP_SetCoder)(int iPort, LPCTSTR lpszCoderName);
+	typedef int (*PAVP_AddPlayWnd)(int iPort, PSTDisplayDev pstDispDev, HWND hWnd, LPRECT lpDrawOffset, LPRECT lpSrcOffset);
+	typedef int (*PAVP_Play)(int iPort);
+	typedef int (*PAVP_GetFreePort)();
+	typedef int (*PAVP_Stop)(int iPort);
+	typedef int (*PAVP_ReleasePort)(int iPort);
+	typedef int (*PAVP_Seek)(int iPort, DWORD dwTime);
+	typedef int (*PAVP_CloseRecFile)(int iFile);
+
 }
 
 
 extern Poco::SharedLibrary sl;
+extern Poco::SharedLibrary avplayer;
+
+
 
 
 
@@ -120,6 +145,7 @@ namespace DVR {
 
 			poco_assert(sl.hasSymbol("JNetLogin"));
 			PJNetLogin JNetLogin = (PJNetLogin)sl.getSymbol("JNetLogin");		
+
 			poco_assert(sl.hasSymbol("JNetGetParam"));
 			PJNetGetParam JNetGetParam = (PJNetGetParam)sl.getSymbol("JNetGetParam");
 
@@ -131,9 +157,11 @@ namespace DVR {
 			{
 				std::cout << "login error:" << lastError(ret) << std::endl;
 				return -1;
-			}			
+			}		
+			std::cout << "login handle: " << handle << std::endl;
 
-			JDeviceInfo deviceinfo = { 0 };
+			::Sleep(1000);
+			JDeviceInfo deviceinfo /*= { 0 }*/;
 			ret = JNetGetParam(handle, 0, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
 			if (ret != JNETErrSuccess)
 			{
@@ -144,7 +172,7 @@ namespace DVR {
 
 			std::cout << "login handle: " << handle << " channel: " << info.nTotalChannel << std::endl;			
 
-			return ret;
+			return handle;
 		}
 
 		int Utility::logout(Utility::HANDLE handle)
@@ -162,11 +190,19 @@ namespace DVR {
 
 		int Utility::Init()
 		{
-			std::cout << "init " << std::endl;
+			std::cout << "init " << std::endl;	
 			poco_assert(sl.isLoaded());
 			poco_assert(sl.hasSymbol("JNetInit"));
 			PJNetInit JNetInit = (PJNetInit)sl.getSymbol("JNetInit");
-			return JNetInit(NULL);			
+
+			poco_assert(avplayer.isLoaded());
+			poco_assert(avplayer.hasSymbol("AVP_Init"));
+			PAVP_Init AVP_Init = (PAVP_Init)avplayer.getSymbol("AVP_Init");
+			AVP_Init();
+
+			if (JNETErrSuccess == JNetInit(NULL))
+				return Utility::success;
+			return -1;
 		}
 
 		int Utility::CleanUp()
@@ -175,113 +211,143 @@ namespace DVR {
 			poco_assert(sl.isLoaded());
 			poco_assert(sl.hasSymbol("JNetCleanup"));
 			PJNetCleanup JNetCleanup = (PJNetCleanup)sl.getSymbol("JNetCleanup");
-			return JNetCleanup();
+
+			poco_assert(avplayer.isLoaded());
+			poco_assert(avplayer.hasSymbol("AVP_Cleanup"));
+			PAVP_Cleanup AVP_Cleanup = (PAVP_Cleanup)avplayer.getSymbol("AVP_Cleanup");
+
+			AVP_Cleanup();
+			if (JNETErrSuccess == JNetCleanup())
+				return Utility::success;
+			return  -1;
 		}
 
-		
+		int  __stdcall Utility::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
+		{
+			poco_assert(avplayer.isLoaded());
+			poco_assert(avplayer.hasSymbol("AVP_WriteRecFile"));
+			PAVP_WriteRecFile AVP_WriteRecFile = (PAVP_WriteRecFile)avplayer.getSymbol("AVP_WriteRecFile");
+
+			DownloadInfo *pDlg = (DownloadInfo *)pUserParam;
+			while (pBuff)
+			{
+				DownloadInfo *pDlg = (DownloadInfo *)pUserParam;
+
+				j_frame_t *pFrame = (j_frame_t *)pBuff;
+
+				if (pDlg->mDownloadBeginTime == -1)
+				{
+					pDlg->mDownloadBeginTime = pFrame->timestamp_sec;
+				}
+
+				AVP_WriteRecFile(pDlg->mDownloadHandle, pBuff, dwRevLen, NULL, 0);
+			}
+			return success;
+		}
 
 		int Utility::GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path)
 		{
-			/*poco_assert(sl.hasSymbol("NET_DVR_GetFileByName"));
-			PNET_DVR_GetFileByName NET_DVR_GetFileByName = (PNET_DVR_GetFileByName)sl.getSymbol("NET_DVR_GetFileByName");
-
-			long downloadHandle = NET_DVR_GetFileByName(handle, (char *)fileinfo.sFileName, (char *)path.c_str());
-			std::cout << "download ret: " << downloadHandle << std::endl;
-			if (downloadHandle < 0)
-			{
-				lastError(handle);
-				return false;
-			}		
 			
-			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0, 0))
-			{
-				lastError(handle);
-				return false;
-			}*/
-
 			return success;
 		}
 
 		int Utility::GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge)
 		{			
-			/*poco_assert(sl.hasSymbol("NET_DVR_GetFileByTime_V40"));
-			PNET_DVR_GetFileByTime_V40 NET_DVR_GetFileByTime_V40 = (PNET_DVR_GetFileByTime_V40)sl.getSymbol("NET_DVR_GetFileByTime_V40");
-
-
-			NET_DVR_PLAYCOND struDownloadCond = { 0 };
-			struct tm Tm;
-			_localtime64_s(&Tm, (const time_t*)&timeinfo.stBeginTime);
-			TMToNetTime(Tm, struDownloadCond.struStartTime);
-			_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
-			TMToNetTime(Tm, struDownloadCond.struStopTime);
+			poco_assert(sl.hasSymbol("JNetRecOpen4Time"));
+			PJNetRecOpen4Time JNetRecOpen4Time = (PJNetRecOpen4Time)sl.getSymbol("JNetRecOpen4Time");
+			poco_assert(sl.hasSymbol("JNetRecCtrl"));
+			PJNetRecCtrl JNetRecCtrl = (PJNetRecCtrl)sl.getSymbol("JNetRecCtrl");
 			
-			long downloadHandle = NET_DVR_GetFileByTime_V40(handle, (char *)path.c_str(), &struDownloadCond);
-
+			struct tm Tm;
+			char startTime[30] = { 0 };
+			char endTime[30] = { 0 };
+			
+			_localtime64_s(&Tm, (const time_t*)&timeinfo.stBeginTime);
+			strftime(startTime, 80, "%Y%m%d%H%M%S", &Tm);
+			_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
+			strftime(endTime, 80, "%Y%m%d%H%M%S", &Tm);
+			
+			long recHandle = 0;
+			DownloadInfo *pInfo = new DownloadInfo();
+			long downloadHandle = JNetRecOpen4Time(handle, "", timeinfo.ch, 0, startTime, endTime, 4096, 0, JRecDownload, pInfo, recHandle);
 			if (downloadHandle < 0)
 			{
+				delete pInfo;
 				lastError(handle);
 				return false;
 			}
-
-			if (!setPlayBackControl(downloadHandle, NET_DVR_PLAYSTART, 0, 0))
-			{
-				lastError(handle);
-				return false;
-			}*/
+			
+			Sleep(1000);
+			JNetRecCtrl(recHandle, JNET_PB_CTRL_START, NULL);
+			
 				
 			return success;
 		}
 
 		int Utility::Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo)
 		{			
-			/*poco_assert(sl.hasSymbol("NET_DVR_PlayBackByName"));
-			PNET_DVR_PlayBackByName NET_DVR_PlayBackByName = (PNET_DVR_PlayBackByName)sl.getSymbol("NET_DVR_PlayBackByName");			
-
-			long playHandle = NET_DVR_PlayBackByName(handle, (char *)fileinfo.sFileName, fileinfo.hwnd);	
-			if (playHandle < 0)
-			{
-				lastError(handle);
-				return false;
-			}
-			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0, 0))
-			{
-				lastError(handle);
-				return false;
-			}*/
-
 			return success;
 		}
 
-		int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo)
-		{
-			/*poco_assert(sl.hasSymbol("NET_DVR_PlayBackByTime_V40"));
-			PNET_DVR_PlayBackByTime_V40 NET_DVR_PlayBackByTime_V40 = (PNET_DVR_PlayBackByTime_V40)sl.getSymbol("NET_DVR_PlayBackByTime_V40");
+		int Utility::Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, int& Channel)
+		{			
+			poco_assert(sl.hasSymbol("JNetRecOpen4Time"));
+			PJNetRecOpen4Time JNetRecOpen4Time = (PJNetRecOpen4Time)sl.getSymbol("JNetRecOpen4Time");
+			poco_assert(sl.hasSymbol("JNetRecCtrl"));
+			PJNetRecCtrl JNetRecCtrl = (PJNetRecCtrl)sl.getSymbol("JNetRecCtrl");
 
-			NET_DVR_VOD_PARA struVodPara = { 0 };			
-			struVodPara.dwSize = sizeof(struVodPara);
-			struVodPara.struIDInfo.dwChannel = timeinfo.ch;
-			struVodPara.hWnd = timeinfo.hwnd;
+			poco_assert(avplayer.hasSymbol("AVP_GetFreePort"));
+			PAVP_GetFreePort AVP_GetFreePort = (PAVP_GetFreePort)avplayer.getSymbol("AVP_GetFreePort");
+			poco_assert(avplayer.hasSymbol("AVP_SetPlayPriority"));
+			PAVP_SetPlayPriority AVP_SetPlayPriority = (PAVP_SetPlayPriority)avplayer.getSymbol("AVP_SetPlayPriority");
+			poco_assert(avplayer.hasSymbol("AVP_SetDataProtocol"));
+			PAVP_SetDataProtocol AVP_SetDataProtocol = (PAVP_SetDataProtocol)avplayer.getSymbol("AVP_SetDataProtocol");
+			poco_assert(avplayer.hasSymbol("AVP_AddPlayWnd"));
+			PAVP_AddPlayWnd AVP_AddPlayWnd = (PAVP_AddPlayWnd)avplayer.getSymbol("AVP_AddPlayWnd");
+			poco_assert(avplayer.hasSymbol("AVP_Play"));
+			PAVP_Play AVP_Play = (PAVP_Play)avplayer.getSymbol("AVP_Play");
+			poco_assert(avplayer.hasSymbol("AVP_SetCoder"));
+			PAVP_SetCoder AVP_SetCoder = (PAVP_SetCoder)avplayer.getSymbol("AVP_SetCoder");
 
 			struct tm Tm;
+			char startTime[30] = { 0 };
+			char endTime[30] = { 0 };
+
 			_localtime64_s(&Tm, (const time_t*)&timeinfo.stBeginTime);
-			TMToNetTime(Tm, struVodPara.struBeginTime);
-
+			strftime(startTime, 80, "%Y%m%d%H%M%S", &Tm);
 			_localtime64_s(&Tm, (const time_t*)&timeinfo.stEndTime);
-			TMToNetTime(Tm, struVodPara.struEndTime);
+			strftime(endTime, 80, "%Y%m%d%H%M%S", &Tm);
 
-			long playHandle = NET_DVR_PlayBackByTime_V40(handle, &struVodPara);
-			if (playHandle < 0)
+			Channel = AVP_GetFreePort();
+			if (Channel < 0)
 			{
-				lastError(handle);				
 				return false;
 			}
-			if (!setPlayBackControl(playHandle, NET_DVR_PLAYSTART, 0, 0))
+
+			long recHandle = 0;
+			DownloadInfo *pInfo = new DownloadInfo();
+			long downloadHandle = JNetRecOpen4Time(handle, "", timeinfo.ch, 0, startTime, endTime, 4096, 0, JRecStream, pInfo, recHandle);
+			if (downloadHandle < 0)
 			{
+				delete pInfo;
 				lastError(handle);
 				return false;
-			}*/
+			}
 
-			return success;
+			Sleep(1000);
+			JNetRecCtrl(recHandle, JNET_PB_CTRL_START, NULL);
+			AVP_SetPlayPriority(Channel, AVPPlaySmooth);
+			AVP_SetDataProtocol(Channel, AVP_PROTOCOL_JPF);
+			int iRet = AVP_SetCoder(Channel, AVP_CODER_JXJ);
+			if (iRet != AVPErrSuccess)
+			{								
+				return false;
+			}
+
+			AVP_AddPlayWnd(Channel, NULL, timeinfo.hwnd, NULL, NULL);
+			AVP_Play(Channel);
+
+			return Channel;
 		}
 
 
@@ -306,30 +372,48 @@ namespace DVR {
 			info.beg_node = 0;
 			info.end_node = J_SDK_MAX_STORE_LOG_SIZE - 1;
 			info.sess_id = -1;
+			bool beg = true;
 
-			
-			LONG lfind = JNetGetParam(handle, timeinfo.ch, PARAM_STORE_LOG, &info, sizeof(JStoreLog), NULL, NULL);
-			if (lfind != JNETErrSuccess)
+			while (beg || info.beg_node < info.total_count)
 			{
-				lastError(lfind);
-				return -1;
-			}			
+				beg = false;
+				LONG lfind = JNetGetParam(handle, timeinfo.ch, PARAM_STORE_LOG, &info, sizeof(JStoreLog), NULL, NULL);
+				if (lfind != JNETErrSuccess)
+				{
+					lastError(lfind);
+					return -1;
+				}
+
+				for (int i = 0; i < info.node_count; i++)
+				{
+					//Store& s = storeLog.store[i];
+					count++;
+				}
+				info.beg_node += J_SDK_MAX_STORE_LOG_SIZE;
+				info.end_node += J_SDK_MAX_STORE_LOG_SIZE;
+				if (info.end_node >= info.total_count)
+				{
+					info.end_node = info.total_count - 1;
+				}
+
+			}
+			
 			
 			std::cout << "find file count: " << count << std::endl;
 
 			////////////////////////////test download
-			//////////download by file
-			/*Utility::FILEINFO fileinfo = { 0 };			
-			strncpy(fileinfo.sFileName, nriFileinfo->sFileName, strlen(nriFileinfo->sFileName));
-			fileinfo.size = nriFileinfo->dwFileSize;
+			////////////download by file
+			//Utility::FILEINFO fileinfo = { 0 };			
+			//strncpy(fileinfo.sFileName, nriFileinfo->sFileName, strlen(nriFileinfo->sFileName));
+			//fileinfo.size = nriFileinfo->dwFileSize;
 
-			std::cout << "download file size: " << fileinfo.size << std::endl;
+			//std::cout << "download file size: " << fileinfo.size << std::endl;
 
-			std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";		 
+			//std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";		 
 
-			GetFile(handle, fileinfo, strfilpath);
-			Sleep(90000);		*/
-			//////////////////download by time 
+			//GetFile(handle, fileinfo, strfilpath);
+			//Sleep(90000);		
+			//////////////////////download by time 
 			//Utility::TIMEINFO info1 = { 0 };
 			//info1.ch = fileinfo[0].ch;
 			//strncpy(info1.sFileName, fileinfo[0].filename, strlen(fileinfo[0].filename));
@@ -345,64 +429,81 @@ namespace DVR {
 			//std::string strfilpath = "D:\\DownLoadVideo\\2.mp4";
 			//GetFile(handle, info1, strfilpath, false);
 			//Sleep(90000);
-			//////////////////////////////////
+			////////////////////////////////////
 			return count;			
 		}
 
-		void Utility::CallbackFn(long lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, long dwUser)
-		{
-			
-		}
+		
 		
 
-		int Utility::DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode)
+		int Utility::stopPlayback(long lPlayHandle, int Channel)
 		{
-			return 0;
+			poco_assert(avplayer.hasSymbol("AVP_Stop"));
+			PAVP_Stop AVP_Stop = (PAVP_Stop)avplayer.getSymbol("AVP_Stop");
+			poco_assert(avplayer.hasSymbol("AVP_ReleasePort"));
+			PAVP_ReleasePort AVP_ReleasePort = (PAVP_ReleasePort)avplayer.getSymbol("AVP_ReleasePort");
+			poco_assert(sl.hasSymbol("JNetRecClose"));
+			PJNetRecClose JNetRecClose = (PJNetRecClose)sl.getSymbol("JNetRecClose");
+
+			AVP_Stop(Channel);
+			AVP_ReleasePort(Channel);
+				
+			return JNetRecClose(lPlayHandle);
 		}
 
-		int Utility::stopPlayback(long lPlayHandle)
+		int Utility::setPlaybackPos(__int64 playbackHandle, int Channel, __int32 pos)
 		{
-		/*	poco_assert(sl.hasSymbol("NET_DVR_StopPlayBack"));
-			PNET_DVR_StopPlayBack NET_DVR_StopPlayBack = (PNET_DVR_StopPlayBack)sl.getSymbol("NET_DVR_StopPlayBack");
+			poco_assert(avplayer.hasSymbol("AVP_Seek"));
+			PAVP_Seek AVP_Seek = (PAVP_Seek)avplayer.getSymbol("AVP_Seek");
+			poco_assert(sl.hasSymbol("JNetRecCtrl"));
+			PJNetRecCtrl JNetRecCtrl = (PJNetRecCtrl)sl.getSymbol("JNetRecCtrl");
 
-			return  NET_DVR_StopPlayBack(lPlayHandle);	*/		
-			return 0;
-		}
+			AVP_Seek(Channel, pos);
 
-		int Utility::setPlaybackPos(__int64 playbackHandle, __int64 filesize, __int32 pos)
-		{
-			//return setPlayBackControl(playbackHandle, NET_DVR_PLAYSETPOS, pos, 0);		
-			return 0;
+			return JNetRecCtrl(playbackHandle, JNET_PB_CTRL_SET_TIME, (void *)pos);
+			
 		}
 
 		int Utility::getPlaybackPos(__int64 playbackHandle, __int32 *pos)
-		{			
-			//return setPlayBackControl(playbackHandle, NET_DVR_PLAYGETPOS, 0, pos);
+		{						
 			return 0;
 		}
 
 		int Utility::getDownloadPos(__int64 downloadHandle)
-		{
-			/*poco_assert(sl.hasSymbol("NET_DVR_GetDownloadPos"));
-			PNET_DVR_GetDownloadPos  NET_DVR_GetDownloadPos = (PNET_DVR_GetDownloadPos)sl.getSymbol("NET_DVR_GetDownloadPos");
-			
-			return NET_DVR_GetDownloadPos(downloadHandle);*/
+		{			
 			return 0;
 		}
 
 		int Utility::pausePlayback(long lPlayHandle, BOOL bPause)
 		{
-			/*setPlayBackControl(lPlayHandle, NET_DVR_PLAYPAUSE, 0, 0);*/
 			return success;
 		}
-
-		int Utility::setPlayBackControl(Utility::DOWNLOAD_HANDLE handle, int Opcode, __int32 in, __int32* out)
+		
+		int Utility::JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 		{
-			/*poco_assert(sl.hasSymbol("NET_DVR_PlayBackControl_V40"));
-			PNET_DVR_PlayBackControl_V40 NET_DVR_PlayBackControl_V40 = (PNET_DVR_PlayBackControl_V40)sl.getSymbol("NET_DVR_PlayBackControl_V40");
+			TIMEINFO *pDlg = (TIMEINFO *)pUserParam;
+			poco_assert(avplayer.hasSymbol("AVP_PutFrame"));
+			PAVP_PutFrame AVP_PutFrame = (PAVP_PutFrame)avplayer.getSymbol("AVP_PutFrame");
 
-			return NET_DVR_PlayBackControl_V40(handle, Opcode, &in, 0, out, NULL);*/
-			return 0;
+			j_frame_t *pFrame = (j_frame_t *)pBuff;			
+			
+			return AVP_PutFrame(pDlg->ch, pBuff);
+		}
+
+		int Utility::stopDownload(long lPlayHandle, int Channel)
+		{
+			poco_assert(avplayer.hasSymbol("AVP_CloseRecFile"));
+			PAVP_CloseRecFile AVP_CloseRecFile = (PAVP_CloseRecFile)avplayer.getSymbol("AVP_CloseRecFile");
+			poco_assert(sl.hasSymbol("JNetRecCtrl"));
+			PJNetRecCtrl JNetRecCtrl = (PJNetRecCtrl)sl.getSymbol("JNetRecCtrl");
+			poco_assert(sl.hasSymbol("JNetRecClose"));
+			PJNetRecClose JNetRecClose = (PJNetRecClose)sl.getSymbol("JNetRecClose");
+
+			JNetRecCtrl(lPlayHandle, JNET_PB_CTRL_STOP, NULL);
+			AVP_CloseRecFile(Channel);
+
+
+			return JNetRecClose(lPlayHandle);
 		}
 
 	}

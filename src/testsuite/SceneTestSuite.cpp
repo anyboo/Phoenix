@@ -7,6 +7,7 @@
 #include "DownloadTest.h"
 #include "DownloadContainerTest.h"
 #include "SearchFileTest.h"
+#include "JXJLIBTEST.h"
 
 //#include "UtilityTest.h"
 
@@ -14,14 +15,15 @@ CppUnit::Test* SceneTestSuite::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("SceneTestSuite");
 
-	pSuite->addTest(DownloadTest::suite());
+	/*pSuite->addTest(DownloadTest::suite());
 	pSuite->addTest(DownloadContainerTest::suite());
 	pSuite->addTest(SearchFileTest::suite());
 	pSuite->addTest(DHCPClientTest::suite());
 	pSuite->addTest(ARPClientTest::suite());
 	pSuite->addTest(DZPLIBTEST::suite());
-	pSuite->addTest(DHLIBTEST::suite());
-	pSuite->addTest(HKLIBTEST::suite());
+	pSuite->addTest(DHLIBTEST::suite());*/
+	//pSuite->addTest(HKLIBTEST::suite());
+	pSuite->addTest(JXJLIBTEST::suite());
 
 	//pSuite->addTest(UtilityTest::suite());
 

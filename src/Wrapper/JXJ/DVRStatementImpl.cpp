@@ -56,10 +56,10 @@ void DVRStatementImpl::playByTime(const Poco::DateTime& time)
 	Utility::CONDITION cond;
 	Utility::TIMEINFO timeinfo;
 
-	int rc = Utility::Playback(_handle, timeinfo);
+	/*int rc = Utility::Playback(_handle, timeinfo);
 
 	if (Utility::success != rc)
-		Utility::throwException(_handle);
+		Utility::throwException(_handle);*/
 }
 
 /*
