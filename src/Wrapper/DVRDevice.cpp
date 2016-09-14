@@ -17,9 +17,18 @@ namespace DVR{
 
 	void DVRDevice::InitChannel()
 	{
-		for (int i = 0; i < NumberOfChannel; i++)
+		int chanels = Poco::AnyCast<int>(_MainSession.getProperty("chanels"));
+		for (int i = 0; i < chanels; i++)
 		{
 			_channels.push_back(false);
+		}
+	}
+
+	void DVRDevice::selectAllChannel()
+	{
+		for (auto var : _channels)
+		{
+			var = true;
 		}
 	}
 

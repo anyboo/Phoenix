@@ -4,7 +4,20 @@
 #include <string>
 #include "DVR/DVRSession.h"
 #include <Poco/Net/SocketAddress.h>
+#include <Poco/SharedLibrary.h>
 #include <map>
+#include <Poco/String.h>
+#include <Poco/Mutex.h>
+
+extern "C"
+{
+	typedef enum SEDK_PlayBackAction		ACTION;
+	typedef struct H264_DVR_FINDINFO		Condition;
+	typedef struct H264_DVR_FILE_DATA		Record;
+	typedef struct SDK_SearchByTime			Time;
+	typedef struct SDK_SearchByTimeResult	Result;
+	typedef struct _H264_DVR_DEVICEINFO		DeviceInfo;
+}
 
 namespace DVR {
 namespace DZPLite {
@@ -13,65 +26,44 @@ class DZPLite_API Utility
 {
 public:
 	~Utility();
-
+	
 	typedef long HANDLE;
-	typedef struct FILEINFO
-	{
-		int ch;						//通道号
-		int size;					//文件大小
-		char sFileName[108];		///< 文件名
-		__time64_t stBeginTime;	///< 文件开始时间
-		__time64_t stEndTime;		///< 文件结束时间
-		HWND hwnd;
-	} FILEINFO;
+	typedef long FileHandle;
+	typedef long PlayHandle;
+	static const int success;
 
-	typedef struct TIMEINFO
-	{
-		int ch;						//通道号
-		int size;					//文件大小
-		char sFileName[108];		///< 文件名
-		__time64_t stBeginTime;	///< 文件开始时间
-		__time64_t stEndTime;		///< 文件结束时间
-		HWND hwnd;
-	} TIMEINFO;
-
-	typedef struct DVRINFO
-	{
-		long nTotalChannel;
-	} DVRINFO;
-	typedef struct CONDITION{} CONDITION;
-
-	static const int success = 1;
 	static Utility::HANDLE dvrHandle(const DVRSession& session);
 	static std::string lastError(Utility::HANDLE handle);
-	static std::string lastError(const DVRSession& session);
-	static void throwException(Utility::HANDLE handle);
-	static void throwException(int rc, const std::string& addErrMsg = std::string());
+	//static std::string lastError(const DVRSession& session);
+	static long Utility::lastError();
+	//static void throwException(Utility::HANDLE handle);
+	static void throwException(long rc, const std::string& addErrMsg = std::string());
 
-	static Utility::HANDLE login(const Poco::Net::SocketAddress& _addr, 
-								 const std::string& user, 
-								 const std::string& password,
-								 DVRINFO& info);
+	static void Init();
+	static void Cleanup();
 
-	static int logout(Utility::HANDLE handle);
-	static int setTimeOut(std::size_t timeout, std::size_t times);
+	static Utility::HANDLE login(const Poco::Net::SocketAddress& _addr, const std::string& user, const std::string& password);
+	static bool logout(Utility::HANDLE handle);
+	
+	static void readDeviceInfo(DeviceInfo& info);
+	static void setTimeOut(std::size_t timeout, std::size_t times);
 
-	static int Init();
-	static int CleanUp();
+	static Utility::FileHandle readStream(Utility::HANDLE handle, Record& data, const std::string& newname);
+	static Utility::FileHandle readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge = false);
+	static int Utility::readStreamPos(Utility::FileHandle handle);
+	static bool closeStream(Utility::HANDLE handle);
 
-	static int GetFile(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo, const std::string& path);
-	static int GetFile(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo, const std::string& path, bool merge);
+	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Record& record);
+	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Condition& time);
+	static float Utility::playPos(Utility::PlayHandle handle);
+	static bool stopStream(Utility::PlayHandle handle);
 
-	static int Playback(Utility::HANDLE handle, const Utility::FILEINFO& fileinfo);
-	static int Playback(Utility::HANDLE handle, const Utility::TIMEINFO& timeinfo);
+	static bool seek(Utility::PlayHandle handle, int pos);
+	static bool play(Utility::PlayHandle handle);
+	static bool pause(Utility::PlayHandle handle);
 
-	static int FindFile(Utility::HANDLE handle, const Utility::TIMEINFO timeinfo, std::size_t timeout);
-
-
-	static int stopPlayback(long lPlayHandle);
-	static int setPlaybackPos(__int64 playbackHandle, __int32 pos);
-	static int getPlaybackPos(__int64 playbackHandle, __int32 *pos);
-	static int getDownloadPos(__int64 downloadHandle);
+	static size_t findStream(Utility::HANDLE handle, const Condition& cond, Record& record, int recordCount);
+	static size_t findStream(Utility::HANDLE handle, const Time& time, Result& result);
 
 	typedef void(*EventCallbackType)(void* pVal);
 
@@ -128,16 +120,25 @@ public:
 		return registerUpdateHandler(dvrHandle(session), callbackFn, pParam);
 	}
 
-
 protected:
-	static void __stdcall CallbackFn(long handle, long totalSize, long curSize, long opCode);
-	static int  __stdcall DataCallbackFn(long handle, long type, unsigned char *buffer, long len, long opCode);
-
-	//static void* eventHookRegister(void* Handle, EventCallbackType callbackFn, void* pParam);
+	//static void callback();
 private:
 	Utility();
 	Utility(const Utility&);
 	Utility& operator = (const Utility&);
+
+	static Poco::Mutex _mutex;
+	static Poco::SharedLibrary _library;
+	static Poco::SharedLibrary _dependency;
+	static Poco::SharedLibrary _dependencyA;
+	//static Poco::SharedLibrary _dependencyC;
+	static DeviceInfo* _pDevice_info;
 };
+
+inline std::string Utility::lastError(Utility::HANDLE handle)
+{
+	long errCode = Utility::lastError();
+	return std::string("errCode");
+}
 
 }}

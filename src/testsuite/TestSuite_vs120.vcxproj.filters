@@ -22,6 +22,9 @@
     <Filter Include="DZPLite">
       <UniqueIdentifier>{e903f471-4f9f-443a-ba99-15a9a842bc77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DeviceContainer">
+      <UniqueIdentifier>{00756190-e0ee-479d-8427-103f97a499a7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{f7a197af-9e5d-4fd3-8ab0-bfdb67fdffcd}</UniqueIdentifier>
     </Filter>
@@ -44,15 +47,14 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
-    <ClCompile Include="DZPLIBTEST.cpp">
-      <Filter>DZPLite</Filter>
-    </ClCompile>
     <ClCompile Include="ARPClientTest.cpp">
       <Filter>ARP\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DZPLIBTEST.cpp" />
     <ClCompile Include="UtilityTest.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceContainerTest.cpp">
+      <Filter>DeviceContainer</Filter>
     </ClCompile>
     <ClCompile Include="DHLIBTEST.cpp">
       <Filter>DHLite</Filter>
@@ -75,15 +77,15 @@
       <Filter>DHCP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneTestSuite.h" />
-    <ClInclude Include="DZPLIBTEST.h">
-      <Filter>DZPLite</Filter>
-    </ClInclude>
     <ClInclude Include="ARPClientTest.h">
       <Filter>ARP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="UtilityTest.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceContainerTest.h">
+      <Filter>DeviceContainer</Filter>
     </ClInclude>
     <ClInclude Include="DHLIBTEST.h">
       <Filter>DHLite</Filter>

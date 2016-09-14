@@ -2,16 +2,12 @@
 #include "VideoLoginUI.h"
 #include "VideoVendorUI.h"
 #include "DVR/DVRSession.h"
+#include "DVR/DVRDeviceContainer.h"
 #include "TestData.h"
 
 VideoLoginUI::VideoLoginUI()
 :m_pages(1)
 {
-	//m_page_Count = m_DeviceList.size() / 5;
-	//if (m_DeviceList.size() % 5 != 0)
-	//{
-	//	m_page_Count += 1;
-	//}
 }
 
 
@@ -87,6 +83,11 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	connectString = connectString + port;
 	DVR::DVRSession* session = new DVR::DVRSession("DZP", connectString.GetData());
 	session->login(user.GetData(),passwd.GetData());
+//	DVR::DVRDeviceContainer 
+	if (session->isLoggedIn())
+	{
+
+	}
 
 	m_IsLogIn = LogInDevice;
 	Vendor_Info vendor;

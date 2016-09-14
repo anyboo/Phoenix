@@ -6,6 +6,7 @@
 #include "ProgtessUI.h"
 #include "DVR/DVRSession.h"
 #include "TestData.h"
+#include "DVR/DVRDeviceContainer.h"
 
 DownLoadWnd::DownLoadWnd() :_channels(0)
 {

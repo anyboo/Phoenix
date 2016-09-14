@@ -30,10 +30,7 @@ public:
 	void login(const std::string& user = "", const std::string& password = "");
 	void logout();
 	bool isLoggedIn()const;
-	void list();
-	void download();
-	void playback();
-	void abort();
+	
 	void setLoginTimeout(std::size_t timeout);
 	std::size_t getLoginTimeout() const;
 	void reconnect();
@@ -72,3 +69,6 @@ inline DVRSessionImpl* PooledSessionImpl::impl() const
 
 }
 
+#if 0
+
+#endif
