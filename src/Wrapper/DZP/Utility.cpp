@@ -13,11 +13,12 @@ const int Utility::success = SDK_RET_CODE::H264_DVR_SUCCESS;
 DeviceInfo* Utility::_pDevice_info = nullptr;
 Poco::SharedLibrary Utility::_dependency("sdk\\DZP\\StreamReader.dll");
 Poco::SharedLibrary Utility::_dependencyA("sdk\\DZP\\DllDeinterlace.dll");
-//Poco::SharedLibrary Utility::_dependencyB("sdk\\DZP\\H264Play.dll");
+// Poco::SharedLibrary Utility::_dependencyB("sdk\\DZP\\H264Play.dll");
 Poco::SharedLibrary Utility::_library("sdk\\DZP\\NetSDK.dll");
 Poco::Mutex Utility::_mutex;
+
 Utility::Utility()
-{	
+{
 	if (!_pDevice_info)
 	{
 		_pDevice_info = new DeviceInfo();
@@ -27,7 +28,7 @@ Utility::Utility()
 
 
 Utility::~Utility()
-{	
+{
 	if (_pDevice_info)
 	{
 		delete _pDevice_info;
@@ -66,13 +67,15 @@ Utility::HANDLE Utility::login(const Poco::Net::SocketAddress& address, const st
 
 	std::string fn("H264_DVR_Login");
 	check_symbol(fn);
-	
+
 	memset(_pDevice_info, 0, sizeof(DeviceInfo));
 	Fn7ParamTypeA pFn = (Fn7ParamTypeA)Utility::_library.getSymbol(fn);
 	std::string ip = address.host().toString();
 	unsigned short port = address.port();
 	int nError = 0;
-	return pFn((char*)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), _pDevice_info, &nError, TCPSOCKET);
+
+	return pFn(const_cast<char*>(ip.c_str()), port, const_cast<char*>(user.c_str()),
+		const_cast<char*>(password.c_str()), _pDevice_info, &nError, TCPSOCKET);
 }
 
 bool Utility::logout(Utility::HANDLE handle)
@@ -107,9 +110,9 @@ Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Record& data, co
 
 	std::string fn("H264_DVR_GetFileByName");
 	check_symbol(fn);
-	
+
 	Fn6ParamTypeA pFn = (Fn6ParamTypeA)Utility::_library.getSymbol(fn);
-	FileHandle file = pFn(handle, &data, (char*)newname.c_str(), nullptr, 0, nullptr);
+	FileHandle file = pFn(handle, &data, const_cast<char*>(newname.c_str()), nullptr, 0, nullptr);
 	if (file > 0) return file;
 
 	return 0;
@@ -122,7 +125,7 @@ Utility::FileHandle Utility::readStream(Utility::HANDLE handle, Condition& time,
 	check_symbol(fn);
 
 	Fn7ParamTypeB pFn = (Fn7ParamTypeB)Utility::_library.getSymbol(fn);
-	FileHandle file = pFn(handle, &time, (char*)newname.c_str(), false, nullptr, 0, nullptr);
+	FileHandle file = pFn(handle, &time, const_cast<char*>(newname.c_str()), false, nullptr, 0, nullptr);
 	if (file > 0) return file;
 
 	return 0;
@@ -143,7 +146,7 @@ bool Utility::closeStream(Utility::FileHandle handle)
 	typedef long (CALL_METHOD *FnParamType)(long);
 	std::string fn("H264_DVR_StopGetFile");
 	check_symbol(fn);
-	
+
 	FnParamType pFn = (FnParamType)Utility::_library.getSymbol(fn);
 	return (Utility::success == pFn(handle));
 }
@@ -155,7 +158,7 @@ Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Record& re
 	check_symbol(fn);
 
 	Fn5ParamTypeB pFn = (Fn5ParamTypeB)Utility::_library.getSymbol(fn);
-	Utility::PlayHandle play = pFn(handle, (void*)(&record), nullptr, nullptr, 0);
+	Utility::PlayHandle play = pFn(handle, const_cast<Record*>(&record), nullptr, nullptr, 0);
 	if (play > 0) return play;
 
 	return 0;
@@ -166,9 +169,9 @@ Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Condition&
 	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
 	std::string fn("H264_DVR_PlayBackByTime");
 	check_symbol(fn);
-	
+
 	Fn5ParamTypeB pFn = (Fn5ParamTypeB)Utility::_library.getSymbol(fn);
-	Utility::PlayHandle play = pFn(handle, (void*)(&time), nullptr, nullptr, 0);
+	Utility::PlayHandle play = pFn(handle, const_cast<Condition*>(&time), nullptr, nullptr, 0);
 	if (play > 0) return play;
 
 	return 0;
@@ -198,7 +201,7 @@ bool Utility::seek(Utility::PlayHandle handle, int pos)
 	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
-	
+
 	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
 	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_SEEK, pos));
 }
@@ -208,7 +211,7 @@ bool Utility::play(Utility::PlayHandle handle)
 	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
-	
+
 	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
 	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_CONTINUE, 0));
 }
@@ -218,7 +221,7 @@ bool Utility::pause(Utility::PlayHandle handle)
 	typedef long (CALL_METHOD *Fn3ParamType)(long, long, long);
 	std::string fn("H264_DVR_PlayBackControl");
 	check_symbol(fn);
-	
+
 	Fn3ParamType pFn = (Fn3ParamType)Utility::_library.getSymbol(fn);
 	return (Utility::success == pFn(handle, ACTION::SDK_PLAY_BACK_PAUSE, 0));
 }
@@ -232,7 +235,8 @@ size_t Utility::findStream(Utility::HANDLE handle, const Condition& cond, Record
 	Fn6ParamTypeB pFn = (Fn6ParamTypeB)Utility::_library.getSymbol(fn);
 	int count = 0;
 	int timeout = 5000;
-	if (Utility::success != pFn(handle, (void*)&cond, (void*)&record, recordCount, &count, timeout))
+	if (Utility::success != pFn(handle, const_cast<Condition*>(&cond), reinterpret_cast<void*>(&record),
+		recordCount, &count, timeout))
 		throwException(lastError(), "findStream failed!");
 	return count;
 }
@@ -251,8 +255,7 @@ size_t Utility::findStream(Utility::HANDLE handle, const Time& time, Result& res
 		throwException(lastError(), "H264_DVR_FindFileByTime failed!");
 
 	return result.nInfoNum;
-	*/
-	
+	*/	
 }
 
 long Utility::lastError()
@@ -260,7 +263,7 @@ long Utility::lastError()
 	typedef long (CALL_METHOD *FnType)();
 	std::string fn("H264_DVR_GetLastError");
 	check_symbol(fn);
-	
+
 	FnType pFn = (FnType)Utility::_library.getSymbol(fn);
 	return pFn();
 }
@@ -312,4 +315,5 @@ void Utility::throwException(long rc, const std::string& addErrMsg)
 	}
 }
 
-}}
+}  // namespace DZPLite
+}  // namespace DVR
