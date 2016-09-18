@@ -46,4 +46,29 @@ DVRStatement& DVRStatement::reset(DVRSession& rSession)
 	return *this;
 }
 
+
+void DVRStatement::DownloadByName(const std::string& name)
+{
+
+}
+void DVRStatement::DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime)
+{
+
+}
+
+void DVRStatement::Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& Channels)
+{
+
+}
+
+void DVRStatement::playByName(const std::string& filename)
+{
+
+}
+
+void DVRStatement::playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime)
+{
+
+}
+
 }

@@ -9,7 +9,6 @@ namespace DVR{
 	{
 	}
 
-
 	DVRDeviceContainer::~DVRDeviceContainer()
 	{
 	}

@@ -108,6 +108,7 @@
     <ClInclude Include="include\DVR\DVRStatementImpl.h" />
     <ClInclude Include="include\DVR\PooledSessionHolder.h" />
     <ClInclude Include="include\DVR\PooledSessionImpl.h" />
+    <ClInclude Include="include\DVR\DVRSearchFilesContainer.h" />
     <ClInclude Include="include\DVR\SessionPool.h" />
     <ClInclude Include="include\DVR\SessionPoolContainer.h" />
   </ItemGroup>
@@ -127,6 +128,7 @@
     <ClCompile Include="DVRStatementImpl.cpp" />
     <ClCompile Include="PooledSessionHolder.cpp" />
     <ClCompile Include="PooledSessionImpl.cpp" />
+    <ClCompile Include="DVRSearchFilesContainer.cpp" />
     <ClCompile Include="SessionPool.cpp" />
     <ClCompile Include="SessionPoolContainer.cpp" />
   </ItemGroup>

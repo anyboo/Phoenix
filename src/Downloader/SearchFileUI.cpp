@@ -4,6 +4,7 @@
 #include "FileLogInfoUI.h"
 #include <time.h>
 #include "TestData.h"
+#include "DVR/DVRSearchFilesContainer.h"
 
 SearchFileUI::SearchFileUI()
 :m_DownloadID(1)
@@ -85,7 +86,7 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	CTestData::getInstance()->SetDownloadfiles(_checked_files);
+//	CTestData::getInstance()->SetDownloadfiles(_checked_files);
 
 	Close();
 }
@@ -128,10 +129,10 @@ void SearchFileUI::OnCheckAll(TNotifyUI& msg)
 
 void SearchFileUI::OnShowFileList()
 {
-	std::vector<SearchFileInfo> _file_info;
-	CTestData::getInstance()->GetSearchFiles(_file_info);
-
-	int filesize = _file_info.size();
+	std::vector<DVR::DVRSearchFiles*> files;
+//	DVRSearchFilesContainer::GetSearchFiles(files);
+	
+	int filesize = files.size();
 	for (int i = 0; i < filesize; i++)
 	{
 		CDialogBuilder builder;
@@ -155,11 +156,11 @@ void SearchFileUI::OnShowFileList()
 		CLabelUI* Lab_etime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 		CLabelUI* Lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 
-		std::string filename = _file_info[i].filename;
-		int channel = _file_info[i].channel;
-		__time64_t stime = _file_info[i].startTime;
-		__time64_t etime = _file_info[i].stopTime;
-		size_t size = _file_info[i].size;
+		std::string filename = files[i]->fname();
+		int channel = files[i]->channel;
+		__time64_t stime = files[i]->startTime;
+		__time64_t etime = files[i]->stopTime;
+		size_t size = files[i]->fsize;
 
 		CDuiString startTime = TimeChange(stime);
 		CDuiString stopTime = TimeChange(etime);

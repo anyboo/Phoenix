@@ -81,6 +81,12 @@
     <ClInclude Include="include\DVR\DVRSearchFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\DVR\DVRException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRSearchFilesContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVRSessionImpl.cpp">
@@ -132,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DVRSearchFiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRSearchFilesContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,7 +8,7 @@
 #include "TestData.h"
 #include "DVR/DVRDeviceContainer.h"
 
-DownLoadWnd::DownLoadWnd() :_channels(0)
+DownLoadWnd::DownLoadWnd() 
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
@@ -97,19 +97,19 @@ void DownLoadWnd::InitWindow()
 
 	SetTimer(GetHWND(), 1, 2000, nullptr);
 
-	std::vector<unsigned long> Login_IDs;
-	CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
-	for (size_t i = 0; i < Login_IDs.size(); i++)
-	{
-		_vendorManage.AddVendorList(Login_IDs[i]);
-	}
+	//std::vector<unsigned long> Login_IDs;
+	//CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
+	//for (size_t i = 0; i < Login_IDs.size(); i++)
+	//{
+	//	_vendorManage.AddVendorList(Login_IDs[i]);
+	//}
 
-	std::vector<unsigned long> download_IDs;
-	CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
-	for (size_t j = 0; j < download_IDs.size(); j++)
-	{
-		_downloadManage.AddDownloadTask(download_IDs[j]);
-	}
+	//std::vector<unsigned long> download_IDs;
+	//CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
+	//for (size_t j = 0; j < download_IDs.size(); j++)
+	//{
+	//	_downloadManage.AddDownloadTask(download_IDs[j]);
+	//}
 }
 
 void DownLoadWnd::FixedSliderPosition(TNotifyUI& msg)
@@ -194,8 +194,11 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->ShowModal();
 
 	if (!pDlg->GetLoginState())return;
-	unsigned long id = CTestData::getInstance()->GetLoginID();
-	_vendorManage.AddVendorList(id);
+	std::string name = pDlg->GetLogInName();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::GetInstance().get(name);
+	std::string Addr = Device.address();
+	size_t channels = Device.channelCount();
+	_vendorManage.AddVendorList(name);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
@@ -232,10 +235,12 @@ bool DownLoadWnd::SearchBegin()
 	}
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
-	std::string strID = select->GetUserData();
-	unsigned long id = std::stoul(strID);
-	DVR::DVRSession* session = CTestData::getInstance()->GetSessionByID(id);
-//	DVR::DVRStatement state(session);
+	std::string name = select->GetUserData().GetData();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::GetInstance().get(name);
+	
+	DVR::DVRStatement impl(Device.session());
+	impl.Searchfile(stime, etime, _all_channels);
+	
 	return true;
 }
 

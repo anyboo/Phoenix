@@ -6,6 +6,11 @@
 #include <Poco/AutoPtr.h>
 #include <Poco/Mutex.h>
 
+#include <Poco/SingletonHolder.h>
+
+
+
+
 namespace DVR{
 	class DVRDevice;
 	class DVR_API DVRDeviceContainer
@@ -14,6 +19,12 @@ namespace DVR{
 		DVRDeviceContainer();
 		~DVRDeviceContainer();
 
+		static Poco::SingletonHolder<DVRDeviceContainer> _Dc;
+		static DVRDeviceContainer& DVRDeviceContainer::GetInstance()
+		{
+			return *_Dc.get();
+		}
+
 		void add(DVRDevice* device);
 		void remove(const std::string& name);
 		bool has(const std::string& name) const;
@@ -21,6 +32,7 @@ namespace DVR{
 		int count() const;
 
 	private:
+		
 		typedef std::map<std::string, Poco::AutoPtr<DVRDevice>, Poco::CILess> DevicePoolMap;
 
 		DVRDeviceContainer(const DVRDeviceContainer&);
@@ -28,7 +40,10 @@ namespace DVR{
 
 		DevicePoolMap _devicePool;
 		Poco::FastMutex _mutex;
+
+
 	};
+	
 
 	void DVRDeviceContainer::remove(const std::string& name)
 	{

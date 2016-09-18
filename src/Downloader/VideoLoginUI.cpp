@@ -6,7 +6,7 @@
 #include "TestData.h"
 
 VideoLoginUI::VideoLoginUI()
-:m_pages(1)
+:m_pages(1), _name("")
 {
 }
 
@@ -81,21 +81,27 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
 	connectString = connectString + port;
-	DVR::DVRSession* session = new DVR::DVRSession("DZP", connectString.GetData());
-	session->login(user.GetData(),passwd.GetData());
-//	DVR::DVRDeviceContainer 
-	if (session->isLoggedIn())
+	DVR::DVRSession session("DZP", connectString.GetData());
+	session.login(user.GetData(),passwd.GetData());
+	if (session.isLoggedIn())
 	{
-
+		m_IsLogIn = LogInDevice;
+	}
+	else
+	{
+		m_IsLogIn = NoLogDevice;
+		return;
 	}
 
-	m_IsLogIn = LogInDevice;
-	Vendor_Info vendor;
-	vendor.session = session;
-	vendor.ipAddr = ip.GetData();
-	vendor.vendorName = brand.GetData();
-	CTestData::getInstance()->SaveLoginInfo(vendor);
+	DVR::DVRDevice* device = new DVR::DVRDevice(session);
+	DVR::DVRDeviceContainer::GetInstance().add(device);
+	_name = device->name();
 	Close();
+}
+
+std::string VideoLoginUI::GetLogInName() const
+{
+	return _name;
 }
 
 void VideoLoginUI::OnPrevPage(TNotifyUI& msg)

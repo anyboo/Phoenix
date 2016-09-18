@@ -78,7 +78,7 @@ private:
 	std::vector<int>		_all_channels;
 	CVendor		_vendorManage;
 	CDownLoadList	_downloadManage;
-	int			_channels;
+	
 	CButtonUI*			_btn_search;
 	SYSTEMTIME		 m_sysTime;
 	CTimeUI*	_TimeControl;

@@ -13,6 +13,14 @@ namespace DVR {
 		
 		~DVRStatement();
 
+		void DownloadByName(const std::string& name);
+		void DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime);
+
+		void Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& channels);
+
+		virtual void playByName(const std::string& filename);
+		virtual void playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime);
+
 		DVRStatement(const DVRStatement& stmt);
 		DVRStatement& operator = (const DVRStatement& stmt);
 		DVRStatement& reset(DVRSession& session);

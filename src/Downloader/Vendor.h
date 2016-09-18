@@ -12,7 +12,7 @@ public:
 
 	void Off_line();
 	void DeleteVendor(CDuiString& sName);
-	void AddVendorList(const unsigned long vendor_id);
+	void AddVendorList(const std::string DeviceName);
 	void ChangeChannelsList(CDuiString& sName);
 
 	DUI_DECLARE_MESSAGE_MAP();
