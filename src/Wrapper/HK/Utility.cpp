@@ -33,7 +33,8 @@ extern "C"
 }
 
 
-extern Poco::SharedLibrary sl;
+Poco::SharedLibrary HCCore("sdk\\HK\\HCCore.dll");
+Poco::SharedLibrary sl("sdk\\HK\\HCNetSDK.dll");
 
 
 
@@ -347,18 +348,18 @@ namespace DVR {
 			
 			std::cout << "find file count: " << count << std::endl;
 
-			////////////////////////////test download
-			//////////download by file
-			Utility::FILEINFO fileinfo = { 0 };			
-			strncpy(fileinfo.sFileName, nriFileinfo->sFileName, strlen(nriFileinfo->sFileName));
-			fileinfo.size = nriFileinfo->dwFileSize;
+			//////////////////////////////test download
+			////////////download by file
+			//Utility::FILEINFO fileinfo = { 0 };			
+			//strncpy(fileinfo.sFileName, nriFileinfo->sFileName, strlen(nriFileinfo->sFileName));
+			//fileinfo.size = nriFileinfo->dwFileSize;
 
-			std::cout << "download file size: " << fileinfo.size << std::endl;
+			//std::cout << "download file size: " << fileinfo.size << std::endl;
 
-			std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";		 
+			//std::string strfilpath = "D:\\DownLoadVideo\\1.mp4";		 
 
-			GetFile(handle, fileinfo, strfilpath);
-			Sleep(90000);		
+			//GetFile(handle, fileinfo, strfilpath);
+			//Sleep(90000);		
 			//////////////////download by time 
 			//Utility::TIMEINFO info1 = { 0 };
 			//info1.ch = fileinfo[0].ch;
