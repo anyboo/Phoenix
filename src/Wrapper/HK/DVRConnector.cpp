@@ -5,8 +5,7 @@
 #include <Poco/SharedLibrary.h>
 #include <Poco/Path.h>
 
-Poco::SharedLibrary HCCore("sdk\\HK\\HCCore.dll");
-Poco::SharedLibrary sl("sdk\\HK\\HCNetSDK.dll");
+
 
 const HKLiteConnectorRegistrator DvrHKLiteConnectorRegistrator;
 

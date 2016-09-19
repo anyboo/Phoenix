@@ -46,8 +46,14 @@ extern "C"
 }
 
 
-extern Poco::SharedLibrary sl;
-extern Poco::SharedLibrary avplayer;
+Poco::SharedLibrary avutil("sdk\\JXJ\\avutil-50.dll");
+Poco::SharedLibrary avcore("sdk\\JXJ\\avcore-0.dll");
+Poco::SharedLibrary avcodec52("sdk\\JXJ\\avcodec-52.dll");
+Poco::SharedLibrary swscale("sdk\\JXJ\\swscale-0.dll");
+Poco::SharedLibrary jxjcodec("sdk\\JXJ\\jxjcodec.dll");
+Poco::SharedLibrary avplayer("sdk\\JXJ\\AVPlayer.dll");
+
+Poco::SharedLibrary sl("sdk\\JXJ\\JNetSDK.dll");
 
 
 
