@@ -35,6 +35,11 @@ namespace DVR{
 		return 110;
 	}
 
+	void DVRDownloadTask::DeleteTaskByName(const std::string name)
+	{
+
+	}
+
 }
 
 

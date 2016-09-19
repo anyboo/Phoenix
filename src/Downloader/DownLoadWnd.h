@@ -5,7 +5,7 @@
 #include "DownLoadList.h"
 #include "TimeUI.h"
 #include <map>
-
+#include <Poco/DateTime.h>
 
 
 
@@ -44,7 +44,7 @@ protected:
 
 	void OnCheckAllchannels(TNotifyUI& msg);
 
-	void GetDataAndTime(__time64_t& start, __time64_t& stop);
+	void GetDataAndTime(Poco::DateTime& start, Poco::DateTime& stop);
 
 	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
 	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);

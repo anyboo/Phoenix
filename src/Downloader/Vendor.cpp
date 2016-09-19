@@ -82,7 +82,7 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 
 void CVendor::AddVendorList(const std::string DeviceName)
 {
-	DVR::DVRDevice& device = DVR::DVRDeviceContainer::GetInstance().get(DeviceName);
+	DVR::DVRDevice& device = DVR::DVRDeviceContainer::getInstance().get(DeviceName);
 	std::string VendorIP = device.address().substr(0, device.address().find_last_of(":"));
 	size_t channels = device.channelCount();
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
@@ -180,7 +180,7 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	CListContainerElementUI* ChannelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, serial + 1));
 	
 	std::string name = SubList->GetUserData();
-	DVR::DVRDeviceContainer::GetInstance().remove(name);
+	DVR::DVRDeviceContainer::getInstance().remove(name);
 	pList->Remove(SubList, true);
 	if (ChannelList != nullptr && ChannelList->GetName() == _T("Channel_List"))
 	{

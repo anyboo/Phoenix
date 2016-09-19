@@ -95,8 +95,9 @@
     <ClInclude Include="include\DVR\DVRConnector.h" />
     <ClInclude Include="include\DVR\DVRDevice.h" />
     <ClInclude Include="include\DVR\DVRDeviceContainer.h" />
+    <ClInclude Include="include\DVR\DVRDownloadPakcetContainer.h" />
     <ClInclude Include="include\DVR\DVRDownloadTask.h" />
-    <ClInclude Include="include\DVR\DVRDownloadTaskContainer.h" />
+    <ClInclude Include="include\DVR\DVRDownloadPacket.h" />
     <ClInclude Include="include\DVR\DVRException.h" />
     <ClInclude Include="include\DVR\DVRSearchFiles.h" />
     <ClInclude Include="include\DVR\DVRSession.h" />
@@ -113,10 +114,11 @@
     <ClInclude Include="include\DVR\SessionPoolContainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DVRDownloadPakcetContainer.cpp" />
     <ClCompile Include="DVRDevice.cpp" />
     <ClCompile Include="DVRDeviceContainer.cpp" />
     <ClCompile Include="DVRDownloadTask.cpp" />
-    <ClCompile Include="DVRDownloadTaskContainer.cpp" />
+    <ClCompile Include="DVRDownloadPacket.cpp" />
     <ClCompile Include="DVRException.cpp" />
     <ClCompile Include="DVRSearchFiles.cpp" />
     <ClCompile Include="DVRSession.cpp" />

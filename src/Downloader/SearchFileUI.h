@@ -1,5 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include <Poco/datetime.h>
 
 #define BT_CLOSE_SEARCHWND		(_T("close_bt"))
 #define BT_BEGINDOWNLOAD		(_T("BT_Download"))
@@ -36,7 +37,7 @@ public:
 
 	void GetFileCountAndSize();
 
-	CDuiString TimeChange(__time64_t inputTime);
+	CDuiString TimeChange(Poco::DateTime inputTime);
 
 	void GetSelectOption(CDuiString& optionName);
 

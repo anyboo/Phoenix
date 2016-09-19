@@ -15,6 +15,7 @@ namespace DVR{
 		std::size_t proValue();
 		std::size_t speed();
 		std::size_t elapsedTime();
+		void DeleteTaskByName(const std::string name);
 
 	};
 }

@@ -195,7 +195,7 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 
 	if (!pDlg->GetLoginState())return;
 	std::string name = pDlg->GetLogInName();
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::GetInstance().get(name);
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
 	std::string Addr = Device.address();
 	size_t channels = Device.channelCount();
 	_vendorManage.AddVendorList(name);
@@ -226,7 +226,7 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 
 bool DownLoadWnd::SearchBegin()
 {
-	__time64_t stime, etime;
+	Poco::DateTime stime, etime;
 	GetDataAndTime(stime, etime);
 	if (stime > etime)
 	{
@@ -236,9 +236,10 @@ bool DownLoadWnd::SearchBegin()
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
 	std::string name = select->GetUserData().GetData();
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::GetInstance().get(name);
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
 	
 	DVR::DVRStatement impl(Device.session());
+
 	impl.Searchfile(stime, etime, _all_channels);
 	
 	return true;
@@ -349,7 +350,7 @@ void DownLoadWnd::SetButtonImage(const CDuiString& ctr_name, const CDuiString& d
 	if (c) c->SetAttribute(_T("foreimage"), value);
 }
 
-void DownLoadWnd::GetDataAndTime(__time64_t& start, __time64_t& stop)
+void DownLoadWnd::GetDataAndTime(Poco::DateTime& start, Poco::DateTime& stop)
 {
 	CLabelUI* Lab_StartData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
 	CLabelUI* Lab_StopData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
@@ -369,13 +370,8 @@ void DownLoadWnd::GetDataAndTime(__time64_t& start, __time64_t& stop)
 
 	sscanf(eData, "%d-%d-%d", &stopTime.tm_year, &stopTime.tm_mon, &stopTime.tm_mday);
 	sscanf(eTime, "%d:%d", &stopTime.tm_hour, &stopTime.tm_min);
-
-	startTime.tm_year -= 1900;
-	startTime.tm_mon -= 1;
-	stopTime.tm_year -= 1900;
-	stopTime.tm_mon -= 1;
-	start = mktime(&startTime);
-	stop = mktime(&stopTime);
+	start = Poco::DateTime(startTime.tm_year, startTime.tm_mon, startTime.tm_mday, startTime.tm_hour, startTime.tm_min);
+	stop = Poco::DateTime(stopTime.tm_year, stopTime.tm_mon, stopTime.tm_mday, stopTime.tm_hour, stopTime.tm_min);
 }
 
 void DownLoadWnd::ReadJsonFile()

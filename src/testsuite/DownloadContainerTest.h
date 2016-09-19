@@ -1,7 +1,7 @@
 #pragma once
 #include "Poco/CppUnit/TestCase.h"
 #include "DVR/DVRDownloadTask.h"
-#include "DVR/DVRDownloadTaskContainer.h"
+#include "DVR/DVRDownloadPacket.h"
 
 using namespace DVR;
 
@@ -21,6 +21,6 @@ public:
 	static CppUnit::Test* suite();
 
 private:
-	DVRDownloadTaskContainer		_packet_container;
+	DVRDownloadPacket		_packet_container;
 };
 

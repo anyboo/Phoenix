@@ -157,10 +157,10 @@ void SearchFileUI::OnShowFileList()
 		CLabelUI* Lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 
 		std::string filename = files[i]->fname();
-		int channel = files[i]->channel;
-		__time64_t stime = files[i]->startTime;
-		__time64_t etime = files[i]->stopTime;
-		size_t size = files[i]->fsize;
+		int channel = files[i]->channel();
+		Poco::DateTime stime = files[i]->startTime();
+		Poco::DateTime etime = files[i]->stopTime();
+		size_t size = files[i]->fsize();
 
 		CDuiString startTime = TimeChange(stime);
 		CDuiString stopTime = TimeChange(etime);
@@ -174,17 +174,11 @@ void SearchFileUI::OnShowFileList()
 }
 
 
-CDuiString SearchFileUI::TimeChange(__time64_t inputTime)
+CDuiString SearchFileUI::TimeChange(Poco::DateTime inputTime)
 {
 	CDuiString strOutTime;
-	struct tm OutTime;
-	OutTime = { 0 };
-	
-	OutTime = *localtime(&inputTime);
-	OutTime.tm_year += 1900;
-	OutTime.tm_mon += 1;
 
-	strOutTime.Format("%d-%02d-%02d  %02d:%02d", OutTime.tm_year, OutTime.tm_mon, OutTime.tm_mday, OutTime.tm_hour, OutTime.tm_min);
+	strOutTime.Format("%d-%02d-%02d  %02d:%02d", inputTime.year(), inputTime.month(), inputTime.day(), inputTime.hour(), inputTime.minute());
 	return strOutTime;
 }
 

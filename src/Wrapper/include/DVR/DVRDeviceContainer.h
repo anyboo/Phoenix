@@ -9,7 +9,7 @@
 #include <Poco/SingletonHolder.h>
 
 
-
+using Poco::Mutex;
 
 namespace DVR{
 	class DVRDevice;
@@ -18,12 +18,27 @@ namespace DVR{
 	public:
 		DVRDeviceContainer();
 		~DVRDeviceContainer();
-
-		static Poco::SingletonHolder<DVRDeviceContainer> _Dc;
-		static DVRDeviceContainer& DVRDeviceContainer::GetInstance()
-		{
+		
+		
+		static DVRDeviceContainer& DVRDeviceContainer::getInstance()
+		{		
+			static Poco::SingletonHolder<DVR::DVRDeviceContainer> _Dc;
 			return *_Dc.get();
 		}
+		//static DVRDeviceContainer* getInstance()
+		//{
+		//	if (instance == NULL)
+		//	{
+		//		_lockMutex.lock();
+		//		if (instance == NULL)
+		//		{
+		//			instance = new DVRDeviceContainer();
+		//		}
+		//		_lockMutex.unlock();
+		//	}
+
+		//	return instance;
+		//}
 
 		void add(DVRDevice* device);
 		void remove(const std::string& name);
@@ -40,9 +55,10 @@ namespace DVR{
 
 		DevicePoolMap _devicePool;
 		Poco::FastMutex _mutex;
-
-
+	//	static Poco::Mutex _lockMutex;
+	//	static DVRDeviceContainer* instance;
 	};
+	
 	
 
 	void DVRDeviceContainer::remove(const std::string& name)
