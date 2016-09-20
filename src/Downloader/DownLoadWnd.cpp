@@ -236,11 +236,11 @@ bool DownLoadWnd::SearchBegin()
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
 	std::string name = select->GetUserData().GetData();
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
+//	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
 	
-	DVR::DVRStatement impl(Device.session());
+//	DVR::DVRStatement impl(Device.session());
 
-	impl.Searchfile(stime, etime, _all_channels);
+//	impl.Searchfile(stime, etime, _all_channels);
 	
 	return true;
 }

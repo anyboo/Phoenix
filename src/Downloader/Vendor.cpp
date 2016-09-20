@@ -4,6 +4,8 @@
 #include "DVR/DVRSession.h"
 #include "DVR/DVRDeviceContainer.h"
 
+#include "DVR/DVRSession.h"
+
 CVendor::CVendor()
 :ppm(nullptr), m_ContListSel(0)
 {	
@@ -82,9 +84,10 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 
 void CVendor::AddVendorList(const std::string DeviceName)
 {
-	DVR::DVRDevice& device = DVR::DVRDeviceContainer::getInstance().get(DeviceName);
-	std::string VendorIP = device.address().substr(0, device.address().find_last_of(":"));
-	size_t channels = device.channelCount();
+//	DVR::DVRDeviceContainer devicecontainer;
+//	DVR::DVRDevice& device = devicecontainer.get(DeviceName);
+	std::string VendorIP; /*= device.address().substr(0, device.address().find_last_of(":"));*/
+	size_t channels = 4;
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
@@ -180,7 +183,7 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	CListContainerElementUI* ChannelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, serial + 1));
 	
 	std::string name = SubList->GetUserData();
-	DVR::DVRDeviceContainer::getInstance().remove(name);
+//	DVR::DVRDeviceContainer::getInstance().remove(name);
 	pList->Remove(SubList, true);
 	if (ChannelList != nullptr && ChannelList->GetName() == _T("Channel_List"))
 	{

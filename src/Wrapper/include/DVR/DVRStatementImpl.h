@@ -21,7 +21,7 @@ namespace DVR {
 			_ostr << t;
 		}
 
-	protected:
+	public:
 		virtual void donwloadByName(const std::string& filename) = 0;
 		virtual void downloadByTime(const Poco::DateTime& time) = 0;
 		

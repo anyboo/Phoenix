@@ -49,7 +49,7 @@ DVRStatement& DVRStatement::reset(DVRSession& rSession)
 
 void DVRStatement::DownloadByName(const std::string& name)
 {
-
+	_pImpl->donwloadByName(name);
 }
 void DVRStatement::DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime)
 {
@@ -58,12 +58,12 @@ void DVRStatement::DownloadByTime(const Poco::DateTime stime, const Poco::DateTi
 
 void DVRStatement::Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& Channels)
 {
-
+	_pImpl->list(stime, etime);
 }
 
 void DVRStatement::playByName(const std::string& filename)
 {
-
+	_pImpl->playByName(filename);
 }
 
 void DVRStatement::playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime)

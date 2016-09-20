@@ -61,15 +61,15 @@
     </ClCompile>
     <ClCompile Include="HKLIBTEST.cpp">
       <Filter>HKLite</Filter>
-    </ClCompile>  
-    <ClCompile Include="DownloadTest.cpp">
-      <Filter>DownloadTask</Filter>
     </ClCompile>
     <ClCompile Include="DownloadContainerTest.cpp">
       <Filter>DownloadTask</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileTest.cpp">
       <Filter>SearchFile</Filter>
+    </ClCompile>
+    <ClCompile Include="DownloadPacketTest.cpp">
+      <Filter>DownloadTask</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,14 +93,14 @@
     <ClInclude Include="HKLIBTEST.h">
       <Filter>HKLite</Filter>
     </ClInclude>
-    <ClInclude Include="DownloadTest.h">
-      <Filter>DownloadTask</Filter>
-    </ClInclude>
     <ClInclude Include="DownloadContainerTest.h">
       <Filter>DownloadTask</Filter>
     </ClInclude>
     <ClInclude Include="SearchFileTest.h">
       <Filter>SearchFile</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadPacketTest.h">
+      <Filter>DownloadTask</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

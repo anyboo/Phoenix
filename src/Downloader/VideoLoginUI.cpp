@@ -94,7 +94,8 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	}
 
 	DVR::DVRDevice* device = new DVR::DVRDevice(session);
-	DVR::DVRDeviceContainer::getInstance().add(device);
+	DVR::DVRDeviceContainer devicecontainer;
+	devicecontainer.add(device);
 	_name = device->name();
 	Close();
 }

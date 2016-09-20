@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{66EBA924-9534-451C-BBAF-65B4F9760DE4}</ProjectGuid>
+    <ProjectGuid>{F8D4F900-81EE-462A-B992-F05B1720FB6B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Wrapper</RootNamespace>
-    <ProjectName>DVRLite</ProjectName>
+    <RootNamespace>JXJLite</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,43 +41,40 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)d</TargetName>
     <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(SolutionDir)ipch\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(SolutionDir)ipch\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DVRLITE_EXPORTS;_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;.\include</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile />
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;JXJLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../include/;./include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib\$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib\</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;JXJLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,51 +84,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="include\JXJ\DVRConnector.h" />
+    <ClInclude Include="include\JXJ\DVRSessionImpl.h" />
+    <ClInclude Include="include\JXJ\DVRStatementImpl.h" />
+    <ClInclude Include="include\JXJ\JXJLite.h" />
+    <ClInclude Include="include\JXJ\Notifier.h" />
+    <ClInclude Include="include\JXJ\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DVR\AbstractSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVRConnector.h" />
-    <ClInclude Include="include\DVR\DVRDevice.h" />
-    <ClInclude Include="include\DVR\DVRDeviceContainer.h" />
-    <ClInclude Include="include\DVR\DVRDownloadPakcetContainer.h" />
-    <ClInclude Include="include\DVR\DVRDownloadTask.h" />
-    <ClInclude Include="include\DVR\DVRDownloadPacket.h" />
-    <ClInclude Include="include\DVR\DVRException.h" />
-    <ClInclude Include="include\DVR\DVRSearchFiles.h" />
-    <ClInclude Include="include\DVR\DVRSession.h" />
-    <ClInclude Include="include\DVR\DVRSessionFactory.h" />
-    <ClInclude Include="include\DVR\DVRSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVR.h" />
-    <ClInclude Include="include\DVR\DVRStatement.h" />
-    <ClInclude Include="include\DVR\DVRStatementCreator.h" />
-    <ClInclude Include="include\DVR\DVRStatementImpl.h" />
-    <ClInclude Include="include\DVR\PooledSessionHolder.h" />
-    <ClInclude Include="include\DVR\PooledSessionImpl.h" />
-    <ClInclude Include="include\DVR\DVRSearchFilesContainer.h" />
-    <ClInclude Include="include\DVR\SessionPool.h" />
-    <ClInclude Include="include\DVR\SessionPoolContainer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DVRDownloadPakcetContainer.cpp" />
-    <ClCompile Include="DVRDevice.cpp" />
-    <ClCompile Include="DVRDeviceContainer.cpp" />
-    <ClCompile Include="DVRDownloadTask.cpp" />
-    <ClCompile Include="DVRDownloadPacket.cpp" />
-    <ClCompile Include="DVRException.cpp" />
-    <ClCompile Include="DVRSearchFiles.cpp" />
-    <ClCompile Include="DVRSession.cpp" />
     <ClCompile Include="DVRConnector.cpp" />
     <ClCompile Include="DVRSessionImpl.cpp" />
-    <ClCompile Include="DVRSessionFactory.cpp" />
-    <ClCompile Include="DVRStatement.cpp" />
-    <ClCompile Include="DVRStatementCreator.cpp" />
     <ClCompile Include="DVRStatementImpl.cpp" />
-    <ClCompile Include="PooledSessionHolder.cpp" />
-    <ClCompile Include="PooledSessionImpl.cpp" />
-    <ClCompile Include="DVRSearchFilesContainer.cpp" />
-    <ClCompile Include="SessionPool.cpp" />
-    <ClCompile Include="SessionPoolContainer.cpp" />
+    <ClCompile Include="Notifier.cpp" />
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

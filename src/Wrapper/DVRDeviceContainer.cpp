@@ -13,6 +13,21 @@ namespace DVR{
 	{
 	}
 
+	void DVRDeviceContainer::remove(const std::string& name)
+	{
+		_devicePool.erase(name);
+	}
+
+	bool DVRDeviceContainer::has(const std::string& name) const
+	{
+		return _devicePool.find(name) != _devicePool.end();
+	}
+
+	int DVRDeviceContainer::count() const
+	{
+		return static_cast<int>(_devicePool.size());
+	}
+
 	void DVRDeviceContainer::add(DVRDevice* device)
 	{
 		poco_check_ptr(device);
@@ -35,6 +50,7 @@ namespace DVR{
 		DevicePoolMap::iterator it = _devicePool.find(name);
 		if (_devicePool.end() == it) throw Poco::NotFoundException(name);
 		return *it->second;
+		//QNzrdXMy
 	}
 
 }

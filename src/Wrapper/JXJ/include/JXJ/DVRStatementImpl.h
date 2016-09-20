@@ -1,17 +1,18 @@
 #pragma once
-#include "DZPLite.h"
+#include "JXJLite.h"
 #include "DVR/DVRStatementImpl.h"
-#include "DZP/Utility.h"
+#include "JXJ/Utility.h"
 
 namespace DVR {
-namespace DZPLite {
+	namespace JXJLite {
 
-class DZPLite_API DVRStatementImpl : public DVR::DVRStatementImpl
+		class JXJLite_API DVRStatementImpl : public DVR::DVRStatementImpl
 {
 public:
 	DVRStatementImpl(DVR::DVRSessionImpl& rSession, Utility::HANDLE pDvr);
 	~DVRStatementImpl();
 
+protected:
 	void donwloadByName(const std::string& filename);
 	void downloadByTime(const Poco::DateTime& time);
 

@@ -4,7 +4,6 @@
 #include "DZPLIBTEST.h"
 #include "DHLIBTEST.h"
 #include "HKLIBTEST.h"
-#include "DownloadTest.h"
 #include "DownloadContainerTest.h"
 #include "SearchFileTest.h"
 #include "UtilityTest.h"
@@ -15,7 +14,7 @@ CppUnit::Test* SceneTestSuite::suite()
 
 //	pSuite->addTest(DZPLIBTEST::suite());
 
-	/*pSuite->addTest(DownloadTest::suite());
+	/*
 	pSuite->addTest(DownloadContainerTest::suite());
 	pSuite->addTest(SearchFileTest::suite());
 	pSuite->addTest(DHCPClientTest::suite());

@@ -6,7 +6,6 @@
 #include <Poco/Path.h>
 
 
-Poco::SharedLibrary sl("sdk\\DH\\dhnetsdk.dll");
 
 const DHLiteConnectorRegistrator DvrDHLiteConnectorRegistrator;
 

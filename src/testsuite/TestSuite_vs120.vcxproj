@@ -32,7 +32,7 @@
     <ClInclude Include="DHCPClientTest.h" />
     <ClInclude Include="DHLIBTEST.h" />
     <ClInclude Include="DownloadContainerTest.h" />
-    <ClInclude Include="DownloadTest.h" />
+    <ClInclude Include="DownloadPacketTest.h" />
     <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="HKLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
@@ -45,7 +45,7 @@
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="DHLIBTEST.cpp" />
     <ClCompile Include="DownloadContainerTest.cpp" />
-    <ClCompile Include="DownloadTest.cpp" />
+    <ClCompile Include="DownloadPacketTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="HKLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />

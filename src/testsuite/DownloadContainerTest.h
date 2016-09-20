@@ -2,6 +2,7 @@
 #include "Poco/CppUnit/TestCase.h"
 #include "DVR/DVRDownloadTask.h"
 #include "DVR/DVRDownloadPacket.h"
+#include "DVR/DVRDownloadPakcetContainer.h"
 
 using namespace DVR;
 
@@ -21,6 +22,7 @@ public:
 	static CppUnit::Test* suite();
 
 private:
-	DVRDownloadPacket		_packet_container;
+	DVRDownloadPacket		_packet;
+	DVRDownloadPakcetContainer		_packet_container;
 };
 
