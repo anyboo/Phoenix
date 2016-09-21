@@ -91,20 +91,20 @@ list 需要异步操作
 */
 void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTime& endTime)
 {
-	/*
-	Utility::CONDITION condition;
-	Utility::TIMEINFO timeinfo;
-	std::size_t timeout = 3000;
-	std::vector<RESULT> result(1000);
-	int count = 0;
-	int maxCount = 1000;
-	int timeout = 5000;
-	//将多天的查询范围，切分成1天的范围多次查询，多次通知
-	int count = Utility::FindFile(_handle, timeinfo, timeout);
 	
-	if (count <= 0)
-		Utility::throwException(_handle);
-	*/
+	//Utility::CONDITION condition;
+	//Utility::TIMEINFO timeinfo;
+	//std::size_t timeout = 3000;
+	//std::vector<RESULT> result(1000);
+	//int count = 0;
+	//int maxCount = 1000;
+	//int timeout = 5000;
+	////将多天的查询范围，切分成1天的范围多次查询，多次通知
+	//int count = Utility::FindFile(_handle, timeinfo, timeout);
+	//
+	//if (count <= 0)
+	//	Utility::throwException(_handle);
+	
 }
 
 }}

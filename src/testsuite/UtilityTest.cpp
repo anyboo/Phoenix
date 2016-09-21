@@ -30,6 +30,7 @@ void UtilityTest::testlogin()
 	_handle = Utility::login(addr, "admin", "");
 	assert(_handle > 0);
 	if (_handle > 0) _logined = true;
+	std::cout << _handle << std::endl;
 }
 
 void UtilityTest::testlogout()
@@ -126,13 +127,13 @@ void UtilityTest::testFindFile()
 	
 	endTime.dwYear = 2016;
 	endTime.dwMonth = 9;
-	endTime.dwDay = 12;
+	endTime.dwDay = 21;
 	endTime.dwHour = 12;
 	endTime.dwMinute = 10;
 	endTime.dwSecond = 23;
 
 	Condition cond;
-	cond.nChannelN0 = 0;
+	cond.nChannelN0 = 1;
 	cond.nFileType = SDK_File_Type::SDK_RECORD_ALL;
 	cond.startTime = startTime;
 	cond.endTime = endTime;
@@ -141,9 +142,13 @@ void UtilityTest::testFindFile()
 
 	int count = 0;
 	assertNotNullPtr(_pRecord);
+	std::cout << _handle << std::endl;
+
 	size_t findcount = Utility::findStream(_handle, cond, *_pRecord, 100);
+	std::cout << findcount << std::endl;
 	assert(findcount >= 0);
 	std::cout << "findstream by name" << std::endl;
+	
 	for (int i = 0; i < findcount; i++)
 	{
 		std::cout << _pRecord[i].ch << _pRecord[i].sFileName
@@ -170,10 +175,10 @@ CppUnit::Test* UtilityTest::suite()
 	CppUnit_addTest(pSuite, UtilityTest, testsetTimeOut);
 	CppUnit_addTest(pSuite, UtilityTest, testlogin);
 	CppUnit_addTest(pSuite, UtilityTest, testFindFile);
-	CppUnit_addTest(pSuite, UtilityTest, testGetFile);
-	CppUnit_addTest(pSuite, UtilityTest, testPlayback);
+//	CppUnit_addTest(pSuite, UtilityTest, testGetFile);
+//	CppUnit_addTest(pSuite, UtilityTest, testPlayback);
 	CppUnit_addTest(pSuite, UtilityTest, testlogout);
-	CppUnit_addTest(pSuite, UtilityTest, testCleanUp);
+//	CppUnit_addTest(pSuite, UtilityTest, testCleanUp);
 
 	return pSuite;
 }
