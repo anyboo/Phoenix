@@ -32,7 +32,8 @@ extern "C"
 }
 
 
-extern Poco::SharedLibrary sl;
+
+Poco::SharedLibrary sl("sdk\\DH\\dhnetsdk.dll");
 
 
 
