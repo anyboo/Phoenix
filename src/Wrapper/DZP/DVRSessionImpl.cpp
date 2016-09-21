@@ -29,6 +29,7 @@ DVRSessionImpl::DVRSessionImpl(const std::string& deviceLocation,
 	setLoginTimeout(_timeout);
 	setProperty("handle", _handle);
 	setProperty("channels", _channels);
+	Utility::Init();
 }
 
 DVRSessionImpl::~DVRSessionImpl()
@@ -36,6 +37,7 @@ DVRSessionImpl::~DVRSessionImpl()
 	try
 	{
 		logout();
+		Utility::Cleanup();
 	}
 	catch (...)
 	{

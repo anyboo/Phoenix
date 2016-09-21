@@ -20,17 +20,11 @@ const std::string DVRConnector::KEY(DVR_CONNECTOR_NAME);
 
 DVRConnector::DVRConnector()
 {	
-	//int rc = Utility::Init();
-	//
-	//if (Utility::success != rc) Utility::throwException(rc);
 }
 
 
 DVRConnector::~DVRConnector()
 {
-	/*int rc = Utility::CleanUp();
-	
-	if (Utility::success != rc)  Utility::throwException(rc);*/
 }
 
 Poco::AutoPtr<DVR::DVRSessionImpl> DVRConnector::createSession(const std::string& connectionString,

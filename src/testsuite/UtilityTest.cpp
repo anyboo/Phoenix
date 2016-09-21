@@ -126,7 +126,7 @@ void UtilityTest::testFindFile()
 	
 	endTime.dwYear = 2016;
 	endTime.dwMonth = 9;
-	endTime.dwDay = 12;
+	endTime.dwDay = 18;
 	endTime.dwHour = 12;
 	endTime.dwMinute = 10;
 	endTime.dwSecond = 23;
