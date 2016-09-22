@@ -96,6 +96,10 @@ public:
 			&AbstractSessionImpl<C>::setHandle,
 			&AbstractSessionImpl<C>::getHandle);
 
+		addProperty("channels",
+			&AbstractSessionImpl<C>::setChannels,
+			&AbstractSessionImpl<C>::getChannels);
+
 		addFeature("bulk", 
 			&AbstractSessionImpl<C>::setBulk, 
 			&AbstractSessionImpl<C>::getBulk);
@@ -204,6 +208,18 @@ public:
 		return _handle;
 	}
 
+	void setChannels(const std::string& name, const Poco::Any& channels)
+		/// Sets the native session channels. 
+	{
+		_channels = Poco::RefAnyCast<int>(channels);
+	}
+
+	Poco::Any getChannels(const std::string& name = "")
+		/// Returns the native session channels. 
+	{
+		return _channels;
+	}
+
 	void setBulk(const std::string& name, bool bulk)
 		/// Sets the execution type.
 	{
@@ -305,6 +321,7 @@ private:
 	bool        _emptyStringIsNull;
 	bool        _forceEmptyString;
 	Poco::Any   _handle;
+	int			_channels;
 };
 
 

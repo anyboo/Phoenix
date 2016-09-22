@@ -17,10 +17,16 @@ namespace DVR{
 		_filesMap.insert(std::pair<size_t, DVRSearchFiles*>(_Count, file));
 	}
 
+	void DVRSearchFilesContainer::Add(const std::vector<RecordFile> rf)
+	{
+		_recordfiles = rf;
+	}
+
 	void DVRSearchFilesContainer::Clear()
 	{
-		_filesMap.clear();
-		_Count = 0;
+		/*_filesMap.clear();
+		_Count = 0;*/
+		_recordfiles.clear();
 	}
 
 	void DVRSearchFilesContainer::GetSearchFiles(std::vector<DVRSearchFiles*>& files)
@@ -32,6 +38,11 @@ namespace DVR{
 		}
 	}
 
+	void DVRSearchFilesContainer::GetSearchFiles(std::vector<RecordFile>& rf)
+	{
+		rf = _recordfiles;
+	}
+
 	void DVRSearchFilesContainer::GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files)
 	{
 		std::vector<const size_t>::iterator itor;
@@ -41,9 +52,14 @@ namespace DVR{
 		}
 	}
 
-	DVRSearchFiles* DVRSearchFilesContainer::GetPlayFileById(const size_t id)
+	/*DVRSearchFiles* DVRSearchFilesContainer::GetPlayFileById(const size_t id)
 	{
 		return _filesMap[id];
+	}*/
+
+	RecordFile& DVRSearchFilesContainer::GetPlayFileById(const size_t id)
+	{
+		return _recordfiles[id];
 	}
 }
 

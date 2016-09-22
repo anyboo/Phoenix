@@ -16,7 +16,7 @@ class SearchFileUI :
 	public WindowImplBase
 {
 public:
-	SearchFileUI();
+	SearchFileUI(const std::string name);
 	~SearchFileUI();
 
 	bool IsBeginDownload();
@@ -52,7 +52,7 @@ protected:
 private:
 	std::vector<int>		_checked_files;
 	IsDownLoadFile		m_IsDownLoad;
-	size_t				m_DownloadID;
+	std::string		_CurrentDname;
 	//std::vector<SearchFileInfo> _file_info;
 private:
 	CListUI*			_pList;

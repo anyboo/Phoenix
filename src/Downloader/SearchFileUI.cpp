@@ -3,12 +3,11 @@
 #include "PlayVideoWnd.h"
 #include "FileLogInfoUI.h"
 #include <time.h>
-#include "TestData.h"
 #include "DVR/DVRSearchFilesContainer.h"
 
-SearchFileUI::SearchFileUI()
-:m_DownloadID(1)
+SearchFileUI::SearchFileUI(const std::string name)
 {
+	_CurrentDname = name;
 }
 
 
@@ -129,8 +128,8 @@ void SearchFileUI::OnCheckAll(TNotifyUI& msg)
 
 void SearchFileUI::OnShowFileList()
 {
-	std::vector<DVR::DVRSearchFiles*> files;
-//	DVRSearchFilesContainer::GetSearchFiles(files);
+	std::vector<DVR::RecordFile> files;
+	DVR::DVRSearchFilesContainer::getInstance().GetSearchFiles(files);
 	
 	int filesize = files.size();
 	for (int i = 0; i < filesize; i++)
@@ -156,11 +155,11 @@ void SearchFileUI::OnShowFileList()
 		CLabelUI* Lab_etime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 		CLabelUI* Lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 
-		std::string filename = files[i]->fname();
-		int channel = files[i]->channel();
-		Poco::DateTime stime = files[i]->startTime();
-		Poco::DateTime etime = files[i]->stopTime();
-		size_t size = files[i]->fsize();
+		std::string filename = files[i].name;
+		int channel = files[i].channel;
+		Poco::DateTime stime = files[i].beginTime;
+		Poco::DateTime etime = files[i].endTime;
+		size_t size = files[i].size;
 
 		CDuiString startTime = TimeChange(stime);
 		CDuiString stopTime = TimeChange(etime);
@@ -188,8 +187,8 @@ void SearchFileUI::GetFileInfo(std::string& SendName)
 
 void SearchFileUI::OnPlayVideo(int CurSel)
 {
-	CTestData::getInstance()->SetPlayhandle(CurSel);
-	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd);
+	DVR::DVRSearchFilesContainer::getInstance().GetPlayFileById(CurSel);
+	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(_CurrentDname, CurSel));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
@@ -220,13 +219,13 @@ void SearchFileUI::GetSelectOption(CDuiString& optionName)
 
 void SearchFileUI::GetFileCountAndSize()
 {
-	std::vector<SearchFileInfo> _file_info;
-	CTestData::getInstance()->GetSearchFiles(_file_info);
+	std::vector<DVR::RecordFile> files;
+	DVR::DVRSearchFilesContainer::getInstance().GetSearchFiles(files);
 	size_t filesize = 0;
 	int fileCount = _checked_files.size();
 	for (size_t i = 0; i < _checked_files.size(); i++)
 	{
-		filesize += _file_info[_checked_files[i]].size;
+		filesize += files[_checked_files[i]].size;
 	}
 
 	CDuiString CountText;

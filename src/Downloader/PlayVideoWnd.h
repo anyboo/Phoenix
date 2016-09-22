@@ -9,7 +9,7 @@ class CPlayVideoWnd :
 	public WindowImplBase
 {
 public:
-	CPlayVideoWnd();
+	CPlayVideoWnd(const std::string name, const int Cursel);
 	~CPlayVideoWnd();
 
 	virtual void InitWindow();
@@ -36,6 +36,9 @@ protected:
 private:
 	bool		m_IsPlay;
 	int			m_stopPos;
+
+	int			_fileID;
+	std::string _dvName;
 private:
 	CButtonUI*				_btn_play;
 	CSliderUI*				_slider;

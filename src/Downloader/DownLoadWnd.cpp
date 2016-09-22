@@ -8,6 +8,7 @@
 #include "TestData.h"
 #include "DVR/DVRDeviceContainer.h"
 
+
 DownLoadWnd::DownLoadWnd() 
 {
 	ReadJsonFile();
@@ -195,15 +196,13 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 
 	if (!pDlg->GetLoginState())return;
 	std::string name = pDlg->GetLogInName();
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
-	std::string Addr = Device.address();
-	size_t channels = Device.channelCount();
 	_vendorManage.AddVendorList(name);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	if(!SearchBegin())return;
+	std::string name;
+	if(!SearchBegin(name))return;
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
@@ -213,7 +212,7 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	if (pDlg->IsCancelSearch())return;
 
 //	start to search file on specify device.
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(name));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
@@ -224,7 +223,7 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	_downloadManage.AddDownloadTask(id);
 }
 
-bool DownLoadWnd::SearchBegin()
+bool DownLoadWnd::SearchBegin(std::string& name)
 {
 	Poco::DateTime stime, etime;
 	GetDataAndTime(stime, etime);
@@ -235,13 +234,14 @@ bool DownLoadWnd::SearchBegin()
 	}
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
-	std::string name = select->GetUserData().GetData();
-//	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
+	name = select->GetUserData().GetData();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
 	
-//	DVR::DVRStatement impl(Device.session());
+	DVR::DVRSession& sssd = Device.session();
+	DVR::DVRStatement statement(Device.session());
 
-//	impl.Searchfile(stime, etime, _all_channels);
-	
+	statement.Searchfile(stime, etime, _all_channels);
+
 	return true;
 }
 

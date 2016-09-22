@@ -92,6 +92,8 @@ void CSetIpWnd::OnUseSelectIP(TNotifyUI& msg)
 	_lab_setIPaddress->SetText(ipAddress.c_str());
 	_lab_setSubNetAddress->SetText(subnetAddress.c_str());
 	_lab_setBroadcastAddress->SetText(BroadcastAddress.c_str());
+	if(BroadcastAddress == "...")
+		BroadcastAddress.clear();
 	setip.setNetConfig(ipAddress, subnetAddress, BroadcastAddress);
 }
 

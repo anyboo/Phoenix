@@ -3,10 +3,15 @@
 #include "PlayWndUI.h"
 #include "DVR/DVRSession.h"
 #include "TestData.h"
+#include "DVR/DVRStatement.h"
+#include "DVR/DVRDevice.h"
+#include "DVR/DVRDeviceContainer.h"
 
-CPlayVideoWnd::CPlayVideoWnd()
+CPlayVideoWnd::CPlayVideoWnd(const std::string name, const int Cursel)
 :m_IsPlay(true), m_stopPos(0)
 {
+	_dvName = name;
+	_fileID = Cursel;
 }
 
 CPlayVideoWnd::~CPlayVideoWnd()
@@ -38,9 +43,12 @@ void CPlayVideoWnd::InitWindow()
 
 void CPlayVideoWnd::BeginPlay()
 {
-	Serach_fileInfo file_info;
-	CTestData::getInstance()->GetPlayFileInfo(file_info);
-//	DVR::DVRSession session();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_dvName);
+	DVR::DVRSession& sssd = Device.session();
+	DVR::DVRStatement statement(Device.session());
+
+	HWND m_hWnd = GetPlayHwnd();
+	statement.playByName(_fileID, m_hWnd);
 }
 
 void CPlayVideoWnd::BuildControlDDX()

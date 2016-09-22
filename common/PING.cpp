@@ -123,7 +123,6 @@ void CPing::ScanIPs(vector<string> &vecIPs, const string& netIp, bool bArp, std:
     addr.s_addr = ulIp;
 
     in_addr addrTmp = addr;
-    char szBuf[MAX_PATH];
 
     for (unsigned char i = 2; i < 255 && (!bpCancel || !(*bpCancel)); ++i)
     {
@@ -161,9 +160,6 @@ bool arpPing(DWORD dwDestIP){
     DWORD dwRetVal;
     ULONG MacAddr[2];       /* for 6-byte hardware addresses */
     ULONG PhysAddrLen = 6;  /* default to length of six bytes */
-
-
-    BYTE *bPhysAddr;
 
  
     memset(&MacAddr, 0xff, sizeof (MacAddr));

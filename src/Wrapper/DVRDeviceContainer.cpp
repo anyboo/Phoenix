@@ -44,7 +44,7 @@ namespace DVR{
 
 	DVRDevice& DVRDeviceContainer::get(const std::string& name)
 	{
-		poco_assert(name.empty());
+		poco_assert(!name.empty());
 
 		FastMutex::ScopedLock lock(_mutex);
 		DevicePoolMap::iterator it = _devicePool.find(name);

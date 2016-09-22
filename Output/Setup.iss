@@ -3,7 +3,7 @@
 
 #include "CodeClasses.iss"
 #define MyAppName "PhoenixUI"
-#define MyAppVersion "2.0.0.0005"
+#define MyAppVersion "2.0.0.0007"
 #define MyAppPublisher "Sisec, Inc."
 #define MyAppURL "http://www.sisec.com.cn"
 #define MyAppExeName "Downloader_d.exe"
@@ -12,7 +12,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{64D5C3E6-449B-4012-B893-E45584D9A4D2}
+AppId={{356F8E06-41F7-4723-8206-0B378029A670}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}

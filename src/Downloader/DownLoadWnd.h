@@ -28,7 +28,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
-	bool SearchBegin();
+	bool SearchBegin(std::string& name);
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 

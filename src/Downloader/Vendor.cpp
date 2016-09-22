@@ -84,9 +84,8 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 
 void CVendor::AddVendorList(const std::string DeviceName)
 {
-//	DVR::DVRDeviceContainer devicecontainer;
-//	DVR::DVRDevice& device = devicecontainer.get(DeviceName);
-	std::string VendorIP; /*= device.address().substr(0, device.address().find_last_of(":"));*/
+	DVR::DVRDevice& device = DVR::DVRDeviceContainer::getInstance().get(DeviceName);
+	std::string VendorIP = device.address().substr(0, device.address().find_last_of(":"));
 	size_t channels = 4;
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;

@@ -1,5 +1,6 @@
 #include "DVR/DVRStatement.h"
 #include "DVR/DVRSession.h"
+#include "DVR/DVRSearchFilesContainer.h"
 
 namespace DVR {
 
@@ -58,12 +59,15 @@ void DVRStatement::DownloadByTime(const Poco::DateTime stime, const Poco::DateTi
 
 void DVRStatement::Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& Channels)
 {
-	_pImpl->list(stime, etime);
+	std::vector<RecordFile>  files;
+	_pImpl->list(stime, etime, Channels, files);
+	DVRSearchFilesContainer::getInstance().Add(files);
 }
 
-void DVRStatement::playByName(const std::string& filename)
+void DVRStatement::playByName(const size_t fileID, HWND& hwnd)
 {
-	_pImpl->playByName(filename);
+	RecordFile& file = DVRSearchFilesContainer::getInstance().GetPlayFileById(fileID);
+	_pImpl->playByName(file, hwnd);
 }
 
 void DVRStatement::playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime)

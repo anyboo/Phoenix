@@ -18,7 +18,7 @@ namespace DVR {
 
 		void Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& channels);
 
-		virtual void playByName(const std::string& filename);
+		virtual void playByName(const size_t fileID, HWND& hwnd);
 		virtual void playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime);
 
 		DVRStatement(const DVRStatement& stmt);

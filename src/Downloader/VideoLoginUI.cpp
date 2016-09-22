@@ -4,6 +4,7 @@
 #include "DVR/DVRSession.h"
 #include "DVR/DVRDeviceContainer.h"
 #include "TestData.h"
+#include "DZP/DVRConnector.h"
 
 VideoLoginUI::VideoLoginUI()
 :m_pages(1), _name("")
@@ -74,6 +75,7 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString user = _user->GetText();
 	CDuiString passwd = _pswd->GetText();
 	
+	user.Append("admin");
 
 	if (ip.IsEmpty() || port.IsEmpty()) return;
 	if (CTestData::getInstance()->IsLogIn(ip.GetData()))return;
@@ -81,9 +83,10 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
 	connectString = connectString + port;
-	DVR::DVRSession session("DZP", connectString.GetData());
-	session.login(user.GetData(),passwd.GetData());
-	if (session.isLoggedIn())
+	DVR::DVRSession *session = new DVR::DVRSession("DZP", connectString.GetData());
+//	DVR::DVRSession session("DZP", connectString.GetData());
+	session->login(user.GetData(),passwd.GetData());
+	if (session->isLoggedIn())
 	{
 		m_IsLogIn = LogInDevice;
 	}
@@ -93,9 +96,8 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 		return;
 	}
 
-	DVR::DVRDevice* device = new DVR::DVRDevice(session);
-	DVR::DVRDeviceContainer devicecontainer;
-	devicecontainer.add(device);
+	DVR::DVRDevice* device = new DVR::DVRDevice(*session);
+	DVR::DVRDeviceContainer::getInstance().add(device);
 	_name = device->name();
 	Close();
 }
