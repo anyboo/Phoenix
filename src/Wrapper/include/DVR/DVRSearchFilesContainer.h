@@ -26,9 +26,10 @@ namespace DVR{
 		void Clear();
 		void GetSearchFiles(std::vector<RecordFile>& rf);
 		void GetSearchFiles(std::vector<DVRSearchFiles*>& files);
-		void GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files);
+	//	void GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files);
 	//	DVRSearchFiles* GetPlayFileById(const size_t id);
-		RecordFile& GetPlayFileById(const size_t id);
+		RecordFile& GetFileById(const size_t id);
+		void GetDownloadfiles(const std::vector<size_t>& IDs, std::vector<RecordFile>& files);
 
 	private:
 		std::vector<RecordFile>				_recordfiles;

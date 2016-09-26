@@ -8,7 +8,6 @@
 #include <Poco/DateTime.h>
 
 
-
 class DownLoadWnd :
 	public WindowImplBase
 {
@@ -28,7 +27,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
-	bool SearchBegin(std::string& name);
+	bool SearchBegin();
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 
@@ -53,6 +52,7 @@ protected:
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
+
 	template<class T>
 	void AddControl(CDuiString ctr_name)
 	{
@@ -74,6 +74,8 @@ protected:
 		return c;
 	}
 
+
+
 private:
 	std::vector<int>		_all_channels;
 	CVendor		_vendorManage;
@@ -85,7 +87,7 @@ private:
 	CListUI*	_vList;
 	CButtonUI*  _SearchControl;
 	CListUI*	_VendorList;
-
+	std::string			_device_name;
 
 	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
@@ -97,5 +99,8 @@ private:
 	const CDuiString starttime = _T("daytimeText1");
 	const CDuiString stoptime = _T("daytimeText2");
 	const CDuiString timetype = _T("Select_time");
+
+//	Poco::Timer t;
+//	Poco::TimerCallback<DownLoadWnd> tc;
 };
 

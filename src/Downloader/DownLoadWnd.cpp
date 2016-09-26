@@ -10,6 +10,7 @@
 
 
 DownLoadWnd::DownLoadWnd() 
+
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
@@ -96,7 +97,7 @@ void DownLoadWnd::InitWindow()
 	BuildControlDDX();
 	InitTime();
 
-	SetTimer(GetHWND(), 1, 2000, nullptr);
+	
 
 	//std::vector<unsigned long> Login_IDs;
 	//CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
@@ -201,8 +202,7 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	std::string name;
-	if(!SearchBegin(name))return;
+	
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
@@ -211,19 +211,25 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 
 	if (pDlg->IsCancelSearch())return;
 
+	if (!SearchBegin())return;
+
 //	start to search file on specify device.
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(name));
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(_device_name));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
 	if (!pSearchDlg->IsBeginDownload())return;
 
-	unsigned long id = CTestData::getInstance()->GetCurrentDid();
-	_downloadManage.AddDownloadTask(id);
+	std::vector<long>	download_handle;
+	std::vector<size_t>	download_fileID;
+	pSearchDlg->GetDownloadHandles(download_handle);
+	pSearchDlg->GetDownloadfileIDs(download_fileID);
+	_downloadManage.AddDownloadTask(download_fileID, download_handle, _device_name);
+	SetTimer(GetHWND(), 11, 1000, nullptr);
 }
 
-bool DownLoadWnd::SearchBegin(std::string& name)
+bool DownLoadWnd::SearchBegin()
 {
 	Poco::DateTime stime, etime;
 	GetDataAndTime(stime, etime);
@@ -234,10 +240,9 @@ bool DownLoadWnd::SearchBegin(std::string& name)
 	}
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
-	name = select->GetUserData().GetData();
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
-	
-	DVR::DVRSession& sssd = Device.session();
+	_device_name = select->GetUserData().GetData();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
+
 	DVR::DVRStatement statement(Device.session());
 
 	statement.Searchfile(stime, etime, _all_channels);
@@ -420,9 +425,10 @@ LRESULT DownLoadWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (wParam == 1)
+	if (wParam == 11)
 	{
 		_downloadManage.RenewList();
 	}
 	return 0;
 }
+

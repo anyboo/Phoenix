@@ -13,7 +13,7 @@ public:
 	~CFileLogInfoUI();
 
 	std::string GetTime();
-
+	std::string GetPath();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);

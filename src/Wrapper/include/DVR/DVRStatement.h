@@ -13,13 +13,17 @@ namespace DVR {
 		
 		~DVRStatement();
 
-		void DownloadByName(const std::string& name);
+		void DownloadByName(const std::vector<size_t>& IDs, const std::string path, std::vector<long>& handles);
+		int GetDownloadPro(const long handle);
 		void DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime);
 
 		void Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& channels);
 
-		virtual void playByName(const size_t fileID, HWND& hwnd);
-		virtual void playByTime(const Poco::DateTime& stime, const  Poco::DateTime etime);
+		virtual int playByName(const size_t fileID, HWND& hwnd);
+		virtual void playByTime(const size_t fileID, HWND& hwnd);
+		void stopPlay(const int playhandle);
+		int getplayPos(const int playhandle);
+		void setplayPos(const int playhandle, const int Pos);
 
 		DVRStatement(const DVRStatement& stmt);
 		DVRStatement& operator = (const DVRStatement& stmt);

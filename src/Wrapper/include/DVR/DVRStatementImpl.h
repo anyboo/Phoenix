@@ -104,11 +104,15 @@ namespace DVR {
 		}
 
 	public:
-		virtual void donwloadByName(const std::string& filename) = 0;
+		virtual long donwloadByName(const RecordFile& rf, const std::string& filename) = 0;
 		virtual void downloadByTime(const Poco::DateTime& time) = 0;
+		virtual int getdownloadPos(const long handle) = 0;
 		
-		virtual void playByName(const RecordFile& filename, HWND& hwnd) = 0;
+		virtual int playByName(const RecordFile& filename, HWND& hwnd) = 0;
 		virtual void playByTime(const Poco::DateTime& time) = 0;
+		virtual void stopPlayback(const int playhandle) = 0;
+		virtual void setplayPos(const int playhandle, const int proValue) = 0;
+		virtual int getplayPos(const int playhandle) = 0;
 
 		virtual void list(const Poco::DateTime& beginTime, const Poco::DateTime& endTime, const std::vector<int>& channels, std::vector<RecordFile>& files) = 0;
 

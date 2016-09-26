@@ -4,6 +4,9 @@
 #include "FileLogInfoUI.h"
 #include <time.h>
 #include "DVR/DVRSearchFilesContainer.h"
+#include "DVR/DVRDevice.h"
+#include "DVR/DVRSession.h"
+#include "DVR/DVRDeviceContainer.h"
 
 SearchFileUI::SearchFileUI(const std::string name)
 {
@@ -84,10 +87,24 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	std::string path = pDlg->GetPath();
 
-//	CTestData::getInstance()->SetDownloadfiles(_checked_files);
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_CurrentDname);
+	DVR::DVRStatement statement(Device.session());
+
+	statement.DownloadByName(_checked_files, path, _Download_handles);
 
 	Close();
+}
+
+void SearchFileUI::GetDownloadHandles(std::vector<long>& handles)
+{
+	handles = _Download_handles;
+}
+
+void SearchFileUI::GetDownloadfileIDs(std::vector<size_t>& IDs)
+{
+	IDs = _checked_files;
 }
 
 void SearchFileUI::Notify(TNotifyUI& msg)
@@ -187,7 +204,7 @@ void SearchFileUI::GetFileInfo(std::string& SendName)
 
 void SearchFileUI::OnPlayVideo(int CurSel)
 {
-	DVR::DVRSearchFilesContainer::getInstance().GetPlayFileById(CurSel);
+	DVR::DVRSearchFilesContainer::getInstance().GetFileById(CurSel);
 	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(_CurrentDname, CurSel));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 0, 0);

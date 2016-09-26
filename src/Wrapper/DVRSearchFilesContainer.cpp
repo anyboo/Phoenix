@@ -43,12 +43,19 @@ namespace DVR{
 		rf = _recordfiles;
 	}
 
-	void DVRSearchFilesContainer::GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files)
+	//void DVRSearchFilesContainer::GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files)
+	//{
+	//	std::vector<const size_t>::iterator itor;
+	//	for (itor = fileIDs.begin(); itor != fileIDs.end(); itor++)
+	//	{
+	//		files.push_back(_filesMap[*itor]);
+	//	}
+	//}
+	void DVRSearchFilesContainer::GetDownloadfiles(const std::vector<size_t>& IDs, std::vector<RecordFile>& files)
 	{
-		std::vector<const size_t>::iterator itor;
-		for (itor = fileIDs.begin(); itor != fileIDs.end(); itor++)
+		for (size_t i = 0; i < IDs.size(); i++)
 		{
-			files.push_back(_filesMap[*itor]);
+			files.push_back(_recordfiles[IDs[i]]);
 		}
 	}
 
@@ -57,7 +64,7 @@ namespace DVR{
 		return _filesMap[id];
 	}*/
 
-	RecordFile& DVRSearchFilesContainer::GetPlayFileById(const size_t id)
+	RecordFile& DVRSearchFilesContainer::GetFileById(const size_t id)
 	{
 		return _recordfiles[id];
 	}

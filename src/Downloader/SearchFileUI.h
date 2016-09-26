@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 #include <Poco/datetime.h>
+#include <vector>
 
 #define BT_CLOSE_SEARCHWND		(_T("close_bt"))
 #define BT_BEGINDOWNLOAD		(_T("BT_Download"))
@@ -19,6 +20,8 @@ public:
 	SearchFileUI(const std::string name);
 	~SearchFileUI();
 
+	void GetDownloadHandles(std::vector<long>& handles);
+	void GetDownloadfileIDs(std::vector<size_t>& IDs);
 	bool IsBeginDownload();
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
@@ -50,7 +53,8 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 private:
-	std::vector<int>		_checked_files;
+	std::vector<size_t>		_checked_files;
+	std::vector<long>		_Download_handles;
 	IsDownLoadFile		m_IsDownLoad;
 	std::string		_CurrentDname;
 	//std::vector<SearchFileInfo> _file_info;

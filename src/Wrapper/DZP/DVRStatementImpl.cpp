@@ -12,6 +12,7 @@ DVRStatementImpl::DVRStatementImpl(DVR::DVRSessionImpl& rSession, Utility::HANDL
 DVR::DVRStatementImpl(rSession),
 _handle(pDvr)
 {
+	
 }
 
 
@@ -41,14 +42,40 @@ DVRStatementImpl::~DVRStatementImpl()
 //}
 
 
-void DVRStatementImpl::donwloadByName(const std::string& filename)
+long DVRStatementImpl::donwloadByName(const RecordFile& rf, const std::string& filename)
 {
 	Record fileinfo;
-	if (Utility::readStream(_handle, fileinfo, filename))
+	fileinfo.ch = rf.channel;
+	memcpy(fileinfo.sFileName, rf.name.c_str(), rf.name.length());
+	fileinfo.size = rf.size;
+	fileinfo.stBeginTime = { 0 };
+	fileinfo.stEndTime = { 0 };
+	fileinfo.stBeginTime.year = rf.beginTime.year();
+	fileinfo.stBeginTime.month = rf.beginTime.month();
+	fileinfo.stBeginTime.day = rf.beginTime.day();
+	fileinfo.stBeginTime.hour = rf.beginTime.hour();
+	fileinfo.stBeginTime.minute = rf.beginTime.minute();
+	fileinfo.stBeginTime.second = rf.beginTime.second();
+	fileinfo.stEndTime.year = rf.endTime.year();
+	fileinfo.stEndTime.month = rf.endTime.month();
+	fileinfo.stEndTime.day = rf.endTime.day();
+	fileinfo.stEndTime.hour = rf.endTime.hour();
+	fileinfo.stEndTime.minute = rf.endTime.minute();
+	fileinfo.stEndTime.second = rf.endTime.second();
+
+	long dhandle = Utility::readStream(_handle, fileinfo, filename);
+	if (dhandle <= 0)
 	{
 		int err = Utility::lastError();
 		Utility::throwException(err, "download is failed!");
 	}
+	return dhandle;
+}
+
+int DVRStatementImpl::getdownloadPos(const long handle)
+{
+	int pos = Utility::readStreamPos(handle);
+	return pos;
 }
 
 void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
@@ -62,18 +89,46 @@ void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 	}
 }
 
-void DVRStatementImpl::playByName(const RecordFile& filename, HWND& hwnd)
+int DVRStatementImpl::playByName(const RecordFile& filename, HWND& hwnd)
 {
 	Record rf;
 	rf.ch = filename.channel;
 	rf.hWnd = hwnd;
+	rf.stBeginTime = { 0 };
+	rf.stEndTime = { 0 };
+	rf.stBeginTime.year = filename.beginTime.year();
+	rf.stBeginTime.month = filename.beginTime.month();
+	rf.stBeginTime.day = filename.beginTime.day();
+	rf.stBeginTime.hour = filename.beginTime.hour();
+	rf.stBeginTime.minute = filename.beginTime.minute();
+	rf.stBeginTime.second = filename.beginTime.second();
+	rf.stEndTime.year = filename.endTime.year();
+	rf.stEndTime.month = filename.endTime.month();
+	rf.stEndTime.day = filename.endTime.day();
+	rf.stEndTime.hour = filename.endTime.hour();
+	rf.stEndTime.minute = filename.endTime.minute();
+	rf.stEndTime.second = filename.endTime.second();
 	memcpy(rf.sFileName, filename.name.c_str(), filename.name.length());
 	rf.size = filename.size;
-	int rc = Utility::playStream(_handle, rf);
-	
-	if (Utility::success != rc)
-		Utility::throwException(_handle);
-	
+
+	paly_handle = Utility::playStream(_handle, rf);
+	return paly_handle;
+}
+
+void DVRStatementImpl::stopPlayback(int playhandle)
+{
+	bool rc = Utility::stopStream(playhandle);
+}
+
+int DVRStatementImpl::getplayPos(const int playhandle)
+{
+	int pos = Utility::playPos(playhandle);
+	return pos;
+}
+
+void DVRStatementImpl::setplayPos(const int playhandle, const int proValue)
+{
+	Utility::seek(playhandle, proValue);
 }
 
 void DVRStatementImpl::playByTime(const Poco::DateTime& time)
@@ -107,6 +162,7 @@ void DVRStatementImpl::ChangeTime(const Poco::DateTime& datatime, __time64_t& ou
 
 void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTime& endTime, const std::vector<int>& channels, std::vector<RecordFile>& files)
 {
+	int maxCount = 1000;
 	int ONEDAY = 24 * 60 * 60;
 	__time64_t timeBegin, timeEnd;
 	ChangeTime(beginTime, timeBegin);
@@ -173,7 +229,7 @@ void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTim
 		cond.hWnd = 0;
 		memset(cond.szFileName, 0, 32);
 
-		int maxCount = 1000;
+		
 		int timeout = 5000;
 		//将多天的查询范围，切分成1天的范围多次查询，多次通知
 		//	int count = Utility::FindFile(_handle, timeinfo, timeout);
@@ -185,7 +241,6 @@ void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTim
 			_pRecord = new Record[100];
 			size_t findcount = Utility::findStream(_handle, cond, *_pRecord, 100);
 
-
 			//	if (findcount <= 0)
 			//		Utility::throwException(_handle);
 			RecordFile rf;
@@ -194,14 +249,15 @@ void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTim
 				rf.name = _pRecord[i].sFileName;
 				rf.size = _pRecord[i].size;
 				rf.beginTime = Poco::DateTime(_pRecord[i].stBeginTime.year, _pRecord[i].stBeginTime.month, _pRecord[i].stBeginTime.day, \
-					_pRecord[i].stBeginTime.hour, _pRecord[i].stBeginTime.minute);
+					_pRecord[i].stBeginTime.hour, _pRecord[i].stBeginTime.minute, _pRecord[i].stBeginTime.second);
 				rf.endTime = Poco::DateTime(_pRecord[i].stEndTime.year, _pRecord[i].stEndTime.month, _pRecord[i].stEndTime.day, \
-					_pRecord[i].stEndTime.hour, _pRecord[i].stEndTime.minute);
+					_pRecord[i].stEndTime.hour, _pRecord[i].stEndTime.minute, _pRecord[i].stEndTime.second);
 				rf.channel = _pRecord[i].ch;
 				files.push_back(rf);
 			}
 		}
 	}
+	
 }
 
 }}

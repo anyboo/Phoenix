@@ -28,7 +28,7 @@
 			<VerticalLayout  height="708" bkimage="skin/bsbj.png" >
 				<HorizontalLayout  height="130" >
 					<VerticalLayout width="50" height="100" padding="30,20,10,10"  bkimage="skin/time.png">
-						<Slider name="Select_time" text="完全            时段" font="1" multiline="true" textpadding="4,15,1,15" hor="false" thumbsize="50,50" step="50" value="100" width="50" height="100"  thumbimage="file='skin/timeOut.png'" thumbpushedimage="skin/timeIn.png" bkimage="file='skin/timeOut.png mask='0xf1234567" />				
+						<Slider name="Select_time" text="完全            时段" font="1" multiline="true" textpadding="4,15,1,15" hor="false" thumbsize="50,50" step="50" value="100" width="50" height="100"  thumbimage="file='skin/timeOut.png'" thumbpushedimage="skin/timeIn.png" bkimage="file='skin/timeOut.png" />				
 					</VerticalLayout>
 					<VerticalLayout width="180" height="130" padding="10,0,10,0" borderround="5,5">
 						<HorizontalLayout	width="180" height="46" bkimage="skin/szdk.png" padding="0,20,0,0">
