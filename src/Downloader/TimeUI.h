@@ -23,10 +23,12 @@ public:
 
 	void InputControl(CDuiString& Input);
 	void SetBtNumEnabled(int begin_num, int end_num, bool IsEnabled);
+
 private:
 	int				_site;
 	CLabelUI*		_lab_time;
 	CDuiString		_setTime;
+	RECT			_rect;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

@@ -75,10 +75,19 @@
     <ClInclude Include="include\DVR\DVRDownloadTask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DVR\DVRDownloadTaskContainer.h">
+    <ClInclude Include="include\DVR\DVRSearchFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DVR\DVRSearchFiles.h">
+    <ClInclude Include="include\DVR\DVRException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRSearchFilesContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRDownloadPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DVR\DVRDownloadPakcetContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,10 +137,16 @@
     <ClCompile Include="DVRDownloadTask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DVRDownloadTaskContainer.cpp">
+    <ClCompile Include="DVRSearchFiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DVRSearchFiles.cpp">
+    <ClCompile Include="DVRSearchFilesContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRDownloadPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DVRDownloadPakcetContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

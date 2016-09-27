@@ -4,13 +4,24 @@
 #include "DVR/DVRSession.h"
 #include "TestData.h"
 
-CPlayVideoWnd::CPlayVideoWnd()
-:m_IsPlay(true), m_stopPos(0)
+#include "DVR/DVRDevice.h"
+#include "DVR/DVRDeviceContainer.h"
+#include "DVR/DVRSearchFilesContainer.h"
+
+CPlayVideoWnd::CPlayVideoWnd(const std::string name, const int Cursel)
+:m_IsPlay(true), m_stopPos(0), _play_handle(0), _playtimes(0), _totaltimes(0),
+t(100, 1000), tc(*this, &CPlayVideoWnd::onTimer)
 {
+	_fileID = Cursel;
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(name);
+	DVR::DVRStatement statement(Device.session());
+	_statement = new DVR::DVRStatement(Device.session());
 }
 
 CPlayVideoWnd::~CPlayVideoWnd()
 {
+	delete _statement;
+	t.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CPlayVideoWnd, WindowImplBase)
@@ -32,15 +43,40 @@ CDuiString CPlayVideoWnd::GetSkinFolder()
 
 void CPlayVideoWnd::InitWindow()
 {
+	DVR::RecordFile rf = DVR::DVRSearchFilesContainer::getInstance().GetFileById(_fileID);
+	Poco::DateTime start = rf.beginTime;
+	Poco::DateTime stop = rf.endTime;
+	struct tm sTM = { 0 };
+	struct tm eTM = { 0 };
+	sTM.tm_year = start.year() - 1900;
+	sTM.tm_mon = start.month() - 1;
+	sTM.tm_mday = start.day();
+	sTM.tm_hour = start.hour();
+	sTM.tm_min = start.minute();
+	sTM.tm_sec = start.second();
+
+	eTM.tm_year = stop.year() - 1900;
+	eTM.tm_mon = stop.month() - 1;
+	eTM.tm_mday = stop.day();
+	eTM.tm_hour = stop.hour();
+	eTM.tm_min = stop.minute();
+	eTM.tm_sec = stop.second();
+
+	__time64_t begin = mktime(&sTM);
+	__time64_t end = mktime(&eTM);
+	__time64_t times = end - begin;
+	size_t tt = times;
+	_totaltimes = tt;
 	BuildControlDDX();
+	t.start(tc);
+
 	BeginPlay();
 }
 
 void CPlayVideoWnd::BeginPlay()
 {
-	Serach_fileInfo file_info;
-	CTestData::getInstance()->GetPlayFileInfo(file_info);
-//	DVR::DVRSession session();
+	_play_hwnd = GetPlayHwnd();
+	_play_handle = _statement->playByName(_fileID, _play_hwnd);
 }
 
 void CPlayVideoWnd::BuildControlDDX()
@@ -66,6 +102,7 @@ void CPlayVideoWnd::Notify(TNotifyUI& msg)
 
 void CPlayVideoWnd::OnCloseWnd(TNotifyUI& msg)
 {
+	_statement->stopPlay(_play_handle);
 	Close();
 }
 
@@ -75,11 +112,13 @@ void CPlayVideoWnd::OnStartStop(TNotifyUI& msg)
 	{
 		_btn_play->SetText(_T("play"));
 		int m_stopPos = _slider->GetValue();
+		_statement->stopPlay(_play_handle);
 		m_IsPlay = false;
 	}
 	else if (!m_IsPlay)
 	{
 		_btn_play->SetText(_T("stop"));
+		_play_handle = _statement->playByName(_fileID, _play_hwnd);
 		m_IsPlay = true;
 	}
 }
@@ -87,6 +126,8 @@ void CPlayVideoWnd::OnStartStop(TNotifyUI& msg)
 void CPlayVideoWnd::OnAdjustPlayPos(TNotifyUI& msg)
 {
 	m_stopPos = _slider->GetValue();
+	_statement->setplayPos(_play_handle, m_stopPos);
+	_playtimes = (_totaltimes * m_stopPos) / 100;
 }
 
 
@@ -101,4 +142,15 @@ HWND CPlayVideoWnd::GetPlayHwnd()
 	::SetWindowPos(pHwnd, NULL, rcWnd.left, rcWnd.top + 40, rcWnd.GetWidth(), rcWnd.GetHeight(), SWP_NOZORDER | SWP_NOSIZE | SWP_DRAWFRAME | SWP_SHOWWINDOW);
 
 	return pHwnd;
+}
+
+void CPlayVideoWnd::onTimer(Poco::Timer& timer)
+{
+//	int pos = _statement->getplayPos(_play_handle);
+	if (m_IsPlay)
+	{
+		_playtimes += 1;
+		int proValue = (_playtimes * 100) / _totaltimes;
+		_slider->SetValue(proValue);
+	}	
 }

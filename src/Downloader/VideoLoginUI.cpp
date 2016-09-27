@@ -2,11 +2,12 @@
 #include "VideoLoginUI.h"
 #include "VideoVendorUI.h"
 #include "DVR/DVRSession.h"
+#include "DVR/DVRDeviceContainer.h"
 #include "TestData.h"
 #include "DZP/DVRConnector.h"
 
 VideoLoginUI::VideoLoginUI()
-:m_pages(1)
+:m_pages(1), _name("")
 {
 }
 
@@ -73,6 +74,8 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString port = _port_edit->GetText();
 	CDuiString user = _user->GetText();
 	CDuiString passwd = _pswd->GetText();
+	
+	user.Append("admin");
 
 	if (ip.IsEmpty() || port.IsEmpty()) return;
 	if (CTestData::getInstance()->IsLogIn(ip.GetData()))return;
@@ -80,16 +83,28 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString connectString;
 	connectString.Format("%s:", ip);
 	connectString = connectString + port;
-	DVR::DVRSession* session = new DVR::DVRSession("DZP", connectString.GetData());
+	DVR::DVRSession *session = new DVR::DVRSession("DZP", connectString.GetData());
+//	DVR::DVRSession session("DZP", connectString.GetData());
 	session->login(user.GetData(),passwd.GetData());
+	if (session->isLoggedIn())
+	{
+		m_IsLogIn = LogInDevice;
+	}
+	else
+	{
+		m_IsLogIn = NoLogDevice;
+		return;
+	}
 
-	m_IsLogIn = LogInDevice;
-	Vendor_Info vendor;
-	vendor.session = session;
-	vendor.ipAddr = ip.GetData();
-	vendor.vendorName = brand.GetData();
-	CTestData::getInstance()->SaveLoginInfo(vendor);
+	DVR::DVRDevice* device = new DVR::DVRDevice(*session);
+	DVR::DVRDeviceContainer::getInstance().add(device);
+	_name = device->name();
 	Close();
+}
+
+std::string VideoLoginUI::GetLogInName() const
+{
+	return _name;
 }
 
 void VideoLoginUI::OnPrevPage(TNotifyUI& msg)

@@ -3,11 +3,14 @@
 #include "PlayVideoWnd.h"
 #include "FileLogInfoUI.h"
 #include <time.h>
-#include "TestData.h"
+#include "DVR/DVRSearchFilesContainer.h"
+#include "DVR/DVRDevice.h"
+#include "DVR/DVRSession.h"
+#include "DVR/DVRDeviceContainer.h"
 
-SearchFileUI::SearchFileUI()
-:m_DownloadID(1)
+SearchFileUI::SearchFileUI(const std::string name)
 {
+	_CurrentDname = name;
 }
 
 
@@ -84,10 +87,24 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	std::string path = pDlg->GetPath();
 
-	CTestData::getInstance()->SetDownloadfiles(_checked_files);
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_CurrentDname);
+	DVR::DVRStatement statement(Device.session());
+
+	statement.DownloadByName(_checked_files, path, _Download_handles);
 
 	Close();
+}
+
+void SearchFileUI::GetDownloadHandles(std::vector<long>& handles)
+{
+	handles = _Download_handles;
+}
+
+void SearchFileUI::GetDownloadfileIDs(std::vector<size_t>& IDs)
+{
+	IDs = _checked_files;
 }
 
 void SearchFileUI::Notify(TNotifyUI& msg)
@@ -128,10 +145,10 @@ void SearchFileUI::OnCheckAll(TNotifyUI& msg)
 
 void SearchFileUI::OnShowFileList()
 {
-	std::vector<SearchFileInfo> _file_info;
-	CTestData::getInstance()->GetSearchFiles(_file_info);
-
-	int filesize = _file_info.size();
+	std::vector<DVR::RecordFile> files;
+	DVR::DVRSearchFilesContainer::getInstance().GetSearchFiles(files);
+	
+	int filesize = files.size();
 	for (int i = 0; i < filesize; i++)
 	{
 		CDialogBuilder builder;
@@ -155,11 +172,11 @@ void SearchFileUI::OnShowFileList()
 		CLabelUI* Lab_etime = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 		CLabelUI* Lab_size = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 
-		std::string filename = _file_info[i].filename;
-		int channel = _file_info[i].channel;
-		__time64_t stime = _file_info[i].startTime;
-		__time64_t etime = _file_info[i].stopTime;
-		size_t size = _file_info[i].size;
+		std::string filename = files[i].name;
+		int channel = files[i].channel;
+		Poco::DateTime stime = files[i].beginTime;
+		Poco::DateTime etime = files[i].endTime;
+		size_t size = files[i].size;
 
 		CDuiString startTime = TimeChange(stime);
 		CDuiString stopTime = TimeChange(etime);
@@ -173,17 +190,11 @@ void SearchFileUI::OnShowFileList()
 }
 
 
-CDuiString SearchFileUI::TimeChange(__time64_t inputTime)
+CDuiString SearchFileUI::TimeChange(Poco::DateTime inputTime)
 {
 	CDuiString strOutTime;
-	struct tm OutTime;
-	OutTime = { 0 };
-	
-	OutTime = *localtime(&inputTime);
-	OutTime.tm_year += 1900;
-	OutTime.tm_mon += 1;
 
-	strOutTime.Format("%d-%02d-%02d  %02d:%02d", OutTime.tm_year, OutTime.tm_mon, OutTime.tm_mday, OutTime.tm_hour, OutTime.tm_min);
+	strOutTime.Format("%d-%02d-%02d  %02d:%02d", inputTime.year(), inputTime.month(), inputTime.day(), inputTime.hour(), inputTime.minute());
 	return strOutTime;
 }
 
@@ -193,8 +204,8 @@ void SearchFileUI::GetFileInfo(std::string& SendName)
 
 void SearchFileUI::OnPlayVideo(int CurSel)
 {
-	CTestData::getInstance()->SetPlayhandle(CurSel);
-	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd);
+	DVR::DVRSearchFilesContainer::getInstance().GetFileById(CurSel);
+	std::auto_ptr<CPlayVideoWnd> pDlg(new CPlayVideoWnd(_CurrentDname, CurSel));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
@@ -225,13 +236,13 @@ void SearchFileUI::GetSelectOption(CDuiString& optionName)
 
 void SearchFileUI::GetFileCountAndSize()
 {
-	std::vector<SearchFileInfo> _file_info;
-	CTestData::getInstance()->GetSearchFiles(_file_info);
+	std::vector<DVR::RecordFile> files;
+	DVR::DVRSearchFilesContainer::getInstance().GetSearchFiles(files);
 	size_t filesize = 0;
 	int fileCount = _checked_files.size();
 	for (size_t i = 0; i < _checked_files.size(); i++)
 	{
-		filesize += _file_info[_checked_files[i]].size;
+		filesize += files[_checked_files[i]].size;
 	}
 
 	CDuiString CountText;

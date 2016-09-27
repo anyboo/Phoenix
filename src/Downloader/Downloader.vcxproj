@@ -138,7 +138,6 @@
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="CalendarUI.h" />
     <ClInclude Include="DownLoadList.h" />
-    <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="DownLoadWnd.h" />
     <ClInclude Include="FileLogInfoUI.h" />
     <ClInclude Include="LogUI.h" />

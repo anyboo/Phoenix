@@ -10,9 +10,7 @@
 		<HorizontalLayout height="60" bkimage="file='skin/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="500,1,1,1" />
-			<Button name="test" width="40" height="40" padding="180,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
-			<Button name="test2" width="40" height="40" padding="10,10,0,0" foreimage="file='skin/tianjia.png' dest='8,9,31,32'" normalimage="skin/timeOut.png" />
-			<Control name="Network" width="30" height="30" padding="275,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Control name="Network" width="30" height="30" padding="525,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
 			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" value="100" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
 			<Label text="100%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>
 		</HorizontalLayout>
@@ -61,12 +59,12 @@
 						<HorizontalLayout	width="160" height="46" bkimage="skin/piancha.png" padding="0,20,0,0">
 							<label text="+偏差" font="1" align="center" width="65" />
 							<Control bkimage="file='skin/st.png'" width="2" />
-							<label name="offset1" text="00:00" font="1" align="center" width="73" />
+							<Button name="offset1" text="00:00" font="1" align="center" width="73" />
 						</HorizontalLayout>
 						<HorizontalLayout	width="160" height="46" bkimage="skin/piancha.png" padding="0,10,0,0">
 							<label text="-偏差" font="1" align="center" width="65" />
 							<Control bkimage="file='skin/st.png'" width="2" />
-							<label name="offset2" text="00:00" font="1" align="center" width="73" />
+							<Button name="offset2" text="00:00" font="1" align="center" width="73" />
 						</HorizontalLayout>
 					</VerticalLayout>
 					<Button name="Search" width="80" height="80" enabled="false" padding="30,30,0,0" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="skin/pushed.png" foreimage="file='skin/chaxun.png' dest='27,20,52,40'" normalimage="file='skin/chaxunanniu.png'" hotimage="file='skin/normal.png'" disabledimage="file='skin/disable.png'"/>

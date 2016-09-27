@@ -17,7 +17,7 @@ namespace DVR{
 
 	void DVRDevice::InitChannel()
 	{
-		int chanels = Poco::AnyCast<int>(_MainSession.getProperty("chanels"));
+		int chanels = Poco::AnyCast<int>(_MainSession.getProperty("channels"));
 		for (int i = 0; i < chanels; i++)
 		{
 			_channels.push_back(false);
@@ -34,14 +34,15 @@ namespace DVR{
 
 	const std::string DVRDevice::name() const
 	{
-		poco_bugcheck_msg("generate the unique string");
+		//poco_bugcheck_msg("generate the unique string");
 		//must be generate the "unique string"
 		return _MainSession.connectorName() + "unique string";
 	}
 
 	const std::string DVRDevice::address() const
 	{
-		return _MainSession.connectionString();
+		return _ipAndport;
+		//return _MainSession.connectionString();
 	}
 
 	bool DVRDevice::isLoggedIn()const

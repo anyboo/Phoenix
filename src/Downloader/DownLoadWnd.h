@@ -5,8 +5,7 @@
 #include "DownLoadList.h"
 #include "TimeUI.h"
 #include <map>
-
-
+#include <Poco/DateTime.h>
 
 
 class DownLoadWnd :
@@ -28,12 +27,13 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	void OnSearch(TNotifyUI& msg);
-	void SearchBegin();
+	bool SearchBegin();
 	void OnLogin(TNotifyUI& msg);
 	void OnBackward(TNotifyUI& msg);
 
 	void OnSelectCalendar(TNotifyUI& msg);
 	void OnSelectDayTime(TNotifyUI& msg);
+	void OnAdjustOffsetTime(TNotifyUI& msg);
 	void FixedSliderPosition(TNotifyUI& msg);
 
 	void InitTime();
@@ -43,7 +43,7 @@ protected:
 
 	void OnCheckAllchannels(TNotifyUI& msg);
 
-	void GetDataAndTime(__time64_t& start, __time64_t& stop);
+	void GetDataAndTime(Poco::DateTime& start, Poco::DateTime& stop);
 
 	void SetButtonImage(const CDuiString& ctr_name, const CDuiString& day);
 	void SetLabelText(const CDuiString& ctr_name, const CDuiString& text);
@@ -51,6 +51,7 @@ protected:
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 
 	template<class T>
 	void AddControl(CDuiString ctr_name)
@@ -73,18 +74,20 @@ protected:
 		return c;
 	}
 
+
+
 private:
 	std::vector<int>		_all_channels;
 	CVendor		_vendorManage;
 	CDownLoadList	_downloadManage;
-	int			_channels;
+	
 	CButtonUI*			_btn_search;
 	SYSTEMTIME		 m_sysTime;
 	CTimeUI*	_TimeControl;
 	CListUI*	_vList;
 	CButtonUI*  _SearchControl;
 	CListUI*	_VendorList;
-
+	std::string			_device_name;
 
 	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
@@ -96,5 +99,8 @@ private:
 	const CDuiString starttime = _T("daytimeText1");
 	const CDuiString stoptime = _T("daytimeText2");
 	const CDuiString timetype = _T("Select_time");
+
+//	Poco::Timer t;
+//	Poco::TimerCallback<DownLoadWnd> tc;
 };
 

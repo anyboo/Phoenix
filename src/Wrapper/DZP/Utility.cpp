@@ -154,12 +154,13 @@ bool Utility::closeStream(Utility::FileHandle handle)
 Utility::PlayHandle Utility::playStream(Utility::HANDLE handle, const Record& record)
 {
 	typedef long (CALL_METHOD *Fn5ParamTypeB)(long, void*, void*, void*, long);
-	std::string fn("H264_DVR_PlayBackByName_V2");
+	std::string fn("H264_DVR_PlayBackByName");
 	check_symbol(fn);
 
 	Fn5ParamTypeB pFn = (Fn5ParamTypeB)Utility::_library.getSymbol(fn);
 	Utility::PlayHandle play = pFn(handle, const_cast<Record*>(&record), nullptr, nullptr, 0);
-	if (play > 0) return play;
+	if (play > 0) 
+		return play;
 
 	return 0;
 }

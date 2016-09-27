@@ -69,3 +69,6 @@ inline DVRSessionImpl* PooledSessionImpl::impl() const
 
 }
 
+#if 0
+
+#endif

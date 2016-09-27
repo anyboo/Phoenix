@@ -42,7 +42,7 @@ void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 
 }
 
-void DVRStatementImpl::playByName(const std::string& filename)
+void DVRStatementImpl::playByName(const std::string& filename, HWND& hwnd)
 {
 	Utility::FILEINFO fileinfo;
 	int rc = Utility::Playback(_handle, fileinfo);
