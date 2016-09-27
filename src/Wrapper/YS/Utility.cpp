@@ -11,22 +11,45 @@
 namespace DVR {
 	namespace YSLite {
 		const int Utility::success = TRUE;
+		Poco::SharedLibrary Utility::_NetDEVDiscovery("sdk\\YS\\NetDEVDiscovery.dll");
+		Poco::SharedLibrary Utility::_libcurl("sdk\\YS\\libcurl.dll");
+		Poco::SharedLibrary Utility::_mxml1("sdk\\YS\\mxml1.dll");
+		Poco::SharedLibrary Utility::_dsp_video_h264("sdk\\YS\\dsp_video_h264.dll");
+		Poco::SharedLibrary Utility::_HW_H265dec_Win32D("sdk\\YS\\HW_H265dec_Win32D.dll");
+		Poco::SharedLibrary Utility::_dsp_audio_aac_enc("sdk\\YS\\dsp_audio_aac_enc.dll");
+		Poco::SharedLibrary Utility::_dsp_audio_aac("sdk\\YS\\dsp_audio_aac.dll");
+		Poco::SharedLibrary Utility::_dsp_audio_g711("sdk\\YS\\dsp_audio_g711.dll");
+		Poco::SharedLibrary Utility::_NDPlayer("sdk\\YS\\NDPlayer.dll");
+		Poco::SharedLibrary Utility::_NDRM_Modeule("sdk\\YS\\NDRM_Module.dll");
 		Poco::SharedLibrary Utility::_library("sdk\\YS\\NetDEVSDK.dll");
 		Poco::Mutex Utility::_mutex;
 		DeviceInfo* Utility::_pDevice_info = nullptr;
 
 		Utility::Utility()
 		{
-
+			if (!_pDevice_info)
+			{
+				_pDevice_info = new DeviceInfo();
+				memset(_pDevice_info, 0, sizeof(DeviceInfo));
+			}
 		}
 
 
 		Utility::~Utility()
 		{
+			if (_pDevice_info)
+			{
+				delete _pDevice_info;
+				_pDevice_info = 0;
+			}
 		}
 
 		void Utility::Init()
 		{				
+			{
+				Poco::Mutex::ScopedLock lock(_mutex);
+				static Utility u;
+			}
 			typedef  BOOL (STDCALL *FnNETDEV_Init)(void);
 			check_symbol("NETDEV_Init");
 			FnNETDEV_Init InitSDK = (FnNETDEV_Init)_library.getSymbol("NETDEV_Init");
@@ -166,14 +189,102 @@ namespace DVR {
 			return StopPlayBack(handle);
 		}
 
-		bool Utility::seek(Utility::PlayHandle handle, int pos)
+		bool Utility::seek(Utility::PlayHandle handle, INT64 pos)
 		{
-			return true;
+			typedef BOOL(STDCALL *FnNETDEV_PlayBackControl)(IN LPVOID   lpPlayHandle, IN INT32    dwControlCode, INOUT LPVOID lpBuffer);
+			check_symbol("NETDEV_PlayBackControl");
+			FnNETDEV_PlayBackControl PlayBackControl = (FnNETDEV_PlayBackControl)_library.getSymbol("NETDEV_PlayBackControl");
+
+			return PlayBackControl(handle, NETDEV_PLAY_CTRL_SETPLAYTIME, &pos);
+		}
+
+		bool Utility::pause(Utility::PlayHandle handle)
+		{
+			typedef BOOL(STDCALL *FnNETDEV_PlayBackControl)(IN LPVOID   lpPlayHandle, IN INT32    dwControlCode, INOUT LPVOID lpBuffer);
+			check_symbol("NETDEV_PlayBackControl");
+			FnNETDEV_PlayBackControl PlayBackControl = (FnNETDEV_PlayBackControl)_library.getSymbol("NETDEV_PlayBackControl");
+
+			return PlayBackControl(handle, NETDEV_PLAY_CTRL_PAUSE, NULL);
+		}
+
+		bool Utility::resume(Utility::PlayHandle handle)
+		{
+			typedef BOOL(STDCALL *FnNETDEV_PlayBackControl)(IN LPVOID   lpPlayHandle, IN INT32    dwControlCode, INOUT LPVOID lpBuffer);
+			check_symbol("NETDEV_PlayBackControl");
+			FnNETDEV_PlayBackControl PlayBackControl = (FnNETDEV_PlayBackControl)_library.getSymbol("NETDEV_PlayBackControl");
+
+			return PlayBackControl(handle, NETDEV_PLAY_CTRL_RESUME, NULL);
 		}
 
 		void Utility::throwException(long rc, const std::string& addErrMsg)
 		{
-			throw Poco::IOException(addErrMsg);
+			switch (rc){
+			case NETDEV_E_COMMON_FAILED:
+			case NETDEV_E_DEV_COMMON_FAILED:
+			case NETDEV_E_SYSCALL_FALIED:
+			case NETDEV_E_NULL_POINT:
+			case NETDEV_E_INVALID_PARAM:
+			case NETDEV_E_INVALID_MODULEID:
+			case NETDEV_E_NO_MEMORY:
+			case NETDEV_E_NOT_SUPPORT:
+			case NETDEV_E_SDK_SOCKET_LSN_FAIL:
+			case NETDEV_E_INIT_MUTEX_FAIL:
+			case NETDEV_E_INIT_SEMA_FAIL:
+			case NETDEV_E_ALLOC_RESOURCE_ERROR:
+			case NETDEV_E_SDK_NOINTE_ERROR:
+			case NETDEV_E_ALREDY_INIT_ERROR:
+			case NETDEV_E_HAVEDATA:
+			case NETDEV_E_NEEDMOREDATA:
+			case NETDEV_E_CONNECT_ERROR:
+			case NETDEV_E_SEND_MSG_ERROR:
+			case NETDEV_E_TIMEOUT:
+			case NETDEV_E_DECODE_RSP_ERROR:
+			case NETDEV_E_SOCKET_RECV_ERROR:
+			case NETDEV_E_NUM_MAX_ERROR:
+			case NETDEV_E_GET_PORT_ERROR:
+			case NETDEV_E_CREATE_THREAD_FAIL:
+			case NETDEV_E_NOENOUGH_BUF:
+			case NETDEV_E_GETLOCALIPANDMACFAIL:
+			case NETDEV_E_RESCODE_NO_EXIST:
+			case NETDEV_E_MSG_DATA_INVALID:
+			case NETDEV_E_GET_CAPABILITY_ERROR:
+			case NETDEV_E_USER_NOT_BIND:
+			case NETDEV_E_AUTHORIZATIONFAIL:
+			case NETDEV_E_BINDNOTIFY_FAIL:
+			case NETDEV_E_NOTADMIN:
+			case NETDEV_E_DEVICE_FACTURER_ERR:
+			case NETDEV_E_NONSUPPORT:
+			case NETDEV_E_TRANSFILE_FAIL:
+			case NETDEV_E_JSON_ERROR:
+			case NETDEV_E_NO_RESULT:
+			case NETDEV_E_USER_WRONG_PASSWD:
+			case NETDEV_E_USER_LOGIN_MAX_NUM:
+			case NETDEV_E_USER_NOT_ONLINE:
+			case NETDEV_E_USER_NO_SUCH_USER:
+			case NETDEV_E_USER_NO_AUTH:
+			case NETDEV_E_USER_MAX_NUM:
+			case NETDEV_E_USER_EXIST:
+			case NETDEV_E_USER_PASSWORD_CHANGE:
+			case NETDEV_E_REMOTE_USER_WITH_WEAK_PASSWD:
+			case NETDEV_E_VOD_PLAY_END:
+			case NETDEV_E_VOD_NO_CM:
+			case NETDEV_E_VOD_OVER_ABILITY:
+			case NETDEV_E_VOD_NO_RECORDING_CM:
+			case NETDEV_E_VOD_NO_RECORDING:
+			case NETDEV_E_VOD_NO_REPLAYURL:
+				throw Poco::IOException(addErrMsg);
+			default:
+				throw Poco::IOException("default exception!");
+			}
+		}
+
+		int Utility::lastError()
+		{
+			typedef INT32 (STDCALL *FnNETDEV_GetLastError)();			
+			check_symbol("NETDEV_GetLastError");
+			FnNETDEV_GetLastError GetLastErro = (FnNETDEV_GetLastError)Utility::_library.getSymbol("NETDEV_GetLastError");
+
+			return GetLastErro();
 		}
 
 		void Utility::readDeviceInfo(DeviceInfo& info)
