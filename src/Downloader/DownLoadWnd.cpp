@@ -6,8 +6,11 @@
 #include "ProgtessUI.h"
 #include "DVR/DVRSession.h"
 #include "TestData.h"
+#include "DVR/DVRDeviceContainer.h"
 
-DownLoadWnd::DownLoadWnd() :_channels(0)
+
+DownLoadWnd::DownLoadWnd() 
+
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
@@ -32,6 +35,8 @@ DownLoadWnd::~DownLoadWnd()
 #define BT_CLOSE_D				(_T("CloseWnd"))
 #define CTR_SELECT_TIME			(_T("Select_time"))
 #define BT_CHECKALL				(_T("checkall"))
+#define BT_offset1				(_T("offset1"))
+#define BT_offset2				(_T("offset2"))
 
 DUI_BEGIN_MESSAGE_MAP(DownLoadWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_OnVideoLoginUI, OnLogin)
@@ -42,6 +47,8 @@ DUI_ON_CLICK_CTRNAME(BT_Calendar2, OnSelectCalendar)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND1, OnSelectDayTime)
 DUI_ON_CLICK_CTRNAME(BT_TIMEWND2, OnSelectDayTime)
 DUI_ON_CLICK_CTRNAME(BT_CHECKALL, OnCheckAllchannels)
+DUI_ON_CLICK_CTRNAME(BT_offset1, OnAdjustOffsetTime)
+DUI_ON_CLICK_CTRNAME(BT_offset2, OnAdjustOffsetTime)
 DUI_ON_MSGTYPE_CTRNAME(DUI_MSGTYPE_VALUECHANGED, CTR_SELECT_TIME, FixedSliderPosition)
 DUI_END_MESSAGE_MAP()
 
@@ -90,21 +97,21 @@ void DownLoadWnd::InitWindow()
 	BuildControlDDX();
 	InitTime();
 
-	SetTimer(GetHWND(), 1, 2000, nullptr);
+	
 
-	std::vector<unsigned long> Login_IDs;
-	CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
-	for (size_t i = 0; i < Login_IDs.size(); i++)
-	{
-		_vendorManage.AddVendorList(Login_IDs[i]);
-	}
+	//std::vector<unsigned long> Login_IDs;
+	//CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
+	//for (size_t i = 0; i < Login_IDs.size(); i++)
+	//{
+	//	_vendorManage.AddVendorList(Login_IDs[i]);
+	//}
 
-	std::vector<unsigned long> download_IDs;
-	CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
-	for (size_t j = 0; j < download_IDs.size(); j++)
-	{
-		_downloadManage.AddDownloadTask(download_IDs[j]);
-	}
+	//std::vector<unsigned long> download_IDs;
+	//CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
+	//for (size_t j = 0; j < download_IDs.size(); j++)
+	//{
+	//	_downloadManage.AddDownloadTask(download_IDs[j]);
+	//}
 }
 
 void DownLoadWnd::FixedSliderPosition(TNotifyUI& msg)
@@ -166,6 +173,20 @@ void DownLoadWnd::OnSelectDayTime(TNotifyUI& msg)
 	SetLabelText(AppenText(msg.pSender->GetName()), pDlg->GetTime());
 }
 
+void DownLoadWnd::OnAdjustOffsetTime(TNotifyUI& msg)
+{
+	std::auto_ptr<CTimeUI> pDlg(new CTimeUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+	//set datetime 's text
+	CDuiString SendName = msg.pSender->GetName();
+	CDuiString setTime = pDlg->GetTime();
+	CButtonUI* btn_offset = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName));
+	btn_offset->SetText(setTime);
+}
+
 void DownLoadWnd::OnLogin(TNotifyUI& msg)
 {
 	std::auto_ptr<VideoLoginUI> pDlg(new VideoLoginUI);
@@ -175,13 +196,13 @@ void DownLoadWnd::OnLogin(TNotifyUI& msg)
 	pDlg->ShowModal();
 
 	if (!pDlg->GetLoginState())return;
-	unsigned long id = CTestData::getInstance()->GetLoginID();
-	_vendorManage.AddVendorList(id);
+	std::string name = pDlg->GetLogInName();
+	_vendorManage.AddVendorList(name);
 }
 
 void DownLoadWnd::OnSearch(TNotifyUI& msg)
 {
-	SearchBegin();
+	
 	std::auto_ptr<CProgtessUI> pDlg(new CProgtessUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
@@ -190,28 +211,43 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 
 	if (pDlg->IsCancelSearch())return;
 
+	if (!SearchBegin())return;
+
 //	start to search file on specify device.
-	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI);
+	std::auto_ptr<SearchFileUI> pSearchDlg(new SearchFileUI(_device_name));
 	assert(pSearchDlg.get());
 	pSearchDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 600);
 	pSearchDlg->CenterWindow();
 	pSearchDlg->ShowModal();
 	if (!pSearchDlg->IsBeginDownload())return;
 
-	unsigned long id = CTestData::getInstance()->GetCurrentDid();
-	_downloadManage.AddDownloadTask(id);
+	std::vector<long>	download_handle;
+	std::vector<size_t>	download_fileID;
+	pSearchDlg->GetDownloadHandles(download_handle);
+	pSearchDlg->GetDownloadfileIDs(download_fileID);
+	_downloadManage.AddDownloadTask(download_fileID, download_handle, _device_name);
+	SetTimer(GetHWND(), 11, 1000, nullptr);
 }
 
-void DownLoadWnd::SearchBegin()
+bool DownLoadWnd::SearchBegin()
 {
-	__time64_t stime, etime;
+	Poco::DateTime stime, etime;
 	GetDataAndTime(stime, etime);
+	if (stime > etime)
+	{
+		MessageBox(GetHWND(), "开始时间不能大于结束时间！", "警告", MB_OK);
+		return false;
+	}
 	int cursel = _vList->GetCurSel();
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
-	std::string strID = select->GetUserData();
-	unsigned long id = std::stoul(strID);
-	DVR::DVRSession* session = CTestData::getInstance()->GetSessionByID(id);
-//	DVR::DVRStatement state(session);
+	_device_name = select->GetUserData().GetData();
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
+
+	DVR::DVRStatement statement(Device.session());
+
+	statement.Searchfile(stime, etime, _all_channels);
+
+	return true;
 }
 
 void DownLoadWnd::Notify(TNotifyUI& msg)
@@ -275,8 +311,15 @@ void DownLoadWnd::CheckOption(CDuiString& sName)
 	}
 	else
 	{
-		_btn_search->SetEnabled(false);
-		_all_channels.erase(_all_channels.begin() + channel);
+		for (size_t i = 0; i < _all_channels.size(); i++)
+		{
+			if (_all_channels[i] == channel)
+			{
+				_all_channels.erase(_all_channels.begin() + i);
+			}
+		}
+		if (_all_channels.size() == 0)
+			_btn_search->SetEnabled(false);
 	}
 }
 
@@ -312,7 +355,7 @@ void DownLoadWnd::SetButtonImage(const CDuiString& ctr_name, const CDuiString& d
 	if (c) c->SetAttribute(_T("foreimage"), value);
 }
 
-void DownLoadWnd::GetDataAndTime(__time64_t& start, __time64_t& stop)
+void DownLoadWnd::GetDataAndTime(Poco::DateTime& start, Poco::DateTime& stop)
 {
 	CLabelUI* Lab_StartData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
 	CLabelUI* Lab_StopData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
@@ -332,13 +375,8 @@ void DownLoadWnd::GetDataAndTime(__time64_t& start, __time64_t& stop)
 
 	sscanf(eData, "%d-%d-%d", &stopTime.tm_year, &stopTime.tm_mon, &stopTime.tm_mday);
 	sscanf(eTime, "%d:%d", &stopTime.tm_hour, &stopTime.tm_min);
-
-	startTime.tm_year -= 1900;
-	startTime.tm_mon -= 1;
-	stopTime.tm_year -= 1900;
-	stopTime.tm_mon -= 1;
-	start = mktime(&startTime);
-	stop = mktime(&stopTime);
+	start = Poco::DateTime(startTime.tm_year, startTime.tm_mon, startTime.tm_mday, startTime.tm_hour, startTime.tm_min);
+	stop = Poco::DateTime(stopTime.tm_year, stopTime.tm_mon, stopTime.tm_mday, stopTime.tm_hour, stopTime.tm_min);
 }
 
 void DownLoadWnd::ReadJsonFile()
@@ -387,9 +425,10 @@ LRESULT DownLoadWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (wParam == 1)
+	if (wParam == 11)
 	{
 		_downloadManage.RenewList();
 	}
 	return 0;
 }
+

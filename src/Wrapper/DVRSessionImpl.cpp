@@ -4,10 +4,11 @@ namespace DVR
 {
 	DVRSessionImpl::DVRSessionImpl(const std::string& connectionString,
 		std::size_t timeout):
-		_connectionString(connectionString),
+		/*_connectionString(connectionString),*/
 		_loginTimeout(timeout)
 
 	{
+		_connectionString = connectionString;
 	}
 
 

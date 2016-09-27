@@ -81,7 +81,7 @@ void CMainWnd::BuildControlDDX()
 
 void CMainWnd::ShowVersion()
 {
-	std::string Version = "2.0.0.0";//MVersion::getVersion();
+	std::string Version = "2.0.0.006";//MVersion::getVersion();
 	_Version->SetText(Version.c_str());
 }
 

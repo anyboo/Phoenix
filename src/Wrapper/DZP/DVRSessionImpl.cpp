@@ -29,6 +29,7 @@ DVRSessionImpl::DVRSessionImpl(const std::string& deviceLocation,
 	setLoginTimeout(_timeout);
 	setProperty("handle", _handle);
 	setProperty("channels", _channels);
+	Utility::Init();
 }
 
 DVRSessionImpl::~DVRSessionImpl()
@@ -36,6 +37,7 @@ DVRSessionImpl::~DVRSessionImpl()
 	try
 	{
 		logout();
+		Utility::Cleanup();
 	}
 	catch (...)
 	{
@@ -63,7 +65,8 @@ void DVRSessionImpl::setChannels()
 {
 	DeviceInfo info = { 0 };
 	Utility::readDeviceInfo(info);
-	_channels = info.byChanNum;
+//	_channels = info.byChanNum;
+	_channels = info.iDigChannel;
 }
 
 void DVRSessionImpl::logout()
@@ -79,7 +82,7 @@ void DVRSessionImpl::logout()
 
 bool DVRSessionImpl::isLoggedIn()const
 {	
-	poco_assert(_handle == 0);
+	poco_assert(_handle != 0);
 	return _connected;
 }
 

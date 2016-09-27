@@ -1,11 +1,12 @@
 #pragma once
-#include "DZPLite.h"
-#include <Poco/DateTime.h>
 #include <string>
+#include <map>
+#include <utility>
+#include "DZPLite.h"
 #include "DVR/DVRSession.h"
+#include <Poco/DateTime.h>
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/SharedLibrary.h>
-#include <map>
 #include <Poco/String.h>
 #include <Poco/Mutex.h>
 
@@ -24,9 +25,9 @@ namespace DZPLite {
 
 class DZPLite_API Utility
 {
-public:
+ public:
 	~Utility();
-	
+
 	typedef long HANDLE;
 	typedef long FileHandle;
 	typedef long PlayHandle;
@@ -34,9 +35,9 @@ public:
 
 	static Utility::HANDLE dvrHandle(const DVRSession& session);
 	static std::string lastError(Utility::HANDLE handle);
-	//static std::string lastError(const DVRSession& session);
+	// static std::string lastError(const DVRSession& session);
 	static long Utility::lastError();
-	//static void throwException(Utility::HANDLE handle);
+	// static void throwException(Utility::HANDLE handle);
 	static void throwException(long rc, const std::string& addErrMsg = std::string());
 
 	static void Init();
@@ -44,14 +45,15 @@ public:
 
 	static Utility::HANDLE login(const Poco::Net::SocketAddress& _addr, const std::string& user, const std::string& password);
 	static bool logout(Utility::HANDLE handle);
-	
+
 	static void readDeviceInfo(DeviceInfo& info);
 	static void setTimeOut(std::size_t timeout, std::size_t times);
 
 	static Utility::FileHandle readStream(Utility::HANDLE handle, Record& data, const std::string& newname);
-	static Utility::FileHandle readStream(Utility::HANDLE handle, Condition& time, const std::string& newname, bool merge = false);
+	static Utility::FileHandle readStream(Utility::HANDLE handle, Condition& time, const std::string& newname,
+		bool merge = false);
 	static int Utility::readStreamPos(Utility::FileHandle handle);
-	static bool closeStream(Utility::HANDLE handle);
+	static bool closeStream(Utility::FileHandle handle);
 
 	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Record& record);
 	static Utility::PlayHandle playStream(Utility::HANDLE handle, const Condition& time);
@@ -69,13 +71,13 @@ public:
 
 	template <typename T, typename CBT>
 	static bool registerUpdateHandler(Utility::HANDLE Handle, CBT callbackFn, T* pParam)
-		/// Registers the callback for (1)(insert, delete, update), (2)(commit) or 
+		/// Registers the callback for (1)(insert, delete, update), (2)(commit) or
 		/// or (3)(rollback) events. Only one function per group can be registered
 		/// at a time. Registration is not thread-safe. Storage pointed to by pParam
 		/// must remain valid as long as registration is active. Registering with
 		/// callbackFn set to zero disables notifications.
-		/// 
-		/// See http://www.sqlite.org/c3ref/update_hook.html and 
+		///
+		/// See http://www.sqlite.org/c3ref/update_hook.html and
 		/// http://www.sqlite.org/c3ref/commit_hook.html for details.
 	{
 		typedef std::pair<CBT, T*> CBPair;
@@ -85,13 +87,12 @@ public:
 
 		static CBMap retMap;
 
-		if (retMap.find(Handle) == retMap.end())//insert callbackFn when key is noexist.
+		if (retMap.find(Handle) == retMap.end())  // insert callbackFn when key is noexist.
 		{
 			retMap.insert(std::make_pair(Handle, CBPair(callbackFn, pParam)));
 			return true;
-		}
-		else //update callbackFn when key is exist.
-		{
+		}else{
+			// update callbackFn when key is exist.
 			CBMapItPair retMapRange = retMap.equal_range(Handle);
 			for (CBMapIt it = retMapRange.first; it != retMapRange.second; ++it)
 			{
@@ -120,9 +121,9 @@ public:
 		return registerUpdateHandler(dvrHandle(session), callbackFn, pParam);
 	}
 
-protected:
-	//static void callback();
-private:
+ protected:
+	// static void callback();
+ private:
 	Utility();
 	Utility(const Utility&);
 	Utility& operator = (const Utility&);
@@ -131,7 +132,7 @@ private:
 	static Poco::SharedLibrary _library;
 	static Poco::SharedLibrary _dependency;
 	static Poco::SharedLibrary _dependencyA;
-	//static Poco::SharedLibrary _dependencyC;
+	// static Poco::SharedLibrary _dependencyC;
 	static DeviceInfo* _pDevice_info;
 };
 
@@ -141,4 +142,5 @@ inline std::string Utility::lastError(Utility::HANDLE handle)
 	return std::string("errCode");
 }
 
-}}
+}  // namespace DZPLite
+}  // namespace DVR

@@ -5,7 +5,7 @@
 		<HorizontalLayout height="60" width="1280">
 			<Control width="45" height="45" padding="30,7,10,7" bkimage="skin/logo.png"/>
 			<Label text="视频高速下载器" textcolor="#FFFFFFFF" font="0" width="300" align="left"/>
-			<Control name="Network" width="30" height="30" padding="656,10,10,5" bkimage="file='skin/network_online.png' dest='1,1,30,30'"/>
+			<Control name="Network" width="30" height="30" padding="656,10,10,5" bkimage="file='skin/network_offline.png' dest='1,1,30,30'"/>
 			<Progress name="electric" width="30" height="10" foreimage="file='skin/jindutiao.png'" bkimage="file='skin/bsbj.png'" value="50" padding="6,20,1,15" bordersize="1" bordercolor="0xf1234567"/>
 			<Label text="50%" name="electric_num" textcolor="#FFFFFFFF" font="4" width="30" height="30" align="left" valign="center" padding="0,10,0,0"/>			
 			<Button name="aboutbt" width="30" height="30" padding="5,10,1,5" tooltip="关于" normalimage="file='skin/function.png' source='0,90,30,120'" hotimage="file='skin/function.png' source='0,60,30,90'"/>
@@ -18,7 +18,7 @@
 		<Button name="Other_tools" float="true" pos="642,414,985,680" width="343" height="267" normalimage="file='skin/tool_normal.png'" hotimage="file='skin/tool_normal.png'" pushedimage="file='skin/tool_normal.png"/>
 		<Control float="true" pos="606,375,672,444" />
 		<HorizontalLayout padding="40,600,0,0" height="40">
-			<Label text="版本：" textcolor="#FFFFFFFF" font="1" width="80" height="40"/>
+			<Label text="版本：" textcolor="#FFFFFFFF" font="1" width="200" height="40"/>
 		</HorizontalLayout>
 	</VerticalLayout>
 </Window>

@@ -178,7 +178,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MessagePump.h" />
-    <ClInclude Include="DownloadPackage.h" />
     <ClInclude Include="ProgressManager.h" />
     <ClInclude Include="..\..\common\log.h">
       <Filter>头文件</Filter>

@@ -43,9 +43,9 @@ IPADDRESS_INFO CSetIPAddress::GetCurIPAddress()
 	}
 	else
 	{
-		IPAddress ipAddress = ipList[n].get<0>();
-		IPAddress subnetAddress = ipList[n].get<1>();
-		IPAddress broadcastAddress = ipList[n].get<2>();
+		IPAddress ipAddress = ipList[n - 1].get<0>();
+		IPAddress subnetAddress = ipList[n - 1].get<1>();
+		IPAddress broadcastAddress = ipList[n - 1].get<2>();
 		ipaddress_Info.strIP = ipAddress.toString();
 		ipaddress_Info.strSubNet = subnetAddress.toString();
 		ipaddress_Info.strBroadcast = broadcastAddress.toString();
@@ -58,7 +58,19 @@ bool CSetIPAddress::setNetConfig(const std::string& sIP, const std::string& sMas
 {
 	std::string mask(" mask=");
 	mask.append(sMask);
-	std::string sNetName = _inft.name();
+	std::string sssname = _inft.name();
+	int len = MultiByteToWideChar(CP_UTF8, 0, (LPCTSTR)sssname.c_str(), -1, NULL, 0);
+	wchar_t * wszGBK = new wchar_t[len];
+	memset(wszGBK, 0, len);
+	MultiByteToWideChar(CP_UTF8, 0, (LPCTSTR)sssname.c_str(), -1, wszGBK, len);
+	len = WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, NULL, 0, NULL, NULL);
+	char *szGBK = new char[len + 1];
+	memset(szGBK, 0, len + 1);
+	WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, szGBK, len, NULL, NULL);
+	std::string sNetName(szGBK);
+	delete[] szGBK;
+	delete[] wszGBK;
+
 	std::string name(" name = \"");
 	name += sNetName;
 	name.append("\"");

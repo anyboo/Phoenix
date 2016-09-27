@@ -24,6 +24,7 @@ public:
 
 	void LogIn();
 	bool GetLoginState();
+	std::string GetLogInName() const;
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
@@ -65,7 +66,7 @@ private:
 	size_t				m_pages;
 	std::vector<string> m_sRecord;
 	std::map<int, string>		m_CnameAndType;
-
+	std::string		_name;
 private:
 	CEditUI*		_brand_edit;
 	CEditUI*		_ip_edit;

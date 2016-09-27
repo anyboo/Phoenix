@@ -52,6 +52,12 @@ void CFileLogInfoUI::OnSaveDownloadPath(TNotifyUI& msg)
 	Close();
 }
 
+std::string CFileLogInfoUI::GetPath()
+{
+	std::string path = _edit_path->GetText();
+	return path;
+}
+
 void CFileLogInfoUI::InitWindow()
 {
 	_comb_case = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("Case_Numb")));

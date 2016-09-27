@@ -74,6 +74,9 @@
     <ClCompile Include="SearchFileTest.cpp">
       <Filter>SearchFile</Filter>
     </ClCompile>
+    <ClCompile Include="UtilityTest.cpp">
+      <Filter>DZPLite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DHCPClientTest.h">
@@ -83,6 +86,7 @@
     <ClInclude Include="ARPClientTest.h">
       <Filter>ARP\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="JXJLIBTEST.h">
       <Filter>JXJLite</Filter>
     </ClInclude>
@@ -106,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="SearchFileTest.h">
       <Filter>SearchFile</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilityTest.h">
+      <Filter>DZPLite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

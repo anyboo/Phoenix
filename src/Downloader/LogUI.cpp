@@ -160,7 +160,7 @@ void CLogUI::exportLog()
 	OPENFILENAME  ofn = { 0 };
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");//file subfix   
+	ofn.lpstrFilter =_T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");//file subfix   
 	ofn.lpstrInitialDir = _T("D:\\");//Default Path
 	ofn.lpstrFile = szBuffer;//File Buffer  
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);

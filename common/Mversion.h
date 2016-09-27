@@ -9,7 +9,7 @@ public:
 public:
 	static std::string getVersion()
 	{
-		return "V2.0.0.0";
+		return "V2.0.0.006";
 	}
 private:
 	MVersion();

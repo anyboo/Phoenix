@@ -9,9 +9,23 @@ namespace DVR{
 	{
 	}
 
-
 	DVRDeviceContainer::~DVRDeviceContainer()
 	{
+	}
+
+	void DVRDeviceContainer::remove(const std::string& name)
+	{
+		_devicePool.erase(name);
+	}
+
+	bool DVRDeviceContainer::has(const std::string& name) const
+	{
+		return _devicePool.find(name) != _devicePool.end();
+	}
+
+	int DVRDeviceContainer::count() const
+	{
+		return static_cast<int>(_devicePool.size());
 	}
 
 	void DVRDeviceContainer::add(DVRDevice* device)
@@ -30,12 +44,13 @@ namespace DVR{
 
 	DVRDevice& DVRDeviceContainer::get(const std::string& name)
 	{
-		poco_assert(name.empty());
+		poco_assert(!name.empty());
 
 		FastMutex::ScopedLock lock(_mutex);
 		DevicePoolMap::iterator it = _devicePool.find(name);
 		if (_devicePool.end() == it) throw Poco::NotFoundException(name);
 		return *it->second;
+		//QNzrdXMy
 	}
 
 }

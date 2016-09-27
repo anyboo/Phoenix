@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Vendor.h"
 #include "TestData.h"
+#include "DVR/DVRSession.h"
+#include "DVR/DVRDeviceContainer.h"
+
+#include "DVR/DVRSession.h"
 
 CVendor::CVendor()
 :ppm(nullptr), m_ContListSel(0)
@@ -38,6 +42,8 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 			if (nextList->GetName() == _T("Channel_List"))
 			{
 				pList->Remove(channel_List, true);
+				CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
+				btn_search->SetEnabled(false);
 				return;
 			}
 			int index = pList->GetItemIndex(channel_List);
@@ -76,21 +82,19 @@ void CVendor::ChangeChannelsList(CDuiString& sName)
 }
 
 
-void CVendor::AddVendorList(const unsigned long vendor_id)
+void CVendor::AddVendorList(const std::string DeviceName)
 {
-	Vendor_Info vendor;
-	CTestData::getInstance()->GetLoginInfoByID(vendor_id, vendor);
-	std::string VendorName = vendor.vendorName;
-	int _channels = vendor.channels;
-	std::string VendorIP = vendor.ipAddr;
+	DVR::DVRDevice& device = DVR::DVRDeviceContainer::getInstance().get(DeviceName);
+	std::string VendorIP = device.address().substr(0, device.address().find_last_of(":"));
+	size_t channels = 4;
 	CListUI* pList = dynamic_cast<CListUI*>(ppm->FindControl(_T("VendorList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//DeviceUI.xml"), (UINT)0, NULL, ppm));
 	assert(SubList);
 	pList->Add(SubList);
-	std::string strID = std::to_string(vendor_id);
-	SubList->SetUserData(strID.c_str());
-	SubList->SetTag(_channels);
+
+	SubList->SetUserData(DeviceName.c_str());
+	SubList->SetTag(channels);
 
 	CDuiString subList_name, button_name;
 	subList_name.Format("VendorContList%d", m_ContListSel);
@@ -103,7 +107,7 @@ void CVendor::AddVendorList(const unsigned long vendor_id)
 
 	CLabelUI* Lab_Name = dynamic_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 0));
 	CLabelUI* Lab_IP = dynamic_cast<CLabelUI*>(ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
-	Lab_Name->SetText(VendorName.c_str());
+	Lab_Name->SetText(DeviceName.c_str());
 	Lab_IP->SetText(VendorIP.c_str());
 }
 
@@ -166,7 +170,6 @@ void CVendor::Off_line()
 
 void CVendor::DeleteVendor(CDuiString& sName)
 {
-
 	CButtonUI* btn_search = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("Search")));
 	btn_search->SetEnabled(false);
 	std::string tmp = sName.Right(sName.GetLength() - 9).GetData();
@@ -177,11 +180,11 @@ void CVendor::DeleteVendor(CDuiString& sName)
 	CListContainerElementUI* SubList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByName(pList, vName));
 	int serial = pList->GetItemIndex(SubList);
 	CListContainerElementUI* ChannelList = dynamic_cast<CListContainerElementUI*>(ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, serial + 1));
+	
+	std::string name = SubList->GetUserData();
+//	DVR::DVRDeviceContainer::getInstance().remove(name);
 	pList->Remove(SubList, true);
-	std::string vendor_id = SubList->GetText();
-	unsigned long pID = std::stoi(vendor_id);
-	CTestData::getInstance()->DeleteVendorByID(pID);
-	if (ChannelList != NULL && ChannelList->GetName() == _T("Channel_List"))
+	if (ChannelList != nullptr && ChannelList->GetName() == _T("Channel_List"))
 	{
 		pList->Remove(ChannelList, true);
 	}
