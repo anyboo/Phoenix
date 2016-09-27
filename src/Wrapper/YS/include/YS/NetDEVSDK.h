@@ -116,10 +116,10 @@ extern "C"{
 #endif
 #endif
 
-#ifndef INT64_DEF
-#define INT64_DEF
-    typedef long long               INT64;
-#endif
+//#ifndef INT64_DEF
+//#define INT64_DEF
+//    typedef long long               INT64;
+//#endif
 
 #ifndef BOOL_DEF
 #define BOOL_DEF

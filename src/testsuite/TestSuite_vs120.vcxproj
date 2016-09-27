@@ -35,9 +35,11 @@
     <ClInclude Include="DownloadPacketTest.h" />
     <ClInclude Include="DZPLIBTEST.h" />
     <ClInclude Include="HKLIBTEST.h" />
+    <ClInclude Include="JXJLIBTEST.h" />
     <ClInclude Include="SceneTestSuite.h" />
     <ClInclude Include="SearchFileTest.h" />
     <ClInclude Include="UtilityTest.h" />
+    <ClInclude Include="YSLIBTEST.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ARPClientTest.cpp" />
@@ -47,9 +49,11 @@
     <ClCompile Include="DownloadContainerTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="HKLIBTEST.cpp" />
+    <ClCompile Include="JXJLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
     <ClCompile Include="SearchFileTest.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
+    <ClCompile Include="YSLIBTEST.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>TestSuite</ProjectName>
@@ -151,7 +155,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../Scene/include;../Wrapper/;../Wrapper/include;$(SolutionDir)\src\Wrapper\DZP\include;$(SolutionDir)\src\Wrapper\DH\include;$(SolutionDir)\src\Wrapper\DH;$(SolutionDir)\src\Wrapper\HK\include;$(SolutionDir)\src\Wrapper\HK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\CppUnit\include\;$(SolutionDir)\poco\Net\include;$(SolutionDir)\poco\Foundation\include;../Scene/include;../Wrapper/;../Wrapper/include;$(SolutionDir)\src\Wrapper\DZP\include;$(SolutionDir)\src\Wrapper\DH\include;$(SolutionDir)\src\Wrapper\DH;$(SolutionDir)\src\Wrapper\HK\include;$(SolutionDir)\src\Wrapper\HK;$(SolutionDir)\src\Wrapper\YS\include;$(SolutionDir)\src\Wrapper\YS;$(SolutionDir)\src\Wrapper\JXJ\include;$(SolutionDir)\src\Wrapper\JXJ;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WINVER=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>

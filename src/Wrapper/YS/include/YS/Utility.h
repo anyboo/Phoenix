@@ -10,17 +10,20 @@
 
 #include "NetDEVSDK.h"
 
-extern "C"
-{	
-	typedef struct tagNETDEVFingData        Record;
-	typedef struct tagNETDEVFindCond		Condition;
-	typedef struct tagNETDEVDeviceInfo		DeviceInfo;
-	typedef struct tagNETDEVPlayBackInfo    Play;
-	typedef struct tagNETDEVPlayBackCondition PlayCondition;
-}
 
 namespace DVR {
 namespace YSLite {
+
+	extern "C"
+	{
+		typedef struct tagNETDEVFingData        Record;
+		typedef struct tagNETDEVFindCond		Condition;
+		typedef struct tagNETDEVDeviceInfo		DeviceInfo;
+		typedef struct tagNETDEVPlayBackInfo    Play;
+		typedef struct tagNETDEVPlayBackCondition PlayCondition;
+	}
+
+
 class YSLite_API Utility
 {
 public:
@@ -33,8 +36,7 @@ public:
 	static Utility::HANDLE dvrHandle(const DVRSession& session);
 	//static std::string lastError(Utility::HANDLE handle);
 	//static std::string lastError(const DVRSession& session);
-	//static long Utility::lastError();
-	//static void throwException(Utility::HANDLE handle);
+	static int Utility::lastError();	
 	static void throwException(long rc, const std::string& addErrMsg = std::string());
 
 	static void Init();
@@ -53,14 +55,15 @@ public:
 	static bool playPos(Utility::PlayHandle handle, INT64 *iTime);
 	static bool stopStream(Utility::PlayHandle handle);
 
-	static bool seek(Utility::PlayHandle handle, int pos);	
+	static bool seek(Utility::PlayHandle handle, INT64 pos);
 	static bool pause(Utility::PlayHandle handle);
+	static bool resume(Utility::PlayHandle handle);
 
 	static LPVOID findStream(Utility::HANDLE handle, const Condition& cond);
 	static bool findNextStream(Utility::HANDLE findHandle, Record& record);
 	static bool closeFindStream(Utility::HANDLE findHandle);
 
-	static void readDeviceInfo(DeviceInfo& info);
+	static void readDeviceInfo(DeviceInfo& info);	
 
 	typedef void(*EventCallbackType)(void* pVal);
 
@@ -126,6 +129,16 @@ private:
 
 	static Poco::Mutex _mutex;
 	static Poco::SharedLibrary _library;	
+	static Poco::SharedLibrary _NDRM_Modeule;
+	static Poco::SharedLibrary _NDPlayer;
+	static Poco::SharedLibrary _dsp_audio_g711;
+	static Poco::SharedLibrary _dsp_audio_aac;
+	static Poco::SharedLibrary _dsp_audio_aac_enc;
+	static Poco::SharedLibrary _HW_H265dec_Win32D;
+	static Poco::SharedLibrary _dsp_video_h264;
+	static Poco::SharedLibrary _mxml1;
+	static Poco::SharedLibrary _libcurl;
+	static Poco::SharedLibrary _NetDEVDiscovery;
 	static DeviceInfo* _pDevice_info;
 };
 
