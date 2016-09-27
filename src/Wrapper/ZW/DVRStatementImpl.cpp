@@ -1,11 +1,11 @@
-#include "JXJ/DVRStatementImpl.h"
-#include "JXJ/Notifier.h"
+#include "ZW/DVRStatementImpl.h"
+#include "ZW/Notifier.h"
 
 #include <vector>
 #include <sstream>
 
 namespace DVR {
-	namespace JXJLite {
+	namespace ZWLite {
 
 DVRStatementImpl::DVRStatementImpl(DVR::DVRSessionImpl& rSession, Utility::HANDLE pDvr):
 DVR::DVRStatementImpl(rSession),
@@ -18,26 +18,28 @@ DVRStatementImpl::~DVRStatementImpl()
 {
 }
 
+
 void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 {
-	Utility::CONDITION cond;
+	/*Utility::CONDITION cond;
 	Utility::TIMEINFO timeinfo;
 
 	std::string path;
 	int rc = Utility::GetFile(_handle, timeinfo, path, false);
 	
 	if (Utility::success != rc)
-		Utility::throwException(_handle);
+		Utility::throwException(_handle);*/
 
 }
 
 
+
 void DVRStatementImpl::playByTime(const Poco::DateTime& time)
 {
-	Utility::CONDITION cond;
+	/*Utility::CONDITION cond;
 	Utility::TIMEINFO timeinfo;
 
-	/*int rc = Utility::Playback(_handle, timeinfo);
+	int rc = Utility::Playback(_handle, timeinfo);
 
 	if (Utility::success != rc)
 		Utility::throwException(_handle);*/
@@ -77,24 +79,5 @@ void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTim
 {
 
 }
-
-/*
-list 需要异步操作
-*/
-//void DVRStatementImpl::list(const Poco::DateTime& beginTime, const Poco::DateTime& endTime)
-//{
-//	Utility::CONDITION condition;
-//	Utility::TIMEINFO timeinfo = { 0 };
-//	std::size_t timeout = 3000;
-//	//std::vector<RESULT> result(1000);
-//	//int count = 0;
-//	//int maxCount = 1000;
-//	//int timeout = 5000;
-//	//将多天的查询范围，切分成1天的范围多次查询，多次通知
-//	int count = Utility::FindFile(_handle, timeinfo, timeout);
-//	
-//	if (count <= 0)
-//		Utility::throwException(_handle);
-//}
 
 }}

@@ -1,8 +1,8 @@
 #include "DVR/DVRSession.h"
 
-#include "DH/DVRSessionImpl.h"
-#include "DH/DVRConnector.h"
-#include "DH/DVRStatementImpl.h"
+#include "ZW/DVRSessionImpl.h"
+#include "ZW/DVRConnector.h"
+#include "ZW/DVRStatementImpl.h"
 
 #include <sstream>
 #include <Poco/DateTimeFormatter.h>
@@ -13,7 +13,7 @@
 
 
 namespace DVR {
-	namespace DHLite {
+	namespace ZWLite {
 
 DVRSessionImpl::DVRSessionImpl(const std::string& deviceLocation,
 	std::size_t timeout):
@@ -45,13 +45,13 @@ void DVRSessionImpl::login(const std::string& user, const std::string& password)
 	std::string host = _addr.host().toString();
 	unsigned short port = _addr.port();
 	
-	Utility::DVRINFO info;
+	/*Utility::DVRINFO info;
 	int error = 0;
 	memset(&info, 0, sizeof(info));
 
 	_handle = Utility::login(_addr, user, password, info);
 
-	if (_handle <= 0) Utility::throwException(_handle);
+	if (_handle <= 0) Utility::throwException(_handle);*/
 	
 	_connected = true;
 }
@@ -75,9 +75,9 @@ bool DVRSessionImpl::isLoggedIn()const
 
 void DVRSessionImpl::setLoginTimeout(std::size_t timeout)
 {
-	int rc = Utility::setTimeOut(timeout, TRY_TIMES);
+	/*int rc = Utility::setTimeOut(timeout, TRY_TIMES);
 	
-	if (rc != Utility::success) Utility::throwException(_handle);
+	if (rc != Utility::success) Utility::throwException(_handle);*/
 }
 
 std::size_t DVRSessionImpl::getLoginTimeout() const
@@ -110,9 +110,6 @@ void DVRSessionImpl::abort()
 {
 
 }
-
-
-
 
 // NOTE: Utility::dvrHandle() has been moved here from Utility.cpp
 // as a workaround for a failing AnyCast with Clang.
