@@ -1,11 +1,11 @@
-#include "ZW/DVRStatementImpl.h"
-#include "ZW/Notifier.h"
+#include "YS/DVRStatementImpl.h"
+#include "YS/Notifier.h"
 
 #include <vector>
 #include <sstream>
 
 namespace DVR {
-	namespace ZWLite {
+	namespace YSLite {
 
 DVRStatementImpl::DVRStatementImpl(DVR::DVRSessionImpl& rSession, Utility::HANDLE pDvr):
 DVR::DVRStatementImpl(rSession),
@@ -31,7 +31,6 @@ void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 		Utility::throwException(_handle);*/
 
 }
-
 
 
 void DVRStatementImpl::playByTime(const Poco::DateTime& time)

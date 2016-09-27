@@ -53,9 +53,6 @@
     <ClCompile Include="ARPClientTest.cpp">
       <Filter>ARP\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JXJLIBTEST.cpp">
-      <Filter>JXJLite</Filter>
-    </ClCompile>
     <ClCompile Include="HKLIBTEST.cpp">
       <Filter>HKLite</Filter>
     </ClCompile>
@@ -66,9 +63,6 @@
       <Filter>DHLite</Filter>
     </ClCompile>
     <ClCompile Include="DownloadContainerTest.cpp">
-      <Filter>DownloadTask</Filter>
-    </ClCompile>
-    <ClCompile Include="DownloadTest.cpp">
       <Filter>DownloadTask</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileTest.cpp">
@@ -87,9 +81,6 @@
       <Filter>ARP\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DZPLIBTEST.h" />
-    <ClInclude Include="JXJLIBTEST.h">
-      <Filter>JXJLite</Filter>
-    </ClInclude>
     <ClInclude Include="HKLIBTEST.h">
       <Filter>HKLite</Filter>
     </ClInclude>
@@ -102,9 +93,6 @@
     <ClInclude Include="DownloadContainerTest.h">
       <Filter>DownloadTask</Filter>
     </ClInclude>
-    <ClInclude Include="DownloadTest.h">
-      <Filter>DownloadTask</Filter>
-    </ClInclude>
     <ClInclude Include="DZPLIBTEST.h">
       <Filter>DZPLite</Filter>
     </ClInclude>
@@ -114,5 +102,6 @@
     <ClInclude Include="UtilityTest.h">
       <Filter>DZPLite</Filter>
     </ClInclude>
+    <ClInclude Include="DownloadPacketTest.h" />
   </ItemGroup>
 </Project>

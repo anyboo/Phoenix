@@ -45,7 +45,6 @@
     <ClCompile Include="DHCPClientTest.cpp" />
     <ClCompile Include="DHLIBTEST.cpp" />
     <ClCompile Include="DownloadContainerTest.cpp" />
-    <ClCompile Include="DownloadPacketTest.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="HKLIBTEST.cpp" />
     <ClCompile Include="SceneTestSuite.cpp" />
