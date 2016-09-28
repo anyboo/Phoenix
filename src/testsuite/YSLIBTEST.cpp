@@ -78,6 +78,45 @@ void YSLIBTEST::testFindfile()
 	}	
 
 	assert(count > 0);
+} 
+
+void YSLIBTEST::testDownload()
+{
+	testLogin();
+
+	Condition cond = { 0 };
+	cond.dwChannelID = 4; //通道
+	cond.tEndTime = _time64(NULL); //开始时间
+	cond.tBeginTime = time(NULL) - 24 * 3600 * 60;	 //结束时间
+
+	LPVOID dwFileHandle = 0;
+	dwFileHandle = Utility::findStream(_handle, cond);
+	assert(dwFileHandle > 0);
+
+	if (dwFileHandle > 0)
+	{
+		Record rd = { 0 };
+		if (Utility::findNextStream(dwFileHandle, rd))
+		{
+			cout << rd.szFileName << endl;
+			NETDEV_PLAYBACKINFO_S stPlayBackInfo = { 0 };
+			strncpy(stPlayBackInfo.szName, rd.szFileName, NETDEV_FILE_NAME_LEN - 1);
+			stPlayBackInfo.tBeginTime = rd.tBeginTime;
+			stPlayBackInfo.tEndTime = rd.tEndTime;
+			Utility::FileHandle fHandle = Utility::readStream(_handle, stPlayBackInfo, "D:\\DownLoadVideo\\ys1.mp4");
+			if (fHandle == NULL)
+			{
+				NETDEV_PLAYBACKCOND_S stPlayInfo = { 0 };
+				stPlayInfo.dwChannelID = cond.dwChannelID;
+				stPlayInfo.tBeginTime = rd.tBeginTime;
+				stPlayInfo.tEndTime = rd.tEndTime;
+			}
+			Sleep(1000 * 60 * 3);			
+		}
+
+		
+		Utility::closeFindStream(dwFileHandle);
+	}
 }
 
 CppUnit::Test* YSLIBTEST::suite()
@@ -87,6 +126,7 @@ CppUnit::Test* YSLIBTEST::suite()
 	CppUnit_addTest(pSuite, YSLIBTEST, testInit);
 	CppUnit_addTest(pSuite, YSLIBTEST, testLogin);	
 	CppUnit_addTest(pSuite, YSLIBTEST, testFindfile);
+	CppUnit_addTest(pSuite, YSLIBTEST, testDownload);
 	CppUnit_addTest(pSuite, YSLIBTEST, testLogout);
 	CppUnit_addTest(pSuite, YSLIBTEST, testClean);
 	
