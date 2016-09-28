@@ -22,6 +22,8 @@ public:
 
 	void testFindfile();
 
+	void testDownload();
+
 private:
 	string _connectString;
 	DVR::YSLite::Utility::HANDLE _handle;
