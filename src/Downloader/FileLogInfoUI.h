@@ -9,7 +9,7 @@ class CFileLogInfoUI :
 	public WindowImplBase
 {
 public:
-	CFileLogInfoUI();
+	CFileLogInfoUI(const std::string ipaddr);
 	~CFileLogInfoUI();
 
 	std::string GetTime();
@@ -33,4 +33,6 @@ private:
 	CEditUI*		_edit_path;
 	CComboUI*		_comb_case;
 	CEditUI*		_edit_time;
+	CEditUI*		_edit_ipaddr;
+	std::string		_download_ip;
 };

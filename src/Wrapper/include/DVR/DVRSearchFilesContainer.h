@@ -21,11 +21,11 @@ namespace DVR{
 			return *Ds.get();
 		}
 
-		void Add(DVRSearchFiles* file);
+	//	void Add(DVRSearchFiles* file);
 		void Add(const std::vector<RecordFile> rf);
 		void Clear();
 		void GetSearchFiles(std::vector<RecordFile>& rf);
-		void GetSearchFiles(std::vector<DVRSearchFiles*>& files);
+	//	void GetSearchFiles(std::vector<DVRSearchFiles*>& files);
 	//	void GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files);
 	//	DVRSearchFiles* GetPlayFileById(const size_t id);
 		RecordFile& GetFileById(const size_t id);

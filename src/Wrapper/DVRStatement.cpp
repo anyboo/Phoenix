@@ -48,28 +48,25 @@ DVRStatement& DVRStatement::reset(DVRSession& rSession)
 }
 
 
-void DVRStatement::DownloadByName(const std::vector<size_t>& IDs, const std::string path, std::vector<long>& handles)
+long DVRStatement::DownloadByName(const RecordFile& file, const std::string path)
 {
-	std::vector<long> _download_handle;
 	time_t nowtime;
 	time(&nowtime);
-	std::vector<RecordFile>  files;
-	DVRSearchFilesContainer::getInstance().GetDownloadfiles(IDs, files);
-	for (size_t i = 0; i < IDs.size(); i++)
-	{
-		nowtime++;
-		std::string vedioname = std::to_string(nowtime) + std::string(".h264");
-		std::string download_path = path + std::string("\\") + vedioname;
-		long handle = _pImpl->donwloadByName(files[i], download_path);
-		_download_handle.push_back(handle);
-	}
-	handles = _download_handle;
+	std::string vedioname = std::to_string(nowtime) + std::string(".h264");
+	std::string download_path = path + std::string("\\") + vedioname;
+	long handle = _pImpl->donwloadByName(file, download_path);
+	return handle;
 }
 
 int DVRStatement::GetDownloadPro(const long handle)
 {
 	int pos = _pImpl->getdownloadPos(handle);
 	return pos;
+}
+
+void DVRStatement::StopDownload(const long handle)
+{
+	_pImpl->stopDownload(handle);
 }
 
 void DVRStatement::DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime)

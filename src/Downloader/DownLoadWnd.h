@@ -89,6 +89,8 @@ private:
 	CListUI*	_VendorList;
 	std::string			_device_name;
 
+	std::string			_DownloadPath;
+	std::vector<size_t>	_download_fileID;
 	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
 
@@ -100,6 +102,9 @@ private:
 	const CDuiString stoptime = _T("daytimeText2");
 	const CDuiString timetype = _T("Select_time");
 
+	long	_download_handle;
+	size_t		_file_id;
+	int		_pro_value;
 //	Poco::Timer t;
 //	Poco::TimerCallback<DownLoadWnd> tc;
 };

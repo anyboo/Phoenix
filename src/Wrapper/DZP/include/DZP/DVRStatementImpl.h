@@ -17,6 +17,7 @@ public:
 	long donwloadByName(const RecordFile& rf, const std::string& filename);
 	void downloadByTime(const Poco::DateTime& time);
 	int getdownloadPos(const long handle);
+	void stopDownload(const long handle);
 
 	int playByName(const RecordFile& filename, HWND& hwnd);
 	void playByTime(const Poco::DateTime& time);

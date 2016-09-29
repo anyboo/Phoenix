@@ -5,8 +5,9 @@
 #include <locale>
 #include <codecvt>
 
-CFileLogInfoUI::CFileLogInfoUI()
+CFileLogInfoUI::CFileLogInfoUI(const std::string ipaddr)
 {
+	_download_ip = ipaddr;
 }
 
 
@@ -49,6 +50,8 @@ void CFileLogInfoUI::Notify(TNotifyUI& msg)
 
 void CFileLogInfoUI::OnSaveDownloadPath(TNotifyUI& msg)
 {
+	std::string path = _edit_path->GetText();
+	CreateDirectory(path.c_str(), nullptr);
 	Close();
 }
 
@@ -63,7 +66,9 @@ void CFileLogInfoUI::InitWindow()
 	_comb_case = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("Case_Numb")));
 	_edit_path = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("path")));
 	_edit_time = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("collect_time")));
+	_edit_ipaddr = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Device_IP")));
 	InitDownloadConfig();
+	_edit_ipaddr->SetText(_download_ip.c_str());
 }
 
 void CFileLogInfoUI::InitDownloadConfig()

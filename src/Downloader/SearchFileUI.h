@@ -20,7 +20,7 @@ public:
 	SearchFileUI(const std::string name);
 	~SearchFileUI();
 
-	void GetDownloadHandles(std::vector<long>& handles);
+	std::string downloadPath();
 	void GetDownloadfileIDs(std::vector<size_t>& IDs);
 	bool IsBeginDownload();
 	virtual void InitWindow();
@@ -57,6 +57,7 @@ private:
 	std::vector<long>		_Download_handles;
 	IsDownLoadFile		m_IsDownLoad;
 	std::string		_CurrentDname;
+	std::string		_downlaod_path;
 	//std::vector<SearchFileInfo> _file_info;
 private:
 	CListUI*			_pList;

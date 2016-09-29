@@ -11,11 +11,11 @@ namespace DVR{
 	{
 	}
 
-	void DVRSearchFilesContainer::Add(DVRSearchFiles* file)
-	{
-		_Count++;
-		_filesMap.insert(std::pair<size_t, DVRSearchFiles*>(_Count, file));
-	}
+	//void DVRSearchFilesContainer::Add(DVRSearchFiles* file)
+	//{
+	//	_Count++;
+	//	_filesMap.insert(std::pair<size_t, DVRSearchFiles*>(_Count, file));
+	//}
 
 	void DVRSearchFilesContainer::Add(const std::vector<RecordFile> rf)
 	{
@@ -29,14 +29,14 @@ namespace DVR{
 		_recordfiles.clear();
 	}
 
-	void DVRSearchFilesContainer::GetSearchFiles(std::vector<DVRSearchFiles*>& files)
-	{
-		std::map<size_t, DVRSearchFiles*>::iterator itor;
-		for (itor = _filesMap.begin(); itor != _filesMap.end(); itor++)
-		{
-			files.push_back(itor->second);
-		}
-	}
+	//void DVRSearchFilesContainer::GetSearchFiles(std::vector<DVRSearchFiles*>& files)
+	//{
+	//	std::map<size_t, DVRSearchFiles*>::iterator itor;
+	//	for (itor = _filesMap.begin(); itor != _filesMap.end(); itor++)
+	//	{
+	//		files.push_back(itor->second);
+	//	}
+	//}
 
 	void DVRSearchFilesContainer::GetSearchFiles(std::vector<RecordFile>& rf)
 	{

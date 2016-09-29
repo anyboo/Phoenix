@@ -53,4 +53,15 @@ namespace DVR{
 		//QNzrdXMy
 	}
 
+	void DVRDeviceContainer::getAllDeviceName(std::vector<std::string>& names)
+	{
+		DevicePoolMap::iterator it = _devicePool.begin();
+		for (it; it != _devicePool.end(); it++)
+		{
+			std::string name = it->first;
+			names.push_back(name);
+		}
+	}
+
+
 }

@@ -13,8 +13,9 @@ namespace DVR {
 		
 		~DVRStatement();
 
-		void DownloadByName(const std::vector<size_t>& IDs, const std::string path, std::vector<long>& handles);
+		long DownloadByName(const RecordFile& file, const std::string path);
 		int GetDownloadPro(const long handle);
+		void StopDownload(const long handle);
 		void DownloadByTime(const Poco::DateTime stime, const Poco::DateTime etime);
 
 		void Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& channels);

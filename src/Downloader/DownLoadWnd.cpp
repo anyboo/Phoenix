@@ -7,21 +7,24 @@
 #include "DVR/DVRSession.h"
 #include "TestData.h"
 #include "DVR/DVRDeviceContainer.h"
-
+#include "DVR/DVRDownloadPacket.h"
 
 DownLoadWnd::DownLoadWnd() 
-
+:_download_handle(0), _file_id(0), _pro_value(100)
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
 	_downloadManage.SetPaintMagager(&m_PaintManager);
 	AddVirtualWnd(_T("Vendor"), &_vendorManage);
 	AddVirtualWnd(_T("DownloadList"), &_downloadManage);
+	_DownloadPath.clear();
 }
 
 
 DownLoadWnd::~DownLoadWnd()
 {
+	KillTimer(GetHWND(), 11);
+	KillTimer(GetHWND(), 1);
 	RemoveVirtualWnd(_T("Vendor"));
 	RemoveVirtualWnd(_T("DownloadList"));
 }
@@ -74,6 +77,32 @@ void DownLoadWnd::OnFinalMessage(HWND hWnd)
 
 void DownLoadWnd::OnBackward(TNotifyUI& msg)
 {
+	std::string configFile;
+	TCHAR PATH[MAX_PATH] = { 0 };
+	std::string AppPath = std::string(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+	configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + std::string(_T("DownloadConfig.json"));
+
+	ofstream ofs(configFile);
+	locale utf8;
+	ofs.imbue(utf8);
+	OStreamWrapper osw(ofs);
+	Document d;
+
+	Document::AllocatorType& alloc = d.GetAllocator();
+	Value root(kObjectType);
+	Value t(kObjectType), s(kObjectType), f(kObjectType), path(kObjectType);
+	t.SetInt64(_download_handle);
+	s.SetInt64(_file_id);
+	f.SetInt64(_pro_value);
+	path.SetString(_DownloadPath.c_str(), _DownloadPath.length(), alloc);
+
+	root.AddMember(_T("handle"), t, alloc);
+	root.AddMember(_T("fileID"), s, alloc);
+	root.AddMember(_T("proValue"), f, alloc);
+	root.AddMember(_T("path"), path, alloc);
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
 	Close();
 }
 
@@ -97,21 +126,42 @@ void DownLoadWnd::InitWindow()
 	BuildControlDDX();
 	InitTime();
 
-	
+	std::vector<std::string> login_names;
+	DVR::DVRDeviceContainer::getInstance().getAllDeviceName(login_names);
+	for (size_t i = 0; i < login_names.size(); i++)
+	{
+		_vendorManage.AddVendorList(login_names[i]);
+		_device_name = login_names[i];
+	}
 
-	//std::vector<unsigned long> Login_IDs;
-	//CTestData::getInstance()->GetAllLoginDIs(Login_IDs);
-	//for (size_t i = 0; i < Login_IDs.size(); i++)
-	//{
-	//	_vendorManage.AddVendorList(Login_IDs[i]);
-	//}
+	int size = DVR::DVRDownloadPacket::getInstance().getTaskSize();
+	if (size != 0)
+	{
+		std::string configFile;
+		TCHAR PATH[MAX_PATH] = { 0 };
+		std::string AppPath = std::string(PATH, ::GetModuleFileNameA(NULL, PATH, MAX_PATH));
+		configFile = AppPath.substr(0, AppPath.find_last_of("\\") + 1) + std::string(_T("DownloadConfig.json"));
 
-	//std::vector<unsigned long> download_IDs;
-	//CTestData::getInstance()->GetDownloadAllpacketID(download_IDs);
-	//for (size_t j = 0; j < download_IDs.size(); j++)
-	//{
-	//	_downloadManage.AddDownloadTask(download_IDs[j]);
-	//}
+		ifstream ifs(configFile);
+		locale utf8;
+		ifs.imbue(utf8);
+		IStreamWrapper isw(ifs);
+		Document d;
+		d.ParseStream(isw);
+		size_t file_size = isw.Tell();
+		if (isw.Tell() == 0)
+			return;
+
+		_download_handle = d[_T("handle")].GetInt64();
+		_file_id = d[_T("fileID")].GetInt64();
+		_pro_value = d[_T("proValue")].GetInt64();
+		_DownloadPath = d[_T("path")].GetString();
+
+		DVR::DVRDownloadPacket::getInstance().GetDownloadIDs(_download_fileID);
+		_downloadManage.AddDownloadTask();
+		SetTimer(GetHWND(), 11, 1000, nullptr);
+		SetTimer(GetHWND(), 1, 200, nullptr);
+	}
 }
 
 void DownLoadWnd::FixedSliderPosition(TNotifyUI& msg)
@@ -221,12 +271,16 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pSearchDlg->ShowModal();
 	if (!pSearchDlg->IsBeginDownload())return;
 
-	std::vector<long>	download_handle;
-	std::vector<size_t>	download_fileID;
-	pSearchDlg->GetDownloadHandles(download_handle);
-	pSearchDlg->GetDownloadfileIDs(download_fileID);
-	_downloadManage.AddDownloadTask(download_fileID, download_handle, _device_name);
+	_DownloadPath = pSearchDlg->downloadPath();
+	pSearchDlg->GetDownloadfileIDs(_download_fileID);
+	DVR::DVRDownloadPacket::getInstance().AddTask(_download_fileID);
+	_downloadManage.AddDownloadTask();
+
+	_download_handle = 0;
+	_file_id = 0;
+	_pro_value = 100;
 	SetTimer(GetHWND(), 11, 1000, nullptr);
+	SetTimer(GetHWND(), 1, 200, nullptr);
 }
 
 bool DownLoadWnd::SearchBegin()
@@ -242,9 +296,7 @@ bool DownLoadWnd::SearchBegin()
 	CListContainerElementUI* select = dynamic_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(_vList, DUI_CTR_LISTCONTAINERELEMENT, cursel));
 	_device_name = select->GetUserData().GetData();
 	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
-
 	DVR::DVRStatement statement(Device.session());
-
 	statement.Searchfile(stime, etime, _all_channels);
 
 	return true;
@@ -273,6 +325,11 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	{
 		if (MessageBox(GetHWND(), "是否删除下载任务！", "警告", MB_OKCANCEL) == IDCANCEL)
 			return;
+		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
+		DVR::DVRStatement statement(Device.session());
+		statement.StopDownload(_download_handle);
+		KillTimer(GetHWND(), 11);
+		KillTimer(GetHWND(), 1);
 		_downloadManage.RemoveSubList(sender_name);
 	}
 	WindowImplBase::Notify(msg);
@@ -426,6 +483,20 @@ LRESULT DownLoadWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam
 LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if (wParam == 11)
+	{
+		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
+		DVR::DVRStatement statement(Device.session());	
+		if (_pro_value == 100 && _file_id < _download_fileID.size())
+		{
+			DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(_download_fileID[_file_id]);
+			_download_handle = statement.DownloadByName(file, _DownloadPath);
+			_file_id++;
+		}		
+		_pro_value = statement.GetDownloadPro(_download_handle);
+		DVR::DVRDownloadPacket::getInstance().UpdateDataByID(_file_id - 1, _pro_value);
+	//	_downloadManage.RenewList();
+	}
+	if (wParam == 1)
 	{
 		_downloadManage.RenewList();
 	}

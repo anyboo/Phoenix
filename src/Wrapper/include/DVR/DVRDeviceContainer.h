@@ -47,6 +47,7 @@ namespace DVR{
 			void remove(const std::string& name);
 			bool has(const std::string& name) const;
 			DVRDevice& get(const std::string& name);
+			void getAllDeviceName(std::vector<std::string>& names);
 			int count() const;
 
 		private:

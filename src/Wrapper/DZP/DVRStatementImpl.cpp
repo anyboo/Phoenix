@@ -78,6 +78,11 @@ int DVRStatementImpl::getdownloadPos(const long handle)
 	return pos;
 }
 
+void DVRStatementImpl::stopDownload(const long handle)
+{
+	Utility::stopStream(handle);
+}
+
 void DVRStatementImpl::downloadByTime(const Poco::DateTime& time)
 {
 	Condition t;

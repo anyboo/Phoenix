@@ -4,6 +4,7 @@
 #include "DVR/DVRStatement.h"
 #include "DVR/DVRDeviceContainer.h"
 #include "DVR/DVRDevice.h"
+#include "DVR/DVRDownloadPacket.h"
 
 CDownLoadList::CDownLoadList()
 :_ppm(nullptr), _taskCount(1)
@@ -22,16 +23,8 @@ void CDownLoadList::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 	_ppm = pPaintMgr;
 }
 
-void CDownLoadList::AddDownloadTask(const std::vector<size_t>& IDs, const std::vector<long>& handle, const std::string name)
+void CDownLoadList::AddDownloadTask()
 {
-	_download_handle = handle;
-	_download_filesID = IDs;
-	_device_name = name;
-	for (size_t i = 0; i < IDs.size(); i++)
-	{
-		_prev_pro.push_back(0);
-	}
-
 	CListUI* pList = dynamic_cast<CListUI*>(_ppm->FindControl(_T("DownloadList")));
 	CDialogBuilder builder;
 	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//FileSubList.xml"), (UINT)0, NULL, _ppm));
@@ -42,11 +35,13 @@ void CDownLoadList::AddDownloadTask(const std::vector<size_t>& IDs, const std::v
 	CLabelUI* lab_lasttime = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
 	CLabelUI* lab_status = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 	CProgressUI* progress = dynamic_cast<CProgressUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_PROGRESS, 0));
-	
-	lab_filename->SetText("DZPFiles");
-	lab_filesize->SetText("454451");
-	lab_speed->SetText("0");
-	lab_lasttime->SetText("-");
+
+	DVR::Download_Info	file_info;
+	DVR::DVRDownloadPacket::getInstance().GetMainTask(file_info);
+	lab_filename->SetText(file_info.fname.c_str());
+	lab_filesize->SetText(std::to_string(file_info.fsize).c_str());
+	lab_speed->SetText(std::to_string(file_info.fsize).c_str());
+	lab_lasttime->SetText(std::to_string(file_info.fsize).c_str());
 	lab_status->SetText("no");
 //	SubList->SetTag(packet_id);
 	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
@@ -73,25 +68,20 @@ void CDownLoadList::AddDataToSubList(CListContainerElementUI* TaskList, const si
 	CLabelUI* lab_status = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 4));
 	CProgressUI* progress = dynamic_cast<CProgressUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_PROGRESS, 0));
 
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
-	DVR::DVRStatement statement(Device.session());
-
-	DVR::RecordFile rf = DVR::DVRSearchFilesContainer::getInstance().GetFileById(fileID);
-	int proValue = statement.GetDownloadPro(_download_handle[fileID]);
-	int speed = (proValue - _prev_pro[fileID]) * rf.size / 100;
-	int lasttime = 0;
-	if (proValue != 0 && _prev_pro[fileID] != 100)
-		lasttime = (100 - proValue) / (proValue - _prev_pro[fileID]);
-	_prev_pro[fileID] = proValue;
-
-	lab_filename->SetText(rf.name.c_str());
-	lab_filesize->SetText(std::to_string(rf.size).c_str());
-	lab_speed->SetText(std::to_string(speed).c_str());
-	lab_lasttime->SetText(std::to_string(lasttime).c_str());
-	lab_status->SetText("no");
-	if (proValue == 100)
+	DVR::Download_Info*	file = DVR::DVRDownloadPacket::getInstance().GetTaskPacket(fileID);
+	lab_filename->SetText(file->fname.c_str());
+	lab_filesize->SetText(std::to_string(file->fsize).c_str());
+	lab_lasttime->SetText(std::to_string(file->lasttime).c_str());
+	lab_speed->SetText(std::to_string(file->speed).c_str());
+	progress->SetValue(file->proValue);
+	if (file->proValue == 100)
+	{
 		lab_status->SetText("finish");
-	progress->SetValue(proValue);
+	}
+	else
+	{
+		lab_status->SetText("no");
+	}
 }
 
 
@@ -102,7 +92,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 	std::string strUserData;
 	CListContainerElementUI* ContList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByName(m_List, strSendName));
 	if (ContList->GetUserData() == _T("Sub"))return;
-	int filesize = _download_filesID.size();
+	int filesize = DVR::DVRDownloadPacket::getInstance().GetDownloadSize();
 	int CurSel = GetSubListCurSel(ContList, m_List);
 	CListContainerElementUI* SubContList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(m_List, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
 	if (SubContList == NULL)
@@ -116,7 +106,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
 				AddSubListAttr(SubList);
-				AddDataToSubList(SubList, i - CurSel - 1);
+			//	AddDataToSubList(SubList, i - CurSel - 1);
 		/*		CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 				BT_CanCel->SetVisible(false);*/
 			}
@@ -134,7 +124,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
 				AddSubListAttr(SubList);
-				AddDataToSubList(SubList, i - CurSel - 1);
+			//	AddDataToSubList(SubList, i - CurSel - 1);
 			/*	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 				BT_CanCel->SetVisible(false);*/
 			}
@@ -190,10 +180,10 @@ void CDownLoadList::RemoveSubList(CDuiString& strSendName)
 	std::string SubListCount = ContList->GetUserData();
 	if (ContList->GetUserData() == _T("Sub"))
 	{
-		pList->Remove(ContList, true);
-		CLabelUI* lab_name = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(ContList, DUI_CTR_LABEL, 0));
-		std::string filename = lab_name->GetText();
-		unsigned long packet_id = ContList->GetTag();
+///		pList->Remove(ContList, true);
+//		CLabelUI* lab_name = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(ContList, DUI_CTR_LABEL, 0));
+//		std::string filename = lab_name->GetText();
+//		unsigned long packet_id = ContList->GetTag();
 //		CTestData::getInstance()->DeleteTaskByFileName(filename, packet_id);
 	}
 	else
@@ -204,13 +194,13 @@ void CDownLoadList::RemoveSubList(CDuiString& strSendName)
 		{
 			pList->RemoveAt(ContListserial, true);
 		}
-		unsigned long packet_id = ContList->GetTag();
-//		CTestData::getInstance()->DeleteWholeTaskByID(packet_id);
+		DVR::DVRDownloadPacket::getInstance().DeleteWholeTask();
 	}
 }
 
 void CDownLoadList::RenewList()
 {
+
 	int index = 0;
 	int tmp = 0;
 	CListUI* pList = dynamic_cast<CListUI*>(_ppm->FindControl(_T("DownloadList")));
@@ -219,10 +209,10 @@ void CDownLoadList::RenewList()
 	{
 		CListContainerElementUI* taskList = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, index));
 		int sublistCount = atoi(taskList->GetUserData());
-	
-		int filesize = _download_filesID.size();
+		
+		int filesize = DVR::DVRDownloadPacket::getInstance().GetDownloadSize();
 		int Max = sublistCount == 0 ? sublistCount : filesize;
-//		AddDataToSubList(taskList, 1);
+		RenewPacketList(taskList);
 		for (int i = 0; i < Max; i++)
 		{
 			CListContainerElementUI* sublist = dynamic_cast<CListContainerElementUI*>(_ppm->FindSubControlByClass(pList, DUI_CTR_LISTCONTAINERELEMENT, index + i + 1));
@@ -246,5 +236,33 @@ void CDownLoadList::AddSubListAttr(CListContainerElementUI* SubList)
 
 	SubList->SetName(taskListName);
 	BT_CanCel->SetName(buttonName);
+	BT_CanCel->SetVisible(false);
 	_taskCount = _taskCount + 1;
+}
+
+void CDownLoadList::RenewPacketList(CListContainerElementUI* TaskList)
+{
+	if (TaskList == nullptr)return;
+	CLabelUI* lab_filename = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 0));
+	CLabelUI* lab_filesize = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 1));
+	CLabelUI* lab_speed = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 2));
+	CLabelUI* lab_lasttime = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 3));
+	CLabelUI* lab_status = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 4));
+	CProgressUI* progress = dynamic_cast<CProgressUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_PROGRESS, 0));
+
+	DVR::Download_Info	file; 
+	DVR::DVRDownloadPacket::getInstance().GetMainTask(file);
+	lab_filename->SetText(file.fname.c_str());
+	lab_filesize->SetText(std::to_string(file.fsize).c_str());
+	lab_lasttime->SetText(std::to_string(file.lasttime).c_str());
+	lab_speed->SetText(std::to_string(file.speed).c_str());
+	progress->SetValue(file.proValue);
+	if (file.proValue == 100)
+	{
+		lab_status->SetText("finish");
+	}
+	else
+	{
+		lab_status->SetText("no");
+	}
 }

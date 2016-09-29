@@ -30,7 +30,7 @@ namespace DVR{
 
 	void DVRDownloadPakcetContainer::DeleteSubTask(const std::string name, const std::string fname)
 	{
-		_packetContainer[name]->DeleteSubTaskByName(fname);
+//		_packetContainer[name]->DeleteSubTaskByName(fname);
 	}
 }
 

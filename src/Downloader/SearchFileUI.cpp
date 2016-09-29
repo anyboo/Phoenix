@@ -11,6 +11,7 @@
 SearchFileUI::SearchFileUI(const std::string name)
 {
 	_CurrentDname = name;
+	_downlaod_path.clear();
 }
 
 
@@ -81,25 +82,24 @@ void SearchFileUI::OnDownLoadFile(TNotifyUI& msg)
 		return;
 	}
 	m_IsDownLoad = beginDownload;
+	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_CurrentDname);
+	DVR::DVRStatement statement(Device.session());
+	std::string address = Device.address();
+	std::string ipaddr = address.substr(0, address.find_last_of(":"));
 
-	std::auto_ptr<CFileLogInfoUI> pDlg(new CFileLogInfoUI);
+	std::auto_ptr<CFileLogInfoUI> pDlg(new CFileLogInfoUI(ipaddr));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	std::string path = pDlg->GetPath();
-
-	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_CurrentDname);
-	DVR::DVRStatement statement(Device.session());
-
-	statement.DownloadByName(_checked_files, path, _Download_handles);
+	_downlaod_path = pDlg->GetPath();
 
 	Close();
 }
 
-void SearchFileUI::GetDownloadHandles(std::vector<long>& handles)
+std::string SearchFileUI::downloadPath()
 {
-	handles = _Download_handles;
+	return _downlaod_path;
 }
 
 void SearchFileUI::GetDownloadfileIDs(std::vector<size_t>& IDs)
