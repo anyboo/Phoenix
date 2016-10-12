@@ -80,7 +80,8 @@ private:
 	std::vector<int>		_all_channels;
 	CVendor		_vendorManage;
 	CDownLoadList	_downloadManage;
-	
+	CButtonUI*			_btn_offset1;
+	CButtonUI*			_btn_offset2;
 	CButtonUI*			_btn_search;
 	SYSTEMTIME		 m_sysTime;
 	CTimeUI*	_TimeControl;

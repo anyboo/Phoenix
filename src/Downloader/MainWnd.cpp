@@ -94,7 +94,7 @@ void CMainWnd::OnClose(TNotifyUI& msg)
 void CMainWnd::OnMin(TNotifyUI& msg)
 {
 	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-	m_IsMinWnd = TRUE;
+	m_IsMinWnd = true;
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
 }
 

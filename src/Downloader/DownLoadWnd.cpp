@@ -23,8 +23,8 @@ DownLoadWnd::DownLoadWnd()
 
 DownLoadWnd::~DownLoadWnd()
 {
-	KillTimer(GetHWND(), 11);
-	KillTimer(GetHWND(), 1);
+	//KillTimer(GetHWND(), 11);
+	//KillTimer(GetHWND(), 1);
 	RemoveVirtualWnd(_T("Vendor"));
 	RemoveVirtualWnd(_T("DownloadList"));
 }
@@ -119,6 +119,8 @@ void DownLoadWnd::BuildControlDDX()
 	AddControl<CSliderUI>(timetype);
 	_btn_search = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Search")));
 	_vList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("VendorList")));
+	_btn_offset1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("offset1")));
+	_btn_offset2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("offset2")));
 }
 
 void DownLoadWnd::InitWindow()
@@ -230,11 +232,16 @@ void DownLoadWnd::OnAdjustOffsetTime(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-	//set datetime 's text
+
 	CDuiString SendName = msg.pSender->GetName();
 	CDuiString setTime = pDlg->GetTime();
-	CButtonUI* btn_offset = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(SendName));
-	btn_offset->SetText(setTime);
+	_btn_offset1->SetText(setTime);
+	if (SendName == _T("offset1")){
+		_btn_offset2->SetText(_T("00:00"));
+	}
+	else{
+		_btn_offset1->SetText(_T("00:00"));
+	}
 }
 
 void DownLoadWnd::OnLogin(TNotifyUI& msg)
@@ -418,6 +425,7 @@ void DownLoadWnd::GetDataAndTime(Poco::DateTime& start, Poco::DateTime& stop)
 	CLabelUI* Lab_StopData = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText2")));
 	CLabelUI* Lab_StartTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText1")));
 	CLabelUI* Lab_StopTime = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("daytimeText2")));
+
 	CDuiString sData = Lab_StartData->GetText();
 	CDuiString sTime = Lab_StartTime->GetText();
 	CDuiString eData = Lab_StopData->GetText();
