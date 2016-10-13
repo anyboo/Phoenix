@@ -51,7 +51,7 @@ void DVRSessionImpl::login(const std::string& user, const std::string& password)
 	unsigned short port = _addr.port();
 	
 	_handle = Utility::login(_addr, user, password);
-	poco_assert(_handle > 0);
+	//poco_assert(_handle > 0);
 	if (_handle <= 0)
 	{
 		Utility::throwException(Utility::lastError(), "login failed!");

@@ -75,7 +75,7 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	CDuiString user = _user->GetText();
 	CDuiString passwd = _pswd->GetText();
 	
-	user.Append("admin");
+	//user.Append("admin");
 
 	if (ip.IsEmpty() || port.IsEmpty()) return;
 	if (CTestData::getInstance()->IsLogIn(ip.GetData()))return;
