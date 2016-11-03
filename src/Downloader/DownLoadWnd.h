@@ -7,6 +7,12 @@
 #include <map>
 #include <Poco/DateTime.h>
 
+typedef enum
+{
+	DL_STATUS_WAITING = 0,
+	DL_STATUS_DOWNLOADING,
+	DL_STATUS_FINISH
+};
 
 class DownLoadWnd :
 	public WindowImplBase
@@ -103,9 +109,10 @@ private:
 	const CDuiString stoptime = _T("daytimeText2");
 	const CDuiString timetype = _T("Select_time");
 
-	long	_download_handle;
+	std::vector<long>	_download_handle;
 	size_t		_file_id;
-	int		_pro_value;
+	std::vector<int>		_pro_value;
+	std::string             _search_time;
 //	Poco::Timer t;
 //	Poco::TimerCallback<DownLoadWnd> tc;
 };

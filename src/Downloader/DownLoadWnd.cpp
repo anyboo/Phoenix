@@ -8,9 +8,11 @@
 #include "TestData.h"
 #include "DVR/DVRDeviceContainer.h"
 #include "DVR/DVRDownloadPacket.h"
+#include <io.h>
+#include <direct.h>
 
 DownLoadWnd::DownLoadWnd() 
-:_download_handle(0), _file_id(0), _pro_value(100)
+:_file_id(0)
 {
 	ReadJsonFile();
 	_vendorManage.SetPaintMagager(&m_PaintManager);
@@ -18,6 +20,7 @@ DownLoadWnd::DownLoadWnd()
 	AddVirtualWnd(_T("Vendor"), &_vendorManage);
 	AddVirtualWnd(_T("DownloadList"), &_downloadManage);
 	_DownloadPath.clear();
+	_search_time = "";
 }
 
 
@@ -91,9 +94,9 @@ void DownLoadWnd::OnBackward(TNotifyUI& msg)
 	Document::AllocatorType& alloc = d.GetAllocator();
 	Value root(kObjectType);
 	Value t(kObjectType), s(kObjectType), f(kObjectType), path(kObjectType);
-	t.SetInt64(_download_handle);
+	//t.SetInt64(_download_handle);
 	s.SetInt64(_file_id);
-	f.SetInt64(_pro_value);
+	//f.SetInt64(_pro_value);
 	path.SetString(_DownloadPath.c_str(), _DownloadPath.length(), alloc);
 
 	root.AddMember(_T("handle"), t, alloc);
@@ -154,9 +157,9 @@ void DownLoadWnd::InitWindow()
 		if (isw.Tell() == 0)
 			return;
 
-		_download_handle = d[_T("handle")].GetInt64();
+		//_download_handle = d[_T("handle")].GetInt64();
 		_file_id = d[_T("fileID")].GetInt64();
-		_pro_value = d[_T("proValue")].GetInt64();
+		//_pro_value = d[_T("proValue")].GetInt64();
 		_DownloadPath = d[_T("path")].GetString();
 
 		DVR::DVRDownloadPacket::getInstance().GetDownloadIDs(_download_fileID);
@@ -278,16 +281,20 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	pSearchDlg->ShowModal();
 	if (!pSearchDlg->IsBeginDownload())return;
 
-	_DownloadPath = pSearchDlg->downloadPath();
+	_DownloadPath = pSearchDlg->downloadPath() + "\\" + _search_time + "\\" + _device_name + "\\";
 	pSearchDlg->GetDownloadfileIDs(_download_fileID);
-	DVR::DVRDownloadPacket::getInstance().AddTask(_download_fileID);
+	DVR::DVRDownloadPacket::getInstance().AddTask(_device_name, _download_fileID);
 	_downloadManage.AddDownloadTask();
+	for (int i = 0; i < _download_fileID.size(); i++)
+	{
+		_download_handle.push_back(0);
+	}
 
-	_download_handle = 0;
+	//_download_handle = 0;
 	_file_id = 0;
-	_pro_value = 100;
-	SetTimer(GetHWND(), 11, 1000, nullptr);
-	SetTimer(GetHWND(), 1, 200, nullptr);
+	//_pro_value = 100;
+	SetTimer(GetHWND(), 11, 200, nullptr);
+	SetTimer(GetHWND(), 1, 2000, nullptr);
 }
 
 bool DownLoadWnd::SearchBegin()
@@ -304,7 +311,12 @@ bool DownLoadWnd::SearchBegin()
 	_device_name = select->GetUserData().GetData();
 	DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
 	DVR::DVRStatement statement(Device.session());
+	char search[60] = { 0 };
+	sprintf_s(search, "%d%02d%02d%02d%02d-%d%02d%02d%02d%02d", stime.year(), stime.month(), stime.day(), stime.hour(), stime.minute(),
+		etime.year(), etime.month(), etime.day(), etime.hour(), etime.minute());	
+	_search_time = string(search);
 	statement.Searchfile(stime, etime, _all_channels);
+	
 
 	return true;
 }
@@ -334,7 +346,7 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 			return;
 		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
 		DVR::DVRStatement statement(Device.session());
-		statement.StopDownload(_download_handle);
+		//statement.StopDownload(_download_handle);
 		KillTimer(GetHWND(), 11);
 		KillTimer(GetHWND(), 1);
 		_downloadManage.RemoveSubList(sender_name);
@@ -494,18 +506,85 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 	{
 		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
 		DVR::DVRStatement statement(Device.session());	
-		if (_pro_value == 100 && _file_id < _download_fileID.size())
+		/*if (_pro_value == 100 && _file_id < _download_fileID.size())
 		{
 			DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(_download_fileID[_file_id]);
 			_download_handle = statement.DownloadByName(file, _DownloadPath);
 			_file_id++;
-		}		
-		_pro_value = statement.GetDownloadPro(_download_handle);
-		DVR::DVRDownloadPacket::getInstance().UpdateDataByID(_file_id - 1, _pro_value);
+		}*/		
+		
+		//_pro_value = statement.GetDownloadPro(_download_handle);
+		//DVR::DVRDownloadPacket::getInstance().UpdateDataByID(_file_id - 1, _pro_value);
 	//	_downloadManage.RenewList();
+		vector<size_t> ids;
+		DVR::DVRDownloadPacket::getInstance().GetDownloading(ids);
+		//std::cout << "size: " << ids.size() << std::endl;
+		for (int i = 0; i < ids.size(); i++)
+		{
+			int status = DVR::DVRDownloadPacket::getInstance().GetDownloadStatus(ids[i]);
+			
+			switch (status)
+			{
+			case DL_STATUS_WAITING:
+			{
+				DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(ids[i]);
+				std::string dir = _DownloadPath + "Í¨µÀ" + std::to_string(file.channel) + "\\";
+				std::string dirtmp;
+				size_t found = 0;
+				if (_access(dir.c_str(), 0) == -1)
+				{
+					found = dir.find_first_of("\\");
+					while (found != string::npos)
+					{
+						dirtmp = dir.substr(0, found);
+						std::cout << dirtmp << std::endl;
+						if (_access(dirtmp.c_str(), 0) == -1)
+							_mkdir(dirtmp.c_str());
+						found = dir.find_first_of("\\", found + 1);
+					}
+				}
+				int handle = statement.DownloadByName(file, dir);
+				_download_handle[i] = handle;
+				DVR::DVRDownloadPacket::getInstance().SetDownloadStatus(ids[i], DL_STATUS_DOWNLOADING);
+				break;
+			}						
+			case DL_STATUS_DOWNLOADING:			
+			case DL_STATUS_FINISH:
+
+			default:
+				break;
+
+			}
+			
+		}
 	}
 	if (wParam == 1)
 	{
+		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
+		DVR::DVRStatement statement(Device.session());
+
+		vector<size_t> ids;
+		DVR::DVRDownloadPacket::getInstance().GetDownloading(ids);
+		for (int i = 0; i < ids.size(); i++)
+		{
+			int status = DVR::DVRDownloadPacket::getInstance().GetDownloadStatus(ids[i]);
+
+			switch (status)
+			{
+			case DL_STATUS_DOWNLOADING:
+			{
+				int value = statement.GetDownloadPro(_download_handle[i]);
+				cout << "i: " << ids[i] << " handle: " << _download_handle[i] << " value: " << value << endl;
+				if (value >= 100)
+				{
+					DVR::DVRDownloadPacket::getInstance().SetDownloadStatus(ids[i], DL_STATUS_FINISH);
+				}
+				DVR::DVRDownloadPacket::getInstance().UpdateDataByID(ids[i], value);
+				break;
+			}
+			}
+		}
+
 		_downloadManage.RenewList();
 	}
 	return 0;

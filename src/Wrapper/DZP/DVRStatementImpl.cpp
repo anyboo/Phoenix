@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include "netsdk.h"
+#include <iostream>
 
 namespace DVR {
 namespace DZPLite {
@@ -62,8 +63,13 @@ long DVRStatementImpl::donwloadByName(const RecordFile& rf, const std::string& f
 	fileinfo.stEndTime.hour = rf.endTime.hour();
 	fileinfo.stEndTime.minute = rf.endTime.minute();
 	fileinfo.stEndTime.second = rf.endTime.second();
-
-	long dhandle = Utility::readStream(_handle, fileinfo, filename);
+	char name[100] = { 0 };
+	sprintf_s(name, "%d%02d%02d%02d%02d-%d%02d%02d%02d%02d.h264",
+		rf.beginTime.year(), rf.beginTime.month(), rf.beginTime.day(), rf.beginTime.hour(), rf.beginTime.minute(),
+		rf.endTime.year(), rf.endTime.month(), rf.endTime.day(), rf.endTime.hour(), rf.endTime.minute());
+	std::string path = filename + std::string(name);	
+	long dhandle = Utility::readStream(_handle, fileinfo, path);
+	std::cout << "download name: " << path << "handle: " << dhandle << std::endl;
 	if (dhandle <= 0)
 	{
 		int err = Utility::lastError();

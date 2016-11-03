@@ -2,12 +2,17 @@
 #include "DVR/DVR.h"
 #include <vector>
 #include <map>
+#include <memory>
+#include <queue>
 #include <Poco/DateTime.h>
 #include "DVR/DVRSearchFiles.h"
 #include <Poco/SingletonHolder.h>
 #include "DVR/DVRStatement.h"
 
 namespace DVR{
+
+
+
 
 	class DVR_API DVRSearchFilesContainer
 	{
@@ -22,7 +27,7 @@ namespace DVR{
 		}
 
 	//	void Add(DVRSearchFiles* file);
-		void Add(const std::vector<RecordFile> rf);
+		void Add(const std::vector<RecordFile> rf);		
 		void Clear();
 		void GetSearchFiles(std::vector<RecordFile>& rf);
 	//	void GetSearchFiles(std::vector<DVRSearchFiles*>& files);
@@ -32,9 +37,13 @@ namespace DVR{
 		void GetDownloadfiles(const std::vector<size_t>& IDs, std::vector<RecordFile>& files);
 
 	private:
+		void GetDownloadRow();
+		void findDownloadMap(std::string s);
+
+	private:
 		std::vector<RecordFile>				_recordfiles;
 		std::map<size_t, DVRSearchFiles*>		_filesMap;
-		size_t					_Count;
+		size_t					_Count;		
 
 		DVRSearchFilesContainer(const DVRSearchFilesContainer&);
 		DVRSearchFilesContainer operator =(const DVRSearchFilesContainer&);

@@ -212,7 +212,7 @@ CDuiString CalendarUI::GetMonth()
 		month++;
 	}
 
-	assert(month < 10 && month > 0);
+	//assert(month < 10 && month > 0);
 	CDuiString str, format;
 	if (month < 10 && month > 0)
 		format = "0%d";

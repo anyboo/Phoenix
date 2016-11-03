@@ -10,84 +10,179 @@ namespace DVR{
 
 	DVRDownloadPacket::~DVRDownloadPacket()
 	{
+		_downloadIDs.clear();
 	}
 
-	void DVRDownloadPacket::AddTask(const std::vector<size_t>& IDs)
-	{
-		_downloadIDs = IDs;
+	void DVRDownloadPacket::AddTask(const std::string devicename, std::vector<size_t>& IDs)
+	{		
 		std::vector<RecordFile>	files;
 		DVR::DVRSearchFilesContainer::getInstance().GetDownloadfiles(IDs, files);
+		Mutex::ScopedLock lock(_mutex);
+	
 		for (size_t i = 0; i < files.size(); i++)
 		{
-			Download_Info* download = new Download_Info;
+			std::shared_ptr<Download_Info> download = std::make_shared<Download_Info>();			
 			download->channel = files[i].channel;
-			download->fname = files[i].name;
+			char name[100] = { 0 };
+			sprintf_s(name, "%d%02d%02d%02d%02d-%d%02d%02d%02d%02d",
+				files[i].beginTime.year(), files[i].beginTime.month(), files[i].beginTime.day(), files[i].beginTime.hour(), files[i].beginTime.minute(),
+				files[i].endTime.year(), files[i].endTime.month(), files[i].endTime.day(), files[i].endTime.hour(), files[i].endTime.minute());
+			download->fname = std::string(name);
 			download->fsize = files[i].size;
 			download->lasttime = 99999999;
 			download->proValue = 0;
 			download->speed = 0;
+			download->id = IDs[i];
+			download->status = DL_STATUS_WAITING;
+			download->order = i;
+			download->starttime = 0;
 
-			_DownloadPacket.push_back(download);
-			_prev_proValue.push_back(0);
-			_elapsed.push_back(0);
-		}	
+			std::string ipchannel = devicename + " " + std::to_string(files[i].channel);
+			auto it = _DownloadPacket.find(ipchannel);
+			if (it != _DownloadPacket.end())
+			{
+				_DownloadPacket[ipchannel].push_back(download);
+			}
+			else
+			{
+				std::deque<std::shared_ptr<Download_Info>> qdowninfo;
+				qdowninfo.push_back(download);
+				_DownloadPacket[ipchannel] = qdowninfo;
+			}
+			_downloadIDs.push_back(download);					
+		}		
 	}
 
 	Download_Info* DVRDownloadPacket::GetTaskPacket(const size_t id)
 	{
-		return _DownloadPacket[id];
+		for (int i = 0; i < _downloadIDs.size(); i++)
+		{
+			if (id == _downloadIDs[i]->id)
+				return _downloadIDs[i].get();
+		}
+		return NULL;		
+	}
+
+	void DVRDownloadPacket::GetDownloading(std::vector<size_t>& ids)
+	{
+		
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{		
+			//std::cout << "deque size: " <<  it->second.size() << std::endl;
+			if (it->second.size() > 0)
+			{
+				ids.push_back(it->second.front()->id);
+			}
+
+		}			
+	}
+	
+	int  DVRDownloadPacket::GetDownloadStatus(const size_t id)
+	{		
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					return it->second[i]->status;
+				}
+			}
+		}		
+		return -1;
+	}
+
+	void DVRDownloadPacket::SetDownloadStatus(const size_t id, const int status)
+	{		
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					it->second[i]->status = status;
+					if (status == DL_STATUS_FINISH)
+					{
+						std::cout << "i: " << i << " id: " << it->second[i]->id << " order: " << it->second[i]->order  << " size: " << it->second.size() << std::endl;						
+						it->second.pop_front();
+					}	
+					return;
+				}
+			}
+		}
+		
 	}
 
 	void DVRDownloadPacket::GetDownloadIDs(std::vector<size_t>& IDs)
 	{
-		IDs = _downloadIDs;
+		for (int i = 0; i < _downloadIDs.size(); i++)
+		{
+			IDs.push_back(_downloadIDs[i]->id);
+		}		
 	}
 
 	int DVRDownloadPacket::getTaskSize()
 	{
-		return _DownloadPacket.size();
+		int taskcount = 0;
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			taskcount += it->second.size();
+		}
+		
+		return taskcount;
 	}
 
 	void DVRDownloadPacket::DeleteWholeTask()
 	{
-		_DownloadPacket.clear();
-		_elapsed.clear();
-		_prev_proValue.clear();
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{			
+			it->second.clear();
+		}
+		_DownloadPacket.clear();		
 		_downloadIDs.clear();
 	}
 
 	void DVRDownloadPacket::DeleteSubTask(const std::string fname, const size_t channel)
 	{
-		for (size_t i = 0; i < _DownloadPacket.size(); i++)
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
 		{
-			if (_DownloadPacket[i]->fname == fname && _DownloadPacket[i]->channel == channel)
+			for (int i = 0; i < it->second.size(); i++)
 			{
-				_DownloadPacket.erase(_DownloadPacket.begin() + i);
-				_elapsed.erase(_elapsed.begin() + i);
-				_prev_proValue.erase(_prev_proValue.begin() + i);
+				if (fname == it->second[i]->fname && channel == it->second[i]->channel)
+				{					
+					it->second.erase(it->second.begin() + i);					
+				}
 			}
-		}
+		}		
 	}
+
 	void DVRDownloadPacket::GetMainTask(Download_Info& files_info)
 	{
-		size_t Task_Size = _DownloadPacket.size();
+		size_t Task_Size = _downloadIDs.size();
 		size_t fsize = 0; int proValue = 0;
 		int speed = 0; int lasttime = 0;
 		std::vector<Download_Info*>::iterator itor;
-		for (size_t i = 0; i < _DownloadPacket.size(); i++)
+		for (int i = 0; i < _downloadIDs.size(); i++)
 		{
-			fsize += _DownloadPacket[i]->fsize;
-			proValue += _DownloadPacket[i]->proValue;
-			speed += _DownloadPacket[i]->speed;
-			lasttime += _DownloadPacket[i]->lasttime;
+			
+			fsize += _downloadIDs[i]->fsize;
+			proValue += _downloadIDs[i]->proValue;
+			if (_downloadIDs[i]->status == DL_STATUS_DOWNLOADING)
+				speed += _downloadIDs[i]->speed;			
 		}
+		
 		proValue = proValue / Task_Size;
+		
 		files_info.fsize = fsize;
 		if (speed == 0 && proValue != 100){
 			files_info.lasttime = 99999999;
 		}
 		else if(speed != 0 && proValue != 100){
-			files_info.lasttime = (100 - proValue) * fsize / speed;
+			files_info.lasttime = (100 - proValue) * fsize / speed / 100;
 		}
 		else if (proValue == 100){
 			files_info.lasttime = 0;
@@ -99,34 +194,45 @@ namespace DVR{
 
 	int DVRDownloadPacket::GetDownloadSize()
 	{
-		return _DownloadPacket.size();
+		return _downloadIDs.size();
 	}
 
 	void DVRDownloadPacket::UpdateDataByID(const size_t id, const int proValue)
 	{
-		_elapsed[id]++;
+		std::cout << "id: " << id << " provalue: " << proValue << std::endl;
+
+		Mutex::ScopedLock lock(_mutex);
+
 		if (proValue == 0)
 			return;
-		if (proValue != _prev_proValue[id] && proValue != 100)
-		{
-			_DownloadPacket[id]->speed = (proValue - _prev_proValue[id]) * _DownloadPacket[id]->fsize / (100 * _elapsed[id]);
-			_DownloadPacket[id]->lasttime = (100 - proValue) *  _DownloadPacket[id]->fsize / _DownloadPacket[id]->speed;
-			_prev_proValue[id] = proValue;
-			_DownloadPacket[id]->proValue = proValue;
-			_elapsed[id] = 0;
-		}
-		if (_elapsed[id] >= 5)
-		{
-			_DownloadPacket[id]->speed = 0;
-			_DownloadPacket[id]->lasttime = 99999999;
-		}
-		if (proValue == 100)
-		{
-			_DownloadPacket[id]->lasttime = 0;
-			_DownloadPacket[id]->speed = 0;
-			_DownloadPacket[id]->proValue = 100;
-		}
-	}
 
+		for(int i = 0; i < _downloadIDs.size(); i++)
+		{
+			if (id == _downloadIDs[i]->id)
+			{				
+				if (_downloadIDs[i]->starttime == 0 && _downloadIDs[i]->status == DL_STATUS_DOWNLOADING)
+				{			
+					long time1 = GetTickCount();
+					std::cout << "start time :" << time1 << std::endl;
+					_downloadIDs[i]->starttime = time1;	
+					return;
+				}
+								 
+				_downloadIDs[i]->proValue = proValue;
+				long cur_time = GetTickCount();
+				std::cout << "exec time: " << cur_time - _downloadIDs[i]->starttime << std::endl;
+				if (cur_time - _downloadIDs[i]->starttime != 0)
+					_downloadIDs[i]->speed = (_downloadIDs[i]->fsize * proValue / 100) * 1000  / (GetTickCount() - _downloadIDs[i]->starttime);
+				std::cout << "id: " << id << " speed: " << _downloadIDs[i]->speed << std::endl;
+				if (_downloadIDs[i]->speed != 0)
+					_downloadIDs[i]->lasttime = (_downloadIDs[i]->fsize * (100 - proValue) / 100) / _downloadIDs[i]->speed;
+
+				return;
+				
+			}
+				
+		}
+
+	}
 }
 

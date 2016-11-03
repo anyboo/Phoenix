@@ -76,10 +76,10 @@ void CFileLogInfoUI::InitDownloadConfig()
 	TCHAR open_path[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, open_path);
 	CDuiString SavePath, CasePath;
-	CasePath.Format("case%d", _comb_case->GetCurSel() + 1);
+	//CasePath.Format("case%d", _comb_case->GetCurSel() + 1);
 	SavePath.Format("%s", open_path);
 	SavePath.Append("\\");
-	SavePath = SavePath + CasePath;
+	//SavePath = SavePath + CasePath;
 	_edit_path->SetText(SavePath);
 
 	SYSTEMTIME systime;
@@ -136,8 +136,8 @@ void CFileLogInfoUI::OnSelectPath(TNotifyUI& msg)
 	}
 
 	std::string CasePath = std::to_string(_comb_case->GetCurSel() + 1);
-	CasePath = std::string(_T("case")) + CasePath;
-	SavePath.append(_T("\\"));
-	SavePath = SavePath + CasePath;
+	//CasePath = std::string(_T("case")) + CasePath;
+	//SavePath.append(_T("\\"));
+	//SavePath = SavePath + CasePath;
 	_edit_path->SetText(SavePath.c_str());
 }

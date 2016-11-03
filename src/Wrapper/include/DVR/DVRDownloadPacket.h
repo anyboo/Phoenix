@@ -2,10 +2,22 @@
 #include "DVR/DVR.h"
 #include <map>
 #include <vector>
+#include <memory>
 #include "Poco/SingletonHolder.h"
 #include "DVR/DVRSearchFilesContainer.h"
+#include "Poco/Mutex.h"
+#include <iostream>
+using Poco::Mutex;
 
 namespace DVR{
+
+	typedef enum
+	{
+		DL_STATUS_WAITING = 0,
+		DL_STATUS_DOWNLOADING,
+		DL_STATUS_FINISH
+	};
+
 	typedef struct DOWNLOADINFO
 	{
 		std::string fname;
@@ -13,7 +25,11 @@ namespace DVR{
 		size_t		channel;
 		int			proValue;
 		int			speed;
-		int			lasttime;
+		long		lasttime;
+		int         id;
+		int         status;
+		int         order;
+		long        starttime;
 	}Download_Info, *pDownload_Info;
 	class DVR_API DVRDownloadPacket
 	{
@@ -27,7 +43,7 @@ namespace DVR{
 			return *sing.get();
 		}
 
-		void AddTask(const std::vector<size_t>& IDs);
+		void AddTask(const std::string devicename, std::vector<size_t>& IDs);
 		void GetMainTask(Download_Info& files_info);
 		void GetDownloadIDs(std::vector<size_t>& IDs);
 		int	getTaskSize();
@@ -36,12 +52,14 @@ namespace DVR{
 		int GetDownloadSize();
 		void DeleteSubTask(const std::string fname, const size_t channel);
 		void UpdateDataByID(const size_t id, const int proValue);
+		void GetDownloading(std::vector<size_t>& ids);
+		int  GetDownloadStatus(const size_t id);
+		void SetDownloadStatus(const size_t id, const int status);
 		
 	private:
-		std::vector<pDownload_Info>		_DownloadPacket;
-		std::vector<int>				_prev_proValue;
-		std::vector<int>				_elapsed;
-		std::vector<size_t>				_downloadIDs;
+		std::map<std::string, std::deque<std::shared_ptr<Download_Info>>>		_DownloadPacket;		
+		std::vector<std::shared_ptr<Download_Info>>				_downloadIDs;
+		Mutex                              _mutex;
 	};
 }
 

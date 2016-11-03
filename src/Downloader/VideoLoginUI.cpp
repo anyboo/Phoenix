@@ -98,7 +98,8 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 
 	DVR::DVRDevice* device = new DVR::DVRDevice(*session);
 	DVR::DVRDeviceContainer::getInstance().add(device);
-	_name = device->name();
+	string ipport = device->address();
+	_name = device->name() + "(" + ipport.substr(0, ipport.find(":"))+ ")";
 	Close();
 }
 

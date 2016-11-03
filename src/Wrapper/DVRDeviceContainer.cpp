@@ -34,11 +34,12 @@ namespace DVR{
 
 		FastMutex::ScopedLock lock(_mutex);
 
-		if (_devicePool.find(device->name()) != _devicePool.end())
+		if (_devicePool.find(device->name()+device->address()) != _devicePool.end())
 			throw DevicePoolExistsException("device already exists" + device->name());
 
 		device->duplicate();
-		_devicePool.insert(DevicePoolMap::value_type(device->name(), device));
+		std::string ipport = device->address();
+		_devicePool.insert(DevicePoolMap::value_type(device->name() + "(" + ipport.substr(0, ipport.find(":")) + ")", device));
 
 	}
 

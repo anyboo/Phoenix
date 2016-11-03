@@ -5,6 +5,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Net/IPAddress.h>
 #include <Poco/Thread.h>
+#include <iostream>
 
 using Poco::Activity;
 using Poco::Thread;

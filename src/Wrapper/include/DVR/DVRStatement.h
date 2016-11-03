@@ -8,7 +8,7 @@ namespace DVR {
 	class DVR_API DVRStatement
 	{
 	public:
-		DVRStatement(DVRStatementImpl::Ptr pImpl);
+		DVRStatement(DVRStatementImpl::Ptr pImpl);		
 		explicit DVRStatement(DVRSession& session);
 		
 		~DVRStatement();
@@ -45,6 +45,7 @@ namespace DVR {
 		
 	private:
 		DVRStatementImpl::Ptr _pImpl;
+		std::string     _Device_Name;
 	};
 
 }

@@ -36,13 +36,14 @@ void CDownLoadList::AddDownloadTask()
 	CLabelUI* lab_status = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_LABEL, 4));
 	CProgressUI* progress = dynamic_cast<CProgressUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_PROGRESS, 0));
 
+	
 	DVR::Download_Info	file_info;
-	DVR::DVRDownloadPacket::getInstance().GetMainTask(file_info);
+	DVR::DVRDownloadPacket::getInstance().GetMainTask(file_info);	
 	lab_filename->SetText(file_info.fname.c_str());
 	lab_filesize->SetText(std::to_string(file_info.fsize).c_str());
 	lab_speed->SetText(std::to_string(file_info.fsize).c_str());
 	lab_lasttime->SetText(std::to_string(file_info.fsize).c_str());
-	lab_status->SetText("no");
+	lab_status->SetText("开始下载");
 //	SubList->SetTag(packet_id);
 	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 
@@ -68,20 +69,40 @@ void CDownLoadList::AddDataToSubList(CListContainerElementUI* TaskList, const si
 	CLabelUI* lab_status = dynamic_cast<CLabelUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_LABEL, 4));
 	CProgressUI* progress = dynamic_cast<CProgressUI*>(_ppm->FindSubControlByClass(TaskList, DUI_CTR_PROGRESS, 0));
 
-	DVR::Download_Info*	file = DVR::DVRDownloadPacket::getInstance().GetTaskPacket(fileID);
+	std::vector<size_t> downloadOrder;
+	DVR::DVRDownloadPacket::getInstance().GetDownloadIDs(downloadOrder);
+
+	DVR::Download_Info*	file = DVR::DVRDownloadPacket::getInstance().GetTaskPacket(downloadOrder[fileID]);
 	lab_filename->SetText(file->fname.c_str());
-	lab_filesize->SetText(std::to_string(file->fsize).c_str());
-	lab_lasttime->SetText(std::to_string(file->lasttime).c_str());
-	lab_speed->SetText(std::to_string(file->speed).c_str());
-	progress->SetValue(file->proValue);
-	if (file->proValue == 100)
+	lab_filesize->SetText(std::to_string(file->fsize).c_str());	
+	if (file->lasttime == 99999999)
 	{
-		lab_status->SetText("finish");
+		char lasttime[50] = { 0 };
+		sprintf_s(lasttime, "%d秒", file->lasttime);
 	}
 	else
 	{
-		lab_status->SetText("no");
+		char lasttime[50] = { 0 };
+		sprintf_s(lasttime, "%d分%d秒", file->lasttime / 60, file->lasttime % 60);
+		lab_lasttime->SetText(lasttime);
 	}
+	
+	lab_speed->SetText(std::to_string(file->speed).c_str());
+	progress->SetValue(file->proValue);
+	switch (file->status)
+	{
+	case DVR::DL_STATUS_DOWNLOADING:
+		lab_status->SetText("下载中");
+		break;
+	case DVR::DL_STATUS_FINISH:
+		lab_status->SetText("完成");
+		break;
+	case DVR::DL_STATUS_WAITING:
+		lab_status->SetText("等待");
+		break;
+	default:
+		break;
+	}	
 }
 
 
@@ -106,7 +127,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
 				AddSubListAttr(SubList);
-			//	AddDataToSubList(SubList, i - CurSel - 1);
+				AddDataToSubList(SubList, i - CurSel - 1);
 		/*		CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 				BT_CanCel->SetVisible(false);*/
 			}
@@ -124,7 +145,7 @@ void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 				SubList->SetUserData(_T("Sub"));
 				m_List->AddAt(SubList, i);
 				AddSubListAttr(SubList);
-			//	AddDataToSubList(SubList, i - CurSel - 1);
+				AddDataToSubList(SubList, i - CurSel - 1);
 			/*	CButtonUI* BT_CanCel = dynamic_cast<CButtonUI*>(_ppm->FindSubControlByClass(SubList, DUI_CTR_BUTTON));
 				BT_CanCel->SetVisible(false);*/
 			}
@@ -254,15 +275,26 @@ void CDownLoadList::RenewPacketList(CListContainerElementUI* TaskList)
 	DVR::DVRDownloadPacket::getInstance().GetMainTask(file);
 	lab_filename->SetText(file.fname.c_str());
 	lab_filesize->SetText(std::to_string(file.fsize).c_str());
-	lab_lasttime->SetText(std::to_string(file.lasttime).c_str());
+	if (file.lasttime == 99999999)
+	{
+		char lasttime[50] = { 0 };
+		sprintf_s(lasttime, "%d秒", file.lasttime);
+	}
+	else
+	{
+		char lasttime[50] = { 0 };
+		sprintf_s(lasttime, "%d分%d秒", file.lasttime / 60, file.lasttime % 60);
+		lab_lasttime->SetText(lasttime);
+	}	
 	lab_speed->SetText(std::to_string(file.speed).c_str());
 	progress->SetValue(file.proValue);
 	if (file.proValue == 100)
 	{
-		lab_status->SetText("finish");
+		lab_status->SetText("完成");
 	}
-	else
+	else if(file.proValue > 0)
 	{
-		lab_status->SetText("no");
+		lab_status->SetText("开始下载");
 	}
+	
 }

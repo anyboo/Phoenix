@@ -50,11 +50,8 @@ DVRStatement& DVRStatement::reset(DVRSession& rSession)
 
 long DVRStatement::DownloadByName(const RecordFile& file, const std::string path)
 {
-	time_t nowtime;
-	time(&nowtime);
-	std::string vedioname = std::to_string(nowtime) + std::string(".h264");
-	std::string download_path = path + std::string("\\") + vedioname;
-	long handle = _pImpl->donwloadByName(file, download_path);
+	
+	long handle = _pImpl->donwloadByName(file, path);
 	return handle;
 }
 
@@ -93,8 +90,8 @@ void DVRStatement::setplayPos(const int playhandle, const int Pos)
 void DVRStatement::Searchfile(const Poco::DateTime stime, const Poco::DateTime etime, const std::vector<int>& Channels)
 {
 	std::vector<RecordFile>  files;
-	_pImpl->list(stime, etime, Channels, files);
-	DVRSearchFilesContainer::getInstance().Clear();
+	_pImpl->list(stime, etime, Channels, files);	
+	DVRSearchFilesContainer::getInstance().Clear();	
 	DVRSearchFilesContainer::getInstance().Add(files);
 }
 

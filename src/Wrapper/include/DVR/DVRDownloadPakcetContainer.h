@@ -3,7 +3,11 @@
 #include "DVR/DVRDownloadPakcetContainer.h"
 #include "DVR/DVRDownloadPacket.h"
 
+
 namespace DVR{
+
+	
+
 	class DVR_API DVRDownloadPakcetContainer
 	{
 	public:
@@ -17,6 +21,7 @@ namespace DVR{
 
 	private:
 		std::map<std::string, DVRDownloadPacket*>		_packetContainer;
+		
 	};
 }
 

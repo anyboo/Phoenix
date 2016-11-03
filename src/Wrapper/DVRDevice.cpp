@@ -36,7 +36,7 @@ namespace DVR{
 	{
 		//poco_bugcheck_msg("generate the unique string");
 		//must be generate the "unique string"
-		return _MainSession.connectorName() + "unique string";
+		return _MainSession.connectorName();
 	}
 
 	const std::string DVRDevice::address() const

@@ -19,7 +19,7 @@ namespace DVR{
 
 	void DVRSearchFilesContainer::Add(const std::vector<RecordFile> rf)
 	{
-		_recordfiles = rf;
+		_recordfiles = rf;		
 	}
 
 	void DVRSearchFilesContainer::Clear()
@@ -40,7 +40,7 @@ namespace DVR{
 
 	void DVRSearchFilesContainer::GetSearchFiles(std::vector<RecordFile>& rf)
 	{
-		rf = _recordfiles;
+		rf = _recordfiles;		
 	}
 
 	//void DVRSearchFilesContainer::GetDownloadFilesByID(std::vector<size_t>& fileIDs, std::vector<DVRSearchFiles*>& files)
