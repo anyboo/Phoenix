@@ -9,8 +9,8 @@ public:
 
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
 
-	void AddDownloadTask();
-	void AddDataToSubList(CListContainerElementUI* TaskList, const size_t fileID);
+	void AddDownloadTask(long searchhandle);
+	void AddDataToSubList(CListContainerElementUI* TaskList, const long search, const size_t fileID);
 	CDuiString TimeChange(__time64_t inputTime);
 
 	void Show_Off_SubList(CDuiString& strSendName);
@@ -20,11 +20,14 @@ public:
 	void RemoveSubList(CDuiString& strSendName);
 
 	void RenewList();
-	void RenewPacketList(CListContainerElementUI* TaskList);
+	void RenewPacketList(int i, CListContainerElementUI* TaskList);
 
 	void AddSubListAttr(CListContainerElementUI* SubList);
+
+	void StopDownload(long searchhandle);
 private:
 	CPaintManagerUI* _ppm;
 	int				_taskCount;
+	std::vector<long>    _download_items;
 };
 

@@ -57,7 +57,7 @@ protected:
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
+	
 
 	template<class T>
 	void AddControl(CDuiString ctr_name)
@@ -108,11 +108,10 @@ private:
 	const CDuiString starttime = _T("daytimeText1");
 	const CDuiString stoptime = _T("daytimeText2");
 	const CDuiString timetype = _T("Select_time");
-
-	std::vector<long>	_download_handle;
-	size_t		_file_id;
-	std::vector<int>		_pro_value;
-	std::string             _search_time;
+		
+	size_t				_file_id;	
+	std::string         _search_time;
+	std::vector<long>   _search_handle;
 //	Poco::Timer t;
 //	Poco::TimerCallback<DownLoadWnd> tc;
 };

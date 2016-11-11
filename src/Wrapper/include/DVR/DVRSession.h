@@ -75,7 +75,16 @@ namespace DVR {
 
 	inline void DVRSession::login(const std::string& user, const std::string& password)
 	{
-		_pImpl->login(user, password);
+		try
+		{
+			_pImpl->login(user, password);
+		}
+		catch (Poco::IOException& Ex)
+		{
+			std::cout << "error:" << Ex.displayText() <<  std::endl;
+			throw Poco::IOException(Ex.displayText());
+		}
+		
 	}
 
 	inline void DVRSession::logout()

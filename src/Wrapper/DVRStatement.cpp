@@ -51,7 +51,9 @@ DVRStatement& DVRStatement::reset(DVRSession& rSession)
 long DVRStatement::DownloadByName(const RecordFile& file, const std::string path)
 {
 	
-	long handle = _pImpl->donwloadByName(file, path);
+	
+	long handle = _pImpl->donwloadByName(file, path);	
+	
 	return handle;
 }
 

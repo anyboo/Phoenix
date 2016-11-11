@@ -7,7 +7,7 @@
 #include "DVR/DVRSession.h"
 #include "TestData.h"
 #include "DVR/DVRDeviceContainer.h"
-#include "DVR/DVRDownloadPacket.h"
+#include "DVR/DVRDownloadPakcetContainer.h"
 #include <io.h>
 #include <direct.h>
 
@@ -139,7 +139,8 @@ void DownLoadWnd::InitWindow()
 		_device_name = login_names[i];
 	}
 
-	int size = DVR::DVRDownloadPacket::getInstance().getTaskSize();
+	//int size = DVR::DVRDownloadPacket::getInstance().getTaskSize();
+	int size = DVR::DVRDownloadPakcetContainer::getInstance().GetSize();
 	if (size != 0)
 	{
 		std::string configFile;
@@ -162,8 +163,8 @@ void DownLoadWnd::InitWindow()
 		//_pro_value = d[_T("proValue")].GetInt64();
 		_DownloadPath = d[_T("path")].GetString();
 
-		DVR::DVRDownloadPacket::getInstance().GetDownloadIDs(_download_fileID);
-		_downloadManage.AddDownloadTask();
+		//DVR::DVRDownloadPacket::getInstance().GetDownloadIDs(_download_fileID);
+		//_downloadManage.AddDownloadTask();
 		SetTimer(GetHWND(), 11, 1000, nullptr);
 		SetTimer(GetHWND(), 1, 200, nullptr);
 	}
@@ -283,12 +284,11 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 
 	_DownloadPath = pSearchDlg->downloadPath() + "\\" + _search_time + "\\" + _device_name + "\\";
 	pSearchDlg->GetDownloadfileIDs(_download_fileID);
-	DVR::DVRDownloadPacket::getInstance().AddTask(_device_name, _download_fileID);
-	_downloadManage.AddDownloadTask();
-	for (int i = 0; i < _download_fileID.size(); i++)
-	{
-		_download_handle.push_back(0);
-	}
+	long currenttime = GetTickCount();
+	DVR::DVRDownloadPakcetContainer::getInstance().AddDownloadItem(_device_name, _download_fileID, currenttime, _search_time);
+	_search_handle.push_back(currenttime);
+	_downloadManage.AddDownloadTask(currenttime);
+	
 
 	//_download_handle = 0;
 	_file_id = 0;
@@ -344,11 +344,13 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	{
 		if (MessageBox(GetHWND(), "是否删除下载任务！", "警告", MB_OKCANCEL) == IDCANCEL)
 			return;
-		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
-		DVR::DVRStatement statement(Device.session());
-		//statement.StopDownload(_download_handle);
-		KillTimer(GetHWND(), 11);
-		KillTimer(GetHWND(), 1);
+		
+		
+		if (_search_handle.size() == 0)
+		{
+			KillTimer(GetHWND(), 11);
+			KillTimer(GetHWND(), 1);
+		}
 		_downloadManage.RemoveSubList(sender_name);
 	}
 	WindowImplBase::Notify(msg);
@@ -504,88 +506,101 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 {
 	if (wParam == 11)
 	{
-		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
-		DVR::DVRStatement statement(Device.session());	
-		/*if (_pro_value == 100 && _file_id < _download_fileID.size())
+		for (int i = 0; i < _search_handle.size(); i++)
 		{
-			DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(_download_fileID[_file_id]);
-			_download_handle = statement.DownloadByName(file, _DownloadPath);
-			_file_id++;
-		}*/		
-		
-		//_pro_value = statement.GetDownloadPro(_download_handle);
-		//DVR::DVRDownloadPacket::getInstance().UpdateDataByID(_file_id - 1, _pro_value);
-	//	_downloadManage.RenewList();
-		vector<size_t> ids;
-		DVR::DVRDownloadPacket::getInstance().GetDownloading(ids);
-		//std::cout << "size: " << ids.size() << std::endl;
-		for (int i = 0; i < ids.size(); i++)
-		{
-			int status = DVR::DVRDownloadPacket::getInstance().GetDownloadStatus(ids[i]);
-			
-			switch (status)
-			{
-			case DL_STATUS_WAITING:
-			{
-				DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(ids[i]);
-				std::string dir = _DownloadPath + "通道" + std::to_string(file.channel) + "\\";
-				std::string dirtmp;
-				size_t found = 0;
-				if (_access(dir.c_str(), 0) == -1)
-				{
-					found = dir.find_first_of("\\");
-					while (found != string::npos)
-					{
-						dirtmp = dir.substr(0, found);
-						std::cout << dirtmp << std::endl;
-						if (_access(dirtmp.c_str(), 0) == -1)
-							_mkdir(dirtmp.c_str());
-						found = dir.find_first_of("\\", found + 1);
-					}
-				}
-				int handle = statement.DownloadByName(file, dir);
-				_download_handle[i] = handle;
-				DVR::DVRDownloadPacket::getInstance().SetDownloadStatus(ids[i], DL_STATUS_DOWNLOADING);
-				break;
-			}						
-			case DL_STATUS_DOWNLOADING:			
-			case DL_STATUS_FINISH:
+			DVR::DVRDownloadPacket* pDownloadItem = DVR::DVRDownloadPakcetContainer::getInstance().GetDownloadItem(_search_handle[i]);
+			std::string devicename;
+			pDownloadItem->GetDeivceName(devicename);
+			DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(devicename);
+			DVR::DVRStatement statement(Device.session());
 
-			default:
-				break;
+			vector<size_t> ids;
+			pDownloadItem->GetDownloading(ids);
+			std::cout << "size: " << ids.size() << std::endl;
+			if (ids.size() == 0)
+			{
+				_search_handle.erase(_search_handle.begin() + i);
+				i--;
+			}
+				
+
+			for (int i = 0; i < ids.size(); i++)
+			{
+				int status = pDownloadItem->GetDownloadStatus(ids[i]);
+
+				switch (status)
+				{
+				case DL_STATUS_WAITING:
+				{
+					DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(ids[i]);
+					std::string dir = _DownloadPath + "通道" + std::to_string(file.channel) + "\\";
+					std::string dirtmp;
+					size_t found = 0;
+					if (_access(dir.c_str(), 0) == -1)
+					{
+						found = dir.find_first_of("\\");
+						while (found != string::npos)
+						{
+							dirtmp = dir.substr(0, found);
+							std::cout << dirtmp << std::endl;
+							if (_access(dirtmp.c_str(), 0) == -1)
+								_mkdir(dirtmp.c_str());
+							found = dir.find_first_of("\\", found + 1);
+						}
+					}
+					long handle = statement.DownloadByName(file, dir);
+					//_download_handle[i] = handle;
+					pDownloadItem->SetDownloadHandle(ids[i], handle);
+					pDownloadItem->SetDownloadStatus(ids[i], DL_STATUS_DOWNLOADING);					
+					break;
+				}
+				case DL_STATUS_DOWNLOADING:
+				case DL_STATUS_FINISH:
+
+				default:
+					break;
+
+				}
 
 			}
-			
-		}
+		}		
+		
 	}
 	if (wParam == 1)
 	{
-		DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(_device_name);
-		DVR::DVRStatement statement(Device.session());
-
-		vector<size_t> ids;
-		DVR::DVRDownloadPacket::getInstance().GetDownloading(ids);
-		for (int i = 0; i < ids.size(); i++)
+		for (int i = 0; i < _search_handle.size(); i++)
 		{
-			int status = DVR::DVRDownloadPacket::getInstance().GetDownloadStatus(ids[i]);
+			DVR::DVRDownloadPacket* pDownloadItem = DVR::DVRDownloadPakcetContainer::getInstance().GetDownloadItem(_search_handle[i]);
+			std::string devicename;
+			pDownloadItem->GetDeivceName(devicename);
+			DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(devicename);
+			DVR::DVRStatement statement(Device.session());
 
-			switch (status)
+			vector<size_t> ids;
+			pDownloadItem->GetDownloading(ids);			
+			for (int i = 0; i < ids.size(); i++)
 			{
-			case DL_STATUS_DOWNLOADING:
-			{
-				int value = statement.GetDownloadPro(_download_handle[i]);
-				cout << "i: " << ids[i] << " handle: " << _download_handle[i] << " value: " << value << endl;
-				if (value >= 100)
+				int status = pDownloadItem->GetDownloadStatus(ids[i]);				
+
+				switch (status)
 				{
-					DVR::DVRDownloadPacket::getInstance().SetDownloadStatus(ids[i], DL_STATUS_FINISH);
+				case DL_STATUS_DOWNLOADING:
+				{
+					int value = statement.GetDownloadPro(pDownloadItem->GetDownloadHandle(ids[i]));
+					cout << "i: " << ids[i] << " handle: " << pDownloadItem->GetDownloadHandle(ids[i]) << " value: " << value << endl;
+					if (value >= 100)
+					{
+						pDownloadItem->SetDownloadStatus(ids[i], DL_STATUS_FINISH);
+					}
+					pDownloadItem->UpdateDataByID(ids[i], value);
+					break;
 				}
-				DVR::DVRDownloadPacket::getInstance().UpdateDataByID(ids[i], value);
-				break;
+				
+				}
 			}
-			}
-		}
-
-		_downloadManage.RenewList();
+		}	
+		if (_search_handle.size() > 0)
+			_downloadManage.RenewList();
 	}
 	return 0;
 }

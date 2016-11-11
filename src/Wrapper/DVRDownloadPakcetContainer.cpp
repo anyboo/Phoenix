@@ -9,28 +9,58 @@ namespace DVR{
 
 	DVRDownloadPakcetContainer::~DVRDownloadPakcetContainer()
 	{
+		Clear();
 	}
 
-	void DVRDownloadPakcetContainer::AddPacket(DVRDownloadPacket* packet)
+	void DVRDownloadPakcetContainer::AddDownloadItem(const std::string device_name, std::vector<size_t>& IDs, long current_time, const std::string search_time)
 	{
-		std::string keyname = std::string("packet") + std::to_string(rand());
-		_packetContainer.insert(std::pair<std::string, DVRDownloadPacket*>(keyname, packet));
+		Mutex::ScopedLock lock(_mutex);
+		std::shared_ptr<DVRDownloadPacket> pDownloadItem = std::make_shared<DVRDownloadPacket>();
+		pDownloadItem->AddTask(IDs);
+		pDownloadItem->SetDeviceName(device_name);
+		pDownloadItem->SetSearchTime(search_time);
+		_DownloadItems[current_time] = pDownloadItem;
 	}
 
-	DVRDownloadPacket* DVRDownloadPakcetContainer::GetPacket(const std::string name)
+	DVRDownloadPacket* DVRDownloadPakcetContainer::GetDownloadItem(const long  current_time)
 	{
-		return _packetContainer[name];
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadItems.begin(); it != _DownloadItems.end(); it++)
+		{
+			if (it->first == current_time)
+			{
+				return it->second.get();
+			}
+		}
+		return NULL;
 	}
 
-	void DVRDownloadPakcetContainer::DeletePacketTask(const std::string name)
+	void DVRDownloadPakcetContainer::DeleteDownloadItem(const long  current_time)
 	{
-		_packetContainer[name]->DeleteWholeTask();
-		_packetContainer.erase(name);
+		Mutex::ScopedLock lock(_mutex);
+		for (auto it = _DownloadItems.begin(); it != _DownloadItems.end(); it++)
+		{
+			if (it->first == current_time)
+			{
+				DVRDownloadPacket *pDownload = it->second.get();
+				pDownload->DeleteWholeTask();
+				_DownloadItems.erase(it);
+			}
+		}
 	}
 
-	void DVRDownloadPakcetContainer::DeleteSubTask(const std::string name, const std::string fname)
+	
+	void DVRDownloadPakcetContainer::Clear()
 	{
-//		_packetContainer[name]->DeleteSubTaskByName(fname);
+		Mutex::ScopedLock lock(_mutex);
+		_DownloadItems.clear();
 	}
+
+	int DVRDownloadPakcetContainer::GetSize()
+	{
+		return _DownloadItems.size();
+	}
+
+	
 }
 

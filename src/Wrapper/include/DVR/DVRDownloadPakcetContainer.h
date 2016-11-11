@@ -6,22 +6,28 @@
 
 namespace DVR{
 
-	
-
 	class DVR_API DVRDownloadPakcetContainer
 	{
 	public:
 		DVRDownloadPakcetContainer();
 		~DVRDownloadPakcetContainer();
 
-		void AddPacket(DVRDownloadPacket* packet);
-		DVRDownloadPacket* GetPacket(const std::string name);
-		void DeletePacketTask(const std::string name);
-		void DeleteSubTask(const std::string name, const std::string fname);
+		static DVRDownloadPakcetContainer& getInstance()
+		{
+			static Poco::SingletonHolder<DVRDownloadPakcetContainer>	sing;
+			return *sing.get();
+		}
+
+		void AddDownloadItem(const std::string devicename, std::vector<size_t>& IDs, long current_time, const std::string  searchtime);
+		DVRDownloadPacket* GetDownloadItem(const long  current_time);
+		void DeleteDownloadItem(const long  current_time);
+		void Clear();
+
+		int GetSize();
 
 	private:
-		std::map<std::string, DVRDownloadPacket*>		_packetContainer;
-		
+		std::map<long, std::shared_ptr<DVRDownloadPacket>>		_DownloadItems;
+		Mutex                              _mutex;
 	};
 }
 

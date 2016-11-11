@@ -13,7 +13,7 @@ namespace DVR{
 		_downloadIDs.clear();
 	}
 
-	void DVRDownloadPacket::AddTask(const std::string devicename, std::vector<size_t>& IDs)
+	void DVRDownloadPacket::AddTask( std::vector<size_t>& IDs)
 	{		
 		std::vector<RecordFile>	files;
 		DVR::DVRSearchFilesContainer::getInstance().GetDownloadfiles(IDs, files);
@@ -33,11 +33,12 @@ namespace DVR{
 			download->proValue = 0;
 			download->speed = 0;
 			download->id = IDs[i];
-			download->status = DL_STATUS_WAITING;
-			download->order = i;
+			download->status = DL_STATUS_WAITING;			
 			download->starttime = 0;
+			download->handle = 0;
+			download->rfile = files[i];
 
-			std::string ipchannel = devicename + " " + std::to_string(files[i].channel);
+			std::string ipchannel = std::to_string(files[i].channel);
 			auto it = _DownloadPacket.find(ipchannel);
 			if (it != _DownloadPacket.end())
 			{
@@ -80,6 +81,7 @@ namespace DVR{
 	
 	int  DVRDownloadPacket::GetDownloadStatus(const size_t id)
 	{		
+		Mutex::ScopedLock lock(_mutex);
 		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
 		{
 			for (int i = 0; i < it->second.size(); i++)
@@ -95,6 +97,7 @@ namespace DVR{
 
 	void DVRDownloadPacket::SetDownloadStatus(const size_t id, const int status)
 	{		
+		Mutex::ScopedLock lock(_mutex);
 		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
 		{
 			for (int i = 0; i < it->second.size(); i++)
@@ -104,7 +107,7 @@ namespace DVR{
 					it->second[i]->status = status;
 					if (status == DL_STATUS_FINISH)
 					{
-						std::cout << "i: " << i << " id: " << it->second[i]->id << " order: " << it->second[i]->order  << " size: " << it->second.size() << std::endl;						
+						std::cout << "i: " << i << " id: " << it->second[i]->id << " size: " << it->second.size() << std::endl;						
 						it->second.pop_front();
 					}	
 					return;
@@ -116,6 +119,7 @@ namespace DVR{
 
 	void DVRDownloadPacket::GetDownloadIDs(std::vector<size_t>& IDs)
 	{
+		Mutex::ScopedLock lock(_mutex);
 		for (int i = 0; i < _downloadIDs.size(); i++)
 		{
 			IDs.push_back(_downloadIDs[i]->id);
@@ -162,6 +166,7 @@ namespace DVR{
 
 	void DVRDownloadPacket::GetMainTask(Download_Info& files_info)
 	{
+		Mutex::ScopedLock lock(_mutex);
 		size_t Task_Size = _downloadIDs.size();
 		size_t fsize = 0; int proValue = 0;
 		int speed = 0; int lasttime = 0;
@@ -189,7 +194,7 @@ namespace DVR{
 		}
 		files_info.speed = speed;
 		files_info.proValue = proValue;
-		files_info.fname = std::string("DZP_download");
+		files_info.fname = _device_name + "(" + _search_time + ")";
 	}
 
 	int DVRDownloadPacket::GetDownloadSize()
@@ -234,5 +239,61 @@ namespace DVR{
 		}
 
 	}
+
+	void DVRDownloadPacket::GetDeivceName(std::string& devicename)
+	{
+		devicename = _device_name;
+	}
+
+	void DVRDownloadPacket::SetDeviceName(const std::string devicename)
+	{
+		_device_name = devicename;
+	}
+
+	void DVRDownloadPacket::GetSearchTime(std::string& searchtime)
+	{
+		searchtime = _search_time;
+	}
+
+	void DVRDownloadPacket::SetSearchTime(const std::string searchtime)
+	{
+		_search_time = searchtime;
+	}
+
+	long DVRDownloadPacket::GetDownloadHandle(const size_t id)
+	{
+		Mutex::ScopedLock lock(_mutex);
+		
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					return it->second[i]->handle;
+				}
+			}
+		}
+		return 0;
+	}
+
+	void DVRDownloadPacket::SetDownloadHandle(const size_t id, const long handle)
+	{
+		Mutex::ScopedLock lock(_mutex);
+		
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					it->second[i]->handle = handle;
+					return;
+				}
+			}
+		}
+	}
+
+	
 }
 

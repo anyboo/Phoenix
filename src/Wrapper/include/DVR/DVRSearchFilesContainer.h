@@ -25,8 +25,7 @@ namespace DVR{
 			static Poco::SingletonHolder<DVRSearchFilesContainer> Ds;
 			return *Ds.get();
 		}
-
-	//	void Add(DVRSearchFiles* file);
+	
 		void Add(const std::vector<RecordFile> rf);		
 		void Clear();
 		void GetSearchFiles(std::vector<RecordFile>& rf);
@@ -41,9 +40,7 @@ namespace DVR{
 		void findDownloadMap(std::string s);
 
 	private:
-		std::vector<RecordFile>				_recordfiles;
-		std::map<size_t, DVRSearchFiles*>		_filesMap;
-		size_t					_Count;		
+		std::vector<RecordFile> _recordfiles;		
 
 		DVRSearchFilesContainer(const DVRSearchFilesContainer&);
 		DVRSearchFilesContainer operator =(const DVRSearchFilesContainer&);

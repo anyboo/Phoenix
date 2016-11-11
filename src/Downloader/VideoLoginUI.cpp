@@ -85,7 +85,16 @@ void VideoLoginUI::OnLogIn(TNotifyUI& msg)
 	connectString = connectString + port;
 	DVR::DVRSession *session = new DVR::DVRSession("DZP", connectString.GetData());
 //	DVR::DVRSession session("DZP", connectString.GetData());
-	session->login(user.GetData(),passwd.GetData());
+	try
+	{
+		session->login(user.GetData(), passwd.GetData());
+	}
+	catch (Poco::IOException& Ex)
+	{
+
+		std::cout << "login error:" << Ex.displayText() << std::endl;
+	}
+	
 	if (session->isLoggedIn())
 	{
 		m_IsLogIn = LogInDevice;
