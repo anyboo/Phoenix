@@ -18,7 +18,7 @@ namespace DVR{
 			return *sing.get();
 		}
 
-		void AddDownloadItem(const std::string devicename, std::vector<size_t>& IDs, long current_time, const std::string  searchtime);
+		void AddDownloadItem(const std::string devicename, std::vector<size_t>& IDs, long current_time, const std::string  searchtime, const std::string downlaodpath);
 		DVRDownloadPacket* GetDownloadItem(const long  current_time);
 		void DeleteDownloadItem(const long  current_time);
 		void Clear();

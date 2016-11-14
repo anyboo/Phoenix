@@ -294,6 +294,50 @@ namespace DVR{
 		}
 	}
 
+	bool DVRDownloadPacket::GetFile(const size_t id, RecordFile& rf)
+	{
+		Mutex::ScopedLock lock(_mutex);
+
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					rf = it->second[i]->rfile;
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
+	}
+
+	std::string DVRDownloadPacket::GetFileName(const size_t id)
+	{
+		Mutex::ScopedLock lock(_mutex);
+
+		for (auto it = _DownloadPacket.begin(); it != _DownloadPacket.end(); it++)
+		{
+			for (int i = 0; i < it->second.size(); i++)
+			{
+				if (id == it->second[i]->id)
+				{
+					return it->second[i]->fname;					
+				}
+			}
+		}
+		return std::string("");
+	}
+
+	std::string DVRDownloadPacket::GetDownloadPath()
+	{
+		return _download_path;
+	}
+
+	void DVRDownloadPacket::SetDownloadPath(const std::string downloadpath)
+	{
+		_download_path = downloadpath;
+	}
 	
 }
 

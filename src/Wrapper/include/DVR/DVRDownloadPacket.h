@@ -57,6 +57,11 @@ namespace DVR{
 		void SetSearchTime(const std::string searchname);
 		long GetDownloadHandle(const size_t id);
 		void SetDownloadHandle(const size_t id, const long handle);
+		bool GetFile(const size_t id, RecordFile& rf);
+		std::string GetFileName(const size_t id);
+		std::string GetDownloadPath();
+		void SetDownloadPath(const std::string downloadpath);
+
 		
 	private:
 		std::map<std::string, std::deque<std::shared_ptr<Download_Info>>>		_DownloadPacket;		
@@ -64,6 +69,7 @@ namespace DVR{
 		Mutex                              _mutex;
 		std::string                        _device_name;
 		std::string                        _search_time;
+		std::string                        _download_path;
 	};
 }
 

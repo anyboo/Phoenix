@@ -122,7 +122,7 @@ void CDownLoadList::AddDataToSubList(CListContainerElementUI* TaskList, const lo
 
 void CDownLoadList::Show_Off_SubList(CDuiString& strSendName)
 {
-	poco_information_f1(logger_handle, "show off sublist: %s", strSendName.GetData());
+	poco_information_f1(logger_handle, "show off sublist: %s", std::string(strSendName.GetData()));
 	CListUI* m_List = dynamic_cast<CListUI*>(_ppm->FindControl(_T("DownloadList")));
 
 	std::string strUserData;

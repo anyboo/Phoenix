@@ -6,6 +6,7 @@
 #include "AppInitialize.h"
 #include "ipset.h"
 #include "InitNetConfig.h"
+#include "log.h"
 
 #include <io.h>
 #include <fcntl.h>
@@ -30,7 +31,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 //	OpenConsole();
 //#endif
 //	CInitNetConfig Init;
-
+	Loggering::Setup_logger();
+	
 	CAppInitialize appInit;
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());

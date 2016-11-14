@@ -10,6 +10,7 @@
 #include "DVR/DVRDownloadPakcetContainer.h"
 #include <io.h>
 #include <direct.h>
+#include "log.h"
 
 DownLoadWnd::DownLoadWnd() 
 :_file_id(0)
@@ -285,7 +286,7 @@ void DownLoadWnd::OnSearch(TNotifyUI& msg)
 	_DownloadPath = pSearchDlg->downloadPath() + "\\" + _search_time + "\\" + _device_name + "\\";
 	pSearchDlg->GetDownloadfileIDs(_download_fileID);
 	long currenttime = GetTickCount();
-	DVR::DVRDownloadPakcetContainer::getInstance().AddDownloadItem(_device_name, _download_fileID, currenttime, _search_time);
+	DVR::DVRDownloadPakcetContainer::getInstance().AddDownloadItem(_device_name, _download_fileID, currenttime, _search_time, _DownloadPath);
 	_search_handle.push_back(currenttime);
 	_downloadManage.AddDownloadTask(currenttime);
 	
@@ -511,12 +512,13 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 			DVR::DVRDownloadPacket* pDownloadItem = DVR::DVRDownloadPakcetContainer::getInstance().GetDownloadItem(_search_handle[i]);
 			std::string devicename;
 			pDownloadItem->GetDeivceName(devicename);
+			poco_information_f1(logger_handle, "device name: %s", devicename);
 			DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(devicename);
 			DVR::DVRStatement statement(Device.session());
 
 			vector<size_t> ids;
-			pDownloadItem->GetDownloading(ids);
-			std::cout << "size: " << ids.size() << std::endl;
+			pDownloadItem->GetDownloading(ids);			
+			poco_information_f1(logger_handle, "size: %u", ids.size());
 			if (ids.size() == 0)
 			{
 				_search_handle.erase(_search_handle.begin() + i);
@@ -524,16 +526,18 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 			}
 				
 
-			for (int i = 0; i < ids.size(); i++)
+			for (int j = 0; j < ids.size(); j++)
 			{
-				int status = pDownloadItem->GetDownloadStatus(ids[i]);
+				int status = pDownloadItem->GetDownloadStatus(ids[j]);
 
 				switch (status)
 				{
 				case DL_STATUS_WAITING:
 				{
-					DVR::RecordFile file = DVR::DVRSearchFilesContainer::getInstance().GetFileById(ids[i]);
-					std::string dir = _DownloadPath + "通道" + std::to_string(file.channel) + "\\";
+					DVR::RecordFile file;
+					if (!pDownloadItem->GetFile(ids[j], file))
+						break;
+					std::string dir = pDownloadItem->GetDownloadPath() + "通道" + std::to_string(file.channel) + "\\";
 					std::string dirtmp;
 					size_t found = 0;
 					if (_access(dir.c_str(), 0) == -1)
@@ -549,9 +553,10 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 						}
 					}
 					long handle = statement.DownloadByName(file, dir);
+					poco_information_f2(logger_handle, "starting downlaod name: %s, handle: %ld", pDownloadItem->GetFileName(ids[j]), handle);
 					//_download_handle[i] = handle;
-					pDownloadItem->SetDownloadHandle(ids[i], handle);
-					pDownloadItem->SetDownloadStatus(ids[i], DL_STATUS_DOWNLOADING);					
+					pDownloadItem->SetDownloadHandle(ids[j], handle);
+					pDownloadItem->SetDownloadStatus(ids[j], DL_STATUS_DOWNLOADING);					
 					break;
 				}
 				case DL_STATUS_DOWNLOADING:
@@ -573,26 +578,28 @@ LRESULT DownLoadWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 			DVR::DVRDownloadPacket* pDownloadItem = DVR::DVRDownloadPakcetContainer::getInstance().GetDownloadItem(_search_handle[i]);
 			std::string devicename;
 			pDownloadItem->GetDeivceName(devicename);
+			poco_information_f1(logger_handle, "device name 1: %s", devicename);
 			DVR::DVRDevice& Device = DVR::DVRDeviceContainer::getInstance().get(devicename);
 			DVR::DVRStatement statement(Device.session());
 
 			vector<size_t> ids;
 			pDownloadItem->GetDownloading(ids);			
-			for (int i = 0; i < ids.size(); i++)
+			for (int j = 0; j < ids.size(); j++)
 			{
-				int status = pDownloadItem->GetDownloadStatus(ids[i]);				
+				int status = pDownloadItem->GetDownloadStatus(ids[j]);				
 
 				switch (status)
 				{
 				case DL_STATUS_DOWNLOADING:
 				{
-					int value = statement.GetDownloadPro(pDownloadItem->GetDownloadHandle(ids[i]));
-					cout << "i: " << ids[i] << " handle: " << pDownloadItem->GetDownloadHandle(ids[i]) << " value: " << value << endl;
+					int value = statement.GetDownloadPro(pDownloadItem->GetDownloadHandle(ids[j]));
+					//cout << "i: " << ids[i] << " handle: " << pDownloadItem->GetDownloadHandle(ids[i]) << " value: " << value << endl;
+					poco_information_f3(logger_handle, "j: %u, handle: %ld, value: %d", ids[j], pDownloadItem->GetDownloadHandle(ids[j]), value);
 					if (value >= 100)
 					{
-						pDownloadItem->SetDownloadStatus(ids[i], DL_STATUS_FINISH);
+						pDownloadItem->SetDownloadStatus(ids[j], DL_STATUS_FINISH);
 					}
-					pDownloadItem->UpdateDataByID(ids[i], value);
+					pDownloadItem->UpdateDataByID(ids[j], value);
 					break;
 				}
 				

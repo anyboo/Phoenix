@@ -96,7 +96,7 @@ private:
 	CListUI*	_VendorList;
 	std::string			_device_name;
 
-	std::string			_DownloadPath;
+	std::string		_DownloadPath;
 	std::vector<size_t>	_download_fileID;
 	std::map<int, std::string>		_VnameAndType;
 	CDuiStringPtrMap _ControlMatrix;
