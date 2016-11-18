@@ -30,8 +30,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 //#ifdef _DEBUG  
 //	OpenConsole();
 //#endif
-//	CInitNetConfig Init;
 	Loggering::Setup_logger();
+
+	CInitNetConfig Init;
+	
 	
 	CAppInitialize appInit;
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);

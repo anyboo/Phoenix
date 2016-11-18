@@ -9,15 +9,19 @@
 			<Button name="bt_close" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="网络配置" textcolor="#FFFFFFFF" font="1" width="200" align="center" padding="500"/>		
 		</HorizontalLayout>
-		<HorizontalLayout width="1050" height="100" padding="100,40,0,0" bordersize="2" bordercolor="0x88888888">
-			<Label text="当前IP地址：" font="1" width="120" padding="10,10,0,0" valign="top"/>
-			<Label text="IP地址:" width="80" font="1" align="left"/>
-			<Label text="192.168.0.11" name="IP_Address" font="6" width="120" align="left"/>
-			<Label text="子网掩码:" font="1" width="90" padding="30,0,0,0" align="left"/>
-			<Label text="255.255.255.0" name="Sub_net" font="6" width="120" align="left"/>
-			<Label text="默认网关:" font="1" width="100" padding="30,0,0,0" align="left"/>
-			<Label text="192.168.1.23" name="Mr_netAddress" font="6" width="120" align="left"/>
-		</HorizontalLayout>
+		<VerticalLayout width="1050" height="300" padding="100,10,0,0" bordersize="2" bordercolor="0x88888888">				
+				<HorizontalLayout>
+				<List name="IP_List1" padding="130,0,0,10" width="600" itemfont="7" bkcolor="#FFFFFFFF" inset="1,1,1,1" itemshowhtml="true" vscrollbar="true"  headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" bordersize="1" bordercolor="0x12342278">
+					<ListHeader height="31" width="600">
+						<ListHeaderItem text="IP地址" font="1" width="197" padding="1,1,1,1" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+						<Control bkimage="file='skin/st.png'" width="1" />
+						<ListHeaderItem text="子网掩码" font="1" width="197" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+						<Control bkimage="file='skin/st.png'" width="1" />
+						<ListHeaderItem text="默认网关" font="1" width="197" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					</ListHeader>
+				</List>				
+				</HorizontalLayout>
+			</VerticalLayout>
 		<VerticalLayout width="1050" height="180" padding="100,10,0,0" bordersize="2" bordercolor="0x88888888">
 			<Label text="IP地址增加：" font="1" width="120" height="30" padding="10,10,0,0" valign="top"/>
 			<HorizontalLayout height="40">

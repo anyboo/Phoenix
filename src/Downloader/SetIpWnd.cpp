@@ -42,6 +42,7 @@ void CSetIpWnd::OnFinalMessage(HWND hWnd)
 
 void CSetIpWnd::InitWindow()
 {
+	std::cout << "InitWindow" << std::endl;
 	_edit_ip1 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Address1")));
 	_edit_ip2 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Address2")));
 	_edit_ip3 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("IP_Address3")));
@@ -55,9 +56,10 @@ void CSetIpWnd::InitWindow()
 	_edit_broadcast3 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("gateway3")));
 	_edit_broadcast4 = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("gateway4")));
 	_pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("IP_List")));
-	_lab_setIPaddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("IP_Address")));
-	_lab_setSubNetAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Sub_net")));
-	_lab_setBroadcastAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Mr_netAddress")));
+	_pIpList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("IP_List1")));
+	//_lab_setIPaddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("IP_Address")));
+	//_lab_setSubNetAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Sub_net")));
+	//_lab_setBroadcastAddress = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Mr_netAddress")));
 	InitShowCurIPAddress();
 }
 
@@ -83,18 +85,27 @@ void CSetIpWnd::OnDelIPSet(TNotifyUI& msg)
 
 void CSetIpWnd::OnUseSelectIP(TNotifyUI& msg)
 {
-	if (_pList->GetCurSel() == -1)
-		return;
-	CListTextElementUI* ListText = dynamic_cast<CListTextElementUI*>(m_PaintManager.FindSubControlByClass(_pList, DUI_CTR_LISTTEXTELEMENT, _pList->GetCurSel()));
-	std::string ipAddress = ListText->GetText(0);
-	std::string subnetAddress = ListText->GetText(2);
-	std::string BroadcastAddress = ListText->GetText(4);
-	_lab_setIPaddress->SetText(ipAddress.c_str());
-	_lab_setSubNetAddress->SetText(subnetAddress.c_str());
-	_lab_setBroadcastAddress->SetText(BroadcastAddress.c_str());
-	if(BroadcastAddress == "...")
-		BroadcastAddress.clear();
-	setip.setNetConfig(ipAddress, subnetAddress, BroadcastAddress);
+	/*if (_pList->GetCurSel() == -1)
+		return;*/
+
+	for (int i = 0; i < _pList->GetCount(); i++)
+	{
+		CListTextElementUI* ListText = dynamic_cast<CListTextElementUI*>(m_PaintManager.FindSubControlByClass(_pList, DUI_CTR_LISTTEXTELEMENT, i));
+		std::string ipAddress = ListText->GetText(0);
+		std::string subnetAddress = ListText->GetText(2);
+		std::string BroadcastAddress = ListText->GetText(4);
+		/*_lab_setIPaddress->SetText(ipAddress.c_str());
+		_lab_setSubNetAddress->SetText(subnetAddress.c_str());
+		_lab_setBroadcastAddress->SetText(BroadcastAddress.c_str());*/
+		if (BroadcastAddress == "...")
+			BroadcastAddress.clear();
+		_setip.setNetConfig(ipAddress, subnetAddress, BroadcastAddress);
+	}
+
+	Sleep(1000);
+
+	InitShowCurIPAddress();
+	
 }
 
 void CSetIpWnd::OnInputNum(TNotifyUI& msg)
@@ -163,6 +174,20 @@ void CSetIpWnd::AddIP_Address()
 	strBDaress = strBDaress1 + strBDaress2 + strBDaress3 + strBDaress4;
 
 	InsertList(strIP_Address, strSubNet, strBDaress);
+	_edit_ip1->SetText("");
+	_edit_ip2->SetText("");
+	_edit_ip3->SetText("");
+	_edit_ip4->SetText("");
+
+	_edit_subnet1->SetText("");
+	_edit_subnet2->SetText("");
+	_edit_subnet3->SetText("");
+	_edit_subnet4->SetText("");
+
+	_edit_broadcast1->SetText("");
+	_edit_broadcast2->SetText("");
+	_edit_broadcast3->SetText("");
+	_edit_broadcast4->SetText("");
 }
 
 void CSetIpWnd::InsertList(CDuiString& strIP, CDuiString& strSubNet, CDuiString& strGateWay)
@@ -186,8 +211,33 @@ void CSetIpWnd::RemoveSubList()
 
 void CSetIpWnd::InitShowCurIPAddress()
 {
-	IPADDRESSINFO ip_info = setip.GetCurIPAddress();
-	_lab_setIPaddress->SetText(ip_info.strIP.c_str());
-	_lab_setSubNetAddress->SetText(ip_info.strSubNet.c_str());
-	_lab_setBroadcastAddress->SetText(ip_info.strBroadcast.c_str());
+	std::cout << "InitShowCurIPAddress" << std::endl;
+	std::vector<IPADDRESSINFO> ipList;
+	std::vector<std::string> gatewayList;
+	
+	_setip.GetCurIPAddress(ipList, gatewayList);
+	
+	
+
+	std::cout << "ip count:" << ipList.size() << std::endl;
+	_pIpList->RemoveAll();
+	for (int i = 0; i < ipList.size(); i++)
+	{
+		CListTextElementUI* ListText = new CListTextElementUI;
+		int Count = _pIpList->GetCount();
+		_pIpList->Add(ListText);
+		ListText->SetFixedHeight(30);
+		ListText->SetText(0, ipList[i].strIP.c_str());
+		ListText->SetText(2, ipList[i].strSubNet.c_str());
+		if (i < gatewayList.size())
+			ListText->SetText(4, gatewayList[i].c_str());
+		ListText->SetBorderSize(1);
+		ListText->SetBorderColor(0x12345678);
+	}
+	
+	_pList->RemoveAll();
+	
+	//_lab_setIPaddress->SetText(ip_info.c_str());	
+	//_lab_setSubNetAddress->SetText(subnet_info.c_str());
+	//_lab_setBroadcastAddress->SetText(gateway_info.c_str());
 }

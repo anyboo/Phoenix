@@ -39,7 +39,7 @@ protected:
 	void InitShowCurIPAddress();
 
 private:
-	CSetIPAddress	setip;
+	CSetIPAddress	_setip;
 private:
 	CEditUI*		_edit_ip1;
 	CEditUI*		_edit_ip2;
@@ -54,7 +54,8 @@ private:
 	CEditUI*		_edit_broadcast3;
 	CEditUI*		_edit_broadcast4;
 	CListUI*		_pList;
-	CLabelUI*		_lab_setIPaddress;
-	CLabelUI*		_lab_setSubNetAddress;
-	CLabelUI*		_lab_setBroadcastAddress;
+	CListUI*        _pIpList;
+	//CLabelUI*		_lab_setIPaddress;
+	//CLabelUI*		_lab_setSubNetAddress;
+	//CLabelUI*		_lab_setBroadcastAddress;
 };

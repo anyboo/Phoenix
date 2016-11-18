@@ -83,10 +83,10 @@ bool DHCPClient::SetNetConfig()
 	Poco::Net::ICMPClient ic(_family);
 
 	setip.setNetConfig(ip, sMsk, sGate);
-	int a = ic.ping(ip, 10);
-	if (a != 0)
-		return true;	
-	return false;
+	//int a = ic.ping(ip, 3);
+	//if (a != 0)
+	//	return true;	
+	return true;
 }
 
 void DHCPClient::MakeRequestPacket(Poco::UInt8* packet)
